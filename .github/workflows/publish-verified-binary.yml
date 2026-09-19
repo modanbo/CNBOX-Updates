@@ -22,6 +22,10 @@ jobs:
           $req = Get-Content ".publisher/request.json" -Raw | ConvertFrom-Json
 
           if ($req.schemaVersion -ne 1) { throw "Unsupported request schema" }
+          if ($req.PSObject.Properties.Name -contains "active" -and $req.active -eq $false) {
+            Write-Host "Publisher request is inactive; nothing to do."
+            exit 0
+          }
           if ([string]::IsNullOrWhiteSpace($req.sourceUrl)) { throw "Missing sourceUrl" }
           if ([string]::IsNullOrWhiteSpace($req.destination)) { throw "Missing destination" }
 
