@@ -1,0 +1,80 @@
+name: Publish verified CNBOX binary
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".publisher/request.json"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate and publish
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $req = Get-Content ".publisher/request.json" -Raw | ConvertFrom-Json
+
+          if ($req.schemaVersion -ne 1) { throw "Unsupported request schema" }
+          if ([string]::IsNullOrWhiteSpace($req.sourceUrl)) { throw "Missing sourceUrl" }
+          if ([string]::IsNullOrWhiteSpace($req.destination)) { throw "Missing destination" }
+
+          $uri = [Uri]$req.sourceUrl
+          if ($uri.Scheme -ne "https") { throw "Only HTTPS sources are allowed" }
+          if (-not $uri.Host.EndsWith(".oaiusercontent.com", [StringComparison]::OrdinalIgnoreCase)) {
+            throw "Source host is not allow-listed"
+          }
+
+          $dest = ([string]$req.destination).Replace("\\","/")
+          if ($dest.StartsWith("/") -or $dest.Contains("..") -or
+              $dest -notmatch "^(manager|payloads|manifests|profiles)/[A-Za-z0-9._/-]+$") {
+            throw "Unsafe destination: $dest"
+          }
+
+          $tmp = Join-Path $env:RUNNER_TEMP "cnbox-source.bin"
+          Invoke-WebRequest -Uri $req.sourceUrl -OutFile $tmp -UseBasicParsing
+
+          $sourceHash = (Get-FileHash $tmp -Algorithm SHA256).Hash.ToLowerInvariant()
+          if (-not [string]::IsNullOrWhiteSpace($req.sourceSha256) -and
+              $sourceHash -ne ([string]$req.sourceSha256).ToLowerInvariant()) {
+            throw "Source SHA256 mismatch"
+          }
+
+          $output = $tmp
+          if (([string]$req.archive).ToLowerInvariant() -eq "zip") {
+            if ([string]::IsNullOrWhiteSpace($req.extract)) { throw "Missing extract member" }
+            $extractName = ([string]$req.extract).Replace("\\","/")
+            if ($extractName.StartsWith("/") -or $extractName.Contains("..")) { throw "Unsafe extract member" }
+
+            $expanded = Join-Path $env:RUNNER_TEMP "expanded"
+            Expand-Archive -Path $tmp -DestinationPath $expanded -Force
+            $candidate = Join-Path $expanded $extractName
+            if (!(Test-Path -LiteralPath $candidate -PathType Leaf)) { throw "Extract member not found: $extractName" }
+            $output = $candidate
+          }
+
+          $outputHash = (Get-FileHash $output -Algorithm SHA256).Hash.ToLowerInvariant()
+          if (-not [string]::IsNullOrWhiteSpace($req.outputSha256) -and
+              $outputHash -ne ([string]$req.outputSha256).ToLowerInvariant()) {
+            throw "Output SHA256 mismatch"
+          }
+
+          $destPath = Join-Path $env:GITHUB_WORKSPACE $dest
+          New-Item -ItemType Directory -Force -Path (Split-Path $destPath -Parent) | Out-Null
+          Copy-Item -LiteralPath $output -Destination $destPath -Force
+
+          git config user.name "cnbox-release-bot"
+          git config user.email "cnbox-release-bot@users.noreply.github.com"
+          git add -- "$dest"
+          if (git diff --cached --quiet) {
+            Write-Host "No binary change to publish."
+          } else {
+            git commit -m "Publish $dest"
+            git push
+          }
