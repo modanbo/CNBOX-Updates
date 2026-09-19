@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-861c-81f7-94f2-2eecf3bc37b1/raw?se=2026-09-19T18%3A29%3A42Z&sp=r&sv=2026-02-06&sr=b&scid=d81606cb-ef71-57de-b3de-94879aa318da&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T14%3A13%3A25Z&ske=2026-09-20T14%3A13%3A25Z&sks=b&skv=2026-02-06&sig=OMR2Y7djxBupwMNd/mm%2BQ1pEsLUQFiba5r2vni4uiFA%3D",
-  "sourceSha256": "06f3b3d5f4ef818cfaca26b08c4a228af80444e21820c4af8dd22629a418a74a",
+  "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-764c-81f7-8589-5a62d9747abf/raw?se=2026-09-19T18%3A47%3A59Z&sp=r&sv=2026-02-06&sr=b&scid=153d26dc-45f6-5524-aba5-7240dfcf63e1&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T14%3A12%3A44Z&ske=2026-09-20T14%3A12%3A44Z&sks=b&skv=2026-02-06&sig=phtLwsho4jJjKoDT0OyRVx17QlCj8ul8hOw7muSp3G8%3D",
+  "sourceSha256": "899d5a2527841f396a6ed625a65356e53e913453f5a4e7cc4afd2cafb782f1b2",
   "archive": "zip",
   "extract": "CNBOX_Manager.exe",
   "destination": "manager/CNBOX_Manager.exe",
-  "outputSha256": "0c51ffa11d783e92039e4ff7033baefa72bf9da76ac4b2af66645ecec822feae"
+  "outputSha256": "ed169d42e7468e23096ac96a5af408aa9371ac7bd4c2ee9b069b8883b08af567"
 }
