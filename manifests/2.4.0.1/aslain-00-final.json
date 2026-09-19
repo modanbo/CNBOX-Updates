@@ -1,0 +1,154 @@
+{
+  "cnboxVersion": "2401-00-R34-R2F9-FINAL-R1",
+  "status": "FINAL_LOCK",
+  "wotVersion": "2.4.0.1",
+  "aslainVersion": "2.4.0.1 #00",
+  "xvmVersion": "13.1.0.0088",
+  "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/aslain-00/CNBOX_PAYLOAD.zip",
+  "payloadSha256": "3084ac30ef07bb914db2bf9523f09e6afb7553f099aecc5518a8c86026371846",
+  "notes": "WoT NA 2.4.0.1 #950. FINAL_LOCK_PASS. Source package SHA256 3b8385de9fee97052397fd1c8ff1640198983941387651774d82e08f192cebde. 21-file CNBOX owner set; Runtime passed.",
+  "baselineFiles": [
+    {
+      "path": "mods/2.4.0.1/com.modxvm.xvm_13.1.0.0088.wotmod",
+      "sha256": "83880eacb4eac5ac5d829045250d6bc7b7c25f4ed8581338aa0f6cd2f2940fb1",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battle.xc",
+      "sha256": "5512446183632a8c6c346cbdc5c034a9e74fdbc1bb95553d2c1c55440f8ec8c1",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/iconset.xc",
+      "sha256": "c7defae7c2c449c41d2b19fd456a2a047a28de9fac0c5e29534a04b469ac79ee",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/playersPanel.xc",
+      "sha256": "61fa63249116b5cdabe497a551b44fb68ebdfbc37efe05dbedadee5f3be5296d",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/statisticForm.xc",
+      "sha256": "f8332351cc5335591fd0edf4a3ca780f6a599cc20e57585670c0d464688298ef",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/texts.xc",
+      "sha256": "25d4568367e25724645852b3376c56483c8df470b82592b59b054fd0d290637f",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/battleVehicleMarkersApp.swf",
+      "sha256": "d246e055c6b25d0c981c07cbf43ce58a7020c79c57a5f871ada5f40d562894a9",
+      "required": true
+    }
+  ],
+  "installedFiles": [
+    {
+      "path": "mods/2.4.0.1/com.modxvm.xvm_13.1.0.0088.wotmod",
+      "sha256": "e1e0fc4473ffe851053ce39cff04c4a90595bb6be3e58d123f70dfee84e55ffc",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.dds",
+      "sha256": "73d03c6d6cf18c91485779b0dcb1ddbf0549a39d7d3d7ff436b3a6671dd83377",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.xml",
+      "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.dds",
+      "sha256": "0cd93ff07352f0bbaf3d5a6b2dcb470f734d8c1206a902a89a8b4f6049e0b77b",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.xml",
+      "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/battleVehicleMarkersApp.swf",
+      "sha256": "9bf2e758b51a8f990ebb41c43ec01a699e3c115df2b8b829ecdca6dd4291778f",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/HT.png",
+      "sha256": "1c3403b2dea847f05961616436cbe27e97f36eb6266c83c82d47fcb80995449b",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/LT.png",
+      "sha256": "9e898192899d87c490ad397424a12cbdc805117ca62488a6c465e4b07ed14ca8",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/MT.png",
+      "sha256": "ffb3d6301d8d0a5840f07465d7d95a7ed14455a4a6909734731f4c1ef76c63a2",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/SPG.png",
+      "sha256": "0bd356c8191bfdc306e9dafdbfe507d46e684d6ab667af155d9ae7bf26c37d9b",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/TD.png",
+      "sha256": "0a031f31cc7fce21a408bc30deff7f0e032c20dcee1b15e3dceecef4c3b11ea6",
+      "required": true
+    },
+    {
+      "path": "res_mods/2.4.0.1/scripts/client/gui/mods/mod_cnbox_eff_bridge.pyc",
+      "sha256": "3972334669e7a831b99fc378a867d6b387d27900bb9c5249b5540a2f5080cff2",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battle.xc",
+      "sha256": "e1358abb6b236a64258fb65ba0f8e8de1e6bc1af6f5ea7e2d287727a4d68fdb0",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/cnbox_lighten.png",
+      "sha256": "701d74f57608cdb6fb510c99bfa06a99875823bb6f5c709fbcf5db2f04a3d710",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/iconset.xc",
+      "sha256": "ef0e5ad0c19966f80cf7f8c414d40f6b1cceea2df1b52fd768c49e68f13ec770",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/playersPanel.xc",
+      "sha256": "e621a0dc42e94e4f6c346d92080151e8851af3fdc58315c8bd42a351fd6472ea",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/statisticForm.xc",
+      "sha256": "41bc00fab37356277bbd1afb37dcfefde02d67397b0ab27451ea290420c12a27",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/texts.xc",
+      "sha256": "5ce359686c8b282d50f84825ea3866a6dc9806bc010fd97173e39a4b8d079e35",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_auto_mode.py",
+      "sha256": "f45bec70173e36227bcaa30d33aaeb4224af68d669606f714ff0da8d308a9c2f",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_native_panel_sort.py",
+      "sha256": "d4929a80187a21a595adac4d20c535be05b5b128fa5fce8ab1cd41dd3969dc47",
+      "required": true
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_vehicle_name_color.py",
+      "sha256": "586af16824c398b5059caad998220c72f893d52249988b613a7955da0dbf121f",
+      "required": true
+    }
+  ]
+}
