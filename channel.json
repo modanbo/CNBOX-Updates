@@ -332,14 +332,14 @@
       ]
     },
     {
-      "cnboxVersion": "2401-03-R34-R2F9-CANDIDATE-R2",
-      "status": "STATIC_CANDIDATE",
+      "cnboxVersion": "2401-03-R34-R2F9-FINAL_LOCK-R1",
+      "status": "FINAL_LOCK",
       "wotVersion": "2.4.0.1",
       "aslainVersion": "2.4.0.1 #03",
       "xvmVersion": "13.1.0.0089",
       "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/aslain-03/CNBOX_PAYLOAD.zip",
       "payloadSha256": "d470b43160ec8b077574a9340098dfc865c823d937074d070ad71fc4b6c3fde8",
-      "notes": "Corrected R2 for the locked user Choice preset. Official Aslain #03 CLI reproduction proved all 7 selected-clean CNBOX owners are byte-identical to archived #01 selected-clean owners after the user's XVM panel options are applied. R1 was withdrawn because its pre-selection statisticForm rebase would undo user-selected HideFlags/HideXVMIcons/remove_ClassIcon/remove_ClanIcon options. R2 therefore reuses the #01 21-file payload byte-for-byte only after exact owner proof. Static review 1/2 PASS; synthetic install/verify/rollback PASS. Exact #01/#03 build detection uses non-CNBOX modmenu/openwg-common hashes, not CNBOX owner hashes. Runtime pending; NOT FINAL_LOCK.",
+      "notes": "Runtime-promoted formal compatibility lock for WoT 2.4.0.1 / Aslain 2.4.0.1 #03 / XVM 13.1.0.0089. Exact locked user-preset reproduction proved all 7 selected-clean CNBOX owners are byte-identical to the archived selected baseline, so the R2 21-file payload is retained byte-for-byte after compatibility proof. Real-game Runtime evidence SHA256 8e61196c1cf0e4c431a8910e8178fbcb43881573e2414689f4ae47cd40aa8677: 21/21 installed hashes PASS, 13 screenshots, fresh xvm.log PASS with CNBOX auto-mode/sort hooks and zero current XVM ERROR/Traceback/Exception, numeric EFF visible, panel modes/sorting/dead sink/TAB native silhouettes/overhead markers/language PASS. Captured python.log is stale historical 2026-08-30 and is a documented limitation, not a current failure. Runtime cross-review PASS. Payload SHA unchanged: d470b43160ec8b077574a9340098dfc865c823d937074d070ad71fc4b6c3fde8.",
       "baselineFiles": [
         {
           "path": "mods/2.4.0.1/com.modxvm.xvm_13.1.0.0089.wotmod",
