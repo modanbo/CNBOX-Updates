@@ -3,9 +3,9 @@
   "channel": "stable",
   "latestAslainVersion": "2.4.0.1 #03",
   "aslainUrl": "https://aslain.com/index.php?/topic/13-download-%E2%98%85-world-of-tanks-%E2%98%85-modpack/",
-  "managerVersion": "1.0.2",
+  "managerVersion": "1.0.3",
   "managerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager.exe",
-  "managerSha256": "ddd6e512132036bdce58aba1364991ec7252f03f1fb55a8e2b0d346f3d000375",
+  "managerSha256": "2bcea9c70743b85a3a5e04b6b47231badc3c2afcc5b638cc8ffab89b8f516981",
   "collectionProfile": {
     "id": "CNBOX_MINIMAL_DEFAULT",
     "description": "CNBOX 最小诊断采集：版本、日志、XVM 配置与 Manager 状态；不采集整个客户端。",
@@ -354,6 +354,15 @@
           ]
         }
       ]
+    }
+  ],
+  "languagePacks": [
+    {
+      "packVersion": "1.0",
+      "wotVersion": "2.4.0.1",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip",
+      "payloadSha256": "b94da55079e88bd7f3db561e9f5efea934cabba2c885267f2e2c22323a1ee129",
+      "notes": "ASIA official Simplified Chinese UI/font layer. Manager English-vehicle-name mode uses ASIA vehicle names; Chinese-vehicle-name mode overlays CN *_vehicles.mo. Fixed source realms: NA/ASIA/CN, WoT 2.4.0.1."
     }
   ]
 }
