@@ -52,10 +52,10 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.0.11
+- version: 1.0.13
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.0.11.exe`
-- SHA256: `875ac3f580c64d641f0d3c9b4ebb887f07365d0ce4bd6ff418d85fb5288d37d6`
+- versioned path: `manager/CNBOX_Manager_v1.0.13.exe`
+- SHA256: `d4fce69373aef0af9a14fc87deca5ff896f04a0fb39338f77de921f245f99ae8`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -116,3 +116,24 @@ detected Aslain version.
 - If Aslain advances before a new creator migration exists, Manager waits for that Aslain migration instead of offering the public package.
 - Fresh/public clients continue to receive the standalone public package.
 - The complete R34/R2F9 functional dependency tree is published as `manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9.json` and is SHA-256 verified before structure comparison.
+
+
+## Manager v1.0.13 public UI and pre-install restore
+
+Public CNBOX Manager is now a separate build flavor for external users.
+
+Public EXE does **not** expose:
+- Runtime collection;
+- Diagnostic collection;
+- collection-save-path controls;
+- Open Collection Folder.
+
+Those development/diagnostic controls remain only in the private Creator build.
+
+Both Public and Creator builds add **恢复安装前状态**:
+- before every CNBOX install/update/repair, Manager creates one persistent PRE_INSTALL snapshot in the selected rollback backup root;
+- only the latest PRE_INSTALL snapshot is retained per client;
+- manual backups are preserved separately and are never pruned by this feature;
+- the restore button is enabled only after a newer CNBOX installed state has been committed;
+- PRE_INSTALL snapshots are not mixed into the historical “回滚旧版本” list;
+- restoring the snapshot also restores the previous Manager InstalledState, including the “no CNBOX installed” state.
