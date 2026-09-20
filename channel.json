@@ -43,7 +43,7 @@
       ],
       "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R2.zip",
       "payloadSha256": "b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1",
-      "notes": "Unified standalone CNBOX R2 rebuilt from the current locked NA Box dependency capture. Full-overwrite policy inside the declared CNBOX/XVM ownership scope: Aslain is NOT required. The payload contains the complete CNBOX/Aslain-XVM dependency set and fully replaces that scope on install/update/repair. If Aslain is present, unrelated plugins outside CNBOX ownership are retained.",
+      "notes": "Public standalone distribution of functional Box WOT2401-R34-R2F9. It is not a functional update to the creator Aslain-derived 2401-03-R34-R2F9-FINAL_LOCK-R1; it packages the same locked Box function with its complete standalone dependencies so external users do not need Aslain.",
       "baselineFiles": [],
       "installedFiles": [
         {
@@ -191,7 +191,11 @@
           "sha256": "3972334669e7a831b99fc378a867d6b387d27900bb9c5249b5540a2f5080cff2",
           "required": true
         }
-      ]
+      ],
+      "releaseTrack": "PUBLIC_STANDALONE",
+      "functionalId": "WOT2401-R34-R2F9",
+      "functionalManifestUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9.json",
+      "functionalManifestSha256": "7c2905261c95756986cadec9dddc92c7677806217becfe117c98b7f771cf080c"
     },
     {
       "cnboxVersion": "2401-00-R34-R2F9-FINAL-R1",
@@ -345,7 +349,9 @@
           "sha256": "586af16824c398b5059caad998220c72f893d52249988b613a7955da0dbf121f",
           "required": true
         }
-      ]
+      ],
+      "releaseTrack": "CREATOR_ASLAIN",
+      "functionalId": "WOT2401-R34-R2F9"
     },
     {
       "cnboxVersion": "2401-03-R34-R2F9-FINAL_LOCK-R1",
@@ -499,7 +505,9 @@
           "sha256": "586af16824c398b5059caad998220c72f893d52249988b613a7955da0dbf121f",
           "required": true
         }
-      ]
+      ],
+      "releaseTrack": "CREATOR_ASLAIN",
+      "functionalId": "WOT2401-R34-R2F9"
     }
   ],
   "aslainFingerprints": [
