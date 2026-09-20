@@ -52,10 +52,14 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.1.0
+- version: 1.1.2
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.1.0.exe`
-- SHA256: `d22e775889f9a7a587ec128154385e6eefbb64c86864448cc9891aa25d5ade75`
+- versioned path: `manager/CNBOX_Manager_v1.1.2.exe`
+- Public SHA256: `93845b4189e46c55171be3361e4876ac48e5c6a6877d84c18b0ba2e8cb3035d9`
+- Creator SHA256 (private engineering artifact): `ca5cf53ce804005f5982bfbdaaadadde266bdb7a9f74034a4b0d622b5a5f64b8`
+- dual-flavor build ZIP SHA256: `99a2f707bdf8c748b8766fbd728c20ff9894803979cbfef3731f36bd979184f6`
+- GitHub Actions build/runtime candidate closure: run `35529399505`
+- detailed guide: `manager/CNBOX_Manager_v1.1.2_README.md`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -144,3 +148,40 @@ Both Public and Creator builds add **恢复安装前状态**:
 The current Manager feature set is released as v1.1.0. This supersedes the internal v1.0.13 label without changing the tested behavior.
 
 Public and Creator remain separate builds. The public executable continues to omit Runtime/Diagnostic collection UI; the Creator executable retains those development tools. The pre-install restore, manual backup, historical rollback, language, and creator/public track rules are unchanged.
+
+
+## Manager v1.1.2 localization / vehicle-name cache fix
+
+v1.1.2 is the public-stable Manager release that closes the vehicle-name localization defect.
+
+Real NA Runtime confirmed all four user-facing paths:
+1. Chinese UI + Chinese vehicle names: PASS.
+2. Restore original NA English: PASS.
+3. Chinese UI + English vehicle names: PASS.
+4. Restore original NA English again: PASS.
+
+The root cause was not missing CN vehicle-name data and not an XVM hardcoded-English table. The versioned `res_mods` language overlay already produced Chinese values through Wulf, but WoT persisted already-converted English `vehicles_list` / `vehicles_cache` objects in `data.wgpdc`. v1.1.2 therefore treats the localization-version key and the derived PDC as part of the language transaction.
+
+v1.1.2 rules:
+- official NA `res` stays original during normal localization;
+- translated files are written to the Manager-owned versioned `res_mods/<WoTVersion>/text/lc_messages` overlay;
+- font override is written to the same versioned `res_mods` layer;
+- the NA client's own `loc_version.xml` version/revision are preserved, while localized mode uses `language=zh_sg`;
+- `data.wgpdc` is invalidated only while WoT is fully exited, then WoT rebuilds localized VehicleItem/VehicleType caches on next launch;
+- direct Chinese-vehicle-name ↔ English-vehicle-name switching is supported; there is **no need to restore original English between the two localized modes**;
+- `恢复原始语言` removes CNBOX-owned overlay files, restores pre-existing overlay files, restores original `loc_version.xml`, repairs legacy official-`res` writes if necessary, and invalidates PDC for an English rebuild;
+- if WoT/WGC updates the client while localized, a newer localization revision is preserved and is not overwritten by the previous generation's sidecar;
+- language operations fail closed when the selected WoT client is running, including root/win64/win32 executable layouts.
+
+For the full operational and recovery model, see `manager/CNBOX_Manager_v1.1.2_README.md`.
+
+### Direct switching rule
+
+With World of Tanks fully exited:
+
+`中文界面 + 英文坦克名称` → click **汉化（中文坦克名称）** directly.
+
+`中文界面 + 中文坦克名称` → click **汉化（英文坦克名称）** directly.
+
+No intermediate **恢复原始语言** step is required.
+
