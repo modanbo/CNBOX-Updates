@@ -1,10 +1,8 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-a724-81f7-b577-8ceefe66ceec/raw?se=2026-09-20T04%3A37%3A44Z&sp=r&sv=2026-02-06&sr=b&scid=1a44cc06-6a1b-5f9b-879d-0e83b9f527ff&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T12%3A42%3A11Z&ske=2026-09-20T12%3A42%3A11Z&sks=b&skv=2026-02-06&sig=jPeGRAJiiUFgNQrdGAgSA9nLdHRpeiZZzOd76uaNm7E%3D",
-  "sourceSha256": "95080f1fccc30678e7879b45afd8b31c1a1160026c3d0790140c2764972b9805",
-  "destination": "manager/CNBOX_Manager.exe",
-  "archive": "zip",
-  "extract": "bin/Release/net48/CNBOX_Manager.exe",
-  "outputSha256": "2bcea9c70743b85a3a5e04b6b47231badc3c2afcc5b638cc8ffab89b8f516981"
+  "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-ad14-81f7-8a5f-f562e422f7e9/raw?se=2026-09-20T04%3A39%3A31Z&sp=r&sv=2026-02-06&sr=b&scid=07c19031-5fb9-5013-a0a8-296660f510f1&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T12%3A42%3A11Z&ske=2026-09-20T12%3A42%3A11Z&sks=b&skv=2026-02-06&sig=PC9h9MO3Vgrql3ji%2BDuTuMM07efyQESW%2Bny4Isu5tbk%3D",
+  "sourceSha256": "b94da55079e88bd7f3db561e9f5efea934cabba2c885267f2e2c22323a1ee129",
+  "destination": "language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip",
+  "outputSha256": "b94da55079e88bd7f3db561e9f5efea934cabba2c885267f2e2c22323a1ee129"
 }
