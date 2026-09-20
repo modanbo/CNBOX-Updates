@@ -52,10 +52,10 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.0.10
+- version: 1.0.11
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.0.10.exe`
-- SHA256: `ce9cd8036ebb34482c25fc9ab8202d2caedc1730f0216e9b184d43b2d034dd3d`
+- versioned path: `manager/CNBOX_Manager_v1.0.11.exe`
+- SHA256: `875ac3f580c64d641f0d3c9b4ebb887f07365d0ce4bd6ff418d85fb5288d37d6`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -102,3 +102,17 @@ detected Aslain version.
 - Rollback is enabled only when at least one backup predates the current Manager-recorded install state.
 - A current or later backup cannot make Rollback clickable merely because its Aslain/CNBOX labels differ.
 - The v1.0.9 Hash-first Aslain version detection and v1.0.8 shared language-backup root remain unchanged.
+
+
+## Manager v1.0.11 creator/public track separation
+
+`2401-03-R34-R2F9-FINAL_LOCK-R1` and
+`2401-R34-R2F9-UNIFIED-R2` are not sequential Box updates. They share functional ID
+`WOT2401-R34-R2F9`.
+
+- The creator/Aslain track follows the detected Aslain build and is used to produce each new Box migration.
+- The public standalone track packages the already-locked creator Box with its complete dependencies so external users do not need Aslain.
+- A creator-track client is never offered the public standalone package as its update source.
+- If Aslain advances before a new creator migration exists, Manager waits for that Aslain migration instead of offering the public package.
+- Fresh/public clients continue to receive the standalone public package.
+- The complete R34/R2F9 functional dependency tree is published as `manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9.json` and is SHA-256 verified before structure comparison.
