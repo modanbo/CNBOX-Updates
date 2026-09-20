@@ -52,10 +52,10 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.0.8
+- version: 1.0.9
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.0.8.exe`
-- SHA256: `1d4113be613e0b60250f4ed0745c9874c077f1e358e1db1f18cf8395d9f1f125`
+- versioned path: `manager/CNBOX_Manager_v1.0.9.exe`
+- SHA256: `2b1535948687e4c4e8aa8ffb6eec07a9268f5de6138dab59ef00cadef4b492ff`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -74,3 +74,21 @@ The R2 payload was rebuilt from the locked NA dependency capture. It contains th
 - Standalone CNBOX selection is resolved by WoT version before legacy Aslain detection logic.
 - Original-language backups use the same base folder selected as “回滚备份位置”, under `CNBOX_LANGUAGE_BACKUPS`.
 - A matching legacy AppData language backup is migrated automatically when needed.
+
+
+## Manager v1.0.9 Aslain detection restoration
+
+Aslain remains informational for the standalone CNBOX, but Check Updates once again tries to identify the
+installed Aslain build instead of displaying "not required".
+
+Detection order when local metadata is unavailable:
+1. published exact file-hash fingerprint;
+2. transient local Aslain metadata scan;
+3. if neither can prove a version, display "未读取到本地版本".
+
+The fingerprint exclusion logic was also corrected: only files owned by the CNBOX version CURRENTLY
+installed on the client can disqualify an Aslain fingerprint. A newer available CNBOX release must not
+invalidate the fingerprint for the user's current Aslain installation.
+
+Standalone CNBOX install/update compatibility remains based on WoT version and does not depend on the
+detected Aslain version.
