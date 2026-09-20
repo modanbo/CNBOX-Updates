@@ -7,6 +7,7 @@ on:
   push:
     paths:
       - ".github/workflows/archive-aslain-native-catalog.yml"
+      - "channel.json"
   workflow_dispatch:
 
 jobs:
