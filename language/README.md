@@ -27,3 +27,17 @@ Language payloads are bound to an exact WoT four-part version (for example `2.4.
 The public `channel.json` must not advertise a payload until its ZIP has been generated from matching NA / ASIA / CN clients, uploaded here, and its SHA-256 is fixed in the channel entry.
 
 Current Manager source baseline: v1.0.3.
+
+
+## Dynamic-base mode (Manager v1.0.4+)
+
+The published 2.4.0.1 ZIP is a reusable translation donor base, not an exact-version replacement package.
+
+For a newer NA client, Manager:
+1. saves/restores the exact current NA English language snapshot for that client generation;
+2. parses the current NA .mo files as the skeleton;
+3. merges matching ASIA translations by exact msgid/key;
+4. leaves new/unmatched NA keys in English;
+5. optionally overlays only CN vehicle-name base + _short keys.
+
+This means NA may update before ASIA/CN. A newer donor refresh only needs to contribute newly available translations; old donor content remains usable.
