@@ -52,10 +52,10 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.0.9
+- version: 1.0.10
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.0.9.exe`
-- SHA256: `2b1535948687e4c4e8aa8ffb6eec07a9268f5de6138dab59ef00cadef4b492ff`
+- versioned path: `manager/CNBOX_Manager_v1.0.10.exe`
+- SHA256: `ce9cd8036ebb34482c25fc9ab8202d2caedc1730f0216e9b184d43b2d034dd3d`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -92,3 +92,13 @@ invalidate the fingerprint for the user's current Aslain installation.
 
 Standalone CNBOX install/update compatibility remains based on WoT version and does not depend on the
 detected Aslain version.
+
+
+## Manager v1.0.10 button-state review
+
+- Check Updates clears stale Install/Update state before each new detection pass.
+- Install/Update is enabled only for an actionable Box update; if the published Box is already the verified current version, the button stays disabled.
+- Same-version damaged/missing Box files use Reinstall/Repair instead of Install/Update.
+- Rollback is enabled only when at least one backup predates the current Manager-recorded install state.
+- A current or later backup cannot make Rollback clickable merely because its Aslain/CNBOX labels differ.
+- The v1.0.9 Hash-first Aslain version detection and v1.0.8 shared language-backup root remain unchanged.
