@@ -1,6 +1,8 @@
 {
   "schemaVersion": 1,
-  "active": false,
-  "sourceUrl": "",
-  "destination": ""
+  "active": true,
+  "sourceUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-9028-81f5-a08d-8da6a984fcc8/raw?se=2026-09-20T06%3A27%3A14Z&sp=r&sv=2026-02-06&sr=b&scid=08460a54-7c09-52cc-ad10-ba72d33f50ee&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T12%3A07%3A56Z&ske=2026-09-20T12%3A07%3A56Z&sks=b&skv=2026-02-06&sig=CywJmR/xD%2BOjOiBu7hWMc1aPWQXRjutz6Nq42Tpxq0k%3D",
+  "sourceSha256": "7c2905261c95756986cadec9dddc92c7677806217becfe117c98b7f771cf080c",
+  "destination": "manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9.json",
+  "outputSha256": "7c2905261c95756986cadec9dddc92c7677806217becfe117c98b7f771cf080c"
 }
