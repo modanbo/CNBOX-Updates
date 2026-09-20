@@ -17,11 +17,11 @@ The private engineering repositories and Google Drive project library remain the
 
 Current public releases use `installMode: CNBOX_AUTHORITATIVE`.
 
-The Manager matches the unified Box by WoT version. Aslain is optional: the published payload includes the XVM runtime/config/shared dependencies required by CNBOX.
+The Manager matches the unified Box by WoT version. Aslain is not required: the published payload contains the complete CNBOX/Aslain-XVM dependency set needed by the Box.
 
-Before install/update/repair, Manager transaction-safely cleans only the release-declared CNBOX/XVM ownership scope and then installs the published unified structure. This deliberately replaces conflicting Aslain XVM, PlayersPanel, OTM and XVM macro selections. Aslain plugins outside that declared ownership scope are retained.
+Before install/update/repair, Manager transaction-safely cleans the complete declared CNBOX/XVM ownership scope and then fully overwrites that scope with the published unified structure. This includes the full CNBOX XVM profile, PlayersPanel/OTM configuration, py_macro layer, XVM shared runtime/l10n resources, XVM/OpenWG runtime WOTMODs, XVM audio/client loader, and CNBOX owner files. Aslain does not need to be installed first. If Aslain is installed, unrelated plugins outside the CNBOX ownership scope are retained.
 
-The result is one public CNBOX structure regardless of which Aslain XVM/list options were selected before CNBOX was installed.
+The result is one complete public CNBOX structure whether the user never installed Aslain, installed Aslain with different XVM/list/OTM choices, or reinstalled CNBOX over an existing Aslain setup.
 
 ## Safety model
 
