@@ -5,6 +5,6 @@
   "sourceSha256": "95080f1fccc30678e7879b45afd8b31c1a1160026c3d0790140c2764972b9805",
   "destination": "manager/CNBOX_Manager.exe",
   "archive": "zip",
-  "extract": "CNBOX_Manager.exe",
+  "extract": "bin/Release/net48/CNBOX_Manager.exe",
   "outputSha256": "2bcea9c70743b85a3a5e04b6b47231badc3c2afcc5b638cc8ffab89b8f516981"
 }
