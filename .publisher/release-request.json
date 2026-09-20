@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "active": true,
-  "tag": "v1.2.0",
-  "title": "CNBOX Manager v1.2.0",
-  "asset": "manager/CNBOX_Manager_v1.2.0.exe",
-  "sha256": "5e4b956da1f182de9b6b5b14874f4665aae848a9bdef4ff0ed5db48298ed5fe1",
-  "notesPath": "manager/CNBOX_Manager_v1.2.0_README.md"
+  "active": false,
+  "tag": "",
+  "title": "",
+  "asset": "",
+  "sha256": "",
+  "notesPath": ""
 }
