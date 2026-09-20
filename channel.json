@@ -3,9 +3,9 @@
   "channel": "stable",
   "latestAslainVersion": "2.4.0.1 #03",
   "aslainUrl": "https://aslain.com/index.php?/topic/13-download-%E2%98%85-world-of-tanks-%E2%98%85-modpack/",
-  "managerVersion": "1.1.2",
+  "managerVersion": "1.2.0",
   "managerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager.exe",
-  "managerSha256": "93845b4189e46c55171be3361e4876ac48e5c6a6877d84c18b0ba2e8cb3035d9",
+  "managerSha256": "5e4b956da1f182de9b6b5b14874f4665aae848a9bdef4ff0ed5db48298ed5fe1",
   "collectionProfile": {
     "id": "CNBOX_DEPENDENCY_DIAG_V3",
     "description": "CNBOX 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
@@ -540,7 +540,7 @@
       "wotVersion": "2.4.0.1",
       "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip",
       "payloadSha256": "b94da55079e88bd7f3db561e9f5efea934cabba2c885267f2e2c22323a1ee129",
-      "notes": "Reusable dynamic translation donor base for CNBOX Manager v1.1.2+. Origin: ASIA/CN WoT 2.4.0.1. The CURRENT NA .mo set remains the skeleton; donor translations are merged only by existing msgid/key, unmatched current-NA text stays English, and CN vehicle base/_short values are applied only in Chinese-vehicle-name mode. v1.1.2 writes the localized result to a Manager-owned versioned res_mods language overlay, preserves official NA res, preserves the NA loc_version version/revision while switching localized language to zh_sg, invalidates data.wgpdc so WoT rebuilds VehicleItem/VehicleType localization, supports direct Chinese-name <-> English-name mode switching with WoT fully exited, restores pre-existing overlays on mode change/restore, and restores original loc_version on '恢复原始语言'."
+      "notes": "Reusable dynamic translation donor base. Origin: ASIA/CN WoT 2.4.0.1. Manager v1.2.0 uses the CURRENT NA .mo set as the skeleton, writes the merged language layer only under versioned res_mods, preserves the NA loc_version version/revision while localized mode uses language=zh_sg, invalidates data.wgpdc so WoT rebuilds VehicleItem/VehicleType localization caches, supports direct Chinese-vehicle-name <-> English-vehicle-name switching without an intermediate restore, and displays the confirmed current localization mode in the Manager UI. Unmatched current-NA text remains English."
     }
   ]
 }
