@@ -37,7 +37,7 @@ jobs:
 
           $dest = ([string]$req.destination).Replace("\\","/")
           if ($dest.StartsWith("/") -or $dest.Contains("..") -or
-              $dest -notmatch "^(manager|payloads|manifests|profiles)/[A-Za-z0-9._/-]+$") {
+              $dest -notmatch "^(manager|payloads|manifests|profiles|language)/[A-Za-z0-9._/-]+$") {
             throw "Unsafe destination: $dest"
           }
 
