@@ -22,7 +22,7 @@
   },
   "releases": [
     {
-      "cnboxVersion": "2401-R34-R2F9-UNIFIED-R1",
+      "cnboxVersion": "2401-R34-R2F9-UNIFIED-R2",
       "status": "FINAL_LOCK",
       "wotVersion": "2.4.0.1",
       "aslainVersion": "ANY",
@@ -41,14 +41,14 @@
         "mods/{wotVersion}/net.openwg/net.openwg.fix.battleresultsreplays_*.wotmod",
         "res_mods/{wotVersion}/audioww/xvm*.bnk"
       ],
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/unified/CNBOX_PAYLOAD.zip",
-      "payloadSha256": "cbf9330ee23bcfb35e119e510d247dd004b78c4e1c6327edc67ef26efdff7fb4",
-      "notes": "Unified standalone public CNBOX. Aslain is optional. CNBOX owns and force-replaces its declared XVM/player-panel/OTM/py_macro/shared-runtime scope while preserving unrelated Aslain plugins. Existing locked R34/R2F9 core behavior is unchanged; package adds pinned XVM dependencies and authoritative ownership metadata.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R2.zip",
+      "payloadSha256": "b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1",
+      "notes": "Unified standalone CNBOX rebuilt directly from the current locked NA Box dependency capture. Aslain remains optional. The payload now exactly uses the locked client's complete CNBOX/Aslain-XVM dependency set (excluding client version metadata), removes unused XVM documentation and unused PlayersPanel preset files, and replaces 17 generic Aslain config files with the exact locked NA versions. Unrelated Aslain plugins remain outside ownership.",
       "baselineFiles": [],
       "installedFiles": [
         {
           "path": "CNBOX_UNIFIED_OWNER.json",
-          "sha256": "b70529d09080075d4401bd45a7b80298f1947a29704a32a2a369c5a9d80a6dcf",
+          "sha256": "0807357c716ab7a98ecd71b50e19af2dd570876b3b2f50f629f8e6916f17eb19",
           "required": true
         },
         {
