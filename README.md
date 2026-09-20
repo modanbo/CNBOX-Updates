@@ -52,10 +52,10 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.0.13
+- version: 1.1.0
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.0.13.exe`
-- SHA256: `d4fce69373aef0af9a14fc87deca5ff896f04a0fb39338f77de921f245f99ae8`
+- versioned path: `manager/CNBOX_Manager_v1.1.0.exe`
+- SHA256: `d22e775889f9a7a587ec128154385e6eefbb64c86864448cc9891aa25d5ade75`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -137,3 +137,10 @@ Both Public and Creator builds add **恢复安装前状态**:
 - the restore button is enabled only after a newer CNBOX installed state has been committed;
 - PRE_INSTALL snapshots are not mixed into the historical “回滚旧版本” list;
 - restoring the snapshot also restores the previous Manager InstalledState, including the “no CNBOX installed” state.
+
+
+## Manager v1.1.0 naming
+
+The current Manager feature set is released as v1.1.0. This supersedes the internal v1.0.13 label without changing the tested behavior.
+
+Public and Creator remain separate builds. The public executable continues to omit Runtime/Diagnostic collection UI; the Creator executable retains those development tools. The pre-install restore, manual backup, historical rollback, language, and creator/public track rules are unchanged.
