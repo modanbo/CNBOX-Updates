@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
-  "active": false,
-  "sourceUrl": "",
-  "destination": ""
+  "active": true,
+  "sourceUrl": "https://sdmntprsoutheastus3.oaiusercontent.com/files/00000000-6330-820c-b9e5-4aadd910c0e3/raw?se=2026-09-20T15%3A26%3A51Z&sp=r&sv=2026-02-06&sr=b&scid=62fad1e9-33b8-5dbc-936b-0903b1dee5ba&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T22%3A14%3A22Z&ske=2026-09-20T22%3A14%3A22Z&sks=b&skv=2026-02-06&sig=Y5dtI%2BoYsn/aiQfkZR4fwhDrbXQqNhO6nlqPNaO3zpc%3D",
+  "sourceSha256": "4ac8ef190a02ead9233c1a0b47cc5f8ffe450f6346fa489db8238e7e67580b3a",
+  "destination": "manager/CNBOX_Manager.exe",
+  "archive": "zip",
+  "extract": "Public/CNBOX_Manager.exe",
+  "outputSha256": "d22e775889f9a7a587ec128154385e6eefbb64c86864448cc9891aa25d5ade75"
 }
