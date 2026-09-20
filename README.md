@@ -60,6 +60,7 @@ Manager:
 - dual-flavor build ZIP SHA256: `39752462c1d1f3a738833bb30cdcc0b43ababd7f21503753bd80efb258269d4b`
 - GitHub Actions build/self-test closure: run `35530551967`
 - detailed guide: `manager/CNBOX_Manager_v1.2.0_README.md`
+- GitHub Release: `v1.2.0` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v1.2.0
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
