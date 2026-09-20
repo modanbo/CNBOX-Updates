@@ -52,10 +52,10 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.0.7
+- version: 1.0.8
 - stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.0.7.exe`
-- SHA256: `7772d16d7a2759306d5658d962b7518213e4d75b01b013283be55a422fd99c95`
+- versioned path: `manager/CNBOX_Manager_v1.0.8.exe`
+- SHA256: `1d4113be613e0b60250f4ed0745c9874c077f1e358e1db1f18cf8395d9f1f125`
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -66,3 +66,11 @@ Unified Box:
 - SHA256: `b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1`
 
 The R2 payload was rebuilt from the locked NA dependency capture. It contains the complete Box dependency set required for standalone installation; it is not an overlay that depends on a prior Aslain installation.
+
+
+## Manager v1.0.8 behavior fixes
+
+- Aslain is shown as optional for authoritative standalone CNBOX releases. If Aslain cannot be detected, the UI shows that it is not required instead of treating the missing local Aslain version as an installation problem.
+- Standalone CNBOX selection is resolved by WoT version before legacy Aslain detection logic.
+- Original-language backups use the same base folder selected as “回滚备份位置”, under `CNBOX_LANGUAGE_BACKUPS`.
+- A matching legacy AppData language backup is migrated automatically when needed.
