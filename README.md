@@ -32,3 +32,18 @@ The result is one public CNBOX structure regardless of which Aslain XVM/list opt
 - Language restore uses the current NA client's local original-language backup and is separate from CNBOX plugin rollback.
 
 Binary publishing is hash-gated. The public publishing workflow only accepts allow-listed temporary HTTPS sources and safe destination prefixes.
+
+
+## Dependency-focused diagnostics
+
+Manager v1.0.7 diagnostics do not dump the entire Aslain installation.
+
+Both normal Diagnostic collection and Runtime collection include the complete CNBOX dependency scope:
+- the full CNBOX Aslain XVM profile;
+- XVM py_macro runtime source;
+- XVM shared runtime/l10n resources (documentation excluded);
+- XVM/OpenWG core/fix WOTMODs;
+- XVM audio/client-loader dependencies;
+- CNBOX owner files.
+
+Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE.json` with the collected paths, categories, sizes and SHA-256 hashes.
