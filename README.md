@@ -47,3 +47,22 @@ Both normal Diagnostic collection and Runtime collection include the complete CN
 - CNBOX owner files.
 
 Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE.json` with the collected paths, categories, sizes and SHA-256 hashes.
+
+
+## Current public artifacts
+
+Manager:
+- version: 1.0.7
+- stable path: `manager/CNBOX_Manager.exe`
+- versioned path: `manager/CNBOX_Manager_v1.0.7.exe`
+- SHA256: `7772d16d7a2759306d5658d962b7518213e4d75b01b013283be55a422fd99c95`
+
+Unified Box:
+- release: `2401-R34-R2F9-UNIFIED-R2`
+- WoT: `2.4.0.1`
+- Aslain required: **No**
+- install policy: **full overwrite inside CNBOX/XVM ownership scope**
+- public payload: `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R2.zip`
+- SHA256: `b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1`
+
+The R2 payload was rebuilt from the locked NA dependency capture. It contains the complete Box dependency set required for standalone installation; it is not an overlay that depends on a prior Aslain installation.
