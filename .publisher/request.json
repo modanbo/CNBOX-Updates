@@ -1,6 +1,8 @@
 {
   "schemaVersion": 1,
-  "active": false,
-  "sourceUrl": "",
-  "destination": ""
+  "active": true,
+  "sourceUrl": "https://sdmntprwestus3.oaiusercontent.com/files/00000000-d0c0-81fd-84ce-b7ad0cf24281/raw?se=2026-09-20T05%3A37%3A27Z&sp=r&sv=2026-02-06&sr=b&scid=170420a8-8790-574e-a29c-aff13239d6b3&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T14%3A13%3A28Z&ske=2026-09-20T14%3A13%3A28Z&sks=b&skv=2026-02-06&sig=kIwWn5hIlrBQtyF1GvlAHFYJoM%2B4LEC4R1ELHfm8RC4%3D",
+  "sourceSha256": "b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1",
+  "destination": "payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R2.zip",
+  "outputSha256": "b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1"
 }
