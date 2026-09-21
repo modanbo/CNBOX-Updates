@@ -58,6 +58,8 @@ jobs:
           f2="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
           test -f "$f2"
           grep -nE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage|panelWidth|panelHeight|setData|setSettings' "$f2" | head -n 300
+          echo '=== ORIGINAL_SIMPLE_PANEL_BODY ==='
+          sed -n '1,90p' "$f2"
           echo '=== ORIGINAL_ALL_DISPLAY_FIELD_REFERENCES ==='
           grep -RniE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage' \
             "$root/original_flash" | head -n 500 || true
