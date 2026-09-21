@@ -1,8 +1,10 @@
 {
   "schemaVersion": 1,
-  "active": true,
+  "active": false,
   "basePayload": "payloads/2.4.0.1/aslain-03/CNBOX_PAYLOAD.zip",
   "destination": "payloads/2.4.0.1/aslain-04/CNBOX_PAYLOAD.zip",
   "manifest": "manifests/2.4.0.1/CNBOX_CREATOR_ASLAIN04_R34_R2F9.json",
-  "expectedSha256": "7870c94e00e59c670068f951b2e09dc0b19fdb93db015e97781098145d375a50"
+  "expectedSha256": "7870c94e00e59c670068f951b2e09dc0b19fdb93db015e97781098145d375a50",
+  "completedRun": 35550934167,
+  "completedPayloadSha256": "7870c94e00e59c670068f951b2e09dc0b19fdb93db015e97781098145d375a50"
 }
