@@ -62,6 +62,15 @@ jobs:
           grep -RniE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage' \
             "$root/original_flash" | head -n 500 || true
 
+          echo '=== ORIGINAL_NEW_PANEL_DATA_BODY ==='
+          f3="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
+          test -f "$f3"
+          sed -n '1,165p' "$f3"
+
+          echo '=== ORIGINAL_ALL_DAMAGE_PAYLOAD_KEYS ==='
+          grep -RhoE 'param1\.[A-Za-z0-9_]*[Dd]amage[A-Za-z0-9_]*' "$root/original_flash" \
+            | sort -u | head -n 300 || true
+
       - name: Inspect compiled backend without executing it
         shell: bash
         run: |
