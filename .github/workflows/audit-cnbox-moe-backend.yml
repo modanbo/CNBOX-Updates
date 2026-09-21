@@ -51,6 +51,8 @@ jobs:
           f="$root/original_flash/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
           test -f "$f"
           grep -nE 'panel_|dragArea|as_setSettings|offsetBattle|updatePosition|startDrag|stopDrag|handleMouse|updateFrame|anchorPoint' "$f" | head -n 300
+          echo '=== ORIGINAL_PROGUNMARKS_DRAG_BODY ==='
+          sed -n '145,238p' "$f"
 
           echo '=== ORIGINAL_SIMPLE_PANEL_FIELDS ==='
           f2="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
