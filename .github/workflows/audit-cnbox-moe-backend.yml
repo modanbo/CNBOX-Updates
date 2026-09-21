@@ -82,9 +82,14 @@ jobs:
           set -euxo pipefail
           root="$RUNNER_TEMP/moe-audit"
           page="$root/protanki-download.html"
-          curl -fL --retry 3 --connect-timeout 20 \
+          # ProTanki returns 403 to some CI/cloud IP ranges. This probe is OPTIONAL:
+          # the pinned Aslain archive above is the build input and is already SHA-locked.
+          if ! curl -fL --retry 3 --connect-timeout 20 \
             "https://protanki.tv/en/mods/mod-tri-otmetki-na-stvole/download" \
-            -o "$page"
+            -o "$page"; then
+            echo "OFFICIAL_PROTANKI_PAGE_SKIPPED_HTTP"
+            exit 0
+          fi
 
           python3 - "$page" "$root" <<'PY'
           import html, re, sys, urllib.request, zipfile, os
