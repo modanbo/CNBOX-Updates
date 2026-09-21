@@ -3,7 +3,7 @@ name: Build CNBOX standalone MoE component
 on:
   push:
     branches:
-      - work/moe-component-1.0.0
+      - work/moe-component-1.0.1
     paths:
       - 'moe/source/**'
       - '.github/workflows/build-cnbox-moe.yml'
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: work/moe-component-1.0.0
+          ref: work/moe-component-1.0.1
           fetch-depth: 0
 
       - name: Fetch pinned ProTanki upstream and FFDec
@@ -93,7 +93,7 @@ jobs:
         run: |
           set -euxo pipefail
           root="$RUNNER_TEMP/cnbox-moe"
-          out="$GITHUB_WORKSPACE/moe/1.0.0"
+          out="$GITHUB_WORKSPACE/moe/1.0.1"
           rm -rf "$out" "$root/payload"
           mkdir -p "$out" "$root/payload/mods/2.4.0.1/net.openwg"
 
@@ -123,11 +123,19 @@ jobs:
           cp "$root/upstream/mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod" \
              "$root/payload/mods/2.4.0.1/net.openwg/"
 
+          # The ProTanki backend persists the drag offset in this user config.
+          # Ship a default only for first install; Manager's MoE installer preserves an
+          # existing copy on update/reinstall and never removes it on uninstall.
+          test -f "$root/upstream/mods/configs/protanki/gunMarksCalculator.json"
+          mkdir -p "$root/payload/mods/configs/protanki"
+          cp "$root/upstream/mods/configs/protanki/gunMarksCalculator.json" \
+             "$root/payload/mods/configs/protanki/gunMarksCalculator.json"
+
           python3 - <<'PY'
           import os, zipfile, hashlib, json
           root=os.environ['RUNNER_TEMP']+'/cnbox-moe'
           src=root+'/payload'
-          out=os.environ['GITHUB_WORKSPACE']+'/moe/1.0.0/CNBOX_MoE_1.0.0_WOT_2.4.0.1.zip'
+          out=os.environ['GITHUB_WORKSPACE']+'/moe/1.0.1/CNBOX_MoE_1.0.1_WOT_2.4.0.1.zip'
           rows=[]
           for dp, _, files in os.walk(src):
               for name in files:
@@ -161,24 +169,24 @@ jobs:
           ]
           manifest={
               'id':'CNBOX_MOE',
-              'version':'1.0.0',
+              'version':'1.0.1',
               'status':'candidate',
               'wotVersion':'2.4.0.1',
               'sourceCore':'ProTanki Gun Marks Calculator 8.1.01',
               'sourceUrl':'https://protanki.tv/',
-              'payloadUrl':'https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.0/CNBOX_MoE_1.0.0_WOT_2.4.0.1.zip',
+              'payloadUrl':'https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.1/CNBOX_MoE_1.0.1_WOT_2.4.0.1.zip',
               'payloadSha256':sha(out),
-              'notes':'Standalone Manager component. CNBOX changes battle UI only; drag offset persists in the original ProTanki config.',
+              'notes':'Standalone Manager component. CNBOX changes battle UI only. ProTanki calculation/data flow stays original; mods/configs/protanki/gunMarksCalculator.json is installed only when missing and is preserved on update/uninstall so the drag offset survives battles and restarts.',
               'installedFiles':[
                   {'path':rel,'sha256':sha(p),'required':True,'shared':shared}
                   for rel,p,shared in specs
               ]
           }
-          with open(os.environ['GITHUB_WORKSPACE']+'/moe/1.0.0/manifest.json','w',encoding='utf-8') as fh:
+          with open(os.environ['GITHUB_WORKSPACE']+'/moe/1.0.1/manifest.json','w',encoding='utf-8') as fh:
               json.dump(manifest,fh,ensure_ascii=False,indent=2)
               fh.write('\n')
-          with open(os.environ['GITHUB_WORKSPACE']+'/moe/1.0.0/SHA256SUMS.txt','w') as fh:
-              fh.write(manifest['payloadSha256']+'  CNBOX_MoE_1.0.0_WOT_2.4.0.1.zip\n')
+          with open(os.environ['GITHUB_WORKSPACE']+'/moe/1.0.1/SHA256SUMS.txt','w') as fh:
+              fh.write(manifest['payloadSha256']+'  CNBOX_MoE_1.0.1_WOT_2.4.0.1.zip\n')
               for spec,(_,p,_) in zip(manifest['installedFiles'],specs):
                   fh.write(spec['sha256']+'  '+spec['path']+'\n')
           print(json.dumps(manifest,ensure_ascii=False,indent=2))
@@ -190,9 +198,9 @@ jobs:
           set -euxo pipefail
           python3 - <<'PY'
           import json,zipfile,hashlib,os
-          root='moe/1.0.0'
+          root='moe/1.0.1'
           m=json.load(open(root+'/manifest.json',encoding='utf-8'))
-          payload=root+'/CNBOX_MoE_1.0.0_WOT_2.4.0.1.zip'
+          payload=root+'/CNBOX_MoE_1.0.1_WOT_2.4.0.1.zip'
           assert hashlib.sha256(open(payload,'rb').read()).hexdigest()==m['payloadSha256']
           with zipfile.ZipFile(payload) as z:
               names=set(z.namelist())
@@ -206,6 +214,27 @@ jobs:
               assert all(i.compress_type==zipfile.ZIP_STORED for i in c.infolist())
               assert 'res/gui/flash/protanki_gunmarks_battle.swf' in c.namelist()
               assert 'res/mods/cnbox.moe/NOTICE.txt' in c.namelist()
+
+          with zipfile.ZipFile(payload) as z:
+              assert 'mods/configs/protanki/gunMarksCalculator.json' in z.namelist()
+              cfg=z.read('mods/configs/protanki/gunMarksCalculator.json').decode('utf-8-sig')
+              assert '"offset"' in cfg
+              assert '"anchorPoint"' in cfg
+
+          # Prove the candidate did not touch the calculation/backend archive members.
+          # Only the battle SWF is replaced and NOTICE.txt is added.
+          upstream=os.environ['RUNNER_TEMP']+'/cnbox-moe/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod'
+          with zipfile.ZipFile(upstream) as u, zipfile.ZipFile('/tmp/core.wotmod') as v:
+              unames=set(u.namelist())
+              vnames=set(v.namelist())
+              allowed_added={'res/mods/cnbox.moe/NOTICE.txt'}
+              assert vnames-unames == allowed_added, vnames-unames
+              assert unames-vnames == set(), unames-vnames
+              for name in sorted(unames):
+                  if name == 'res/gui/flash/protanki_gunmarks_battle.swf':
+                      continue
+                  assert hashlib.sha256(u.read(name)).hexdigest() == hashlib.sha256(v.read(name)).hexdigest(), name
+          print('STATIC_MOE_BACKEND_UNCHANGED_OK')
           print('STATIC_MOE_PAYLOAD_OK')
           PY
 
@@ -215,10 +244,10 @@ jobs:
           set -euxo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add moe/1.0.0
+          git add moe/1.0.1
           if git diff --cached --quiet; then
             echo 'No output changes.'
             exit 0
           fi
-          git commit -m 'Build CNBOX standalone MoE 1.0.0 candidate'
-          git push origin HEAD:work/moe-component-1.0.0
+          git commit -m 'Build CNBOX standalone MoE 1.0.1 candidate'
+          git push origin HEAD:work/moe-component-1.0.1
