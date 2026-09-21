@@ -15,8 +15,16 @@ package poliroid.views.battle.gunmarks
     * Calculation/backend data is left to the original ProTanki core. This class
     * only remaps existing battle fields into the compact three-row presentation:
     * predictedRating + deltaRating
-    * currentMovingDamage
-    * battleMovingDamage + deltaDamage
+    * battleMovingDamage
+    * predictedMovingDamage + deltaDamage
+
+    * Static field semantics are locked against the two CN reference screenshots:
+    *   EWMA_new = EWMA_old + (2/101) * (battleDamage - EWMA_old)
+    * A 3749 battle with a projected 3385 average and +7 delta implies a pre-battle
+    * average ~3378; a 955 battle with projected 3348 and -48 implies ~3396.
+    * This matches ProTanki's own field split: battleMovingDamage is the battle
+    * contribution, predictedMovingDamage is the projected moving average, and
+    * deltaDamage is the moving-average change.
     *
     * Dragging/persistence remains owned by ProGunMarks and the backend.
     */
@@ -74,8 +82,8 @@ package poliroid.views.battle.gunmarks
          this._averageDelta.visible = true;
 
          this._percent.text = this._s(param1.predictedRating);
-         this._battleValue.text = this._cleanDamage(this._s(param1.currentMovingDamage));
-         this._averageValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
+         this._battleValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
+         this._averageValue.text = this._cleanDamage(this._s(param1.predictedMovingDamage));
 
          this._setDelta(this._percentDelta,this._percentArrow,this._s(param1.deltaRating),true);
          this._setDelta(this._averageDelta,this._averageArrow,this._s(param1.deltaDamage),false);
