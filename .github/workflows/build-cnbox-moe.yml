@@ -106,9 +106,10 @@ jobs:
           # battle row = this battle's effective damage;
           # average row = projected moving average; delta = projected-current.
           src="$GITHUB_WORKSPACE/moe/source/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
-          grep -Fq 'this._battleValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));' "$src"
-          grep -Fq 'this._averageValue.text = this._cleanDamage(this._s(param1.predictedMovingDamage));' "$src"
-          if grep -Fq 'this._battleValue.text = this._cleanDamage(this._s(param1.currentMovingDamage));' "$src"; then
+          grep -Fq 'this.nextMarkValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));' "$src"
+          grep -Fq 'this.predictedMovingDamage.text = this._cleanDamage(this._s(param1.predictedMovingDamage));' "$src"
+          grep -Fq 'this._setDelta(this.currentMovingDamage,this._averageArrow,this._s(param1.deltaDamage),false);' "$src"
+          if grep -Fq 'this.nextMarkValue.text = this._cleanDamage(this._s(param1.currentMovingDamage));' "$src"; then
             echo 'Incorrect legacy CN field mapping reappeared' >&2
             exit 1
           fi
@@ -119,9 +120,12 @@ jobs:
           grep -Fq 'private static const PANEL_W:Number = 192;' "$src"
           grep -Fq 'private static const PANEL_H:Number = 120;' "$src"
           grep -Fq 'private static const PAD_X:Number = 20;' "$src"
-          grep -Fq 'this._battleValue = this._makeText(16,true,WHITE,103,50,71,24,TextFormatAlign.LEFT);' "$src"
-          grep -Fq 'this._averageValue = this._makeText(16,true,WHITE,103,82,51,24,TextFormatAlign.LEFT);' "$src"
+          grep -Fq 'this._styleField(this.nextMarkValue,16,true,WHITE,103,50,71,24,TextFormatAlign.LEFT);' "$src"
+          grep -Fq 'this._styleField(this.predictedMovingDamage,16,true,WHITE,103,82,51,24,TextFormatAlign.LEFT);' "$src"
+          grep -Fq 'this._styleField(this.currentMovingDamage,15,true,WHITE,163,84,26,22,TextFormatAlign.LEFT);' "$src"
           grep -Fq 'this._averageArrow.x = Math.min(152,right + 4);' "$src"
+          grep -Fq 'var format:TextFormat = field.defaultTextFormat;' "$src"
+          # The original ProGunMarks host source must not be overridden in 1.0.5.
           test ! -f "$GITHUB_WORKSPACE/moe/source/poliroid/views/battle/gunmarks/ProGunMarks.as"
           test ! -f "$GITHUB_WORKSPACE/moe/source/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
           grep -Fq 'private static const GREEN:uint = 0x2FDAA1;' "$src"
