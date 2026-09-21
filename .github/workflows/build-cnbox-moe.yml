@@ -84,8 +84,17 @@ jobs:
           "$root/ffdec/ffdec.sh" -export script "$root/verify" \
             "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
 
+          # UI wire contract: these are existing ProTanki battle payload fields.
+          # Lock all five CN-panel values plus the original position hand-off.
           grep -Rqs '本场标伤' "$root/verify"
+          grep -Rqs '平均标伤' "$root/verify"
+          grep -Rqs 'predictedRating' "$root/verify"
+          grep -Rqs 'deltaRating' "$root/verify"
+          grep -Rqs 'currentMovingDamage' "$root/verify"
           grep -Rqs 'battleMovingDamage' "$root/verify"
+          grep -Rqs 'deltaDamage' "$root/verify"
+          grep -Rqs 'offsetBattle' "$root/verify"
+          grep -Rqs 'anchorPoint' "$root/verify"
           grep -Rqs 'updatePosition(this._offset)' "$root/verify"
 
       - name: Build deterministic WOTMOD and Manager payload
