@@ -136,7 +136,7 @@ jobs:
 
           # The Aslain single-mod archive does not carry ProTanki's external JSON;
           # Aslain's installer normally lays it down separately. Build the known upstream
-          # default deterministically for FIRST install. Manager v1.2.9 treats this file as
+          # default deterministically for FIRST install. Manager v1.2.10 treats this file as
           # user-owned: an existing copy is never overwritten and uninstall never removes it,
           # so offset/anchor survive battles, client restarts and reinstall.
           mkdir -p "$root/payload/mods/configs/protanki"
