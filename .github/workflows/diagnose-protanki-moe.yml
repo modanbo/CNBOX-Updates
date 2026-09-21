@@ -80,6 +80,39 @@ jobs:
             strings -a -n 3 "$pyc" || true
           } > "$GITHUB_WORKSPACE/moe/diagnostics/protanki_backend_disassembly.txt"
 
+      - name: Inspect current official ProTanki standalone dependencies
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/protanki-diagnose"
+          out="$GITHUB_WORKSPACE/moe/diagnostics/protanki_official_standalone.txt"
+          python3 - "$root" "$out" <<'PY'
+          import html, re, sys, urllib.request, zipfile, os, hashlib
+          root,out=sys.argv[1],sys.argv[2]
+          page=urllib.request.urlopen("https://protanki.tv/en/mods/mod-tri-otmetki-na-stvole/download", timeout=30).read().decode("utf-8","replace")
+          page=html.unescape(page)
+          urls=re.findall(r"https://s3\.protanki\.tv/[^\"'<> ]+",page)
+          if not urls:
+              open(out,"w").write("NO_DIRECT_URL_FOUND\n")
+              raise SystemExit(0)
+          url=urls[0].replace("&amp;","&")
+          archive=os.path.join(root,"protanki-official.zip")
+          urllib.request.urlretrieve(url,archive)
+          h=hashlib.sha256(open(archive,"rb").read()).hexdigest()
+          with zipfile.ZipFile(archive) as z:
+              names=z.namelist()
+              with open(out,"w",encoding="utf-8") as fh:
+                  fh.write("SHA256 "+h+"\n")
+                  fh.write("SIZE "+str(os.path.getsize(archive))+"\n")
+                  fh.write("=== MEMBERS ===\n")
+                  for n in names:
+                      fh.write(n+"\n")
+                  fh.write("\n=== GUNMARK CONFIG ===\n")
+                  for n in names:
+                      if n.replace("\\","/").lower().endswith("mods/configs/protanki/gunmarkscalculator.json"):
+                          fh.write(z.read(n).decode("utf-8-sig","replace")+"\n")
+          PY
+
       - name: Extract Aslain implicit dependency rules
         shell: bash
         run: |
