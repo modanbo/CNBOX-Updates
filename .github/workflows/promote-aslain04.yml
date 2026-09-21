@@ -1,0 +1,68 @@
+name: Promote Aslain #04 Creator payload
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".publisher/aslain04-promote.json"
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate request and build deterministic payload
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $req = Get-Content ".publisher/aslain04-promote.json" -Raw | ConvertFrom-Json
+          if ($req.schemaVersion -ne 1) { throw "Unsupported request schema" }
+          if (-not $req.active) { Write-Host "Inactive request"; exit 0 }
+
+          foreach ($p in @($req.basePayload, $req.destination, $req.manifest)) {
+            if ([string]::IsNullOrWhiteSpace($p) -or $p.StartsWith("/") -or $p.Contains("..")) {
+              throw "Unsafe request path: $p"
+            }
+          }
+          if ($req.basePayload -notmatch "^payloads/2\.4\.0\.1/aslain-03/CNBOX_PAYLOAD\.zip$") {
+            throw "Unexpected base payload"
+          }
+          if ($req.destination -notmatch "^payloads/2\.4\.0\.1/aslain-04/CNBOX_PAYLOAD\.zip$") {
+            throw "Unexpected destination"
+          }
+          if ($req.manifest -notmatch "^manifests/2\.4\.0\.1/[A-Za-z0-9._-]+\.json$") {
+            throw "Unexpected manifest path"
+          }
+
+          python ".publisher/build_aslain04_payload.py" --base $req.basePayload --out $req.destination --manifest $req.manifest
+
+          $sha = (Get-FileHash -LiteralPath $req.destination -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($sha -ne ([string]$req.expectedSha256).ToLowerInvariant()) {
+            throw "Final payload SHA256 mismatch: $sha"
+          }
+          Write-Host "PASS deterministic payload SHA256=$sha"
+
+      - name: Commit promoted payload and manifest
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $req = Get-Content ".publisher/aslain04-promote.json" -Raw | ConvertFrom-Json
+          if (-not $req.active) { exit 0 }
+
+          git config user.name "cnbox-release-bot"
+          git config user.email "cnbox-release-bot@users.noreply.github.com"
+          git add -- $req.destination $req.manifest
+          if (git diff --cached --quiet) {
+            Write-Host "No generated change."
+            exit 0
+          }
+          git commit -m "Publish Aslain #04 Creator FINAL_LOCK payload"
+          git push
