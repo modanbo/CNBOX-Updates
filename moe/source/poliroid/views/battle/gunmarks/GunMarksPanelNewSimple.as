@@ -4,6 +4,7 @@ package poliroid.views.battle.gunmarks
    import flash.display.MovieClip;
    import flash.display.Shape;
    import flash.display.Sprite;
+   import flash.filters.DropShadowFilter;
    import flash.text.TextField;
    import flash.text.TextFormat;
    import flash.text.TextFormatAlign;
@@ -49,13 +50,20 @@ package poliroid.views.battle.gunmarks
       private var _averageArrow:Sprite;
       private var _unavailable:TextField;
 
-      private static const PANEL_W:Number = 222;
-      private static const PANEL_H:Number = 82;
-      private static const PAD_X:Number = 12;
-      private static const WHITE:uint = 0xF2F2F2;
-      private static const MUTED:uint = 0xE6E6E6;
-      private static const GREEN:uint = 0x67D64A;
-      private static const RED:uint = 0xE25A4E;
+      // The two supplied CN captures are the same panel at ~1.0x and ~1.25x UI scale.
+      // Their outer rectangles close at ~192x120 logical px (the second capture is
+      // ~240x150), so keep the native aspect here instead of stretching a short banner.
+      private static const PANEL_W:Number = 192;
+      private static const PANEL_H:Number = 120;
+      private static const PAD_X:Number = 20;
+
+      // Visual pass sampled from the two reference states. Text is intentionally warm-white
+      // rather than pure #fff; up is the cyan-green used by the CN helper, down is its
+      // muted coral red. We can still make tiny final adjustments without touching data logic.
+      private static const WHITE:uint = 0xF2F0E8;
+      private static const MUTED:uint = 0xE0DED4;
+      private static const GREEN:uint = 0x2FDAA1;
+      private static const RED:uint = 0xCB4E52;
 
       public function GunMarksPanelNewSimple()
       {
@@ -133,24 +141,24 @@ package poliroid.views.battle.gunmarks
          }
 
          this._back = new Shape();
-         this._back.graphics.lineStyle(1,0xFFFFFF,0.24);
-         this._back.graphics.beginFill(0x111714,0.66);
+         this._back.graphics.lineStyle(1,0xD8D6CC,0.28);
+         this._back.graphics.beginFill(0x10130F,0.43);
          this._back.graphics.drawRect(0,0,PANEL_W,PANEL_H);
          this._back.graphics.endFill();
          this._back.mouseEnabled = false;
          addChild(this._back);
 
-         this._percent = this._makeText(19,true,WHITE,0,0,94,28,TextFormatAlign.LEFT);
-         this._percentDelta = this._makeText(14,true,WHITE,113,5,100,22,TextFormatAlign.LEFT);
+         this._percent = this._makeText(20,true,WHITE,PAD_X,14,82,29,TextFormatAlign.LEFT);
+         this._percentDelta = this._makeText(15,true,WHITE,112,17,70,23,TextFormatAlign.LEFT);
 
-         this._battleCaption = this._makeText(15,false,MUTED,PAD_X,31,82,21,TextFormatAlign.LEFT);
+         this._battleCaption = this._makeText(16,true,MUTED,PAD_X,50,78,24,TextFormatAlign.LEFT);
          this._battleCaption.text = "\u672c\u573a\u6807\u4f24";
-         this._battleValue = this._makeText(15,true,WHITE,92,31,116,21,TextFormatAlign.LEFT);
+         this._battleValue = this._makeText(16,true,WHITE,100,50,74,24,TextFormatAlign.LEFT);
 
-         this._averageCaption = this._makeText(15,false,MUTED,PAD_X,55,82,21,TextFormatAlign.LEFT);
+         this._averageCaption = this._makeText(16,true,MUTED,PAD_X,82,78,24,TextFormatAlign.LEFT);
          this._averageCaption.text = "\u5e73\u5747\u6807\u4f24";
-         this._averageValue = this._makeText(15,true,WHITE,92,55,74,21,TextFormatAlign.LEFT);
-         this._averageDelta = this._makeText(14,true,WHITE,177,56,40,20,TextFormatAlign.LEFT);
+         this._averageValue = this._makeText(16,true,WHITE,100,82,54,24,TextFormatAlign.LEFT);
+         this._averageDelta = this._makeText(15,true,WHITE,158,84,31,22,TextFormatAlign.LEFT);
 
          this._percentArrow = new Sprite();
          this._percentArrow.mouseEnabled = false;
@@ -184,6 +192,7 @@ package poliroid.views.battle.gunmarks
          field.wordWrap = false;
          field.embedFonts = true;
          field.antiAliasType = AntiAliasType.ADVANCED;
+         field.filters = [new DropShadowFilter(1,90,0x000000,0.86,2,2,1.5,1)];
          addChild(field);
          return field;
       }
@@ -239,37 +248,44 @@ package poliroid.views.battle.gunmarks
          arrow.graphics.beginFill(color,1);
          if(sign > 0)
          {
-            arrow.graphics.moveTo(0,7);
-            arrow.graphics.lineTo(5,0);
-            arrow.graphics.lineTo(10,7);
+            // Narrow stem + head, matching the CN reference rather than a solid triangle.
+            arrow.graphics.drawRect(3,4,2,7);
+            arrow.graphics.moveTo(0,5);
+            arrow.graphics.lineTo(4,0);
+            arrow.graphics.lineTo(8,5);
+            arrow.graphics.lineTo(0,5);
          }
          else
          {
-            arrow.graphics.moveTo(0,0);
-            arrow.graphics.lineTo(10,0);
-            arrow.graphics.lineTo(5,7);
+            arrow.graphics.drawRect(3,0,2,7);
+            arrow.graphics.moveTo(0,6);
+            arrow.graphics.lineTo(8,6);
+            arrow.graphics.lineTo(4,11);
+            arrow.graphics.lineTo(0,6);
          }
-         arrow.graphics.lineTo(0,sign > 0 ? 7 : 0);
          arrow.graphics.endFill();
       }
 
       private function _layoutTopRow() : void
       {
+         var right:Number = 0;
          this._percent.x = PAD_X;
-         this._percent.y = 4;
-         this._percent.width = 100;
-         this._percentArrow.x = 106;
-         this._percentArrow.y = 11;
-         this._percentDelta.x = this._percentArrow.visible ? 120 : 109;
-         this._percentDelta.y = 6;
+         this._percent.y = 14;
+         this._percent.width = 82;
+
+         right = this._percent.x + Math.min(this._percent.textWidth + 4,78);
+         this._percentArrow.x = Math.min(103,right + 4);
+         this._percentArrow.y = 22;
+         this._percentDelta.x = this._percentArrow.visible ? this._percentArrow.x + 11 : this._percentArrow.x + 1;
+         this._percentDelta.y = 17;
       }
 
       private function _layoutAverageRow() : void
       {
-         var right:Number = this._averageValue.x + Math.min(this._averageValue.textWidth + 4,72);
-         this._averageArrow.x = Math.min(170,right + 3);
-         this._averageArrow.y = 62;
-         this._averageDelta.x = this._averageArrow.visible ? this._averageArrow.x + 13 : this._averageArrow.x + 1;
+         var right:Number = this._averageValue.x + Math.min(this._averageValue.textWidth + 4,50);
+         this._averageArrow.x = Math.min(148,right + 4);
+         this._averageArrow.y = 89;
+         this._averageDelta.x = this._averageArrow.visible ? this._averageArrow.x + 11 : this._averageArrow.x + 1;
       }
 
       private function _cleanDamage(value:String) : String
