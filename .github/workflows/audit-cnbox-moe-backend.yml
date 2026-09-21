@@ -64,3 +64,12 @@ jobs:
             grep -RniE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting' \
               "$root/decompiled" | head -n 400 || true
           fi
+
+          echo '=== xdis opcode/name audit ==='
+          set +e
+          pydisasm "$pyc" > "$root/disassembly.txt" 2>&1
+          drc=$?
+          set -e
+          echo "PYDISASM_RC=$drc"
+          grep -niE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting|offset|position' \
+            "$root/disassembly.txt" | head -n 500 || true
