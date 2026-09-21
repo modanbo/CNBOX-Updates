@@ -250,6 +250,22 @@ jobs:
                       continue
                   assert hashlib.sha256(u.read(name)).hexdigest() == hashlib.sha256(v.read(name)).hexdigest(), name
           print('STATIC_MOE_BACKEND_UNCHANGED_OK')
+
+          # Static-only persistence trace. Search the NON-SWF backend members for the
+          # configuration/position symbols that bind the Flash updatePosition callback to
+          # persistent ProTanki state. This is diagnostic evidence only on this pass; once
+          # the exact owner member is identified we can turn it into a locked assertion.
+          terms=(b'gunMarksCalculator', b'offsetBattle', b'updatePosition', b'anchorPoint')
+          evidence={}
+          with zipfile.ZipFile('/tmp/core.wotmod') as z:
+              for i in z.infolist():
+                  if i.is_dir() or i.filename.endswith('protanki_gunmarks_battle.swf'):
+                      continue
+                  data=z.read(i.filename)
+                  found=[t.decode('ascii') for t in terms if t in data]
+                  if found:
+                      evidence[i.filename]=found
+          print('STATIC_MOE_PERSISTENCE_SYMBOLS='+json.dumps(evidence,sort_keys=True))
           print('STATIC_MOE_PAYLOAD_OK')
           PY
 
