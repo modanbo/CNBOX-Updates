@@ -3,7 +3,7 @@ name: Audit CNBOX MoE static structure
 on:
   push:
     branches:
-      - work/moe-component-1.0.4
+      - work/moe-component-1.0.5
     paths:
       - ".github/workflows/audit-cnbox-moe-backend.yml"
 
@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: work/moe-component-1.0.4
+          ref: work/moe-component-1.0.5
 
       - name: Fetch pinned ProTanki core
         shell: bash
