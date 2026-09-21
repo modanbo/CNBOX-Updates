@@ -1,11 +1,11 @@
-name: Audit CNBOX MoE backend persistence
+name: Audit CNBOX MoE static structure
 
 on:
   push:
     branches:
       - work/moe-component-1.0.3
     paths:
-      - '.github/workflows/audit-cnbox-moe-backend.yml'
+      - ".github/workflows/audit-cnbox-moe-backend.yml"
 
 permissions:
   contents: read
@@ -18,293 +18,98 @@ jobs:
         with:
           ref: work/moe-component-1.0.3
 
-      - name: Fetch pinned ProTanki package
+      - name: Fetch pinned ProTanki core
         shell: bash
         run: |
           set -euxo pipefail
           root="$RUNNER_TEMP/moe-audit"
           mkdir -p "$root"
           curl -fL --retry 3 --connect-timeout 20 \
-            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' \
+            "https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip" \
             -o "$root/protanki.zip"
-          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          echo "3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  $root/protanki.zip" | sha256sum -c -
           unzip -q "$root/protanki.zip" -d "$root/upstream"
-          unzip -q "$root/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod" -d "$root/core"
+          core="$root/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+          test -f "$core"
+          unzip -q "$core" -d "$root/core"
           test -f "$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+          test -f "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
+          sha256sum "$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+          file "$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc" || true
 
-      - name: Inspect current official ProTanki standalone archive
+      - name: Export original Flash and verify drag/data contract
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-audit"
+          curl -fL --retry 3 --connect-timeout 20 \
+            "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip" \
+            -o "$root/ffdec.zip"
+          echo "35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  $root/ffdec.zip" | sha256sum -c -
+          mkdir -p "$root/ffdec" "$root/original_flash"
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+          "$root/ffdec/ffdec.sh" -export script "$root/original_flash" \
+            "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          host="$root/original_flash/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
+          simple="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
+          detail="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
+          test -f "$host"
+          test -f "$simple"
+          test -f "$detail"
+
+          grep -Fq "this._offset = param1.offsetBattle;" "$host"
+          grep -Fq "this.anchorPointType = param1.anchorPoint;" "$host"
+          grep -Fq "this.dragArea.startDrag();" "$host"
+          grep -Fq "this.dragArea.stopDrag();" "$host"
+          grep -Fq "this.updatePosition(this._offset);" "$host"
+
+          grep -Fq "param1.predictedRating" "$simple"
+          grep -Fq "param1.deltaRating" "$simple"
+          grep -Fq "param1.battleMovingDamage" "$simple"
+          grep -Fq "param1.deltaDamage" "$simple"
+
+          grep -Fq "param1.predictedMovingDamage" "$detail"
+          grep -Fq "param1.currentMovingDamage" "$detail"
+
+          echo "STATIC_ORIGINAL_DRAG_CONTRACT_OK"
+          echo "STATIC_ORIGINAL_DATA_FIELDS_OK"
+
+      - name: Optional current official archive config check
         shell: bash
         run: |
           set -euxo pipefail
           root="$RUNNER_TEMP/moe-audit"
           page="$root/protanki-download.html"
           curl -fL --retry 3 --connect-timeout 20 \
-            'https://protanki.tv/en/mods/mod-tri-otmetki-na-stvole/download' \
+            "https://protanki.tv/en/mods/mod-tri-otmetki-na-stvole/download" \
             -o "$page"
 
-          python3 - "$page" "$root/official-url.txt" <<'PY'
-          import html,re,sys
-          s=open(sys.argv[1],encoding='utf-8',errors='replace').read()
-          s=html.unescape(s)
-          urls=re.findall(r'https://s3\.protanki\.tv/[^"\'<> ]+',s)
+          python3 - "$page" "$root" <<'PY'
+          import html, re, sys, urllib.request, zipfile, os
+          page, root = sys.argv[1], sys.argv[2]
+          s = html.unescape(open(page, encoding="utf-8", errors="replace").read())
+          urls = re.findall(r"https://s3\.protanki\.tv/[^\"'<> ]+", s)
           if not urls:
-              print('OFFICIAL_PROTANKI_DIRECT_URL_NOT_EMBEDDED')
+              print("OFFICIAL_PROTANKI_DIRECT_URL_NOT_EMBEDDED")
               raise SystemExit(0)
-          open(sys.argv[2],'w').write(urls[0])
-          print('OFFICIAL_PROTANKI_DIRECT_URL_FOUND')
-          PY
-
-          if test -s "$root/official-url.txt"; then
-            curl -fL --retry 3 --connect-timeout 20 \
-              "$(cat "$root/official-url.txt")" -o "$root/protanki-official.zip"
-            echo '=== OFFICIAL_PROTANKI_ARCHIVE_CONFIG_PATHS ==='
-            unzip -Z1 "$root/protanki-official.zip" | grep -Ei 'gunMarksCalculator|protanki/.+\.json|gunmark' | head -n 300 || true
-            cfg="$(unzip -Z1 "$root/protanki-official.zip" | grep -Ei 'mods/configs/protanki/gunMarksCalculator\.json
-        run: |
-          set -euxo pipefail
-          root="$RUNNER_TEMP/moe-audit"
-          curl -fL --retry 3 --connect-timeout 20 \
-            'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip' \
-            -o "$root/ffdec.zip"
-          echo '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  '"$root"'/ffdec.zip' | sha256sum -c -
-          mkdir -p "$root/ffdec" "$root/original_flash"
-          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
-          chmod +x "$root/ffdec/ffdec.sh"
-          "$root/ffdec/ffdec.sh" -export script "$root/original_flash" \
-            "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
-
-          echo '=== ORIGINAL_PROGUNMARKS_STRUCTURE ==='
-          f="$root/original_flash/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
-          test -f "$f"
-          grep -nE 'panel_|dragArea|as_setSettings|offsetBattle|updatePosition|startDrag|stopDrag|handleMouse|updateFrame|anchorPoint' "$f" | head -n 300
-          echo '=== ORIGINAL_PROGUNMARKS_DRAG_BODY ==='
-          sed -n '145,238p' "$f"
-
-          echo '=== ORIGINAL_SIMPLE_PANEL_FIELDS ==='
-          f2="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
-          test -f "$f2"
-          grep -nE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage|panelWidth|panelHeight|setData|setSettings' "$f2" | head -n 300
-          echo '=== ORIGINAL_SIMPLE_PANEL_BODY ==='
-          sed -n '1,90p' "$f2"
-          echo '=== ORIGINAL_ALL_DISPLAY_FIELD_REFERENCES ==='
-          grep -RniE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage' \
-            "$root/original_flash" | head -n 500 || true
-
-          echo '=== ORIGINAL_NEW_PANEL_DATA_BODY ==='
-          f3="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
-          test -f "$f3"
-          sed -n '1,165p' "$f3"
-
-          echo '=== ORIGINAL_ALL_DAMAGE_PAYLOAD_KEYS ==='
-          grep -RhoE 'param1\.[A-Za-z0-9_]*[Dd]amage[A-Za-z0-9_]*' "$root/original_flash" \
-            | sort -u | head -n 300 || true
-
-      - name: Inspect compiled backend without executing it
-        shell: bash
-        run: |
-          set -euxo pipefail
-          root="$RUNNER_TEMP/moe-audit"
-          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
-          sha256sum "$pyc"
-          file "$pyc" || true
-          xxd -l 32 "$pyc"
-
-          echo '=== ASCII symbols relevant to persistence/config ==='
-          strings -a -n 4 "$pyc" | grep -Ei 'gun.?marks|offset|position|config|settings|update|save|anchor' | head -n 300 || true
-
-      - name: Try Python bytecode decompile
-        shell: bash
-        run: |
-          set -euxo pipefail
-          root="$RUNNER_TEMP/moe-audit"
-          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
-          python3 -m pip install -q 'uncompyle6>=3.9,<4'
-          mkdir -p "$root/decompiled"
-          set +e
-          uncompyle6 -o "$root/decompiled" "$pyc"
-          rc=$?
-          set -e
-          echo "UNCOMPYLE6_RC=$rc"
-          find "$root/decompiled" -type f -maxdepth 5 -print
-          if find "$root/decompiled" -type f | grep -q .; then
-            echo '=== Decompiled persistence/config references ==='
-            grep -RniE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting' \
-              "$root/decompiled" | head -n 400 || true
-          fi
-
-          echo '=== xdis code-object constants/names audit (no opcode decompile) ==='
-          python3 - "$pyc" <<'PY'
-          import sys
-          from xdis.load import load_module
-          path=sys.argv[1]
+          print("OFFICIAL_PROTANKI_DIRECT_URL_FOUND")
+          archive = os.path.join(root, "protanki-official.zip")
           try:
-              loaded=load_module(path)
-              root=next(x for x in loaded if hasattr(x,'co_consts'))
+              urllib.request.urlretrieve(urls[0], archive)
           except Exception as e:
-              print('XDIS_CONST_LOAD_ERROR='+repr(e))
+              print("OFFICIAL_PROTANKI_DOWNLOAD_SKIPPED", repr(e))
               raise SystemExit(0)
-
-          needles=('damage','mark','offset','position','config','setting','save','anchor',
-                   'rating','moving','battle','update')
-          seen=set()
-          def walk(co, depth=0):
-              ident=(getattr(co,'co_name','?'), getattr(co,'co_firstlineno',-1), id(co))
-              if ident in seen:
-                  return
-              seen.add(ident)
-              names=[str(x) for x in getattr(co,'co_names',())]
-              strs=[]
-              for x in getattr(co,'co_consts',()):
-                  if isinstance(x,(str,bytes)):
-                      try:
-                          s=x.decode('utf-8','replace') if isinstance(x,bytes) else x
-                      except Exception:
-                          s=repr(x)
-                      if any(n in s.lower() for n in needles):
-                          strs.append(s)
-              nh=[n for n in names if any(k in n.lower() for k in needles)]
-              if nh or strs:
-                  print('CODEOBJ',getattr(co,'co_name','?'),'NAMES',repr(nh),'STRS',repr(strs))
-              for x in getattr(co,'co_consts',()):
-                  if hasattr(x,'co_consts'):
-                      walk(x,depth+1)
-          walk(root)
-          PY
-
-          echo '=== xdis opcode/name audit ==='
-          set +e
-          pydisasm "$pyc" > "$root/disassembly.txt" 2>&1
-          drc=$?
-          set -e
-          echo "PYDISASM_RC=$drc"
-          grep -niE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting|offset|position' \
-            "$root/disassembly.txt" | head -n 500 || true
- | head -n 1 || true)"
-            if test -n "$cfg"; then
-              echo '=== OFFICIAL_PROTANKI_GUNMARKS_CONFIG ==='
-              unzip -p "$root/protanki-official.zip" "$cfg"
-              echo
-            fi
-          fi
-
-      - name: Export original ProTanki Flash presentation for structural diff
-        shell: bash
-        run: |
-          set -euxo pipefail
-          root="$RUNNER_TEMP/moe-audit"
-          curl -fL --retry 3 --connect-timeout 20 \
-            'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip' \
-            -o "$root/ffdec.zip"
-          echo '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  '"$root"'/ffdec.zip' | sha256sum -c -
-          mkdir -p "$root/ffdec" "$root/original_flash"
-          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
-          chmod +x "$root/ffdec/ffdec.sh"
-          "$root/ffdec/ffdec.sh" -export script "$root/original_flash" \
-            "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
-
-          echo '=== ORIGINAL_PROGUNMARKS_STRUCTURE ==='
-          f="$root/original_flash/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
-          test -f "$f"
-          grep -nE 'panel_|dragArea|as_setSettings|offsetBattle|updatePosition|startDrag|stopDrag|handleMouse|updateFrame|anchorPoint' "$f" | head -n 300
-          echo '=== ORIGINAL_PROGUNMARKS_DRAG_BODY ==='
-          sed -n '145,238p' "$f"
-
-          echo '=== ORIGINAL_SIMPLE_PANEL_FIELDS ==='
-          f2="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
-          test -f "$f2"
-          grep -nE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage|panelWidth|panelHeight|setData|setSettings' "$f2" | head -n 300
-          echo '=== ORIGINAL_SIMPLE_PANEL_BODY ==='
-          sed -n '1,90p' "$f2"
-          echo '=== ORIGINAL_ALL_DISPLAY_FIELD_REFERENCES ==='
-          grep -RniE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage' \
-            "$root/original_flash" | head -n 500 || true
-
-          echo '=== ORIGINAL_NEW_PANEL_DATA_BODY ==='
-          f3="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
-          test -f "$f3"
-          sed -n '1,165p' "$f3"
-
-          echo '=== ORIGINAL_ALL_DAMAGE_PAYLOAD_KEYS ==='
-          grep -RhoE 'param1\.[A-Za-z0-9_]*[Dd]amage[A-Za-z0-9_]*' "$root/original_flash" \
-            | sort -u | head -n 300 || true
-
-      - name: Inspect compiled backend without executing it
-        shell: bash
-        run: |
-          set -euxo pipefail
-          root="$RUNNER_TEMP/moe-audit"
-          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
-          sha256sum "$pyc"
-          file "$pyc" || true
-          xxd -l 32 "$pyc"
-
-          echo '=== ASCII symbols relevant to persistence/config ==='
-          strings -a -n 4 "$pyc" | grep -Ei 'gun.?marks|offset|position|config|settings|update|save|anchor' | head -n 300 || true
-
-      - name: Try Python bytecode decompile
-        shell: bash
-        run: |
-          set -euxo pipefail
-          root="$RUNNER_TEMP/moe-audit"
-          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
-          python3 -m pip install -q 'uncompyle6>=3.9,<4'
-          mkdir -p "$root/decompiled"
-          set +e
-          uncompyle6 -o "$root/decompiled" "$pyc"
-          rc=$?
-          set -e
-          echo "UNCOMPYLE6_RC=$rc"
-          find "$root/decompiled" -type f -maxdepth 5 -print
-          if find "$root/decompiled" -type f | grep -q .; then
-            echo '=== Decompiled persistence/config references ==='
-            grep -RniE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting' \
-              "$root/decompiled" | head -n 400 || true
-          fi
-
-          echo '=== xdis code-object constants/names audit (no opcode decompile) ==='
-          python3 - "$pyc" <<'PY'
-          import sys
-          from xdis.load import load_module
-          path=sys.argv[1]
           try:
-              loaded=load_module(path)
-              root=next(x for x in loaded if hasattr(x,'co_consts'))
+              with zipfile.ZipFile(archive) as z:
+                  names = z.namelist()
+                  hits = [n for n in names if "gunmark" in n.lower() or ("protanki/" in n.lower() and n.lower().endswith(".json"))]
+                  print("OFFICIAL_PROTANKI_RELEVANT_PATHS", hits[:200])
+                  cfg = next((n for n in names if n.replace("\\","/").lower().endswith("mods/configs/protanki/gunmarkscalculator.json")), None)
+                  if cfg:
+                      print("OFFICIAL_PROTANKI_GUNMARKS_CONFIG")
+                      print(z.read(cfg).decode("utf-8-sig", "replace"))
           except Exception as e:
-              print('XDIS_CONST_LOAD_ERROR='+repr(e))
-              raise SystemExit(0)
-
-          needles=('damage','mark','offset','position','config','setting','save','anchor',
-                   'rating','moving','battle','update')
-          seen=set()
-          def walk(co, depth=0):
-              ident=(getattr(co,'co_name','?'), getattr(co,'co_firstlineno',-1), id(co))
-              if ident in seen:
-                  return
-              seen.add(ident)
-              names=[str(x) for x in getattr(co,'co_names',())]
-              strs=[]
-              for x in getattr(co,'co_consts',()):
-                  if isinstance(x,(str,bytes)):
-                      try:
-                          s=x.decode('utf-8','replace') if isinstance(x,bytes) else x
-                      except Exception:
-                          s=repr(x)
-                      if any(n in s.lower() for n in needles):
-                          strs.append(s)
-              nh=[n for n in names if any(k in n.lower() for k in needles)]
-              if nh or strs:
-                  print('CODEOBJ',getattr(co,'co_name','?'),'NAMES',repr(nh),'STRS',repr(strs))
-              for x in getattr(co,'co_consts',()):
-                  if hasattr(x,'co_consts'):
-                      walk(x,depth+1)
-          walk(root)
+              print("OFFICIAL_PROTANKI_ARCHIVE_INSPECT_SKIPPED", repr(e))
           PY
-
-          echo '=== xdis opcode/name audit ==='
-          set +e
-          pydisasm "$pyc" > "$root/disassembly.txt" 2>&1
-          drc=$?
-          set -e
-          echo "PYDISASM_RC=$drc"
-          grep -niE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting|offset|position' \
-            "$root/disassembly.txt" | head -n 500 || true
