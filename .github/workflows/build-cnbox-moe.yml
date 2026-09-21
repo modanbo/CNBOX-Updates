@@ -266,6 +266,11 @@ jobs:
                   if found:
                       evidence[i.filename]=found
           print('STATIC_MOE_PERSISTENCE_SYMBOLS='+json.dumps(evidence,sort_keys=True))
+          with zipfile.ZipFile('/tmp/core.wotmod') as z:
+              py_members=[i.filename for i in z.infolist()
+                          if not i.is_dir() and
+                          (i.filename.endswith('.pyc') or '/scripts/' in i.filename)]
+          print('STATIC_MOE_SCRIPT_MEMBERS='+json.dumps(sorted(py_members)))
           print('STATIC_MOE_PAYLOAD_OK')
           PY
 
