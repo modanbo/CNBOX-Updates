@@ -1,0 +1,25 @@
+=== MOE OPTION ===
+700-      <Mod Id="NonXVMHitlogs_high_caliber" Author="" SizeKb="413" File="" Enabled="true" New="false" InstallOrder="2342" Preview="../Shared/NonXVMHitlogs_high_caliber_fbac0543.jpg|../Shared/NonXVMHitlogs_high_caliber_2f9525a4.jpg" Legacy="modpack/NonXVMHitlogs/high_caliber" KeepExisting="mods\configs\oldskool\high_caliber.json">
+701-        <Package File="../Files/NonXVMHitlogs/NonXVMHitlogs_high_caliber_b96b2d7b.zip" SizeKb="412" Order="2341" />
+702-        <Package File="../Files/NonXVMHitlogs/NonXVMHitlogs_high_caliber_part1_35c4a044.zip" SizeKb="1" Order="2347" />
+703-      </Mod>
+704-    </Group>
+705-  </Category>
+706-  <Category Id="MarksOnGun" Icon="E735" Enabled="true">
+707-    <Group Id="MarksOnGun_direct" Exclusive="false" Enabled="true">
+708:      <Mod Id="MarksOnGun_Gun_Marks_lebwa" Author="" SizeKb="315" File="../Files/MarksOnGun/MarksOnGun_Gun_Marks_lebwa_c0dc9156.zip" Enabled="true" New="false" InstallOrder="1956" Preview="../Shared/MarksOnGun_Gun_Marks_lebwa_2ccbc5d7.jpg" AuthorUrl="https://lebwa.tv/hub/modpack-lebwa" Legacy="modpack/MarksOnGun/Gun_Marks_lebwa" Radio="true" CheckableAlone="true" />
+709:      <Mod Id="MarksOnGun_Gun_Marks_Calculator" Author="" SizeKb="467" File="../Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip" Enabled="true" New="false" InstallOrder="2110" Preview="../Shared/MarksOnGun_Gun_Marks_Calculator_e2c56d3d.jpg" AuthorUrl="https://protanki.tv/" Legacy="modpack/MarksOnGun/Gun_Marks_Calculator" Radio="true" CheckableAlone="true" />
+710-      <Mod Id="MarksOnGun_MarksOnGunExtended" Author="" SizeKb="759" File="../Files/MarksOnGun/MarksOnGun_MarksOnGunExtended_3ba3ec39.zip" Enabled="true" New="true" InstallOrder="2325" Preview="../Shared/MarksOnGun_MarksOnGunExtended_2de76e35.jpg|../Shared/MarksOnGun_MarksOnGunExtended_8c449536.jpg" AuthorUrl="https://wotsite.net/mody-dlya-world-of-tanks/12437-mod-pokaza-protsenta-otmetki-na-orudie-v-boyu-dlya-wot.html" Legacy="modpack/MarksOnGun/MarksOnGunExtended" NewSince="2026-09-02" Radio="true" />
+711:      <Mod Id="MarksOnGun_MoE_Calculator_14th_ua" Author="" SizeKb="2079" File="" Enabled="true" New="false" InstallOrder="1904" Preview="../Shared/MarksOnGun_MoE_Calculator_14th_ua_960daa9f.jpg|../Shared/MarksOnGun_MoE_Calculator_14th_ua_6d1b5fac.jpg" AuthorUrl="https://wgmods.net/7745/" Legacy="modpack/MarksOnGun/MoE_Calculator_14th_ua" Radio="true">
+712:        <Package File="../Files/MarksOnGun/MarksOnGun_MoE_Calculator_14th_ua_900ee1ff.zip" SizeKb="1669" Order="1904" />
+713:        <Package File="../Files/MarksOnGun/MarksOnGun_MoE_Calculator_14th_ua_part1_9f812a75.zip" SizeKb="410" Order="2378" />
+714-      </Mod>
+715-      <Mod Id="MarksOnGun_Expected_Vehicle_Values" Author="" SizeKb="1453" File="../Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_d435e60a.zip" Enabled="true" New="false" InstallOrder="1835" Preview="../Shared/MarksOnGun_Expected_Vehicle_Values_d4235979.jpg" AuthorUrl="https://wgmods.net/4322/" Legacy="modpack/MarksOnGun/Expected_Vehicle_Values" Radio="false" CheckableAlone="true" />
+716-      <Mod Id="MarksOnGun_moe_overlay" Author="" SizeKb="38" File="../Files/MarksOnGun/MarksOnGun_moe_overlay_41ad708f.zip" Enabled="true" New="false" InstallOrder="1895" Preview="../Shared/MarksOnGun_moe_overlay_32c16feb.jpg" AuthorUrl="https://wgmods.net/7596/" Legacy="modpack/MarksOnGun/moe_overlay" Radio="false" CheckableAlone="true" />
+717-      <Mod Id="MarksOnGun_MoE_Tracker" Author="" SizeKb="28" File="../Files/MarksOnGun/MarksOnGun_MoE_Tracker_be08a728.zip" Enabled="true" New="false" InstallOrder="1894" Preview="../Shared/MarksOnGun_MoE_Tracker_8cda8ec1.jpg" AuthorUrl="https://wgmods.net/7578/" Legacy="modpack/MarksOnGun/MoE_Tracker" Radio="false" CheckableAlone="true" />
+718-      <Mod Id="MarksOnGun_techtree_stats" Author="" SizeKb="370" File="" Enabled="true" New="false" InstallOrder="2324" Preview="../Shared/MarksOnGun_techtree_stats_8cce143e.jpg" AuthorUrl="https://github.com/deadhat/wotmods-public" Legacy="modpack/MarksOnGun/techtree_stats" Radio="false" CheckableAlone="true">
+719-        <Package File="../Files/MarksOnGun/MarksOnGun_techtree_stats_af2223f9.zip" SizeKb="369" Order="2324" />
+720-        <Package File="../Files/MarksOnGun/MarksOnGun_techtree_stats_part1_35c4a044.zip" SizeKb="1" Order="2347" />
+721-      </Mod>
+
+=== OPENWG COMMON / FIX RULES ===
