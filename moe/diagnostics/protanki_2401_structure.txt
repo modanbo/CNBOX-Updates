@@ -1,0 +1,66 @@
+=== OUTER ARCHIVE ===
+mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod
+mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod
+mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod
+mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod
+
+=== TOP-LEVEL FILE HASHES ===
+e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca  /home/runner/work/_temp/protanki-diagnose/upstream/mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod
+d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283  /home/runner/work/_temp/protanki-diagnose/upstream/mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod
+26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1  /home/runner/work/_temp/protanki-diagnose/upstream/mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod
+e83eeab978e7599fb0924e01933df1c863977ee33984e2701270b23cda27a408  /home/runner/work/_temp/protanki-diagnose/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod
+
+=== CORE META.XML ===
+<root>
+
+	<!-- Techical MOD ID -->
+	<id>tv.protanki.gunmarkscalc</id>
+
+	<!-- Package version -->
+	<version>8.1.01</version>
+
+	<!-- Human readable name -->
+	<name>Gun marks achivment calculator</name>
+
+	<!-- Human readable description -->
+	<description>Help player calculate current achivment progress in battle</description>
+</root>
+=== CORE MEMBERS ===
+meta.xml
+res/
+res/gui/
+res/gui/flash/
+res/gui/flash/protanki_gunmarks_battle.swf
+res/gui/maps/
+res/gui/maps/mods/
+res/gui/maps/mods/gunmarks/
+res/gui/maps/mods/gunmarks/new-simple.png
+res/gui/maps/mods/gunmarks/new.png
+res/gui/maps/mods/gunmarks/old.png
+res/gui/maps/mods/gunmarks/screen.png
+res/mods/
+res/mods/protanki.gunmarks/
+res/mods/protanki.gunmarks/text/
+res/mods/protanki.gunmarks/text/en.yml
+res/mods/protanki.gunmarks/text/ru.yml
+res/mods/protanki.gunmarks/text/uk.yml
+res/scripts/
+res/scripts/client/
+res/scripts/client/gui/
+res/scripts/client/gui/mods/
+res/scripts/client/gui/mods/mod_pro_gunmarks.pyc
+
+=== CORE META/DEPENDENCY STRINGS ===
+<root>
+	<!-- Techical MOD ID -->
+	<id>tv.protanki.gunmarkscalc</id>
+	<!-- Package version -->
+	<version>8.1.01</version>
+	<!-- Human readable name -->
+	<name>Gun marks achivment calculator</name>
+	<!-- Human readable description -->
+	<description>Help player calculate current achivment progress in battle</description>
+</root>
+
+=== CORE SCRIPT STRING HINTS ===
+mod_pro_gunmarkss
