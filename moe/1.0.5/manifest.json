@@ -6,7 +6,7 @@
   "sourceCore": "ProTanki Gun Marks Calculator 8.1.01",
   "sourceUrl": "https://protanki.tv/",
   "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.5/CNBOX_MoE_1.0.5_WOT_2.4.0.1.zip",
-  "payloadSha256": "a3696b42f99262cb7a6f10e22e236f6835e6c9afc43a806205b697246a5ec21f",
+  "payloadSha256": "fbc330dfb1e7edc7eacf0bacc50991dacc40e2ff1e289a94fe7fcf4ba9c86fa1",
   "notes": "Standalone Manager component. ProTanki calculation backend and ProGunMarks host stay original. CNBOX changes only the stock new battle panel class and adds zh_sg text fallback. mods/configs/protanki/gunMarksCalculator.json is installed only when missing and preserved on update/uninstall so drag offset survives battles and restarts.",
   "installedFiles": [
     {
@@ -29,7 +29,7 @@
     },
     {
       "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
-      "sha256": "2fbcce63b64682ccce384a020e7db5f57f0fa2df697198548057918cb4c1bad1",
+      "sha256": "b0120e0ebf5b1f4ac0f44d63fab594021d96e71cd7aabb0263db44b64a00a924",
       "required": true,
       "shared": false
     }
