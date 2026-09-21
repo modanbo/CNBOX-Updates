@@ -358,4 +358,8 @@ jobs:
             exit 0
           fi
           git commit -m 'Build CNBOX standalone MoE 1.0.5 candidate'
+          # Another diagnostic/audit workflow may have advanced the same work branch
+          # while this build was running. Rebase the deterministic candidate commit
+          # instead of failing the release build on a harmless ref race.
+          git pull --rebase origin work/moe-component-1.0.5
           git push origin HEAD:work/moe-component-1.0.5
