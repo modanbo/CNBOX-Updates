@@ -123,13 +123,25 @@ jobs:
           cp "$root/upstream/mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod" \
              "$root/payload/mods/2.4.0.1/net.openwg/"
 
-          # The ProTanki backend persists the drag offset in this user config.
-          # Ship a default only for first install; Manager's MoE installer preserves an
-          # existing copy on update/reinstall and never removes it on uninstall.
-          test -f "$root/upstream/mods/configs/protanki/gunMarksCalculator.json"
+          # The Aslain single-mod archive does not carry ProTanki's external JSON;
+          # Aslain's installer normally lays it down separately. Build the known upstream
+          # default deterministically for FIRST install. Manager v1.2.9 treats this file as
+          # user-owned: an existing copy is never overwritten and uninstall never removes it,
+          # so offset/anchor survive battles, client restarts and reinstall.
           mkdir -p "$root/payload/mods/configs/protanki"
-          cp "$root/upstream/mods/configs/protanki/gunMarksCalculator.json" \
-             "$root/payload/mods/configs/protanki/gunMarksCalculator.json"
+          cat > "$root/payload/mods/configs/protanki/gunMarksCalculator.json" <<'EOF'
+          {
+            "enable": true,
+            "enabled": true,
+            "offset": [107, 342],
+            "minimized": false,
+            "skinVariant": "new",
+            "anchorPoint": "top-right",
+            "progressLogic": "damage",
+            "accountMark": true
+          }
+          EOF
+          sed -i 's/^          //' "$root/payload/mods/configs/protanki/gunMarksCalculator.json"
 
           python3 - <<'PY'
           import os, zipfile, hashlib, json
