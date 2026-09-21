@@ -732,5 +732,8 @@
         }
       ]
     }
-  ]
+  ],
+  "creatorManagerVersion": "1.2.11",
+  "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager_Creator.exe",
+  "creatorManagerSha256": "37032c0d571ad908818e3a317b6cc53bfb86d887c87e51ba7f56d65e05e14b45"
 }
