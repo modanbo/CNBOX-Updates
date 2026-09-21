@@ -104,6 +104,45 @@ jobs:
               "$root/decompiled" | head -n 400 || true
           fi
 
+          echo '=== xdis code-object constants/names audit (no opcode decompile) ==='
+          python3 - "$pyc" <<'PY'
+          import sys
+          from xdis.load import load_module
+          path=sys.argv[1]
+          try:
+              loaded=load_module(path)
+              root=next(x for x in loaded if hasattr(x,'co_consts'))
+          except Exception as e:
+              print('XDIS_CONST_LOAD_ERROR='+repr(e))
+              raise SystemExit(0)
+
+          needles=('damage','mark','offset','position','config','setting','save','anchor',
+                   'rating','moving','battle','update')
+          seen=set()
+          def walk(co, depth=0):
+              ident=(getattr(co,'co_name','?'), getattr(co,'co_firstlineno',-1), id(co))
+              if ident in seen:
+                  return
+              seen.add(ident)
+              names=[str(x) for x in getattr(co,'co_names',())]
+              strs=[]
+              for x in getattr(co,'co_consts',()):
+                  if isinstance(x,(str,bytes)):
+                      try:
+                          s=x.decode('utf-8','replace') if isinstance(x,bytes) else x
+                      except Exception:
+                          s=repr(x)
+                      if any(n in s.lower() for n in needles):
+                          strs.append(s)
+              nh=[n for n in names if any(k in n.lower() for k in needles)]
+              if nh or strs:
+                  print('CODEOBJ',getattr(co,'co_name','?'),'NAMES',repr(nh),'STRS',repr(strs))
+              for x in getattr(co,'co_consts',()):
+                  if hasattr(x,'co_consts'):
+                      walk(x,depth+1)
+          walk(root)
+          PY
+
           echo '=== xdis opcode/name audit ==='
           set +e
           pydisasm "$pyc" > "$root/disassembly.txt" 2>&1
