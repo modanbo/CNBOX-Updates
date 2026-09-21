@@ -276,6 +276,26 @@ jobs:
                   assert hashlib.sha256(u.read(name)).hexdigest() == hashlib.sha256(v.read(name)).hexdigest(), name
           print('STATIC_MOE_BACKEND_UNCHANGED_OK')
 
+          # The two CN screenshots supplied by the project owner are also a semantic
+          # cross-check for the three rows, without launching the game:
+          #   battle=3749, projected avg=3385, avg delta=+7  -> pre avg ~3378
+          #   battle= 955, projected avg=3348, avg delta=-48 -> pre avg ~3396
+          # Both close under the same 100-battle EWMA k=2/101 used by the compared
+          # 14th_ua/Lebwa implementations. This protects the battle-vs-average binding.
+          import math
+          k=2.0/101.0
+          def rh(v):
+              return int(math.floor(v+0.5)) if v >= 0 else -int(math.floor(-v+0.5))
+          up_old,up_battle=3378,3749
+          up_new=up_old+k*(up_battle-up_old)
+          assert rh(up_new)==3385
+          assert rh(up_new-up_old)==7
+          dn_old,dn_battle=3396,955
+          dn_new=dn_old+k*(dn_battle-dn_old)
+          assert rh(dn_new)==3348
+          assert rh(dn_new-dn_old)==-48
+          print('STATIC_MOE_CN_REFERENCE_MATH_OK')
+
           # Static-only persistence trace. Search the NON-SWF backend members for the
           # configuration/position symbols that bind the Flash updatePosition callback to
           # persistent ProTanki state. This is diagnostic evidence only on this pass; once
