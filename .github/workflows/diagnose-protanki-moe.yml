@@ -80,6 +80,20 @@ jobs:
             strings -a -n 3 "$pyc" || true
           } > "$GITHUB_WORKSPACE/moe/diagnostics/protanki_backend_disassembly.txt"
 
+      - name: Extract Aslain implicit dependency rules
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cfg="$GITHUB_WORKSPACE/aslain_catalogs/2.4.0.1/04/Configuration"
+          out="$GITHUB_WORKSPACE/moe/diagnostics/aslain_04_moe_dependencies.txt"
+          {
+            echo "=== MOE OPTION ==="
+            grep -n -C 8 -E "MarksOnGun_Gun_Marks_Calculator|Gun_Marks_Calculator|Gun_Marks_lebwa|MoE_Calculator_14th_ua" "$cfg" || true
+            echo
+            echo "=== OPENWG COMMON / FIX RULES ==="
+            grep -n -C 4 -E "net\.openwg\.common|battleresultscache|battleresultsreplays|Implicit.*openwg|openwg.*RequiresAny|RequiresAny=.*MarksOnGun" "$cfg" || true
+          } > "$out"
+
       - name: Commit diagnostic evidence
         shell: bash
         run: |
