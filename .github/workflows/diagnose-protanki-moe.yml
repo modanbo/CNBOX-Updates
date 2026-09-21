@@ -52,12 +52,40 @@ jobs:
             unzip -p "$core" res/scripts/client/gui/mods/mod_pro_gunmarks.pyc | strings -a -n 4 | grep -Ei "openwg|modslist|settingsapi|battle.?result|dependency|config|gunmark|offset|position|server|region|api" | head -n 500 || true
           } > "$out"
 
+      - name: Export original Flash scripts and disassemble backend
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/protanki-diagnose"
+          core="$root/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+          mkdir -p "$root/core" "$root/ffdec" "$root/original_flash" "$GITHUB_WORKSPACE/moe/diagnostics/original_flash"
+          unzip -q -o "$core" -d "$root/core"
+
+          curl -fL --retry 3 --connect-timeout 20             "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip"             -o "$root/ffdec.zip"
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+          "$root/ffdec/ffdec.sh" -export script "$root/original_flash"             "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          cp "$root/original_flash/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"              "$GITHUB_WORKSPACE/moe/diagnostics/original_flash/ProGunMarks.as"
+          cp "$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"              "$GITHUB_WORKSPACE/moe/diagnostics/original_flash/GunMarksPanelNewSimple.as"
+          cp "$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"              "$GITHUB_WORKSPACE/moe/diagnostics/original_flash/GunMarksPanelNew.as"
+
+          python3 -m pip install -q "uncompyle6>=3.9,<4" || true
+          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+          {
+            echo "=== PYDISASM ==="
+            pydisasm "$pyc" || true
+            echo
+            echo "=== STRINGS ==="
+            strings -a -n 3 "$pyc" || true
+          } > "$GITHUB_WORKSPACE/moe/diagnostics/protanki_backend_disassembly.txt"
+
       - name: Commit diagnostic evidence
         shell: bash
         run: |
           set -euxo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add moe/diagnostics/protanki_2401_structure.txt
-          git commit -m "Record ProTanki 2.4.0.1 package structure"
+          git add moe/diagnostics/
+          git commit -m "Record ProTanki 2.4.0.1 package and Flash diagnostics"
           git push origin HEAD:work/moe-component-1.0.5-diagnose
