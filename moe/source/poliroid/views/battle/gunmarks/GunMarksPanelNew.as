@@ -1,6 +1,5 @@
 package poliroid.views.battle.gunmarks
 {
-   import flash.display.DisplayObject;
    import flash.display.MovieClip;
    import flash.display.Shape;
    import flash.display.Sprite;
@@ -13,14 +12,14 @@ package poliroid.views.battle.gunmarks
    /**
     * CNBOX compact MoE presentation for ProTanki's stock "new" panel.
     *
-    * IMPORTANT:
-    * - ProGunMarks (host/drag/lifecycle) is NOT replaced in 1.0.5.
-    * - ProTanki Python calculation backend is NOT changed.
-    * - Existing config keeps skinVariant="new", so the stock host selects this class.
+    * Runtime-safety rule for 1.0.5:
+    * - original ProGunMarks host is untouched;
+    * - original timeline TextFields are reused (no new font-dependent TextFields);
+    * - calculation/backend remains untouched;
+    * - only panel labels/layout/background/arrows are presentation changes.
     */
    public class GunMarksPanelNew extends MovieClip implements IGunMarksPanel
    {
-      // Keep the original public timeline names so linkage stays compatible.
       public var hitAreaA:MovieClip;
       public var progressBar:MovieClip = null;
       public var drPredicted:TextField = null;
@@ -35,16 +34,8 @@ package poliroid.views.battle.gunmarks
 
       private var _built:Boolean = false;
       private var _back:Shape;
-      private var _percent:TextField;
-      private var _percentDelta:TextField;
-      private var _battleCaption:TextField;
-      private var _battleValue:TextField;
-      private var _averageCaption:TextField;
-      private var _averageValue:TextField;
-      private var _averageDelta:TextField;
       private var _percentArrow:Sprite;
       private var _averageArrow:Sprite;
-      private var _unavailable:TextField;
 
       private static const PANEL_W:Number = 192;
       private static const PANEL_H:Number = 120;
@@ -88,21 +79,14 @@ package poliroid.views.battle.gunmarks
             return;
          }
 
-         this._unavailable.visible = false;
-         this._percent.visible = true;
-         this._percentDelta.visible = true;
-         this._battleCaption.visible = true;
-         this._battleValue.visible = true;
-         this._averageCaption.visible = true;
-         this._averageValue.visible = true;
-         this._averageDelta.visible = true;
+         this._showNormalFields();
 
-         this._percent.text = this._s(param1.predictedRating);
-         this._battleValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
-         this._averageValue.text = this._cleanDamage(this._s(param1.predictedMovingDamage));
+         this.drPredicted.text = this._s(param1.predictedRating);
+         this.nextMarkValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
+         this.predictedMovingDamage.text = this._cleanDamage(this._s(param1.predictedMovingDamage));
 
-         this._setDelta(this._percentDelta,this._percentArrow,this._s(param1.deltaRating),true);
-         this._setDelta(this._averageDelta,this._averageArrow,this._s(param1.deltaDamage),false);
+         this._setDelta(this.drPredictedDelta,this._percentArrow,this._s(param1.deltaRating),true);
+         this._setDelta(this.currentMovingDamage,this._averageArrow,this._s(param1.deltaDamage),false);
 
          this._layoutTopRow();
          this._layoutAverageRow();
@@ -110,17 +94,19 @@ package poliroid.views.battle.gunmarks
 
       private function _ensureUi() : void
       {
-         var i:int = 0;
-         var d:DisplayObject = null;
          if(this._built) return;
          this._built = true;
 
-         // Hide the stock "new" artwork/labels, but leave the timeline/linkage intact.
-         for(i = 0; i < numChildren; i++)
-         {
-            d = getChildAt(i);
-            d.visible = false;
-         }
+         if(this.background) this.background.visible = false;
+         if(this.progressBar) this.progressBar.visible = false;
+
+         this._back = new Shape();
+         this._back.graphics.lineStyle(1,0xD8D6CC,0.28);
+         this._back.graphics.beginFill(0x10130F,0.43);
+         this._back.graphics.drawRect(0,0,PANEL_W,PANEL_H);
+         this._back.graphics.endFill();
+         this._back.mouseEnabled = false;
+         addChildAt(this._back,0);
 
          if(this.hitAreaA)
          {
@@ -130,25 +116,23 @@ package poliroid.views.battle.gunmarks
             this.hitAreaA.visible = true;
          }
 
-         this._back = new Shape();
-         this._back.graphics.lineStyle(1,0xD8D6CC,0.28);
-         this._back.graphics.beginFill(0x10130F,0.43);
-         this._back.graphics.drawRect(0,0,PANEL_W,PANEL_H);
-         this._back.graphics.endFill();
-         this._back.mouseEnabled = false;
-         addChild(this._back);
+         // Reuse the SWF's already-created text fields and their embedded font linkage.
+         this._styleField(this.drPredicted,20,true,WHITE,PAD_X,14,82,29,TextFormatAlign.LEFT);
+         this._styleField(this.drPredictedDelta,15,true,WHITE,112,17,70,23,TextFormatAlign.LEFT);
 
-         this._percent = this._makeText(20,true,WHITE,PAD_X,14,82,29,TextFormatAlign.LEFT);
-         this._percentDelta = this._makeText(15,true,WHITE,112,17,70,23,TextFormatAlign.LEFT);
+         this._styleField(this.damageCurrentLabel,16,true,MUTED,PAD_X,50,80,24,TextFormatAlign.LEFT);
+         this.damageCurrentLabel.text = "\u672c\u573a\u6807\u4f24";
 
-         this._battleCaption = this._makeText(16,true,MUTED,PAD_X,50,80,24,TextFormatAlign.LEFT);
-         this._battleCaption.text = "\u672c\u573a\u6807\u4f24";
-         this._battleValue = this._makeText(16,true,WHITE,103,50,71,24,TextFormatAlign.LEFT);
+         this._styleField(this.nextMarkValue,16,true,WHITE,103,50,71,24,TextFormatAlign.LEFT);
 
-         this._averageCaption = this._makeText(16,true,MUTED,PAD_X,82,80,24,TextFormatAlign.LEFT);
-         this._averageCaption.text = "\u5e73\u5747\u6807\u4f24";
-         this._averageValue = this._makeText(16,true,WHITE,103,82,51,24,TextFormatAlign.LEFT);
-         this._averageDelta = this._makeText(15,true,WHITE,163,84,26,22,TextFormatAlign.LEFT);
+         this._styleField(this.nextMarkLabel,16,true,MUTED,PAD_X,82,80,24,TextFormatAlign.LEFT);
+         this.nextMarkLabel.text = "\u5e73\u5747\u6807\u4f24";
+
+         this._styleField(this.predictedMovingDamage,16,true,WHITE,103,82,51,24,TextFormatAlign.LEFT);
+         this._styleField(this.currentMovingDamage,15,true,WHITE,163,84,26,22,TextFormatAlign.LEFT);
+
+         this._styleField(this.accountInfoLabel,14,false,MUTED,10,43,PANEL_W - 20,28,TextFormatAlign.CENTER);
+         this.accountInfoLabel.visible = false;
 
          this._percentArrow = new Sprite();
          this._percentArrow.mouseEnabled = false;
@@ -160,16 +144,21 @@ package poliroid.views.battle.gunmarks
          this._averageArrow.mouseChildren = false;
          addChild(this._averageArrow);
 
-         this._unavailable = this._makeText(14,false,MUTED,10,43,PANEL_W - 20,28,TextFormatAlign.CENTER);
-         this._unavailable.visible = false;
+         this._showNormalFields();
       }
 
-      private function _makeText(size:Number, bold:Boolean, color:uint, xPos:Number, yPos:Number,
-                                 widthValue:Number, heightValue:Number, alignValue:String) : TextField
+      private function _styleField(field:TextField, size:Number, bold:Boolean, color:uint,
+                                   xPos:Number, yPos:Number, widthValue:Number, heightValue:Number,
+                                   alignValue:String) : void
       {
-         var field:TextField = new TextField();
-         var format:TextFormat = new TextFormat("$FieldFont",size,color,bold);
+         if(!field) return;
+
+         var format:TextFormat = field.defaultTextFormat;
+         format.size = size;
+         format.bold = bold;
+         format.color = color;
          format.align = alignValue;
+
          field.defaultTextFormat = format;
          field.setTextFormat(format);
          field.x = xPos;
@@ -180,26 +169,40 @@ package poliroid.views.battle.gunmarks
          field.mouseEnabled = false;
          field.multiline = false;
          field.wordWrap = false;
-         field.embedFonts = true;
          field.antiAliasType = AntiAliasType.ADVANCED;
          field.filters = [new DropShadowFilter(1,90,0x000000,0.86,2,2,1.5,1)];
-         addChild(field);
-         return field;
+         field.visible = true;
+      }
+
+      private function _showNormalFields() : void
+      {
+         if(this.drPredicted) this.drPredicted.visible = true;
+         if(this.drPredictedDelta) this.drPredictedDelta.visible = true;
+         if(this.damageCurrentLabel) this.damageCurrentLabel.visible = true;
+         if(this.nextMarkValue) this.nextMarkValue.visible = true;
+         if(this.nextMarkLabel) this.nextMarkLabel.visible = true;
+         if(this.predictedMovingDamage) this.predictedMovingDamage.visible = true;
+         if(this.currentMovingDamage) this.currentMovingDamage.visible = true;
+         if(this.accountInfoLabel) this.accountInfoLabel.visible = false;
       }
 
       private function _setUnavailable(value:String) : void
       {
-         this._percent.visible = false;
-         this._percentDelta.visible = false;
-         this._battleCaption.visible = false;
-         this._battleValue.visible = false;
-         this._averageCaption.visible = false;
-         this._averageValue.visible = false;
-         this._averageDelta.visible = false;
-         this._percentArrow.visible = false;
-         this._averageArrow.visible = false;
-         this._unavailable.visible = true;
-         this._unavailable.text = value.length > 0 ? value : "MoE";
+         if(this.drPredicted) this.drPredicted.visible = false;
+         if(this.drPredictedDelta) this.drPredictedDelta.visible = false;
+         if(this.damageCurrentLabel) this.damageCurrentLabel.visible = false;
+         if(this.nextMarkValue) this.nextMarkValue.visible = false;
+         if(this.nextMarkLabel) this.nextMarkLabel.visible = false;
+         if(this.predictedMovingDamage) this.predictedMovingDamage.visible = false;
+         if(this.currentMovingDamage) this.currentMovingDamage.visible = false;
+         if(this._percentArrow) this._percentArrow.visible = false;
+         if(this._averageArrow) this._averageArrow.visible = false;
+
+         if(this.accountInfoLabel)
+         {
+            this.accountInfoLabel.visible = true;
+            this.accountInfoLabel.text = value.length > 0 ? value : "MoE";
+         }
       }
 
       private function _setDelta(field:TextField, arrow:Sprite, raw:String, percent:Boolean) : void
@@ -224,13 +227,18 @@ package poliroid.views.battle.gunmarks
          }
 
          if(percent && value.length > 0 && value.indexOf("%") < 0) value += "%";
-         field.textColor = color;
-         field.text = value;
+
+         if(field)
+         {
+            field.textColor = color;
+            field.text = value;
+         }
          this._drawArrow(arrow,sign,color);
       }
 
       private function _drawArrow(arrow:Sprite, sign:int, color:uint) : void
       {
+         if(!arrow) return;
          arrow.graphics.clear();
          arrow.visible = sign != 0;
          if(sign == 0) return;
@@ -257,24 +265,24 @@ package poliroid.views.battle.gunmarks
 
       private function _layoutTopRow() : void
       {
-         var right:Number = 0;
-         this._percent.x = PAD_X;
-         this._percent.y = 14;
-         this._percent.width = 82;
+         if(!this.drPredicted || !this.drPredictedDelta) return;
 
-         right = this._percent.x + Math.min(this._percent.textWidth + 4,78);
+         var right:Number = this.drPredicted.x + Math.min(this.drPredicted.textWidth + 4,78);
          this._percentArrow.x = Math.min(103,right + 4);
          this._percentArrow.y = 22;
-         this._percentDelta.x = this._percentArrow.visible ? this._percentArrow.x + 11 : this._percentArrow.x + 1;
-         this._percentDelta.y = 17;
+         this.drPredictedDelta.x = this._percentArrow.visible ? this._percentArrow.x + 11 : this._percentArrow.x + 1;
+         this.drPredictedDelta.y = 17;
       }
 
       private function _layoutAverageRow() : void
       {
-         var right:Number = this._averageValue.x + Math.min(this._averageValue.textWidth + 4,49);
+         if(!this.predictedMovingDamage || !this.currentMovingDamage) return;
+
+         var right:Number = this.predictedMovingDamage.x + Math.min(this.predictedMovingDamage.textWidth + 4,49);
          this._averageArrow.x = Math.min(152,right + 4);
          this._averageArrow.y = 89;
-         this._averageDelta.x = this._averageArrow.visible ? this._averageArrow.x + 11 : this._averageArrow.x + 1;
+         this.currentMovingDamage.x = this._averageArrow.visible ? this._averageArrow.x + 11 : this._averageArrow.x + 1;
+         this.currentMovingDamage.y = 84;
       }
 
       private function _cleanDamage(value:String) : String
