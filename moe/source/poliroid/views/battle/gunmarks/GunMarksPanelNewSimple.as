@@ -1,0 +1,293 @@
+package poliroid.views.battle.gunmarks
+{
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import flash.display.Shape;
+   import flash.display.Sprite;
+   import flash.text.TextField;
+   import flash.text.TextFormat;
+   import flash.text.TextFormatAlign;
+   import flash.text.AntiAliasType;
+
+   /**
+    * CNBOX compact MoE presentation.
+    *
+    * Calculation/backend data is left to the original ProTanki core. This class
+    * only remaps existing battle fields into the compact three-row presentation:
+    * predictedRating + deltaRating
+    * currentMovingDamage
+    * battleMovingDamage + deltaDamage
+    *
+    * Dragging/persistence remains owned by ProGunMarks and the backend.
+    */
+   public class GunMarksPanelNewSimple extends MovieClip implements IGunMarksPanel
+   {
+      public var hitAreaA:MovieClip;
+      public var progress:MovieClip;
+      public var mainLabel:TextField;
+      public var helpLabel:TextField;
+      public var externalLabel:TextField;
+
+      private var _built:Boolean = false;
+      private var _back:Shape;
+      private var _percent:TextField;
+      private var _percentDelta:TextField;
+      private var _battleCaption:TextField;
+      private var _battleValue:TextField;
+      private var _averageCaption:TextField;
+      private var _averageValue:TextField;
+      private var _averageDelta:TextField;
+      private var _percentArrow:Sprite;
+      private var _averageArrow:Sprite;
+      private var _unavailable:TextField;
+
+      private static const PANEL_W:Number = 222;
+      private static const PANEL_H:Number = 82;
+      private static const PAD_X:Number = 12;
+      private static const WHITE:uint = 0xF2F2F2;
+      private static const MUTED:uint = 0xE6E6E6;
+      private static const GREEN:uint = 0x67D64A;
+      private static const RED:uint = 0xE25A4E;
+
+      public function GunMarksPanelNewSimple()
+      {
+         super();
+      }
+
+      public function setData(param1:Object) : void
+      {
+         this._ensureUi();
+
+         if(!param1 || !param1.accountValidated || !param1.networkValidated && !param1.historyValidated)
+         {
+            this._setUnavailable(param1 ? this._s(param1.accountValidatedLabel) : "");
+            return;
+         }
+
+         this._unavailable.visible = false;
+         this._percent.visible = true;
+         this._percentDelta.visible = true;
+         this._battleCaption.visible = true;
+         this._battleValue.visible = true;
+         this._averageCaption.visible = true;
+         this._averageValue.visible = true;
+         this._averageDelta.visible = true;
+
+         this._percent.text = this._s(param1.predictedRating);
+         this._battleValue.text = this._cleanDamage(this._s(param1.currentMovingDamage));
+         this._averageValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
+
+         this._setDelta(this._percentDelta,this._percentArrow,this._s(param1.deltaRating),true);
+         this._setDelta(this._averageDelta,this._averageArrow,this._s(param1.deltaDamage),false);
+
+         this._layoutTopRow();
+         this._layoutAverageRow();
+      }
+
+      public function setSettings(param1:Object) : void
+      {
+         this._ensureUi();
+         mouseChildren = false;
+         mouseEnabled = false;
+      }
+
+      public function get panelHeight() : int
+      {
+         this._ensureUi();
+         return int(PANEL_H);
+      }
+
+      public function get panelWidth() : int
+      {
+         this._ensureUi();
+         return int(PANEL_W);
+      }
+
+      private function _ensureUi() : void
+      {
+         var i:int = 0;
+         var d:DisplayObject = null;
+         if(this._built) return;
+         this._built = true;
+
+         for(i = 0; i < numChildren; i++)
+         {
+            d = getChildAt(i);
+            d.visible = false;
+         }
+
+         if(this.hitAreaA)
+         {
+            this.hitAreaA.width = PANEL_W;
+            this.hitAreaA.height = PANEL_H;
+            this.hitAreaA.alpha = 0;
+            this.hitAreaA.visible = true;
+         }
+
+         this._back = new Shape();
+         this._back.graphics.lineStyle(1,0xFFFFFF,0.24);
+         this._back.graphics.beginFill(0x111714,0.66);
+         this._back.graphics.drawRect(0,0,PANEL_W,PANEL_H);
+         this._back.graphics.endFill();
+         this._back.mouseEnabled = false;
+         addChild(this._back);
+
+         this._percent = this._makeText(19,true,WHITE,0,0,94,28,TextFormatAlign.LEFT);
+         this._percentDelta = this._makeText(14,true,WHITE,113,5,100,22,TextFormatAlign.LEFT);
+
+         this._battleCaption = this._makeText(15,false,MUTED,PAD_X,31,82,21,TextFormatAlign.LEFT);
+         this._battleCaption.text = "\u672c\u573a\u6807\u4f24";
+         this._battleValue = this._makeText(15,true,WHITE,92,31,116,21,TextFormatAlign.LEFT);
+
+         this._averageCaption = this._makeText(15,false,MUTED,PAD_X,55,82,21,TextFormatAlign.LEFT);
+         this._averageCaption.text = "\u5e73\u5747\u6807\u4f24";
+         this._averageValue = this._makeText(15,true,WHITE,92,55,74,21,TextFormatAlign.LEFT);
+         this._averageDelta = this._makeText(14,true,WHITE,177,56,40,20,TextFormatAlign.LEFT);
+
+         this._percentArrow = new Sprite();
+         this._percentArrow.mouseEnabled = false;
+         this._percentArrow.mouseChildren = false;
+         addChild(this._percentArrow);
+
+         this._averageArrow = new Sprite();
+         this._averageArrow.mouseEnabled = false;
+         this._averageArrow.mouseChildren = false;
+         addChild(this._averageArrow);
+
+         this._unavailable = this._makeText(14,false,MUTED,10,26,PANEL_W - 20,28,TextFormatAlign.CENTER);
+         this._unavailable.visible = false;
+      }
+
+      private function _makeText(size:Number, bold:Boolean, color:uint, xPos:Number, yPos:Number,
+                                 widthValue:Number, heightValue:Number, alignValue:String) : TextField
+      {
+         var field:TextField = new TextField();
+         var format:TextFormat = new TextFormat("$FieldFont",size,color,bold);
+         format.align = alignValue;
+         field.defaultTextFormat = format;
+         field.setTextFormat(format);
+         field.x = xPos;
+         field.y = yPos;
+         field.width = widthValue;
+         field.height = heightValue;
+         field.selectable = false;
+         field.mouseEnabled = false;
+         field.multiline = false;
+         field.wordWrap = false;
+         field.embedFonts = true;
+         field.antiAliasType = AntiAliasType.ADVANCED;
+         addChild(field);
+         return field;
+      }
+
+      private function _setUnavailable(value:String) : void
+      {
+         this._percent.visible = false;
+         this._percentDelta.visible = false;
+         this._battleCaption.visible = false;
+         this._battleValue.visible = false;
+         this._averageCaption.visible = false;
+         this._averageValue.visible = false;
+         this._averageDelta.visible = false;
+         this._percentArrow.visible = false;
+         this._averageArrow.visible = false;
+         this._unavailable.visible = true;
+         this._unavailable.text = value.length > 0 ? value : "MoE";
+      }
+
+      private function _setDelta(field:TextField, arrow:Sprite, raw:String, percent:Boolean) : void
+      {
+         var n:Number = this._number(raw);
+         var color:uint = WHITE;
+         var sign:int = 0;
+         var value:String = this._stripSign(raw);
+
+         if(!isNaN(n))
+         {
+            if(n > 0)
+            {
+               sign = 1;
+               color = GREEN;
+            }
+            else if(n < 0)
+            {
+               sign = -1;
+               color = RED;
+            }
+         }
+
+         if(percent && value.length > 0 && value.indexOf("%") < 0) value += "%";
+         field.textColor = color;
+         field.text = value;
+         this._drawArrow(arrow,sign,color);
+      }
+
+      private function _drawArrow(arrow:Sprite, sign:int, color:uint) : void
+      {
+         arrow.graphics.clear();
+         arrow.visible = sign != 0;
+         if(sign == 0) return;
+
+         arrow.graphics.beginFill(color,1);
+         if(sign > 0)
+         {
+            arrow.graphics.moveTo(0,7);
+            arrow.graphics.lineTo(5,0);
+            arrow.graphics.lineTo(10,7);
+         }
+         else
+         {
+            arrow.graphics.moveTo(0,0);
+            arrow.graphics.lineTo(10,0);
+            arrow.graphics.lineTo(5,7);
+         }
+         arrow.graphics.lineTo(0,sign > 0 ? 7 : 0);
+         arrow.graphics.endFill();
+      }
+
+      private function _layoutTopRow() : void
+      {
+         this._percent.x = PAD_X;
+         this._percent.y = 4;
+         this._percent.width = 100;
+         this._percentArrow.x = 106;
+         this._percentArrow.y = 11;
+         this._percentDelta.x = this._percentArrow.visible ? 120 : 109;
+         this._percentDelta.y = 6;
+      }
+
+      private function _layoutAverageRow() : void
+      {
+         var right:Number = this._averageValue.x + Math.min(this._averageValue.textWidth + 4,72);
+         this._averageArrow.x = Math.min(170,right + 3);
+         this._averageArrow.y = 62;
+         this._averageDelta.x = this._averageArrow.visible ? this._averageArrow.x + 13 : this._averageArrow.x + 1;
+      }
+
+      private function _cleanDamage(value:String) : String
+      {
+         return value.replace(/^\s*\/\s*/,"");
+      }
+
+      private function _number(value:String) : Number
+      {
+         var s:String = value == null ? "" : value;
+         s = s.replace(/%/g,"");
+         s = s.replace(/\s/g,"");
+         s = s.replace(/,/g,"");
+         return Number(s);
+      }
+
+      private function _stripSign(value:String) : String
+      {
+         var s:String = value == null ? "" : value;
+         return s.replace(/^\s*[+-]\s*/,"");
+      }
+
+      private function _s(value:*) : String
+      {
+         if(value === null || value === undefined) return "";
+         return String(value);
+      }
+   }
+}
