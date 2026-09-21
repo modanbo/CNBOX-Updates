@@ -237,8 +237,11 @@ jobs:
           # Only the battle SWF is replaced and NOTICE.txt is added.
           upstream=os.environ['RUNNER_TEMP']+'/cnbox-moe/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod'
           with zipfile.ZipFile(upstream) as u, zipfile.ZipFile('/tmp/core.wotmod') as v:
-              unames=set(u.namelist())
-              vnames=set(v.namelist())
+              # Repacking does not preserve upstream's explicit directory entries. Compare
+              # FILE members only: the loader consumes files, and our invariant is that every
+              # backend file is byte-identical except the one SWF presentation asset.
+              unames={i.filename for i in u.infolist() if not i.is_dir()}
+              vnames={i.filename for i in v.infolist() if not i.is_dir()}
               allowed_added={'res/mods/cnbox.moe/NOTICE.txt'}
               assert vnames-unames == allowed_added, vnames-unames
               assert unames-vnames == set(), unames-vnames
