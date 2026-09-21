@@ -697,14 +697,14 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.0.0",
+      "version": "1.0.4",
       "status": "STATIC_LOCK",
       "wotVersion": "2.4.0.1",
       "sourceCore": "ProTanki Gun Marks Calculator 8.1.01",
       "sourceUrl": "https://protanki.tv/",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.0/CNBOX_MoE_1.0.0_WOT_2.4.0.1.zip",
-      "payloadSha256": "95c4e9983f35efdf8e43b9d219402801a9a2c46ff74d42bf4a07bb1a00b33c6a",
-      "notes": "Standalone Manager component. CNBOX changes battle UI only; drag offset persists in the original ProTanki config.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.4/CNBOX_MoE_1.0.4_WOT_2.4.0.1.zip",
+      "payloadSha256": "a5820434ca85f126c3dfb951fa57a03ebae88bc4300c8ad79bb7d02b0e3b32ff",
+      "notes": "Standalone Manager component. ProTanki 8.1.01 calculation/backend is byte-preserved; CNBOX replaces only the battle UI. Compact CN three-row layout is statically tuned to the two supplied reference screenshots. mods/configs/protanki/gunMarksCalculator.json is first-install-only user state and is preserved on update/uninstall so drag position survives battles, restarts and reinstall.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -726,7 +726,7 @@
         },
         {
           "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
-          "sha256": "316716a8498fa721565ba0eca6a95708c5864175fdae14bd4ead4e99def331bf",
+          "sha256": "71289c39f36c33480879c1f61bb8677229909810ba9aa30016739d7738eb6220",
           "required": true,
           "shared": false
         }
