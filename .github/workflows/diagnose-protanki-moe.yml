@@ -1,0 +1,63 @@
+name: Diagnose ProTanki MoE package
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.0.5-diagnose
+    paths:
+      - ".github/workflows/diagnose-protanki-moe.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.0.5-diagnose
+
+      - name: Inspect pinned Aslain package and WOTMOD
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/protanki-diagnose"
+          mkdir -p "$root/upstream" "$GITHUB_WORKSPACE/moe/diagnostics"
+
+          curl -fL --retry 3 --connect-timeout 20             "https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip"             -o "$root/protanki.zip"
+          echo "3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  $root/protanki.zip" | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/upstream"
+
+          out="$GITHUB_WORKSPACE/moe/diagnostics/protanki_2401_structure.txt"
+          {
+            echo "=== OUTER ARCHIVE ==="
+            unzip -Z1 "$root/protanki.zip" | sort
+            echo
+            echo "=== TOP-LEVEL FILE HASHES ==="
+            find "$root/upstream" -type f -print0 | sort -z | xargs -0 sha256sum
+            echo
+            core="$root/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+            echo "=== CORE META.XML ==="
+            unzip -p "$core" meta.xml || true
+            echo
+            echo "=== CORE MEMBERS ==="
+            unzip -Z1 "$core" | sort
+            echo
+            echo "=== CORE META/DEPENDENCY STRINGS ==="
+            unzip -p "$core" meta.xml | strings || true
+            echo
+            echo "=== CORE SCRIPT STRING HINTS ==="
+            unzip -p "$core" res/scripts/client/gui/mods/mod_pro_gunmarks.pyc | strings -a -n 4 | grep -Ei "openwg|modslist|settingsapi|battle.?result|dependency|config|gunmark|offset|position|server|region|api" | head -n 500 || true
+          } > "$out"
+
+      - name: Commit diagnostic evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moe/diagnostics/protanki_2401_structure.txt
+          git commit -m "Record ProTanki 2.4.0.1 package structure"
+          git push origin HEAD:work/moe-component-1.0.5-diagnose
