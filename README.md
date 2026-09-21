@@ -73,6 +73,27 @@ Unified Box:
 The R2 payload was rebuilt from the locked NA dependency capture. It contains the complete Box dependency set required for standalone installation; it is not an overlay that depends on a prior Aslain installation.
 
 
+## Current Creator / Aslain compatibility lock
+
+The private Creator engineering track is separate from the public standalone distribution.
+
+Current Creator Box:
+- release: `2401-04-R34-R2F9-FINAL_LOCK-R1`
+- WoT: `2.4.0.1`
+- Aslain: `2.4.0.1 #04`
+- XVM: `13.1.0.0090`
+- Creator payload: `payloads/2.4.0.1/aslain-04/CNBOX_PAYLOAD.zip`
+- payload SHA256: `7870c94e00e59c670068f951b2e09dc0b19fdb93db015e97781098145d375a50`
+- release metadata: `manifests/2.4.0.1/CNBOX_CREATOR_ASLAIN04_R34_R2F9.json`
+- status: `FINAL_LOCK / STATIC_PROMOTED / TWO_REVIEW_PASS / RUNTIME_NOT_REQUIRED_FOR_THIS_DELTA`
+
+This #04 migration is a low-risk controlled XVM 0089 -> 0090 rebase. The CNBOX-critical `battle.swf` and `xvm_battle_classic.swf` remain byte-identical to the prior Runtime-proven #03 lock. The visible CNBOX change is the clearer 17x15 yellow spotted triangle, with its existing geometry preserved. Automatic compatibility preflight, two independent static reviews, synthetic install, and exact rollback passed.
+
+Runtime collection is not a mandatory promotion gate for this delta. If a real in-game problem is observed later, the Creator workflow collects targeted Runtime evidence for that problem.
+
+The public standalone release remains `2401-R34-R2F9-UNIFIED-R2`; publishing this Creator compatibility lock does **not** move Public users to XVM 0090 or change the Public Manager release.
+
+
 ## Manager v1.0.8 behavior fixes
 
 - Aslain is shown as optional for authoritative standalone CNBOX releases. If Aslain cannot be detected, the UI shows that it is not required instead of treating the missing local Aslain version as an installation problem.
@@ -111,7 +132,7 @@ detected Aslain version.
 
 ## Manager v1.0.11 creator/public track separation
 
-`2401-03-R34-R2F9-FINAL_LOCK-R1` and
+`2401-04-R34-R2F9-FINAL_LOCK-R1` and
 `2401-R34-R2F9-UNIFIED-R2` are not sequential Box updates. They share functional ID
 `WOT2401-R34-R2F9`.
 
