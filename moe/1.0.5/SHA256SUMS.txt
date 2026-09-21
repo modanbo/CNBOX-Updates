@@ -1,0 +1,5 @@
+a3696b42f99262cb7a6f10e22e236f6835e6c9afc43a806205b697246a5ec21f  CNBOX_MoE_1.0.5_WOT_2.4.0.1.zip
+e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca  mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod
+d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283  mods/{WOT_VERSION}/me.poliroid.modslistapi_1.7.9.wotmod
+26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1  mods/{WOT_VERSION}/net.openwg/net.openwg.gameface_1.1.6.wotmod
+2fbcce63b64682ccce384a020e7db5f57f0fa2df697198548057918cb4c1bad1  mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod
