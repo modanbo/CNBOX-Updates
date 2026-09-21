@@ -153,11 +153,11 @@ package poliroid.views.battle.gunmarks
 
          this._battleCaption = this._makeText(16,true,MUTED,PAD_X,50,78,24,TextFormatAlign.LEFT);
          this._battleCaption.text = "\u672c\u573a\u6807\u4f24";
-         this._battleValue = this._makeText(16,true,WHITE,100,50,74,24,TextFormatAlign.LEFT);
+         this._battleValue = this._makeText(16,true,WHITE,103,50,71,24,TextFormatAlign.LEFT);
 
          this._averageCaption = this._makeText(16,true,MUTED,PAD_X,82,78,24,TextFormatAlign.LEFT);
          this._averageCaption.text = "\u5e73\u5747\u6807\u4f24";
-         this._averageValue = this._makeText(16,true,WHITE,100,82,54,24,TextFormatAlign.LEFT);
+         this._averageValue = this._makeText(16,true,WHITE,103,82,51,24,TextFormatAlign.LEFT);
          this._averageDelta = this._makeText(15,true,WHITE,158,84,31,22,TextFormatAlign.LEFT);
 
          this._percentArrow = new Sprite();
@@ -282,8 +282,8 @@ package poliroid.views.battle.gunmarks
 
       private function _layoutAverageRow() : void
       {
-         var right:Number = this._averageValue.x + Math.min(this._averageValue.textWidth + 4,50);
-         this._averageArrow.x = Math.min(148,right + 4);
+         var right:Number = this._averageValue.x + Math.min(this._averageValue.textWidth + 4,49);
+         this._averageArrow.x = Math.min(152,right + 4);
          this._averageArrow.y = 89;
          this._averageDelta.x = this._averageArrow.visible ? this._averageArrow.x + 11 : this._averageArrow.x + 1;
       }
