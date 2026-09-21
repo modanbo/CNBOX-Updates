@@ -1,0 +1,66 @@
+name: Audit CNBOX MoE backend persistence
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.0.1
+    paths:
+      - '.github/workflows/audit-cnbox-moe-backend.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.0.1
+
+      - name: Fetch pinned ProTanki package
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-audit"
+          mkdir -p "$root"
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' \
+            -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/upstream"
+          unzip -q "$root/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod" -d "$root/core"
+          test -f "$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+
+      - name: Inspect compiled backend without executing it
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-audit"
+          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+          sha256sum "$pyc"
+          file "$pyc" || true
+          xxd -l 32 "$pyc"
+
+          echo '=== ASCII symbols relevant to persistence/config ==='
+          strings -a -n 4 "$pyc" | grep -Ei 'gun.?marks|offset|position|config|settings|update|save|anchor' | head -n 300 || true
+
+      - name: Try Python bytecode decompile
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-audit"
+          pyc="$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+          python3 -m pip install -q 'uncompyle6>=3.9,<4'
+          mkdir -p "$root/decompiled"
+          set +e
+          uncompyle6 -o "$root/decompiled" "$pyc"
+          rc=$?
+          set -e
+          echo "UNCOMPYLE6_RC=$rc"
+          find "$root/decompiled" -type f -maxdepth 5 -print
+          if find "$root/decompiled" -type f | grep -q .; then
+            echo '=== Decompiled persistence/config references ==='
+            grep -RniE 'offsetBattle|updatePosition|gunMarksCalculator|anchorPoint|save|config|setting' \
+              "$root/decompiled" | head -n 400 || true
+          fi
