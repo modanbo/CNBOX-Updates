@@ -32,6 +32,31 @@ jobs:
           unzip -q "$root/upstream/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod" -d "$root/core"
           test -f "$root/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
 
+      - name: Export original ProTanki Flash presentation for structural diff
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-audit"
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip' \
+            -o "$root/ffdec.zip"
+          echo '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  '"$root"'/ffdec.zip' | sha256sum -c -
+          mkdir -p "$root/ffdec" "$root/original_flash"
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+          "$root/ffdec/ffdec.sh" -export script "$root/original_flash" \
+            "$root/core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          echo '=== ORIGINAL_PROGUNMARKS_STRUCTURE ==='
+          f="$root/original_flash/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
+          test -f "$f"
+          grep -nE 'panel_|dragArea|as_setSettings|offsetBattle|updatePosition|startDrag|stopDrag|handleMouse|updateFrame|anchorPoint' "$f" | head -n 300
+
+          echo '=== ORIGINAL_SIMPLE_PANEL_FIELDS ==='
+          f2="$root/original_flash/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as"
+          test -f "$f2"
+          grep -nE 'predictedRating|deltaRating|currentMovingDamage|battleMovingDamage|deltaDamage|panelWidth|panelHeight|setData|setSettings' "$f2" | head -n 300
+
       - name: Inspect compiled backend without executing it
         shell: bash
         run: |
