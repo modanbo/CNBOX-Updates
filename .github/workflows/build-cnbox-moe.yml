@@ -96,6 +96,8 @@ jobs:
           grep -Rqs 'offsetBattle' "$root/verify"
           grep -Rqs 'anchorPoint' "$root/verify"
           grep -Rqs 'updatePosition(this._offset)' "$root/verify"
+          echo '=== STATIC_MOE_FLASH_BRIDGE_REFERENCES ==='
+          grep -RniE 'updatePosition|offsetBattle|as_setSettings' "$root/verify" | head -n 200
 
       - name: Build deterministic WOTMOD and Manager payload
         shell: bash
