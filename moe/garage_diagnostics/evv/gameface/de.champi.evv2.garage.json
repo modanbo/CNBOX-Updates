@@ -1,0 +1,11 @@
+[
+    {
+        "type": "Layout",
+		"id": "R.mods.champi.evv2.views.MoEGarageGameFaceView",
+        "path": "coui://gui/gameface/mods/CHAMPi/EVV2/EVV2.html",
+        "parameters": {
+            "entrance": "MoEGarageGameFaceView",
+            "impl": "gameface"
+        }
+    }
+]
