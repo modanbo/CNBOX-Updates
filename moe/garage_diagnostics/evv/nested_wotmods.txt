@@ -1,0 +1,185 @@
+
+=== mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod ===
+res/gui/flash/
+res/gui/flash/GUIFlash.swf
+res/scripts/
+res/scripts/client/
+res/scripts/client/gui/
+res/scripts/client/gui/mods/
+res/scripts/client/gui/mods/gambiter/
+res/scripts/client/gui/mods/gambiter/flash.pyc
+res/scripts/client/gui/mods/gambiter/utils.pyc
+res/scripts/client/gui/mods/gambiter/__init__.pyc
+--- META ---
+<root>
+	<!-- Technical MOD ID -->
+	<id>gambiter.guiflash</id>
+	<!-- Package version -->
+	<version>0.6.6</version>
+	<!-- Human readable name -->
+	<name>GUIFlash</name>
+	<!-- Human readable description -->
+	<description>Flash components for use in python mods.</description>
+</root>
+
+=== mods/2.4.0.1/champi.settingsgui_1.81.wotmod ===
+res/gui/maps/icons/champi/settingsgui/
+res/gui/maps/icons/champi/settingsgui/modlistapi_icon.png
+res/scripts/
+res/scripts/client/
+res/scripts/client/champisettingsgui.pyc
+--- META ---
+<root>
+	<!-- Technical MOD ID -->
+	<id>champi.settingsgui</id>
+	<!-- Package version -->
+	<version>1.81</version>
+	<!-- Human readable name -->
+	<name>CHAMPi's Mods Settings GUI</name>
+	<!-- Human readable description -->
+	<description>A GUI for champi mods settings</description>
+</root>
+
+=== mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod ===
+res/gui/flash/
+res/gui/flash/evv_battle.swf
+res/gui/flash/evv_garage.swf
+res/gui/gameface/
+res/gui/gameface/mods/
+res/gui/gameface/mods/CHAMPi/
+res/gui/gameface/mods/CHAMPi/EVV2/
+res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css
+res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js
+res/gui/gen_resources/de.champi.evv2.garage.json
+res/gui/maps/icons/champi/moe/
+res/gui/maps/icons/champi/moe/canon_sword_32x32.png
+res/gui/maps/icons/champi/moe/combined_damage.png
+res/gui/maps/icons/champi/moe/combined_damage_16x16.png
+res/gui/maps/icons/champi/moe/combined_damage_24x24.png
+res/gui/maps/icons/champi/moe/moe1.png
+res/gui/maps/icons/champi/moe/moe2.png
+res/gui/maps/icons/champi/moe/moe3.png
+res/gui/maps/icons/champi/moe/moe4.png
+res/gui/maps/icons/champi/settings/
+res/gui/maps/icons/champi/settings/colorpreset-blue.png
+res/gui/maps/icons/champi/settings/colorpreset-champi1.png
+res/gui/maps/icons/champi/settings/colorpreset-champi2.png
+res/gui/maps/icons/champi/settings/colorpreset-dark.png
+res/gui/maps/icons/champi/settings/colorpreset-gold.png
+res/gui/maps/icons/champi/settings/colorpreset-green.png
+res/gui/maps/icons/champi/settings/colorpreset-pink.png
+res/gui/maps/icons/champi/settings/colorpreset-red.png
+res/gui/maps/icons/champi/settings/colorpreset-violet.png
+res/gui/maps/icons/champi/settings/colorpreset-white.png
+res/gui/maps/icons/champi/settings/inbattle_moe_layout2.png
+res/gui/maps/icons/champi/settings/inbattle_moe_layout3.png
+res/gui/maps/icons/champi/settings/inbattle_moe_layout4.png
+res/gui/maps/icons/champi/settings/inbattle_moe_layout5.png
+res/gui/maps/icons/champi/settings/inbattle_moe_layout6.png
+res/gui/maps/icons/champi/settings/inbattle_moe_layout_todo.png
+res/gui/maps/icons/champi/settings/garage/
+res/gui/maps/icons/champi/settings/garage/garage_layout2.png
+res/gui/maps/icons/champi/settings/garage/garage_layout3.png
+res/gui/maps/icons/champi/settings/garage/garage_layout4.png
+res/gui/maps/icons/champi/settings/garage/garage_layout5.png
+res/gui/maps/icons/champi/settings/garage/garage_layout6.png
+res/gui/maps/icons/champi/settings/garage/garage_layout7.png
+res/gui/maps/icons/champi/summary/battles_32x32.png
+res/gui/maps/icons/champi/summary/battles_lord.png
+res/mods/configs/
+res/mods/configs/res_map/
+res/mods/configs/res_map/MoEGarageGameFaceView.json
+res/scripts/
+res/scripts/client/
+res/scripts/client/gui/
+res/scripts/client/gui/mods/
+res/scripts/client/gui/mods/mod_evv.pyc
+--- META ---
+<root>
+	<!-- Technical MOD ID -->
+	<id>champi.expectedVehicleValues2</id>
+	<!-- Package version -->
+	<version>2.05.000</version>
+	<!-- Human readable name -->
+	<name>Expected Vehicle Values v2</name>
+	<!-- Human readable description -->
+	<description>display MoE, Mastery, WNX and expected damage value information in garage and battle</description>
+</root>
+
+=== mods/2.4.0.1/aslain.modmenu_2.0.17.wotmod ===
+res/gui/flash/
+res/gui/gameface/
+res/gui/gameface/mods/
+res/gui/gameface/mods/aslain/
+res/gui/gameface/mods/aslain/ModMenu/
+res/gui/gameface/mods/aslain/ModMenu/fonts/
+res/gui/gameface/mods/aslain/ModMenu/img/
+res/gui/gameface/mods/aslain/ModMenuButton/
+res/mods/configs/
+res/mods/configs/res_map/
+res/scripts/
+res/scripts/client/
+res/scripts/client/gui/
+res/scripts/client/gui/aslainMenu/
+res/scripts/client/gui/mods/
+res/scripts/client/gui/aslainMenu/__init__.pyc
+res/scripts/client/gui/aslainMenu/_constants.pyc
+res/scripts/client/gui/aslainMenu/_diag.pyc
+res/scripts/client/gui/aslainMenu/api.pyc
+res/scripts/client/gui/aslainMenu/button.pyc
+res/scripts/client/gui/aslainMenu/context_menu.pyc
+res/scripts/client/gui/aslainMenu/entries.pyc
+res/scripts/client/gui/aslainMenu/frontend.pyc
+res/scripts/client/gui/aslainMenu/hotkeys.pyc
+res/scripts/client/gui/aslainMenu/l10n.pyc
+res/scripts/client/gui/aslainMenu/login.pyc
+res/scripts/client/gui/aslainMenu/modslist_shim.pyc
+res/scripts/client/gui/aslainMenu/skeleton.pyc
+res/scripts/client/gui/aslainMenu/templates.pyc
+res/scripts/client/gui/aslainMenu/utils.pyc
+res/scripts/client/gui/aslainMenu/view.pyc
+res/scripts/client/gui/mods/mod_modmenu.pyc
+res/gui/flash/ModMenuLoginButton.swf
+res/gui/gameface/mods/aslain/ModMenu/ModMenu.css
+res/gui/gameface/mods/aslain/ModMenu/ModMenu.html
+res/gui/gameface/mods/aslain/ModMenu/ModMenu.js
+res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt
+res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf
+res/gui/gameface/mods/aslain/ModMenu/img/play.png
+res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css
+res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html
+res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js
+res/mods/configs/res_map/ModMenu.json
+res/mods/configs/res_map/ModMenuButton.json
+--- META ---
+<root>
+  <id>aslain.modmenu</id>
+  <version>2.0.17</version>
+  <name>Mod Menu</name>
+  <description>One window in the garage for the settings of the mods that use it. Speaks the Python API mods already use, so an existing mod needs no change. Needs OpenWG Gameface 1.1.6 or newer. https://github.com/Aslain/modmenu</description>
+</root>
+
+
+=== mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod ===
+res/scripts/
+res/gui/flash/
+res/gui/gameface/
+res/scripts/client/
+res/scripts/client/openwg_gameface.pyc
+res/gui/gameface/js/
+res/gui/gameface/mods/
+res/gui/gameface/js/index.js
+res/gui/gameface/mods/libs/
+res/gui/gameface/mods/libs/common.js
+res/gui/gameface/mods/libs/debug.js
+res/gui/gameface/mods/libs/media.js
+res/gui/gameface/mods/libs/model.js
+res/gui/gameface/mods/libs/sound.js
+res/gui/gameface/mods/libs/views.js
+--- META ---
+<root>
+    <id>net.openwg.gameface</id>
+    <version>1.1.6</version>
+    <name>net.openwg.gameface</name>
+    <description>Generate res_map.json file with mod items for ingame UiResourceManager, provide Gameface injector and wrappers</description>
+</root>
