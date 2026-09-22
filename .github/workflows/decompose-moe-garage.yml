@@ -30,23 +30,38 @@ jobs:
           import sys, xml.etree.ElementTree as ET
           p=sys.argv[1]
           root=ET.parse(p).getroot()
-          rows=[]
-          for cat in root.iter():
-              if cat.tag not in ("Mod","Package","Category","Group"):
-                  continue
-              attrs=dict(cat.attrib)
-              blob=" ".join(str(v) for v in attrs.values()).lower()
-              if any(k in blob for k in ("mark", "moe", "garage", "hangar", "gunmark")):
-                  rows.append((cat.tag,attrs))
-          for tag,attrs in rows:
-              print(tag, attrs)
+
+          def walk(node, category="", group=""):
+              if node.tag == "Category":
+                  category=node.attrib.get("Id","")
+              if node.tag == "Group":
+                  group=node.attrib.get("Id","")
+              if node.tag == "Mod":
+                  a=node.attrib
+                  mid=a.get("Id","")
+                  file=a.get("File","")
+                  legacy=a.get("Legacy","")
+                  author=a.get("AuthorUrl","")
+                  probe=" ".join((mid,file,legacy,author)).lower()
+                  if any(k in probe for k in ("garage","hangar","mark","moe","gunmark")):
+                      print("MOD")
+                      print(" category =",category)
+                      print(" group    =",group)
+                      print(" id       =",mid)
+                      print(" file     =",file)
+                      print(" legacy   =",legacy)
+                      print(" author   =",author)
+                      for ch in node:
+                          if ch.tag=="Package":
+                              print(" package  =",ch.attrib.get("File",""),"order=",ch.attrib.get("Order",""))
+                      print()
+              for ch in node:
+                  walk(ch,category,group)
+          walk(root)
           PY
 
-          {
-            echo
-            echo "=== GREP GARAGE / HANGAR / MARKS / MOE ==="
-            grep -niE "garage|hangar|marks.?in|gun.?marks|marksongun|moe|mark.?on.?gun" "$cfg" | head -n 1000 || true
-          } >> moe/garage_diagnostics/aslain05_garage_moe_candidates.txt
+          wc -c moe/garage_diagnostics/aslain05_garage_moe_candidates.txt
+          head -n 2000 moe/garage_diagnostics/aslain05_garage_moe_candidates.txt
 
       - name: Commit diagnostic evidence
         shell: bash
