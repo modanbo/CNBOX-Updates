@@ -1,8 +1,6 @@
 {
   "schemaVersion": 1,
-  "active": true,
-  "sourceUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-bb24-81f5-bc4f-baad0020f327/raw?se=2026-09-22T19%3A54%3A54Z&sp=r&sv=2026-02-06&sr=b&scid=7958530e-81e7-5071-aef7-9e14b2f3d691&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T19%3A43%3A31Z&ske=2026-09-23T19%3A43%3A31Z&sks=b&skv=2026-02-06&sig=trRvhFyPRPBkdJeHVXsIeWDZSlsM86Gb/pwFitYvFRU%3D",
-  "sourceSha256": "46de3c1b7e5e4013191a772a84a09c36e0819919973eef47c8a3696200d4ec63",
-  "outputSha256": "46de3c1b7e5e4013191a772a84a09c36e0819919973eef47c8a3696200d4ec63",
-  "destination": "manager/NAJXBox_Manager_v2.0.2.zip"
+  "active": false,
+  "sourceUrl": "",
+  "destination": ""
 }
