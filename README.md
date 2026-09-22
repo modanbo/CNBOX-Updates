@@ -1,6 +1,8 @@
-# CNBOX-Updates
+# NAJXBox Updates — `CNBOX-Updates` compatibility endpoint
 
-Public **read-only distribution channel** used by `CNBOX_Manager.exe`.
+Public **read-only distribution channel** used by current `NAJXBox Manager` and legacy `CNBOX_Manager.exe` clients.
+
+The repository name remains `CNBOX-Updates` during the controlled brand migration so existing raw updater URLs continue to work. A new `NAJXBox-Updates` canonical repository will only replace it after the explicit compatibility bridge is verified.
 
 This repository intentionally contains only release-facing material:
 
@@ -51,22 +53,27 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 
 ## Current public artifacts
 
-Manager:
-- version: 2.0.0
-- stable Public path: `manager/CNBOX_Manager.exe`
-- versioned Public path: `manager/CNBOX_Manager_v2.0.0.exe`
-- stable Creator path: `manager/CNBOX_Manager_Creator.exe`
-- versioned Creator path: `manager/CNBOX_Manager_Creator_v2.0.0.exe`
-- Public SHA256: `420d18d06cf346ce48bdbcb51a1f56f09a1c044dc546fec7b083555c28248998`
-- Creator SHA256: `e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8`
-- dual-flavor ZIP: `manager/CNBOX_Manager_v2.0.0.zip`
-- dual-flavor ZIP SHA256: `06dd40346f3975572c6dee0b483f4ef126edad44d306e74926fd51e9789a52ec`
-- source commit: `13be723a793e2fba8ecbbdc4141884108a81810f`
-- GitHub Actions build/self-test closure: run `35678464425`
-- detailed guide: `manager/CNBOX_Manager_v2.0.0_README.md`
-- GitHub Release: `v2.0.0` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v2.0.0
+Manager / Creator:
+- version: **2.0.2**
+- external product name: **NAJXBox**
+- legacy stable Public path: `manager/CNBOX_Manager.exe`
+- canonical Public alias: `manager/NAJXBox_Manager.exe`
+- versioned Public path: `manager/NAJXBox_Manager_v2.0.2.exe`
+- legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe`
+- canonical Creator alias: `manager/NAJXBox_Manager_Creator.exe`
+- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.2.exe`
+- Public SHA256: `7e6660b49b1614cef15d6e74467c4923648c9634479d76d0968c44cf4ebc45b4`
+- Creator SHA256: `b71ffdd4983b37af9bcc502e5660b2247488fa12c6c8a9a35ff2ee621e20e974`
+- dual-flavor ZIP: `manager/NAJXBox_Manager_v2.0.2.zip`
+- dual-flavor ZIP SHA256: `46de3c1b7e5e4013191a772a84a09c36e0819919973eef47c8a3696200d4ec63`
+- source commit: `9ce4102057f5059490e671bb8ddeb8ce5ce739d8`
+- verified build/self-test/UI closure: run `35773869617`
+- detailed guide: `manager/NAJXBox_Manager_v2.0.2_README.md`
+- GitHub Release: `v2.0.2` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v2.0.2
 
-Manager 2.0 is the rebuilt authority/state architecture. Public and Creator remain separate build flavors. Public accepts only `CNBOX_AUTHORITATIVE + PUBLIC_STANDALONE + FINAL_LOCK` Box releases; test/candidate and Creator-track releases are ignored. Creator compatibility is proved from the actual dependency contract instead of assuming adjacent Aslain versions are interchangeable.
+The old `CNBOX_Manager.exe` updater endpoint intentionally remains live and carries the exact same Public v2.0.2 bytes as the new `NAJXBox_Manager.exe` alias. This prevents legacy Manager clients from losing their update chain during the repository rename migration.
+
+Manager v2.0.2 adds explicit current-Mod identity, the Public-standalone pre-test dependency-closure collection model, Runtime-superset/no-double-upload semantics, and NAJXBox external branding. Public and Creator remain separate build flavors and test candidates never become Public releases automatically.
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
