@@ -7,7 +7,7 @@ The repository name remains `CNBOX-Updates` during the controlled brand migratio
 This repository intentionally contains only release-facing material:
 
 - `channel.json` — stable machine-readable update manifest.
-- `manager/` — CNBOX Manager binaries.
+- `manager/` — NAJXBox Manager binaries; legacy `CNBOX_Manager*.exe` filenames remain as compatibility aliases.
 - `payloads/` — version-mapped CNBOX update payloads.
 - `language/` — reusable CNBOX Chinese translation donor packages.
 - `manifests/` — hashes and release metadata.
@@ -54,26 +54,31 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager / Creator:
-- version: **2.0.2**
+- version: **2.0.3**
 - external product name: **NAJXBox**
-- legacy stable Public path: `manager/CNBOX_Manager.exe`
+- legacy stable Public path: `manager/CNBOX_Manager.exe` (compatibility alias)
 - canonical Public alias: `manager/NAJXBox_Manager.exe`
-- versioned Public path: `manager/NAJXBox_Manager_v2.0.2.exe`
-- legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe`
+- versioned Public path: `manager/NAJXBox_Manager_v2.0.3.exe`
+- legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe` (compatibility alias)
 - canonical Creator alias: `manager/NAJXBox_Manager_Creator.exe`
-- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.2.exe`
-- Public SHA256: `7e6660b49b1614cef15d6e74467c4923648c9634479d76d0968c44cf4ebc45b4`
-- Creator SHA256: `b71ffdd4983b37af9bcc502e5660b2247488fa12c6c8a9a35ff2ee621e20e974`
-- dual-flavor ZIP: `manager/NAJXBox_Manager_v2.0.2.zip`
-- dual-flavor ZIP SHA256: `46de3c1b7e5e4013191a772a84a09c36e0819919973eef47c8a3696200d4ec63`
-- source commit: `9ce4102057f5059490e671bb8ddeb8ce5ce739d8`
-- verified build/self-test/UI closure: run `35773869617`
-- detailed guide: `manager/NAJXBox_Manager_v2.0.2_README.md`
-- GitHub Release: `v2.0.2` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v2.0.2
+- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.3.exe`
+- Public SHA256: `3abdec35f6294d4ddf4066a84041ce7e362f39e50ebbe575b6a5097c97d4bbeb`
+- Creator SHA256: `d577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b`
+- dual-flavor ZIP: `manager/NAJXBox_Manager_v2.0.3.zip`
+- dual-flavor ZIP SHA256: `3e914414c66613bafdf35671b4436f3eeb5534307cc70c4b501f8b037dae4bc6`
+- source/build head: `cb8a3dfee1d1ccee3b7f42acd7b702ede9a5e3fe`
+- verified self-hosted build/self-test/UI/VersionInfo closure: run `35782308953`
+- detailed guide: `manager/NAJXBox_Manager_v2.0.3_README.md`
 
-The old `CNBOX_Manager.exe` updater endpoint intentionally remains live and carries the exact same Public v2.0.2 bytes as the new `NAJXBox_Manager.exe` alias. This prevents legacy Manager clients from losing their update chain during the repository rename migration.
+v2.0.3 is the executable-branding closure. The visible UI was already NAJXBox in v2.0.2; v2.0.3 also changes the actual Windows executable identity to NAJXBox:
+- `ProductName = NAJXBox Manager`
+- `FileDescription = NAJXBox Manager`
+- `CompanyName = NAJXBox`
+- `InternalName = NAJXBox_Manager.exe`
+- `OriginalFilename = NAJXBox_Manager.exe`
+- `FileVersion = 2.0.3.0`
 
-Manager v2.0.2 adds explicit current-Mod identity, the Public-standalone pre-test dependency-closure collection model, Runtime-superset/no-double-upload semantics, and NAJXBox external branding. Public and Creator remain separate build flavors and test candidates never become Public releases automatically.
+Compatibility owners intentionally remain unchanged: old `CNBOX_Manager` AppData/state/backup/manifest identifiers and the old raw update URL remain readable/active. Repository names are also intentionally unchanged.
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
