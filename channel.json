@@ -8,7 +8,7 @@
   "managerSha256": "3abdec35f6294d4ddf4066a84041ce7e362f39e50ebbe575b6a5097c97d4bbeb",
   "collectionProfile": {
     "id": "CNBOX_DEPENDENCY_DIAG_V3",
-    "description": "CNBOX 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
+    "description": "NAJXBox 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
     "paths": [
       "version.xml",
       "python.log",
