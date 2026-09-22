@@ -2,7 +2,7 @@
 
 Public **read-only distribution channel** used by current `NAJXBox Manager` and legacy `CNBOX_Manager.exe` clients.
 
-The repository name remains `CNBOX-Updates` during the controlled brand migration so existing raw updater URLs continue to work. A new `NAJXBox-Updates` canonical repository will only replace it after the explicit compatibility bridge is verified.
+The repository name **intentionally remains `CNBOX-Updates`**. Repository naming is compatibility/infrastructure and is no longer a rename TODO. The program/product brand is NAJXBox; legacy raw updater paths remain valid permanently unless a future infrastructure change is explicitly requested.
 
 This repository intentionally contains only release-facing material:
 
@@ -69,6 +69,7 @@ Manager / Creator:
 - source/build head: `cb8a3dfee1d1ccee3b7f42acd7b702ede9a5e3fe`
 - verified self-hosted build/self-test/UI/VersionInfo closure: run `35782308953`
 - detailed guide: `manager/NAJXBox_Manager_v2.0.3_README.md`
+- GitHub Release: `v2.0.3` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v2.0.3
 
 v2.0.3 is the executable-branding closure. The visible UI was already NAJXBox in v2.0.2; v2.0.3 also changes the actual Windows executable identity to NAJXBox:
 - `ProductName = NAJXBox Manager`
