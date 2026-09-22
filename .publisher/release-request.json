@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "active": true,
-  "tag": "v2.0.3",
-  "title": "NAJXBox Manager v2.0.3",
-  "asset": "manager/NAJXBox_Manager_v2.0.3.exe",
-  "sha256": "3abdec35f6294d4ddf4066a84041ce7e362f39e50ebbe575b6a5097c97d4bbeb",
-  "notesPath": "manager/NAJXBox_Manager_v2.0.3_README.md"
+  "active": false,
+  "tag": "",
+  "title": "",
+  "asset": "",
+  "sha256": "",
+  "notesPath": ""
 }
