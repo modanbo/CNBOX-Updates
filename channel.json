@@ -697,14 +697,14 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.0.5",
-      "status": "DISPLAY_FIX_CANDIDATE",
+      "version": "1.0.6",
+      "status": "GARAGE_INTEGRATION_CANDIDATE",
       "wotVersion": "2.4.0.1",
-      "sourceCore": "ProTanki Gun Marks Calculator 8.1.01",
-      "sourceUrl": "https://protanki.tv/",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.5/CNBOX_MoE_1.0.5_WOT_2.4.0.1.zip",
-      "payloadSha256": "fbc330dfb1e7edc7eacf0bacc50991dacc40e2ff1e289a94fe7fcf4ba9c86fa1",
-      "notes": "Standalone Manager component display-fix candidate after 1.0.4 did not render in the user's client. ProTanki calculation backend and original ProGunMarks host remain unchanged; CNBOX modifies only the stock new panel class, reuses original timeline TextFields, and adds zh_sg text fallback. Persistent drag config remains user-owned.",
+      "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
+      "sourceUrl": "https://protanki.tv/ ; https://wgmods.net/4322/",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.6/CNBOX_MoE_1.0.6_WOT_2.4.0.1.zip",
+      "payloadSha256": "80faef4b00bacc441cc68db9dd40566206149eb0f3f00718ecc6881cb34e0772",
+      "notes": "Independent Manager MoE candidate. ProTanki owns battle UI/calculation; CHAMPi EVV provides garage MoE model/65-85-95-100 thresholds/drag persistence. EVV battle presentation is callback-compatible but intentionally blank. Box remains unrelated.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -725,8 +725,32 @@
           "shared": true
         },
         {
+          "path": "mods/{WOT_VERSION}/aslain.modmenu_2.0.17.wotmod",
+          "sha256": "ad5711a41458afa38055182792773aced86b91add91e11644d6b5c273beea94b",
+          "required": true,
+          "shared": true
+        },
+        {
+          "path": "mods/{WOT_VERSION}/champi.settingsgui_1.81.wotmod",
+          "sha256": "2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805",
+          "required": true,
+          "shared": true
+        },
+        {
+          "path": "mods/{WOT_VERSION}/gambiter.guiflash_0.6.6.wotmod",
+          "sha256": "a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5",
+          "required": true,
+          "shared": true
+        },
+        {
           "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
           "sha256": "b0120e0ebf5b1f4ac0f44d63fab594021d96e71cd7aabb0263db44b64a00a924",
+          "required": true,
+          "shared": false
+        },
+        {
+          "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
+          "sha256": "47811ac68dbf4d7e2fe539a161b38d06d33a9e79f697c1007948b8f27491eee2",
           "required": true,
           "shared": false
         }

@@ -1,0 +1,171 @@
+/* CNBOX garage MoE skin
+ *
+ * Presentation-only overlay for CHAMPi EVV2 2.05.000.
+ * The EVV calculation/backend and GameFace model are not modified.
+ * Reference: CN helper garage screenshot archived 2026-09-21.
+ */
+
+#evv2-root {
+  width: 192rem !important;
+  padding: 12rem 14rem 11rem 14rem !important;
+  background: rgba(10, 13, 11, .56) !important;
+  border: 1rem solid rgba(220, 218, 206, .26) !important;
+  border-radius: 0 !important;
+  box-shadow: inset 0 0 1rem rgba(0,0,0,.65), 0 1rem 2rem rgba(0,0,0,.32) !important;
+  --evv2-main-font-size: 16rem;
+  --evv2-main-line-height: 20rem;
+  --evv2-legend-font-size: 12rem;
+  --evv2-legend-line-height: 15rem;
+  --evv2-delta-raised-color: #2fdaa1;
+  --evv2-delta-fallen-color: #cb4e52;
+  --evv2-delta-color: rgba(242,240,232,.97);
+  color: #f2f0e8;
+}
+
+#evv2-root:hover {
+  background: rgba(10, 13, 11, .56) !important;
+  border-color: rgba(220, 218, 206, .26) !important;
+  box-shadow: inset 0 0 1rem rgba(0,0,0,.65), 0 1rem 2rem rgba(0,0,0,.32) !important;
+}
+
+#evv2-root .evv2-main {
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-areas:
+      "percent delta"
+      "average average" !important;
+  column-gap: 7rem !important;
+  row-gap: 5rem !important;
+  min-height: 45rem !important;
+  align-items: center !important;
+}
+
+#evv2-root .evv2-left {
+  grid-area: percent;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  justify-content: flex-start !important;
+}
+
+#evv2-root .evv2-delta {
+  grid-area: delta;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  justify-content: flex-start !important;
+  color: var(--evv2-delta-color) !important;
+}
+
+#evv2-root .evv2-right {
+  grid-area: average;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  justify-content: flex-start !important;
+}
+
+#evv2-root .evv2-right::before {
+  content: "平均标伤";
+  margin-right: 7rem;
+  color: rgba(224,222,212,.98);
+  font-size: 14rem;
+  line-height: 19rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 1rem 1rem rgba(0,0,0,.9), 0 0 2rem rgba(0,0,0,.45);
+}
+
+#evv2-root .evv2-moeicon,
+#evv2-root .evv2-damage-icon {
+  display: none !important;
+}
+
+#evv2-root .evv2-moepercent,
+#evv2-root .evv2-percent {
+  font-size: 18rem !important;
+  line-height: 22rem !important;
+  font-weight: 700 !important;
+  color: rgba(242,240,232,.99) !important;
+}
+
+#evv2-root .evv2-avg {
+  font-size: 14rem !important;
+  line-height: 19rem !important;
+  font-weight: 700 !important;
+  color: rgba(242,240,232,.99) !important;
+}
+
+#evv2-root .evv2-delta-arrow,
+#evv2-root .evv2-delta-value {
+  font-size: 13rem !important;
+  line-height: 18rem !important;
+  font-weight: 700 !important;
+}
+
+#evv2-root.evv2-delta-raised .evv2-delta-arrow,
+#evv2-root.evv2-delta-raised .evv2-delta-value {
+  color: #2fdaa1 !important;
+}
+
+#evv2-root.evv2-delta-fallen .evv2-delta-arrow,
+#evv2-root.evv2-delta-fallen .evv2-delta-value {
+  color: #cb4e52 !important;
+}
+
+/* CN reference card has no progress strip; it shows only current %, average,
+ * then the four damage thresholds in a compact 2 x 2 grid. */
+#evv2-root .evv2-progress {
+  display: none !important;
+}
+
+#evv2-root .evv2-threshold-legend {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: auto auto !important;
+  column-gap: 16rem !important;
+  row-gap: 3rem !important;
+  margin-top: 7rem !important;
+  width: 100% !important;
+}
+
+#evv2-root .evv2-threshold-item {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: baseline !important;
+  justify-content: flex-start !important;
+  min-width: 0 !important;
+  color: rgba(224,222,212,.98) !important;
+}
+
+#evv2-root .evv2-threshold-icon,
+#evv2-root .evv2-threshold-percent {
+  display: none !important;
+}
+
+#evv2-root .evv2-threshold-item::before {
+  display: inline-block;
+  width: 30rem;
+  margin-right: 7rem;
+  color: rgba(224,222,212,.98);
+  font-size: 12rem;
+  line-height: 15rem;
+  font-weight: 500;
+  text-align: left;
+  text-shadow: 0 1rem 1rem rgba(0,0,0,.9);
+}
+
+#evv2-root .evv2-threshold-item[data-percent="65"]::before { content: "65%"; }
+#evv2-root .evv2-threshold-item[data-percent="85"]::before { content: "85%"; }
+#evv2-root .evv2-threshold-item[data-percent="95"]::before { content: "95%"; }
+#evv2-root .evv2-threshold-item[data-percent="100"]::before { content: "100%"; }
+
+#evv2-root .evv2-threshold-label {
+  margin-left: 0 !important;
+  color: rgba(242,240,232,.97) !important;
+  font-size: 12rem !important;
+  line-height: 15rem !important;
+  font-weight: 600 !important;
+}
+
+/* Do not re-color the four rows. The CN reference uses one muted/white family. */
+#evv2-root.evv2-color-mode .evv2-threshold-item {
+  --evv2-threshold-color: rgba(242,240,232,.97) !important;
+}

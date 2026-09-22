@@ -67,3 +67,33 @@ Live display verification remains the next gate before changing 1.0.5 from candi
 ## Garage panel
 
 The ProTanki package above contains the battle UI only. The requested garage MoE card is a separate layer and must be sourced/decomposed independently, then packaged behind the same single Manager “打环插件” option.
+
+
+### 1.0.6 — GARAGE_INTEGRATION_CANDIDATE
+
+Payload:
+`80faef4b00bacc441cc68db9dd40566206149eb0f3f00718ecc6881cb34e0772`
+
+ProTanki battle WOTMOD:
+`b0120e0ebf5b1f4ac0f44d63fab594021d96e71cd7aabb0263db44b64a00a924`
+
+CHAMPi EVV garage WOTMOD:
+`47811ac68dbf4d7e2fe539a161b38d06d33a9e79f697c1007948b8f27491eee2`
+
+Garage upstream:
+- CHAMPi Expected Vehicle Values 2.05.000
+- Aslain package `MarksOnGun_Expected_Vehicle_Values_2edd8787.zip`
+- package SHA256 `4fcb507d6ab133b959c99fa18af5c917e98b824f7a2b0e86210db5a3df87555c`
+
+Architecture:
+- ProTanki remains the visible battle MoE owner;
+- EVV supplies garage current MoE %, average damage, 65/85/95/100 thresholds and persistent Ctrl-drag;
+- EVV protected backend is byte-preserved;
+- EVV battle presentation is callback-compatible but intentionally blank, preventing duplicate battle panels;
+- EVV garage model/JavaScript is unchanged; a CSS-only CN reference skin is appended.
+
+Static combined-package closure: PASS.
+
+The Manager still exposes one independent “打环插件” component. Box owns none of these files.
+
+History rule: do not re-decompose EVV while version remains 2.05.000 and the pinned package SHA256 remains unchanged.
