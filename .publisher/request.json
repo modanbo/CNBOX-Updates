@@ -1,6 +1,10 @@
 {
   "schemaVersion": 1,
-  "active": false,
-  "sourceUrl": "",
-  "destination": ""
+  "active": true,
+  "sourceUrl": "https://sdmntprwestus3.oaiusercontent.com/files/00000000-1838-81fd-9837-7d161f23931a/raw?se=2026-09-22T19%3A34%3A48Z&sp=r&sv=2026-02-06&sr=b&scid=26982508-1f97-5bf0-b7c8-77e1ddf43fa5&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T18%3A52%3A06Z&ske=2026-09-23T18%3A52%3A06Z&sks=b&skv=2026-02-06&sig=ejg1ycl5lDRbjLjVFYY3oZzl0PlqrfYCiht%2B%2BN0JY1Y%3D",
+  "sourceSha256": "46de3c1b7e5e4013191a772a84a09c36e0819919973eef47c8a3696200d4ec63",
+  "archive": "zip",
+  "extract": "Public/NAJXBox_Manager.exe",
+  "outputSha256": "7e6660b49b1614cef15d6e74467c4923648c9634479d76d0968c44cf4ebc45b4",
+  "destination": "manager/CNBOX_Manager.exe"
 }
