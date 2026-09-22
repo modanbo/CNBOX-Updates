@@ -94,6 +94,10 @@ jobs:
             rel="$(basename "$f")"
             cp "$f" "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/garage_flash/$rel"
           done
+          find "$root/battle_scripts" -type f -name "*.as" -maxdepth 10 -print0 | while IFS= read -r -d '' f; do
+            rel="$(basename "$f")"
+            cp "$f" "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/battle_flash/$rel"
+          done
 
           {
             echo "=== EVV2 JS MODEL FIELDS ==="
