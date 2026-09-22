@@ -1,0 +1,81 @@
+name: Inspect Expected Vehicle Values package
+
+on:
+  push:
+    branches:
+      - work/moe-garage-decompose
+    paths:
+      - ".github/workflows/inspect-evv.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-garage-decompose
+
+      - name: Download and decompose EVV
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/evv"
+          mkdir -p "$root/out" "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv"
+
+          url="https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip"
+          curl -fL --retry 3 --connect-timeout 20 "$url" -o "$root/evv.zip"
+          sha256sum "$root/evv.zip" > "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/package_sha256.txt"
+          unzip -q "$root/evv.zip" -d "$root/out"
+
+          {
+            echo "=== OUTER MEMBERS ==="
+            unzip -Z1 "$root/evv.zip" | sort
+            echo
+            echo "=== ALL EXTRACTED FILES ==="
+            find "$root/out" -type f | sed "s#^$root/out/##" | sort
+            echo
+            echo "=== TOP HASHES ==="
+            find "$root/out" -type f -print0 | sort -z | xargs -0 sha256sum
+          } > "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/structure.txt"
+
+          python3 - "$root/out" "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/nested_wotmods.txt" <<'PY'
+          import os,sys,zipfile,re
+          root,out=sys.argv[1],sys.argv[2]
+          with open(out,"w",encoding="utf-8") as fh:
+              for dp,_,fs in os.walk(root):
+                  for n in fs:
+                      p=os.path.join(dp,n)
+                      if not (n.endswith(".wotmod") or n.endswith(".mtmod") or n.endswith(".zip")):
+                          continue
+                      fh.write("\n=== "+os.path.relpath(p,root)+" ===\n")
+                      try:
+                          with zipfile.ZipFile(p) as z:
+                              for name in z.namelist():
+                                  low=name.lower()
+                                  if any(k in low for k in ("garage","hangar","battle","mark","moe","gameface","script","config","settings","flash")):
+                                      fh.write(name+"\n")
+                              if "meta.xml" in z.namelist():
+                                  fh.write("--- META ---\n")
+                                  fh.write(z.read("meta.xml").decode("utf-8","replace")+"\n")
+                      except Exception as e:
+                          fh.write("NOT_ZIP "+repr(e)+"\n")
+          PY
+
+          {
+            echo "=== GARAGE/HANGAR REFERENCES ==="
+            grep -RniE "garage|hangar|selectedVehicle|vehicleSelected|carousel|marksOnGun|MoE|mark" "$root/out" 2>/dev/null | head -n 1200 || true
+          } > "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/text_refs.txt"
+
+      - name: Commit EVV decomposition
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moe/garage_diagnostics/evv
+          git commit -m "Record Expected Vehicle Values package decomposition"
+          git push origin HEAD:work/moe-garage-decompose
