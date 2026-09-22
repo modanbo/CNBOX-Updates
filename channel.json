@@ -3,9 +3,9 @@
   "channel": "stable",
   "latestAslainVersion": "2.4.0.1 #05",
   "aslainUrl": "https://aslain.com/index.php?/topic/13-download-%E2%98%85-world-of-tanks-%E2%98%85-modpack/",
-  "managerVersion": "2.0.1",
+  "managerVersion": "2.0.2",
   "managerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager.exe",
-  "managerSha256": "e32fbb44e3cc641b3a1c64362c5cb183938c77ef39fcf97f68cac9b3be848476",
+  "managerSha256": "7e6660b49b1614cef15d6e74467c4923648c9634479d76d0968c44cf4ebc45b4",
   "collectionProfile": {
     "id": "CNBOX_DEPENDENCY_DIAG_V3",
     "description": "CNBOX 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
@@ -757,9 +757,9 @@
       ]
     }
   ],
-  "creatorManagerVersion": "2.0.1",
+  "creatorManagerVersion": "2.0.2",
   "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager_Creator.exe",
-  "creatorManagerSha256": "4f6631656ed59aa90bae2abe3a532cb3a1cad8e592acfc9031fd3c18927e0e81",
+  "creatorManagerSha256": "b71ffdd4983b37af9bcc502e5660b2247488fa12c6c8a9a35ff2ee621e20e974",
   "creatorTestPackage": {
     "schemaVersion": 1,
     "version": "2401-05-R34-R2F9-TEST-CANDIDATE-R4",
@@ -770,5 +770,15 @@
     "fileName": "CNBOX_ASLAIN05_TEST_CANDIDATE_R4_FINAL_RUNTIME_HANDOFF.zip",
     "sha256": "65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c",
     "notes": "Creator-only test candidate metadata. Not a release entry; Public and normal Creator release selection must ignore it. The actual R4 ZIP is installed manually through Creator test transaction."
+  },
+  "productName": "NAJXBox",
+  "legacyProductName": "CNBOX",
+  "managerCanonicalUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
+  "creatorManagerCanonicalUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe",
+  "brandMigration": {
+    "displayName": "NAJXBox",
+    "legacyCompatibilityName": "CNBOX",
+    "phase": "DISPLAY_AND_BINARY_ALIAS",
+    "note": "v2.0.2 uses NAJXBox externally while retaining legacy CNBOX state fields, directories, manifest keys and stable updater paths for backward compatibility. Repository/Drive/Gitee rename is a separate migration."
   }
 }
