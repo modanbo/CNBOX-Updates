@@ -288,6 +288,17 @@ jobs:
           print('STATIC_MOE_106_COMBINED_PACKAGE_OK')
           PY
 
+      - name: Upload 1.0.6 archival artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX_MoE_1.0.6_CANDIDATE
+          path: |
+            moe/1.0.6/CNBOX_MoE_1.0.6_WOT_2.4.0.1.zip
+            moe/1.0.6/manifest.json
+            moe/1.0.6/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Commit deterministic 1.0.6 candidate
         shell: bash
         run: |
