@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprwestus.oaiusercontent.com/files/00000000-85c8-8230-88ca-cff468b362f2/raw?se=2026-09-22T20%3A55%3A03Z&sp=r&sv=2026-02-06&sr=b&scid=00c9aaae-67da-5ff6-ae43-d297e1fcd805&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T18%3A14%3A42Z&ske=2026-09-23T18%3A14%3A42Z&sks=b&skv=2026-02-06&sig=8Ly73zdCqvAZ1iXhzSAWLjhjA0ZT59WG3Q/0RQcQRp8%3D",
-  "destination": "manager/NAJXBox_Manager_Creator.exe",
+  "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-8dd0-81f7-b168-4ddc2e02e309/raw?se=2026-09-22T20%3A55%3A39Z&sp=r&sv=2026-02-06&sr=b&scid=8e82412e-c10d-5e6b-a348-4d04f8a42692&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T19%3A04%3A01Z&ske=2026-09-23T19%3A04%3A01Z&sks=b&skv=2026-02-06&sig=1RgiHh3XIAtTaLQ26uaf1hm76lgbpV8h10ldndqxuPk%3D",
+  "destination": "manager/NAJXBox_Manager_Creator_v2.0.3.exe",
   "sourceSha256": "3e914414c66613bafdf35671b4436f3eeb5534307cc70c4b501f8b037dae4bc6",
   "archive": "zip",
   "extract": "Creator/NAJXBox_Manager_Creator.exe",
