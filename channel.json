@@ -759,5 +759,16 @@
   ],
   "creatorManagerVersion": "2.0.0",
   "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager_Creator.exe",
-  "creatorManagerSha256": "e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8"
+  "creatorManagerSha256": "e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8",
+  "creatorTestPackage": {
+    "schemaVersion": 1,
+    "version": "2401-05-R34-R2F9-TEST-CANDIDATE-R4",
+    "status": "TEST_CANDIDATE",
+    "wotVersion": "2.4.0.1",
+    "aslainVersion": "2.4.0.1 #05",
+    "xvmVersion": "13.1.0.0090",
+    "fileName": "CNBOX_ASLAIN05_TEST_CANDIDATE_R4_FINAL_RUNTIME_HANDOFF.zip",
+    "sha256": "65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c",
+    "notes": "Creator-only test candidate metadata. Not a release entry; Public and normal Creator release selection must ignore it. The actual R4 ZIP is installed manually through Creator test transaction."
+  }
 }
