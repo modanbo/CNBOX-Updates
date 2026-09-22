@@ -52,15 +52,21 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager:
-- version: 1.2.0
-- stable path: `manager/CNBOX_Manager.exe`
-- versioned path: `manager/CNBOX_Manager_v1.2.0.exe`
-- Public SHA256: `5e4b956da1f182de9b6b5b14874f4665aae848a9bdef4ff0ed5db48298ed5fe1`
-- Creator SHA256 (private engineering artifact): `203ab9da4e358a0276ed552d4c69f1e3d27351bee614af2f4825ab4612436030`
-- dual-flavor build ZIP SHA256: `39752462c1d1f3a738833bb30cdcc0b43ababd7f21503753bd80efb258269d4b`
-- GitHub Actions build/self-test closure: run `35530551967`
-- detailed guide: `manager/CNBOX_Manager_v1.2.0_README.md`
-- GitHub Release: `v1.2.0` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v1.2.0
+- version: 2.0.0
+- stable Public path: `manager/CNBOX_Manager.exe`
+- versioned Public path: `manager/CNBOX_Manager_v2.0.0.exe`
+- stable Creator path: `manager/CNBOX_Manager_Creator.exe`
+- versioned Creator path: `manager/CNBOX_Manager_Creator_v2.0.0.exe`
+- Public SHA256: `420d18d06cf346ce48bdbcb51a1f56f09a1c044dc546fec7b083555c28248998`
+- Creator SHA256: `e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8`
+- dual-flavor ZIP: `manager/CNBOX_Manager_v2.0.0.zip`
+- dual-flavor ZIP SHA256: `06dd40346f3975572c6dee0b483f4ef126edad44d306e74926fd51e9789a52ec`
+- source commit: `13be723a793e2fba8ecbbdc4141884108a81810f`
+- GitHub Actions build/self-test closure: run `35678464425`
+- detailed guide: `manager/CNBOX_Manager_v2.0.0_README.md`
+- GitHub Release: `v2.0.0` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v2.0.0
+
+Manager 2.0 is the rebuilt authority/state architecture. Public and Creator remain separate build flavors. Public accepts only `CNBOX_AUTHORITATIVE + PUBLIC_STANDALONE + FINAL_LOCK` Box releases; test/candidate and Creator-track releases are ignored. Creator compatibility is proved from the actual dependency contract instead of assuming adjacent Aslain versions are interchangeable.
 
 Unified Box:
 - release: `2401-R34-R2F9-UNIFIED-R2`
@@ -70,8 +76,7 @@ Unified Box:
 - public payload: `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R2.zip`
 - SHA256: `b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1`
 
-The R2 payload was rebuilt from the locked NA dependency capture. It contains the complete Box dependency set required for standalone installation; it is not an overlay that depends on a prior Aslain installation.
-
+The Manager 2.0 promotion does not change the Public Box functional lock. The current Public Box remains the verified standalone FINAL_LOCK above.
 
 ## Current Creator / Aslain compatibility lock
 
