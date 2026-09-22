@@ -6,5 +6,5 @@
   "archive": "zip",
   "extract": "Public/CNBOX_Manager.exe",
   "outputSha256": "420d18d06cf346ce48bdbcb51a1f56f09a1c044dc546fec7b083555c28248998",
-  "destination": "manager/CNBOX_Manager.exe"
+  "destination": "manager/CNBOX_Manager_v2.0.0.exe"
 }
