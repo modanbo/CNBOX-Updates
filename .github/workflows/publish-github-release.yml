@@ -1,4 +1,4 @@
-name: Publish CNBOX GitHub Release
+name: Publish NAJXBox GitHub Release
 
 on:
   push:
@@ -32,7 +32,220 @@ jobs:
           if ($req.tag -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') { throw "Unsafe tag" }
 
           $asset = ([string]$req.asset).Replace("\","/")
-          if ($asset -notmatch '^manager/CNBOX_Manager_v[0-9]+\.[0-9]+\.[0-9]+\.exe$') {
+          if ($asset -notmatch '^manager/(?:NAJXBox|CNBOX)_Manager_v[0-9]+\.[0-9]+\.[0-9]+\.exe
+            throw "Unsafe public release asset: $asset"
+          }
+
+          $notes = ([string]$req.notesPath).Replace("\","/")
+          if ($notes -notmatch '^manager/(?:NAJXBox|CNBOX)_Manager_v[0-9]+\.[0-9]+\.[0-9]+_README\.md
+            throw "Unsafe notes path: $notes"
+          }
+
+          if (!(Test-Path -LiteralPath $asset -PathType Leaf)) { throw "Asset missing: $asset" }
+          if (!(Test-Path -LiteralPath $notes -PathType Leaf)) { throw "Notes missing: $notes" }
+
+          $actual = (Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne ([string]$req.sha256).ToLowerInvariant()) {
+            throw "Asset SHA256 mismatch"
+          }
+
+          "active=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "tag=$($req.tag)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "title=$($req.title)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "asset=$asset" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "notes=$notes" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "sha256=$actual" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Publish GitHub Release
+        if: steps.req.outputs.active == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.req.outputs.tag }}
+          TITLE: ${{ steps.req.outputs.title }}
+          ASSET: ${{ steps.req.outputs.asset }}
+          NOTES: ${{ steps.req.outputs.notes }}
+          SHA256: ${{ steps.req.outputs.sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists."
+            exit 0
+          fi
+
+          ASSET_FILE="${ASSET##*/}"
+          SHA_FILE="${ASSET_FILE%.exe}.sha256.txt"
+          printf '%s  %s\n' "$SHA256" "$ASSET_FILE" > "$SHA_FILE"
+
+          gh release create "$TAG" \
+            "$ASSET#$TITLE Public" \
+            "$SHA_FILE#SHA256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target main \
+            --title "$TITLE" \
+            --notes-file "$NOTES" \
+            --latest
+
+      - name: Clear release request
+        if: steps.req.outputs.active == 'true'
+        shell: pwsh
+        run: |
+          $cleared = [ordered]@{
+            schemaVersion = 1
+            active = $false
+            tag = ""
+            title = ""
+            asset = ""
+            sha256 = ""
+            notesPath = ""
+          } | ConvertTo-Json
+          Set-Content ".publisher/release-request.json" -Value $cleared -Encoding utf8
+
+          git config user.name "najxbox-release-bot"
+          git config user.email "najxbox-release-bot@users.noreply.github.com"
+          git add ".publisher/release-request.json"
+          git commit -m "Clear completed GitHub Release request"
+          git push
+) {
+            throw "Unsafe public release asset: $asset"
+          }
+
+          $notes = ([string]$req.notesPath).Replace("\","/")
+          if ($notes -notmatch '^manager/CNBOX_Manager_v[0-9]+\.[0-9]+\.[0-9]+_README\.md$') {
+            throw "Unsafe notes path: $notes"
+          }
+
+          if (!(Test-Path -LiteralPath $asset -PathType Leaf)) { throw "Asset missing: $asset" }
+          if (!(Test-Path -LiteralPath $notes -PathType Leaf)) { throw "Notes missing: $notes" }
+
+          $actual = (Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne ([string]$req.sha256).ToLowerInvariant()) {
+            throw "Asset SHA256 mismatch"
+          }
+
+          "active=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "tag=$($req.tag)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "title=$($req.title)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "asset=$asset" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "notes=$notes" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "sha256=$actual" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Publish GitHub Release
+        if: steps.req.outputs.active == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.req.outputs.tag }}
+          TITLE: ${{ steps.req.outputs.title }}
+          ASSET: ${{ steps.req.outputs.asset }}
+          NOTES: ${{ steps.req.outputs.notes }}
+          SHA256: ${{ steps.req.outputs.sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists."
+            exit 0
+          fi
+
+          printf '%s  CNBOX_Manager_%s.exe\n' "$SHA256" "$TAG" > "CNBOX_Manager_${TAG}.sha256.txt"
+
+          gh release create "$TAG" \
+            "$ASSET#CNBOX Manager ${TAG} Public" \
+            "CNBOX_Manager_${TAG}.sha256.txt#SHA256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target main \
+            --title "$TITLE" \
+            --notes-file "$NOTES" \
+            --latest
+
+      - name: Clear release request
+        if: steps.req.outputs.active == 'true'
+        shell: pwsh
+        run: |
+          $cleared = [ordered]@{
+            schemaVersion = 1
+            active = $false
+            tag = ""
+            title = ""
+            asset = ""
+            sha256 = ""
+            notesPath = ""
+          } | ConvertTo-Json
+          Set-Content ".publisher/release-request.json" -Value $cleared -Encoding utf8
+
+          git config user.name "cnbox-release-bot"
+          git config user.email "cnbox-release-bot@users.noreply.github.com"
+          git add ".publisher/release-request.json"
+          git commit -m "Clear completed GitHub Release request"
+          git push
+) {
+            throw "Unsafe notes path: $notes"
+          }
+
+          if (!(Test-Path -LiteralPath $asset -PathType Leaf)) { throw "Asset missing: $asset" }
+          if (!(Test-Path -LiteralPath $notes -PathType Leaf)) { throw "Notes missing: $notes" }
+
+          $actual = (Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne ([string]$req.sha256).ToLowerInvariant()) {
+            throw "Asset SHA256 mismatch"
+          }
+
+          "active=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "tag=$($req.tag)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "title=$($req.title)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "asset=$asset" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "notes=$notes" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "sha256=$actual" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+
+      - name: Publish GitHub Release
+        if: steps.req.outputs.active == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.req.outputs.tag }}
+          TITLE: ${{ steps.req.outputs.title }}
+          ASSET: ${{ steps.req.outputs.asset }}
+          NOTES: ${{ steps.req.outputs.notes }}
+          SHA256: ${{ steps.req.outputs.sha256 }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $TAG already exists."
+            exit 0
+          fi
+
+          printf '%s  CNBOX_Manager_%s.exe\n' "$SHA256" "$TAG" > "CNBOX_Manager_${TAG}.sha256.txt"
+
+          gh release create "$TAG" \
+            "$ASSET#CNBOX Manager ${TAG} Public" \
+            "CNBOX_Manager_${TAG}.sha256.txt#SHA256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --target main \
+            --title "$TITLE" \
+            --notes-file "$NOTES" \
+            --latest
+
+      - name: Clear release request
+        if: steps.req.outputs.active == 'true'
+        shell: pwsh
+        run: |
+          $cleared = [ordered]@{
+            schemaVersion = 1
+            active = $false
+            tag = ""
+            title = ""
+            asset = ""
+            sha256 = ""
+            notesPath = ""
+          } | ConvertTo-Json
+          Set-Content ".publisher/release-request.json" -Value $cleared -Encoding utf8
+
+          git config user.name "cnbox-release-bot"
+          git config user.email "cnbox-release-bot@users.noreply.github.com"
+          git add ".publisher/release-request.json"
+          git commit -m "Clear completed GitHub Release request"
+          git push
+) {
             throw "Unsafe public release asset: $asset"
           }
 
