@@ -3,9 +3,9 @@
   "channel": "stable",
   "latestAslainVersion": "2.4.0.1 #05",
   "aslainUrl": "https://aslain.com/index.php?/topic/13-download-%E2%98%85-world-of-tanks-%E2%98%85-modpack/",
-  "managerVersion": "1.2.11",
+  "managerVersion": "2.0.0",
   "managerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager.exe",
-  "managerSha256": "8d88fa90853827a3d3fb5411c2b3033273d147a96b0afdb1653a435083a0f1bf",
+  "managerSha256": "420d18d06cf346ce48bdbcb51a1f56f09a1c044dc546fec7b083555c28248998",
   "collectionProfile": {
     "id": "CNBOX_DEPENDENCY_DIAG_V3",
     "description": "CNBOX 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
@@ -757,7 +757,7 @@
       ]
     }
   ],
-  "creatorManagerVersion": "1.2.11",
+  "creatorManagerVersion": "2.0.0",
   "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager_Creator.exe",
-  "creatorManagerSha256": "37032c0d571ad908818e3a317b6cc53bfb86d887c87e51ba7f56d65e05e14b45"
+  "creatorManagerSha256": "e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8"
 }
