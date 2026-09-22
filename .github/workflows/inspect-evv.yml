@@ -70,6 +70,39 @@ jobs:
             grep -RniE "garage|hangar|selectedVehicle|vehicleSelected|carousel|marksOnGun|MoE|mark" "$root/out" 2>/dev/null | head -n 1200 || true
           } > "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/text_refs.txt"
 
+      - name: Export EVV garage UI and GameFace contract
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/evv"
+          core="$root/out/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod"
+          mkdir -p "$root/core" "$root/ffdec" "$root/garage_scripts"                    "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/gameface"                    "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/garage_flash"
+          unzip -q -o "$core" -d "$root/core"
+
+          cp "$root/core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js"              "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/gameface/EVV2.js"
+          cp "$root/core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css"              "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/gameface/EVV2.css"
+          cp "$root/core/res/gui/gen_resources/de.champi.evv2.garage.json"              "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/gameface/de.champi.evv2.garage.json"
+          cp "$root/core/res/mods/configs/res_map/MoEGarageGameFaceView.json"              "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/gameface/MoEGarageGameFaceView.json"
+
+          curl -fL --retry 3 --connect-timeout 20             "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip"             -o "$root/ffdec.zip"
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+
+          "$root/ffdec/ffdec.sh" -export script "$root/garage_scripts"              "$root/core/res/gui/flash/evv_garage.swf"
+
+          find "$root/garage_scripts" -type f -name "*.as" -maxdepth 10 -print0 | while IFS= read -r -d '' f; do
+            rel="$(basename "$f")"
+            cp "$f" "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/garage_flash/$rel"
+          done
+
+          {
+            echo "=== EVV2 JS MODEL FIELDS ==="
+            grep -nE "moe|mark|damage|garage|threshold|percent|vehicle|position|drag|65|85|95|100"               "$root/core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js" | head -n 800 || true
+            echo
+            echo "=== EVV2 GARAGE FLASH MODEL FIELDS ==="
+            grep -RniE "moe|mark|damage|garage|threshold|percent|vehicle|position|drag|65|85|95|100"               "$root/garage_scripts" | head -n 1200 || true
+          } > "$GITHUB_WORKSPACE/moe/garage_diagnostics/evv/model_fields.txt"
+
       - name: Commit EVV decomposition
         shell: bash
         run: |
