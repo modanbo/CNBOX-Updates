@@ -84,3 +84,148 @@
 /home/runner/work/_temp/evv/garage_scripts/scripts/de/champi/wot/utils/LabelWithBackground.as:1171:         this.computeOffsetsFromCurrentPosition(_loc2_,_loc3_);
 /home/runner/work/_temp/evv/garage_scripts/scripts/de/champi/wot/utils/LabelWithBackground.as:1176:         dispatchEvent(new Event(POSITION_CHANGED));
 /home/runner/work/_temp/evv/garage_scripts/scripts/de/champi/wot/utils/LabelWithBackground.as:1179:      private function computeOffsetsFromCurrentPosition(param1:Number, param2:Number) : void
+
+=== EVV2 BATTLE FLASH MODEL FIELDS ===
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:26:      public static const POSITION_CHANGED:String = "LabelWithBackgroundPositionChanged";
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:42:      private var _dragging:Boolean = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:44:      private var _dragEnabled:Boolean = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:46:      private var _dragRequested:Boolean = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:48:      private var _dragPointerOffsetX:Number = 0;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:50:      private var _dragPointerOffsetY:Number = 0;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:52:      public var requireCtrlForDrag:Boolean = true;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:212:         this.disableDragInternal();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:442:            if(param1.panel.draggable != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:444:               this._dragRequested = param1.panel.draggable === true;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:445:               if(this._dragRequested)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:447:                  this.enableDragInternal();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:451:                  this.disableDragInternal();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:515:         this.setClampedAnchorPosition(_loc12_,_loc13_,this._lastAlignX,this._lastAlignY,_loc5_,_loc6_);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:518:      public function migrateAnchorPosition(param1:Object, param2:Number, param3:Number) : Boolean
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:571:      public function migrateAnchorPositionFrom(param1:String, param2:String, param3:Number, param4:Number, param5:Object, param6:Number, param7:Number) : Boolean
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:756:      private function getPointerPositionInParent() : Point
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:772:      private function setAnchorPosition(param1:Number, param2:Number, param3:String = "LEFT", param4:String = "TOP") : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:780:      private function setClampedAnchorPosition(param1:Number, param2:Number, param3:String, param4:String, param5:Number, param6:Number) : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:786:         _loc9_ = this.clampHorizontalPosition(_loc9_,param5);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:787:         _loc10_ = this.clampVerticalPosition(_loc10_,param6);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:792:      private function clampVerticalPosition(param1:Number, param2:Number) : Number
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:818:      private function clampHorizontalPosition(param1:Number, param2:Number) : Number
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1021:         if(!this._dragging && this._lastLayoutSettings != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1027:      private function enableDragInternal() : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1029:         if(!this._dragRequested)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1039:         removeEventListener(Event.ADDED_TO_STAGE,this.onAddedToStageForDrag);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1040:         addEventListener(Event.ADDED_TO_STAGE,this.onAddedToStageForDrag,false,0,true);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1047:            this._dragEnabled = true;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1051:            this._dragEnabled = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1055:      private function disableDragInternal() : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1057:         this._dragRequested = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1058:         this._dragEnabled = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1059:         if(this._dragging)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1061:            this._dragging = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1062:            stopDrag();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1066:         removeEventListener(Event.ADDED_TO_STAGE,this.onAddedToStageForDrag);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1072:            stage.removeEventListener(MouseEvent.MOUSE_MOVE,this.onDragMouseMove,true);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1077:      private function onAddedToStageForDrag(param1:Event) : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1079:         if(this._dragRequested)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1081:            this.enableDragInternal();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1087:         if(this._dragging)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1089:            this._dragging = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1090:            stopDrag();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1093:         this._dragEnabled = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1098:            stage.removeEventListener(MouseEvent.MOUSE_MOVE,this.onDragMouseMove,true);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1121:         if(this._dragging)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1125:         if(this.requireCtrlForDrag && !this._ctrlActive)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1129:         this._dragging = true;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1136:         var _loc2_:Point = this.getPointerPositionInParent();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1137:         this._dragPointerOffsetX = this.x - _loc2_.x;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1138:         this._dragPointerOffsetY = this.y - _loc2_.y;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1141:            stage.addEventListener(MouseEvent.MOUSE_MOVE,this.onDragMouseMove,true,0,true);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1146:      private function onDragMouseMove(param1:MouseEvent) : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1148:         if(!this._dragging)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1152:         var _loc2_:Point = this.getPointerPositionInParent();
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1153:         this.x = this.clampHorizontalPosition(_loc2_.x + this._dragPointerOffsetX,this.getScreenWidthInFlashUnits());
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1154:         this.y = this.clampVerticalPosition(_loc2_.y + this._dragPointerOffsetY,this.getScreenHeightInFlashUnits());
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1159:         if(!this._dragging)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1163:         this._dragging = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1166:            stage.removeEventListener(MouseEvent.MOUSE_MOVE,this.onDragMouseMove,true);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1171:         this.computeOffsetsFromCurrentPosition(_loc2_,_loc3_);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1176:         dispatchEvent(new Event(POSITION_CHANGED));
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/utils/LabelWithBackground.as:1179:      private function computeOffsetsFromCurrentPosition(param1:Number, param2:Number) : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:1:package de.champi.wot.evv.views.battle
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:7:   import mods.shared.BattleDisplayable;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:9:   public class ExpectedVehicleValueBattle extends BattleDisplayable
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:18:      private var _pendingMoeAnchorMigration:Object;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:22:      private var _panelsVisible:Boolean = true;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:26:      public var py_savePosition:Function;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:28:      public function ExpectedVehicleValueBattle()
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:62:            this._panel.addEventListener(LabelWithBackground.POSITION_CHANGED,this.onPanelPosChanged);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:63:            this._pendingMoeAnchorMigration = this.settings.panel.pendingAnchorMigration;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:64:            if(this._pendingMoeAnchorMigration)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:66:               this._panel.visible = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:78:            this._panel2.addEventListener(LabelWithBackground.POSITION_CHANGED,this.onPanelPosChanged);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:82:               this._panel2.visible = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:99:         this._pendingMoeAnchorMigration = null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:110:            this.py_savePosition(1,this._panel.offsetX,this._panel.offsetY);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:116:            this.py_savePosition(2,_loc2_.offsetX,_loc2_.offsetY);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:129:            this.applyPendingAnchorMigration(this._panel,this.settings,this._pendingMoeAnchorMigration,1);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:152:         var _loc5_:Boolean = param1.migrateAnchorPositionFrom(String(param3.oldAlignX),String(param3.oldAlignY),Number(param3.oldX),Number(param3.oldY),param2,App.appWidth,App.appHeight);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:162:            this._pendingMoeAnchorMigration = null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:170:         param1.visible = this._panelsVisible;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:171:         if(this.py_savePosition != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:173:            this.py_savePosition(param4,_loc6_,_loc7_);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:177:      public function as_setPanelsVisible(param1:Boolean) : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:179:         this._panelsVisible = param1;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:182:            this._panel.visible = param1 && this._pendingMoeAnchorMigration == null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:186:            this._panel2.visible = param1 && this._pendingWnxAnchorMigration == null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:193:         var moePositionMigrated:Boolean = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:194:         var wnxPositionMigrated:Boolean = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:195:         var moeOffsetX:Number = NaN;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:196:         var moeOffsetY:Number = NaN;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:203:            moePositionMigrated = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:204:            wnxPositionMigrated = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:209:                  moePositionMigrated = this._panel.migrateAnchorPosition(newSettings,App.appWidth,App.appHeight);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:215:                  this._panel.visible = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:225:                  wnxPositionMigrated = this._panel2.migrateAnchorPosition(newWnxSettings,App.appWidth,App.appHeight);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:231:                  this._panel2.visible = false;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:235:            this._pendingMoeAnchorMigration = Boolean(this.settings.panel) && Boolean(this.settings.panel.pendingAnchorMigration) ? this.settings.panel.pendingAnchorMigration : null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:237:            if(Boolean(moePositionMigrated) && Boolean(this._panel) && this.py_savePosition != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:239:               moeOffsetX = this._panel.offsetX;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:240:               moeOffsetY = this._panel.offsetY;
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:242:            if(Boolean(wnxPositionMigrated) && Boolean(this._panel2) && this.py_savePosition != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:247:            if(Boolean(moePositionMigrated) && Boolean(this._panel) && this.py_savePosition != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:249:               this.py_savePosition(1,moeOffsetX,moeOffsetY);
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:251:            if(Boolean(wnxPositionMigrated) && Boolean(this._panel2) && this.py_savePosition != null)
+/home/runner/work/_temp/evv/battle_scripts/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as:253:               this.py_savePosition(2,wnxOffsetX,wnxOffsetY);
+/home/runner/work/_temp/evv/battle_scripts/scripts/evvBattleInjector.as:3:   import de.champi.wot.evv.views.battle.ExpectedVehicleValueBattle;
+/home/runner/work/_temp/evv/battle_scripts/scripts/evvBattleInjector.as:7:   public dynamic class evvBattleInjector extends AbstractComponentInjector
+/home/runner/work/_temp/evv/battle_scripts/scripts/evvBattleInjector.as:12:      public function evvBattleInjector()
+/home/runner/work/_temp/evv/battle_scripts/scripts/evvBattleInjector.as:20:         componentName = "ExpectedVehicleValueBattleView";
+/home/runner/work/_temp/evv/battle_scripts/scripts/evvBattleInjector.as:21:         componentUI = ExpectedVehicleValueBattle;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:4:   import net.wg.gui.battle.views.BaseBattlePage;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:25:      private function createComponent() : BattleDisplayable
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:27:         var _loc1_:BattleDisplayable = new this.componentUI() as BattleDisplayable;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:32:      protected function configureComponent(param1:BattleDisplayable) : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:41:         var view:BaseBattlePage = null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:42:         var component:BattleDisplayable = null;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:49:            view = mainViewContainer.getChildAt(idx) as BaseBattlePage;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:54:               component.battlePage = view;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/AbstractComponentInjector.as:55:               component.initBattle();
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:4:   import net.wg.gui.battle.components.BattleUIDisplayable;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:5:   import net.wg.gui.battle.views.BaseBattlePage;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:7:   public class BattleDisplayable extends BattleUIDisplayable
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:10:      public var battlePage:BaseBattlePage;
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:14:      public function BattleDisplayable()
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:19:      public function initBattle() : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:21:         if(!this.battlePage.contains(this))
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:23:            this.battlePage.addChild(this);
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:25:         if(!this.battlePage.isFlashComponentRegisteredS(this.componentName))
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:27:            this.battlePage.registerFlashComponentS(this,this.componentName);
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:31:      public function finiBattle() : void
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:33:         if(this.battlePage.isFlashComponentRegisteredS(this.componentName))
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:35:            this.battlePage.unregisterFlashComponentS(this.componentName);
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:37:         if(this.battlePage.contains(this))
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:39:            this.battlePage.removeChild(this);
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:46:         this.battlePage.addEventListener(Event.RESIZE,this._handleResize);
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:51:         this.battlePage.removeEventListener(Event.RESIZE,this._handleResize);
+/home/runner/work/_temp/evv/battle_scripts/scripts/mods/shared/BattleDisplayable.as:52:         this.finiBattle();
+
+=== EVV BACKEND STRINGS ===
