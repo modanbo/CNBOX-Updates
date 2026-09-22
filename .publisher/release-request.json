@@ -1,10 +1,9 @@
 {
   "schemaVersion": 1,
-  "active": false,
-  "tag": "",
-  "title": "",
-  "asset": "",
-  "sha256": "",
-  "notesPath": "",
-  "requestedAtUtc": "2026-09-20T19:10:00Z"
+  "active": true,
+  "tag": "v2.0.0",
+  "title": "CNBOX Manager v2.0.0",
+  "asset": "manager/CNBOX_Manager_v2.0.0.exe",
+  "sha256": "420d18d06cf346ce48bdbcb51a1f56f09a1c044dc546fec7b083555c28248998",
+  "notesPath": "manager/CNBOX_Manager_v2.0.0_README.md"
 }
