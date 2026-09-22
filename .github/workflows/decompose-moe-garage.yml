@@ -1,0 +1,59 @@
+name: Decompose garage MoE candidates
+
+on:
+  push:
+    branches:
+      - work/moe-garage-decompose
+    paths:
+      - ".github/workflows/decompose-moe-garage.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-garage-decompose
+
+      - name: Parse latest Aslain catalog for garage and MoE candidates
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cfg="aslain_catalogs/2.4.0.1/05/Configuration"
+          mkdir -p moe/garage_diagnostics
+
+          python3 - "$cfg" > moe/garage_diagnostics/aslain05_garage_moe_candidates.txt <<'PY'
+          import sys, xml.etree.ElementTree as ET
+          p=sys.argv[1]
+          root=ET.parse(p).getroot()
+          rows=[]
+          for cat in root.iter():
+              if cat.tag not in ("Mod","Package","Category","Group"):
+                  continue
+              attrs=dict(cat.attrib)
+              blob=" ".join(str(v) for v in attrs.values()).lower()
+              if any(k in blob for k in ("mark", "moe", "garage", "hangar", "gunmark")):
+                  rows.append((cat.tag,attrs))
+          for tag,attrs in rows:
+              print(tag, attrs)
+          PY
+
+          {
+            echo
+            echo "=== GREP GARAGE / HANGAR / MARKS / MOE ==="
+            grep -niE "garage|hangar|marks.?in|gun.?marks|marksongun|moe|mark.?on.?gun" "$cfg" | head -n 1000 || true
+          } >> moe/garage_diagnostics/aslain05_garage_moe_candidates.txt
+
+      - name: Commit diagnostic evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moe/garage_diagnostics
+          git commit -m "Record Aslain #05 garage MoE candidates"
+          git push origin HEAD:work/moe-garage-decompose
