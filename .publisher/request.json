@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-dc28-81f5-bb4c-9bd72c2f3316/raw?se=2026-09-22T02%3A34%3A28Z&sp=r&sv=2026-02-06&sr=b&scid=48ac422f-5782-5f07-86c1-8eb51b85383f&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-21T21%3A36%3A25Z&ske=2026-09-22T21%3A36%3A25Z&sks=b&skv=2026-02-06&sig=5Td2gL195rCgHKdfdJU5YJeGbxyLVqz4x6/Qdwo%2BuAw%3D",
+  "sourceUrl": "https://sdmntpreastus2.oaiusercontent.com/files/00000000-3c48-81f6-97ea-76c62364d53e/raw?se=2026-09-22T02%3A35%3A10Z&sp=r&sv=2026-02-06&sr=b&scid=b78e6f10-80f8-5a60-8230-415f7b215fdb&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-21T21%3A40%3A56Z&ske=2026-09-22T21%3A40%3A56Z&sks=b&skv=2026-02-06&sig=J/eU10fD9F1HCXsL8a8ELXY2HkqZqXgXSynRjPjuYYg%3D",
   "sourceSha256": "06dd40346f3975572c6dee0b483f4ef126edad44d306e74926fd51e9789a52ec",
   "archive": "zip",
   "extract": "Creator/CNBOX_Manager_Creator.exe",
   "outputSha256": "e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8",
-  "destination": "manager/CNBOX_Manager_Creator.exe"
+  "destination": "manager/CNBOX_Manager_Creator_v2.0.0.exe"
 }
