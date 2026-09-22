@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprwestus.oaiusercontent.com/files/00000000-9134-8230-b60a-bc20d79903c6/raw?se=2026-09-22T19%3A43%3A16Z&sp=r&sv=2026-02-06&sr=b&scid=a7c2781d-8bb4-51db-a25e-bff8dd2d742f&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T18%3A17%3A21Z&ske=2026-09-23T18%3A17%3A21Z&sks=b&skv=2026-02-06&sig=nQmLfRPN7KGH0jqgsacOWv/8JkRJ13knTxRXmSiKolg%3D",
+  "sourceUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-0234-81f5-885c-f27c731ab622/raw?se=2026-09-22T19%3A43%3A58Z&sp=r&sv=2026-02-06&sr=b&scid=7a9d3635-b58c-5dd1-9b99-0f5812c5f73f&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T17%3A38%3A15Z&ske=2026-09-23T17%3A38%3A15Z&sks=b&skv=2026-02-06&sig=OoCKYHss9mK6HR8Nl5/XBXWtiCLuuCi2Q6lX3kE163Y%3D",
   "sourceSha256": "46de3c1b7e5e4013191a772a84a09c36e0819919973eef47c8a3696200d4ec63",
   "archive": "zip",
-  "extract": "Public/NAJXBox_Manager.exe",
-  "outputSha256": "7e6660b49b1614cef15d6e74467c4923648c9634479d76d0968c44cf4ebc45b4",
-  "destination": "manager/CNBOX_Manager.exe"
+  "extract": "Creator/NAJXBox_Manager_Creator.exe",
+  "outputSha256": "b71ffdd4983b37af9bcc502e5660b2247488fa12c6c8a9a35ff2ee621e20e974",
+  "destination": "manager/CNBOX_Manager_Creator.exe"
 }
