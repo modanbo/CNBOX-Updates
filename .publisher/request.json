@@ -4,7 +4,7 @@
   "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-f78c-81f7-ad6a-3b83fbb63afb/raw?se=2026-09-22T02%3A30%3A58Z&sp=r&sv=2026-02-06&sr=b&scid=944c5659-031c-5d50-99ce-9ec708c5e213&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-21T21%3A43%3A05Z&ske=2026-09-22T21%3A43%3A05Z&sks=b&skv=2026-02-06&sig=ddBnDsSmFfEZYwfTGyXaEC/qf9JyWOAzoMKg85MX7x8%3D",
   "sourceSha256": "06dd40346f3975572c6dee0b483f4ef126edad44d306e74926fd51e9789a52ec",
   "archive": "zip",
-  "extract": "Public/CNBOX_Manager.exe",
-  "outputSha256": "420d18d06cf346ce48bdbcb51a1f56f09a1c044dc546fec7b083555c28248998",
-  "destination": "manager/CNBOX_Manager_v2.0.0.exe"
+  "extract": "Creator/CNBOX_Manager_Creator.exe",
+  "outputSha256": "e3cc8b06612d0a591027ec99ad311db75ed82ebb38e78e6b27b3a587643ad4c8",
+  "destination": "manager/CNBOX_Manager_Creator.exe"
 }
