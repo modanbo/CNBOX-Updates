@@ -1,0 +1,17 @@
+name: CNBOX Public Runner Probe
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/cnbox-public-runner-probe.yml"
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Public runner assigned
+        run: |
+          echo "CNBOX_PUBLIC_RUNNER_PROBE_PASS"
+          uname -a
