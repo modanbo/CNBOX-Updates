@@ -1,0 +1,234 @@
+name: Aslain critical package preflight
+
+permissions:
+  contents: write
+
+on:
+  push:
+    paths:
+      - ".github/workflows/aslain-critical-package-audit.yml"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compare latest Aslain critical packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import io
+          import json
+          import re
+          import urllib.parse
+          import urllib.request
+          import zipfile
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          rootdir = Path("aslain_catalogs")
+          index = json.loads((rootdir / "index.json").read_text(encoding="utf-8"))
+          catalogs = index.get("catalogs", [])
+          if len(catalogs) < 2:
+              raise SystemExit("Need at least two archived Aslain catalogs")
+
+          current = catalogs[0]
+          previous = None
+          for item in catalogs[1:]:
+              if item.get("wotVersion") == current.get("wotVersion"):
+                  previous = item
+                  break
+          if previous is None:
+              raise SystemExit("No previous catalog for same WoT version")
+
+          game = current["wotVersion"]
+          def build_of(item):
+              m = re.search(r'#\s*(\d+)', item.get("aslainVersion", ""))
+              if not m:
+                  raise SystemExit("Unparseable Aslain version: " + item.get("aslainVersion", ""))
+              return int(m.group(1))
+
+          new_build = build_of(current)
+          old_build = build_of(previous)
+          new_path = rootdir / game / f"{new_build:02d}" / "Configuration"
+          old_path = rootdir / game / f"{old_build:02d}" / "Configuration"
+          new_root = ET.fromstring(new_path.read_bytes())
+          old_root = ET.fromstring(old_path.read_bytes())
+
+          def mods_by_id(root):
+              out = {}
+              for mod in root.iter("Mod"):
+                  mid = mod.attrib.get("Id")
+                  if mid:
+                      out[mid] = mod
+              return out
+
+          old_mods = mods_by_id(old_root)
+          new_mods = mods_by_id(new_root)
+          all_ids = sorted(set(old_mods) | set(new_mods))
+          changed_ids = []
+          for mid in all_ids:
+              a = old_mods.get(mid)
+              b = new_mods.get(mid)
+              ab = ET.tostring(a, encoding="utf-8") if a is not None else None
+              bb = ET.tostring(b, encoding="utf-8") if b is not None else None
+              if ab != bb:
+                  changed_ids.append(mid)
+
+          critical_re = re.compile(r'(xvm|player_panels|playerspanel|openwg|players_panel|battlevehiclemarkers|vehiclemarkers)', re.I)
+          critical_ids = [mid for mid in changed_ids if critical_re.search(mid)]
+
+          base_url = f"https://repo.aslain.com/wot_modmanager/{game}/Configuration"
+          def refs(mod):
+              if mod is None:
+                  return []
+              result = []
+              f = mod.attrib.get("File", "").strip()
+              if f:
+                  result.append(f)
+              for pkg in mod.iter("Package"):
+                  f = pkg.attrib.get("File", "").strip()
+                  if f:
+                      result.append(f)
+              seen = set()
+              out = []
+              for r in result:
+                  if r not in seen:
+                      seen.add(r)
+                      out.append(r)
+              return out
+
+          def fetch_bytes(ref):
+              url = urllib.parse.urljoin(base_url, ref)
+              req = urllib.request.Request(url, headers={
+                  "User-Agent": "NAJXBox-Aslain-Critical-Preflight/1.0",
+                  "Cache-Control": "no-cache"
+              })
+              with urllib.request.urlopen(req, timeout=90) as resp:
+                  data = resp.read()
+              return url, data
+
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def flatten_zip(data, prefix="", depth=0):
+              result = {}
+              if depth > 3:
+                  return result
+              try:
+                  zf = zipfile.ZipFile(io.BytesIO(data))
+              except zipfile.BadZipFile:
+                  return result
+              for info in zf.infolist():
+                  if info.is_dir():
+                      continue
+                  child = zf.read(info.filename)
+                  key = prefix + info.filename.replace("\\", "/")
+                  result[key] = {"sha256": sha(child), "bytes": len(child)}
+                  lower = info.filename.lower()
+                  if lower.endswith((".wotmod", ".zip")) and len(child) <= 64 * 1024 * 1024:
+                      nested = flatten_zip(child, key + "!", depth + 1)
+                      result.update(nested)
+              return result
+
+          def archive_record(ref):
+              url, data = fetch_bytes(ref)
+              return {
+                  "ref": ref,
+                  "url": url,
+                  "sha256": sha(data),
+                  "bytes": len(data),
+                  "entries": flatten_zip(data)
+              }
+
+          audits = []
+          for mid in critical_ids:
+              old_refs = refs(old_mods.get(mid))
+              new_refs = refs(new_mods.get(mid))
+              old_records = [archive_record(r) for r in old_refs]
+              new_records = [archive_record(r) for r in new_refs]
+
+              def combined(records):
+                  out = {}
+                  for rec in records:
+                      for path, meta in rec["entries"].items():
+                          out[rec["ref"] + "::" + path] = meta
+                  return out
+
+              old_entries = combined(old_records)
+              new_entries = combined(new_records)
+
+              # Compare by archive-internal path as well as exact archive ref so a renamed
+              # package can still reveal whether its payload owners actually changed.
+              def by_internal(records):
+                  out = {}
+                  for rec in records:
+                      for path, meta in rec["entries"].items():
+                          out[path] = meta
+                  return out
+
+              oi = by_internal(old_records)
+              ni = by_internal(new_records)
+              paths = sorted(set(oi) | set(ni))
+              added = [p for p in paths if p not in oi]
+              removed = [p for p in paths if p not in ni]
+              changed = [p for p in paths if p in oi and p in ni and oi[p]["sha256"] != ni[p]["sha256"]]
+              unchanged = [p for p in paths if p in oi and p in ni and oi[p]["sha256"] == ni[p]["sha256"]]
+
+              audits.append({
+                  "modId": mid,
+                  "oldRefs": old_refs,
+                  "newRefs": new_refs,
+                  "oldArchives": old_records,
+                  "newArchives": new_records,
+                  "internalComparison": {
+                      "added": added,
+                      "removed": removed,
+                      "changed": changed,
+                      "unchangedCount": len(unchanged)
+                  }
+              })
+
+          report = {
+              "schemaVersion": 1,
+              "wotVersion": game,
+              "fromAslainVersion": previous["aslainVersion"],
+              "toAslainVersion": current["aslainVersion"],
+              "fromConfigurationSha256": previous.get("configurationSha256"),
+              "toConfigurationSha256": current.get("configurationSha256"),
+              "changedModIds": changed_ids,
+              "changedModCount": len(changed_ids),
+              "criticalPattern": critical_re.pattern,
+              "criticalChangedModIds": critical_ids,
+              "criticalChangedModCount": len(critical_ids),
+              "criticalAudits": audits
+          }
+          out = rootdir / game / f"{new_build:02d}" / "critical_package_audit.json"
+          out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(json.dumps({
+              "from": report["fromAslainVersion"],
+              "to": report["toAslainVersion"],
+              "changedModCount": report["changedModCount"],
+              "criticalChangedModIds": critical_ids,
+              "output": str(out)
+          }, indent=2))
+          PY
+
+      - name: Commit audit evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add aslain_catalogs/*/*/critical_package_audit.json
+          if git diff --cached --quiet; then
+            echo "Critical audit already current."
+            exit 0
+          fi
+          git commit -m "Audit latest Aslain critical package delta"
+          git push
