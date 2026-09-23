@@ -697,13 +697,13 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.0.8",
-      "status": "UI_REVIEW_CANDIDATE",
+      "version": "1.0.9",
+      "status": "OFFICIAL_CN_UI_REVIEW_CANDIDATE",
       "wotVersion": "2.4.0.1",
       "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.8/CNBOX_MoE_1.0.8_WOT_2.4.0.1.zip",
-      "payloadSha256": "d375acdc450295314dd01749bd1b2978cc33fb797987079b6bf9621dc1f2b384",
-      "notes": "UI-only candidate. Proven calculation/data/drag/settings functions are frozen. ProTanki backend/host unchanged; CHAMPi EVV backend and EVV2.js unchanged. Only battle panel presentation, garage CSS presentation, EVV duplicate battle display neutralization, locale fallback, and notices differ from upstream.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.9/CNBOX_MoE_1.0.9_WOT_2.4.0.1.zip",
+      "payloadSha256": "0cdf01752860e172ae52bcd75ad31993bf13a5698662910f76b8f699f2aa2744",
+      "notes": "Official-CN UI candidate. Proven calculation/data/event/drag/settings functions are frozen. ProTanki backend/host unchanged. CHAMPi EVV backend unchanged; upstream EVV2.js is preserved byte-for-byte as the built file prefix and only an isolated presentation tail is appended. Official authority: battle 147x93, lobby 210x134.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -743,13 +743,13 @@
         },
         {
           "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
-          "sha256": "3201597966d72b632ec9950fc59993dc5f60a6305191b7f053fcfb5f216b53ec",
+          "sha256": "8728f3d3a15a17e98873bf4e51ae32ec96fb01053ffd119f5f276b332b24e2f4",
           "required": true,
           "shared": false
         },
         {
           "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
-          "sha256": "f388941f0036167c3587262b92e0f371521374b513410649296b821a48f20c8e",
+          "sha256": "fc22480047e9f64e14fe5f0a38e283bfe4f7382250246b36b07ec0829968b4d6",
           "required": true,
           "shared": false
         }
