@@ -10,7 +10,7 @@ package poliroid.views.battle.gunmarks
    import flash.text.TextFormatAlign;
 
    /**
-    * NAJXBox MoE 1.0.9 - official CN SWF BATTLE presentation adapter.
+    * NAJXBox MoE 1.0.10 - tri-locale official CN SWF BATTLE presentation adapter.
     *
     * Authority:
     *   wotassist.markongun.swf SHA256
@@ -144,6 +144,11 @@ package poliroid.views.battle.gunmarks
          this._showNormalFields();
 
          // Mature ProTanki semantic mapping is unchanged.
+         // Static labels are intentionally taken from the original ProTanki
+         // locale-resolved data object instead of being hard-coded in presentation.
+         if(this.damageCurrentLabel) this.damageCurrentLabel.text = this._s(param1.damageCurrentLabel);
+         if(this.nextMarkLabel) this.nextMarkLabel.text = this._s(param1.nextMarkLabel);
+
          this.drPredicted.text = this._ensurePercent(this._s(param1.predictedRating));
          this.nextMarkValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
          this.predictedMovingDamage.text = this._cleanDamage(this._s(param1.predictedMovingDamage));
@@ -191,12 +196,10 @@ package poliroid.views.battle.gunmarks
          this._style(this.drPredictedDelta,14,DOWN,1.0,0,18,42,16);
 
          this._style(this.damageCurrentLabel,14,WHITE,0.7,14,42,60,16);
-         this.damageCurrentLabel.text = "\u672c\u573a\u6807\u4f24";
 
          this._style(this.nextMarkValue,14,WHITE,1.0,0,41,46,16);
 
          this._style(this.nextMarkLabel,14,WHITE,0.7,15,66,60,16);
-         this.nextMarkLabel.text = "\u5e73\u5747\u6807\u4f24";
 
          this._style(this.predictedMovingDamage,14,WHITE,1.0,0,65,52,16);
          this._style(this.currentMovingDamage,14,DOWN,1.0,0,66,38,16);
