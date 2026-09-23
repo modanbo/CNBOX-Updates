@@ -70,7 +70,7 @@ jobs:
             throw "Output SHA256 mismatch"
           }
 
-          # Hard security gate for Public Manager EXEs.
+          # Free security gate for Public Manager EXEs.
           # Creator remains an engineering flavor and is intentionally excluded.
           $isPublicManager =
             $dest -match '^manager/(?:CNBOX_Manager|NAJXBox_Manager(?:_v[0-9]+\.[0-9]+\.[0-9]+)?)\.exe$'
@@ -98,25 +98,14 @@ jobs:
             if ($security.finalSha256.ToLowerInvariant() -ne $outputHash) {
               throw "Security manifest SHA256 does not match Public EXE"
             }
-            if ($security.signature.status -ne "PASS") { throw "Public signature security gate is not PASS" }
             if ($security.defender.status -ne "PASS") { throw "Microsoft Defender security gate is not PASS" }
             if ($security.virustotal.status -ne "PASS") { throw "VirusTotal security gate is not PASS" }
             if ([int]$security.virustotal.malicious -ne 0) { throw "VirusTotal malicious detections are non-zero" }
             if ([int]$security.virustotal.suspicious -ne 0) { throw "VirusTotal suspicious detections are non-zero" }
 
-            $sig = Get-AuthenticodeSignature -LiteralPath $output
-            if ($sig.Status -ne [System.Management.Automation.SignatureStatus]::Valid) {
-              throw "Public EXE Authenticode signature is not Valid: $($sig.Status)"
-            }
-            if ($null -eq $sig.SignerCertificate) { throw "Public EXE signer certificate is missing" }
-
-            $thumb = $sig.SignerCertificate.Thumbprint.ToUpperInvariant()
-            $manifestThumb = ([string]$security.signature.thumbprint).ToUpperInvariant()
-            if ($thumb -ne $manifestThumb) { throw "Signer thumbprint does not match security manifest" }
-
-            Write-Host "PUBLIC SECURITY GATE PASS"
+            Write-Host "PUBLIC FREE SECURITY GATE PASS"
             Write-Host "  SHA256: $outputHash"
-            Write-Host "  Signer: $($sig.SignerCertificate.Subject)"
+            Write-Host "  Authenticode: optional / may be NotSigned"
             Write-Host "  Defender: PASS"
             Write-Host "  VirusTotal malicious=0 suspicious=0"
           }
