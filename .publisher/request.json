@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprnortheu.oaiusercontent.com/files/00000000-9090-81f4-b77b-c3e20881762d/raw?se=2026-09-23T16%3A59%3A37Z&sp=r&sv=2026-02-06&sr=b&scid=701e3ab4-1aea-5594-b2a0-32242b85506e&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-23T16%3A43%3A12Z&ske=2026-09-24T16%3A43%3A12Z&sks=b&skv=2026-02-06&sig=SAARXQMKnwu9n/icAeYIW36ZTY8T2pw6BMUmHcFK5JI%3D",
-  "destination": "manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9_R4.json",
-  "sourceSha256": "a406713fe06bea53a232fc29ce99cde8dd99ab2970bd641e220368769835865b"
+  "sourceUrl": "https://sdmntprkoreacentral.oaiusercontent.com/files/00000000-2084-8206-9853-93a720214a29/raw?se=2026-09-23T17%3A00%3A20Z&sp=r&sv=2026-02-06&sr=b&scid=916a1fce-19d7-5a80-ac52-dc6e763292ba&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-23T16%3A42%3A24Z&ske=2026-09-24T16%3A42%3A24Z&sks=b&skv=2026-02-06&sig=VG%2BQBQci3eTAgP9XWQ7p6rzGqRXRDC3H3RuHj4eCJec%3D",
+  "destination": "manifests/2.4.0.1/CNBOX_CREATOR_ASLAIN06_R34_R2F9_R4.json",
+  "sourceSha256": "b9484e0f65e37d51cc8563d1e469a0b55ac5d1c1d1827b94c41a7b82c2d1264c"
 }
