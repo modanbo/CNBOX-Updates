@@ -126,3 +126,45 @@ Static closure: PASS.
 
 Runtime screenshot evidence is archived in Google Drive as:
 `RUNTIME_MOE_1.0.6_GARAGE_VISIBLE_CLIPPED_DRAG_FAIL_20260923.png`.
+
+
+### 1.0.8 — UI_REVIEW_CANDIDATE
+
+Project-owner rule:
+- finish battle + garage UI first;
+- double-review after both are built;
+- do not rewrite proven third-party calculation/data/event/drag/settings functions;
+- CNBOX is changing presentation only.
+
+Payload:
+`d375acdc450295314dd01749bd1b2978cc33fb797987079b6bf9621dc1f2b384`
+
+ProTanki CN UI WOTMOD:
+`3201597966d72b632ec9950fc59993dc5f60a6305191b7f053fcfb5f216b53ec`
+
+CHAMPi EVV CN garage WOTMOD:
+`f388941f0036167c3587262b92e0f371521374b513410649296b821a48f20c8e`
+
+UI target:
+- battle reference measured about 154 × 98 px;
+- garage reference measured about 220 × 141 px;
+- battle: MoE%+delta / 本场标伤 / 平均标伤+delta;
+- garage: ring + mark indicator + current%+delta / 平均标伤 / 65-85-95-100 2×2 matrix.
+
+Function freeze:
+- ProTanki protected backend byte-identical to pinned upstream;
+- ProTanki `ProGunMarks` host decompiles identical before/after;
+- CHAMPi EVV protected backend byte-identical to pinned upstream;
+- CHAMPi `EVV2.js` byte-identical to pinned upstream;
+- original EVV garage Ctrl+drag/savePosition/anchor migration remains untouched;
+- 1.0.7 custom runtime drag/position patch is removed from the active source baseline.
+
+Static review:
+`STATIC_MOE_108_UI_ONLY_REVIEW_PASS`
+
+Workflow run:
+`35877692148`
+
+The EVV visible battle panel remains presentation-neutralized solely to prevent a second battle UI; ProTanki is the single visible battle owner. This does not alter EVV calculation/model data.
+
+1.0.8 is the new presentation architecture baseline. Future fixes must not reintroduce runtime-function wrapping without a separate, evidence-based review.

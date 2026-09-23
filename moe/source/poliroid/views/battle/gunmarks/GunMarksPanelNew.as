@@ -12,11 +12,12 @@ package poliroid.views.battle.gunmarks
    /**
     * CNBOX compact MoE presentation for ProTanki's stock "new" panel.
     *
-    * Runtime-safety rule for 1.0.5:
+    * UI-only lock for 1.0.8:
     * - original ProGunMarks host is untouched;
     * - original timeline TextFields are reused (no new font-dependent TextFields);
     * - calculation/backend remains untouched;
-    * - only panel labels/layout/background/arrows are presentation changes.
+    * - only panel size, labels, spacing, background and arrows are presentation changes;
+    * - target geometry is measured from the archived CN battle reference (~154 x 98 px at reference scale).
     */
    public class GunMarksPanelNew extends MovieClip implements IGunMarksPanel
    {
@@ -37,9 +38,9 @@ package poliroid.views.battle.gunmarks
       private var _percentArrow:Sprite;
       private var _averageArrow:Sprite;
 
-      private static const PANEL_W:Number = 192;
-      private static const PANEL_H:Number = 120;
-      private static const PAD_X:Number = 20;
+      private static const PANEL_W:Number = 154;
+      private static const PANEL_H:Number = 98;
+      private static const PAD_X:Number = 14;
       private static const WHITE:uint = 0xF2F0E8;
       private static const MUTED:uint = 0xE0DED4;
       private static const GREEN:uint = 0x2FDAA1;
@@ -102,7 +103,7 @@ package poliroid.views.battle.gunmarks
 
          this._back = new Shape();
          this._back.graphics.lineStyle(1,0xD8D6CC,0.28);
-         this._back.graphics.beginFill(0x10130F,0.43);
+         this._back.graphics.beginFill(0x10130F,0.48);
          this._back.graphics.drawRect(0,0,PANEL_W,PANEL_H);
          this._back.graphics.endFill();
          this._back.mouseEnabled = false;
@@ -117,21 +118,21 @@ package poliroid.views.battle.gunmarks
          }
 
          // Reuse the SWF's already-created text fields and their embedded font linkage.
-         this._styleField(this.drPredicted,20,true,WHITE,PAD_X,14,82,29,TextFormatAlign.LEFT);
-         this._styleField(this.drPredictedDelta,15,true,WHITE,112,17,70,23,TextFormatAlign.LEFT);
+         this._styleField(this.drPredicted,18,true,WHITE,PAD_X,10,66,25,TextFormatAlign.LEFT);
+         this._styleField(this.drPredictedDelta,14,true,WHITE,84,12,60,22,TextFormatAlign.LEFT);
 
-         this._styleField(this.damageCurrentLabel,16,true,MUTED,PAD_X,50,80,24,TextFormatAlign.LEFT);
+         this._styleField(this.damageCurrentLabel,15,true,MUTED,PAD_X,37,70,23,TextFormatAlign.LEFT);
          this.damageCurrentLabel.text = "\u672c\u573a\u6807\u4f24";
 
-         this._styleField(this.nextMarkValue,16,true,WHITE,103,50,71,24,TextFormatAlign.LEFT);
+         this._styleField(this.nextMarkValue,15,true,WHITE,86,37,55,23,TextFormatAlign.LEFT);
 
-         this._styleField(this.nextMarkLabel,16,true,MUTED,PAD_X,82,80,24,TextFormatAlign.LEFT);
+         this._styleField(this.nextMarkLabel,15,true,MUTED,PAD_X,64,70,23,TextFormatAlign.LEFT);
          this.nextMarkLabel.text = "\u5e73\u5747\u6807\u4f24";
 
-         this._styleField(this.predictedMovingDamage,16,true,WHITE,103,82,51,24,TextFormatAlign.LEFT);
-         this._styleField(this.currentMovingDamage,15,true,WHITE,163,84,26,22,TextFormatAlign.LEFT);
+         this._styleField(this.predictedMovingDamage,15,true,WHITE,86,64,39,23,TextFormatAlign.LEFT);
+         this._styleField(this.currentMovingDamage,14,true,WHITE,134,66,20,21,TextFormatAlign.LEFT);
 
-         this._styleField(this.accountInfoLabel,14,false,MUTED,10,43,PANEL_W - 20,28,TextFormatAlign.CENTER);
+         this._styleField(this.accountInfoLabel,13,false,MUTED,8,35,PANEL_W - 16,26,TextFormatAlign.CENTER);
          this.accountInfoLabel.visible = false;
 
          this._percentArrow = new Sprite();
@@ -267,22 +268,22 @@ package poliroid.views.battle.gunmarks
       {
          if(!this.drPredicted || !this.drPredictedDelta) return;
 
-         var right:Number = this.drPredicted.x + Math.min(this.drPredicted.textWidth + 4,78);
-         this._percentArrow.x = Math.min(103,right + 4);
-         this._percentArrow.y = 22;
-         this.drPredictedDelta.x = this._percentArrow.visible ? this._percentArrow.x + 11 : this._percentArrow.x + 1;
-         this.drPredictedDelta.y = 17;
+         var right:Number = this.drPredicted.x + Math.min(this.drPredicted.textWidth + 3,64);
+         this._percentArrow.x = Math.min(79,right + 3);
+         this._percentArrow.y = 17;
+         this.drPredictedDelta.x = this._percentArrow.visible ? this._percentArrow.x + 10 : this._percentArrow.x + 1;
+         this.drPredictedDelta.y = 12;
       }
 
       private function _layoutAverageRow() : void
       {
          if(!this.predictedMovingDamage || !this.currentMovingDamage) return;
 
-         var right:Number = this.predictedMovingDamage.x + Math.min(this.predictedMovingDamage.textWidth + 4,49);
-         this._averageArrow.x = Math.min(152,right + 4);
-         this._averageArrow.y = 89;
-         this.currentMovingDamage.x = this._averageArrow.visible ? this._averageArrow.x + 11 : this._averageArrow.x + 1;
-         this.currentMovingDamage.y = 84;
+         var right:Number = this.predictedMovingDamage.x + Math.min(this.predictedMovingDamage.textWidth + 3,37);
+         this._averageArrow.x = Math.min(126,right + 3);
+         this._averageArrow.y = 70;
+         this.currentMovingDamage.x = this._averageArrow.visible ? this._averageArrow.x + 10 : this._averageArrow.x + 1;
+         this.currentMovingDamage.y = 66;
       }
 
       private function _cleanDamage(value:String) : String
