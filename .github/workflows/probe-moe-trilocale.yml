@@ -1,0 +1,103 @@
+name: Probe MoE tri-locale upstream
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.0.10-trilocale
+    paths:
+      - '.github/workflows/probe-moe-trilocale.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.0.10-trilocale
+          fetch-depth: 0
+
+      - name: Fetch pinned upstreams and FFDec
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-trilocale"
+          mkdir -p "$root/protanki" "$root/evv" "$root/ffdec" "$root/out"
+
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' \
+            -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/protanki"
+
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip' \
+            -o "$root/evv.zip"
+          echo '4fcb507d6ab133b959c99fa18af5c917e98b824f7a2b0e86210db5a3df87555c  '"$root"'/evv.zip' | sha256sum -c -
+          unzip -q "$root/evv.zip" -d "$root/evv"
+
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip' \
+            -o "$root/ffdec.zip"
+          echo '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  '"$root"'/ffdec.zip' | sha256sum -c -
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+
+      - name: Decompile original ProTanki language owner
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-trilocale"
+          wotmod="$root/protanki/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+          mkdir -p "$root/protanki_core" "$root/protanki_as"
+          unzip -q "$wotmod" -d "$root/protanki_core"
+          "$root/ffdec/ffdec.sh" -export script "$root/protanki_as" \
+            "$root/protanki_core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/trilocale"
+          mkdir -p "$dest"
+          cp "$root/protanki_as/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as" \
+             "$dest/ORIGINAL_GunMarksPanelNew.as"
+          cp "$root/protanki_as/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as" \
+             "$dest/ORIGINAL_ProGunMarks.as"
+          cp "$root/protanki_core/res/mods/protanki.gunmarks/text/en.yml" \
+             "$dest/PROTANKI_en.yml"
+
+      - name: Inventory EVV locale resources
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-trilocale"
+          wotmod="$root/evv/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod"
+          mkdir -p "$root/evv_core"
+          unzip -q "$wotmod" -d "$root/evv_core"
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/trilocale"
+          {
+            echo 'Pinned EVV WOTMOD:'
+            sha256sum "$wotmod"
+            echo
+            echo 'Locale files:'
+            find "$root/evv_core/res/mods/champi.expectedvehiclevalues2/text" -maxdepth 1 -type f -printf '%f\n' | sort
+            echo
+            echo 'English file exists?'
+            test -f "$root/evv_core/res/mods/champi.expectedvehiclevalues2/text/en.yml" && echo YES || echo NO
+            echo
+            echo 'GameFace files:'
+            find "$root/evv_core/res/gui/gameface/mods/CHAMPi/EVV2" -maxdepth 1 -type f -printf '%f\n' | sort
+          } > "$dest/EVV_LOCALE_INVENTORY.txt"
+
+      - name: Commit diagnostic output
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/diagnostics/trilocale
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'Record original MoE locale ownership'
+          git push origin HEAD:work/moe-component-1.0.10-trilocale
