@@ -1,0 +1,81 @@
+name: Decompose CN official MoE WBP reference
+
+on:
+  push:
+    branches:
+      - work/cn-official-moe-reference
+    paths:
+      - '.github/workflows/decompose-cn-official-moe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  decompose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/cn-official-moe-reference
+
+      - name: Download pinned CN official WBP and FFDec
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cn-official-moe"
+          mkdir -p "$root/wbp" "$root/core" "$root/ffdec" "$root/scripts"                    "$GITHUB_WORKSPACE/moe/cn_official_reference"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp'             -o "$root/cn_moe.wbp"
+          echo '3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16  '"$root"'/cn_moe.wbp' | sha256sum -c -
+
+          unzip -q "$root/cn_moe.wbp" -d "$root/wbp"
+          unzip -q "$root/wbp/Files/mod_mark_on_gun.wotmod" -d "$root/core"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip'             -o "$root/ffdec.zip"
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+
+      - name: Export original ActionScript and metadata
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cn-official-moe"
+          swf="$root/core/res/gui/flash/wotassist.markongun.swf"
+          out="$GITHUB_WORKSPACE/moe/cn_official_reference"
+
+          "$root/ffdec/ffdec.sh" -export script "$root/scripts" "$swf"
+
+          cp -R "$root/scripts/scripts/." "$out/scripts/"
+          cp "$root/wbp/wbpimg.jpg" "$out/wbpimg.jpg"
+          cp "$root/wbp/wbpinfo" "$out/wbpinfo.gb2312"
+
+          python3 - "$root/wbp/wbpinfo" "$out/wbpinfo.utf8.xml" <<'PY'
+          import sys
+          src,dst=sys.argv[1:3]
+          raw=open(src,'rb').read().decode('gb2312')
+          open(dst,'w',encoding='utf-8').write(raw)
+          PY
+
+          {
+            echo "WBP_SHA256=3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16"
+            echo "SWF_SHA256=$(sha256sum "$swf" | cut -d' ' -f1)"
+            echo "MOD_WOTMOD_SHA256=$(sha256sum "$root/wbp/Files/mod_mark_on_gun.wotmod" | cut -d' ' -f1)"
+            echo "API_WOTMOD_SHA256=$(sha256sum "$root/wbp/Files/wotassist.api.wotmod" | cut -d' ' -f1)"
+            echo
+            echo "=== SWF KEY CLASSES ==="
+            find "$root/scripts/scripts" -type f -name '*.as' | sort
+            echo
+            echo "=== UI SYMBOLS / FIELDS ==="
+            grep -RniE 'LOBBYCOMP|BATTLECOMP|battleDamage|movingAvgDamage|damageRating|markOnGun|65%|85%|95%|100%|startDrag|stopDrag|MOUSE_DOWN|MOUSE_UP|x =|y ='               "$root/scripts/scripts" | head -n 5000 || true
+          } > "$out/decomposition_index.txt"
+
+      - name: Commit reference decomposition
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/cn_official_reference
+          git commit -m 'Archive and decompose CN official MoE WBP reference'
+          git push origin HEAD:work/cn-official-moe-reference
