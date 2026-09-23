@@ -1,0 +1,59 @@
+name: Probe MoE Python battle input strings
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.1.2-battle-owner
+    paths:
+      - '.github/workflows/probe-moe-python-input.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.1.2-battle-owner
+          fetch-depth: 0
+
+      - name: Fetch pinned ProTanki package
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-python-input"
+          mkdir -p "$root/protanki" "$root/core"
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' \
+            -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/protanki"
+          wotmod="$root/protanki/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+          unzip -q "$wotmod" -d "$root/core"
+
+      - name: Extract input-related strings only
+        shell: bash
+        run: |
+          set -euxo pipefail
+          pyc="$RUNNER_TEMP/moe-python-input/core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/battle_input/PROTANKI_PY_INPUT_STRINGS.txt"
+          {
+            echo "=== INPUT/CURSOR/HOTKEY RELATED STRINGS ==="
+            strings -a "$pyc" | grep -Ei 'input|key|ctrl|control|mouse|cursor|handle.*key|key.*event|battle.*app|component|visible|minimiz|drag' || true
+            echo
+            echo "=== ALL SYMBOL-LIKE STRINGS AROUND GUI OWNERS ==="
+            strings -a "$pyc" | grep -Ei 'ProGunMarks|gunMarks|Battle|Flash|inject|view|settings|offset|anchor' || true
+          } > "$dest"
+
+      - name: Commit diagnostic
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/diagnostics/battle_input/PROTANKI_PY_INPUT_STRINGS.txt
+          git commit -m 'Archive ProTanki Python battle input strings'
+          git push origin HEAD:work/moe-component-1.1.2-battle-owner
