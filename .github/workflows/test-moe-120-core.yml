@@ -1,0 +1,32 @@
+name: Test MoE 1.2.0 pure core
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - 'moe/rebuild/1.2.0/source/**'
+      - 'moe/rebuild/1.2.0/tests/**'
+      - '.github/workflows/test-moe-120-core.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+      - name: Python 3 pure-core tests
+        run: python3 moe/rebuild/1.2.0/tests/test_core.py
+      - name: Python 2 syntax compatibility guard
+        shell: bash
+        run: |
+          set -euxo pipefail
+          ! grep -REn 'f["''']|async def|await |yield from|nonlocal|typing\.' moe/rebuild/1.2.0/source
+          python3 - <<'PY'
+          import ast,glob
+          for p in glob.glob('moe/rebuild/1.2.0/source/*.py'):
+              ast.parse(open(p,encoding='utf-8').read(),filename=p)
+              print('PARSE',p)
+          PY
