@@ -1,0 +1,77 @@
+# pydisasm version 6.1.8
+# Python bytecode 2.7 (62211)
+# Disassembled from Python 3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]
+# Timestamp in code: 1788211489 (2026-08-31 21:24:49)
+# Method Name:       <pjorion_protected>
+# Filename:          mod_pro_gunmarks
+# Argument count:    0
+# Number of locals:  0
+# Stack size:        10
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: -1
+#    1: None
+#    2: ''
+#    3: 1
+#    4: 2
+#    5: 8
+#    6: '0'
+# Names:
+#    0: __builtin__
+#    1: sys
+#    2: zlib
+#    3: marshal
+#    4: reload
+#    5: loads
+#    6: join
+#    7: decompress
+#    8: _getframe
+#    9: f_code
+#   10: co_code
+#   11: len
+#   12: dir
+#   13: x
+#   14: chr
+#   15: int
+#   16: bin
+#   17: ord
+#   18: rjust
+#   19: globals
+
+# Method Name:       <pjorion_protected>
+# Filename:          mod_pro_gunmarks
+# Argument count:    0
+# Number of locals:  0
+# Stack size:        10
+# Flags:             0x00000040 (NOFREE)
+# First Line:        1
+# Constants:
+#    0: -1
+#    1: None
+#    2: ''
+#    3: 1
+#    4: 2
+#    5: 8
+#    6: '0'
+# Names:
+#    0: __builtin__
+#    1: sys
+#    2: zlib
+#    3: marshal
+#    4: reload
+#    5: loads
+#    6: join
+#    7: decompress
+#    8: _getframe
+#    9: f_code
+#   10: co_code
+#   11: len
+#   12: dir
+#   13: x
+#   14: chr
+#   15: int
+#   16: bin
+#   17: ord
+#   18: rjust
+#   19: globals
