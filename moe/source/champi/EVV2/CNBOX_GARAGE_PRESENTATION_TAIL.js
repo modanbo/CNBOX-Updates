@@ -1,4 +1,4 @@
-/* NAJXBox MoE 1.0.10 — tri-locale isolated official-CN garage presentation tail.
+/* NAJXBox MoE 1.0.11 — fail-safe bilingual official-CN garage presentation tail.
  * This file is concatenated AFTER the byte-identical upstream EVV2.js.
  * It only reads EVV's existing currentState and paints a child overlay.
  * It does not alter calculation, model acquisition, events, Ctrl-drag, anchors or savePosition.
@@ -24,30 +24,35 @@
   const threshold = (value) => finite(value, 0) > 0 ? rounded(value) : '--';
 
   function resolvePresentationLocale() {
-    const values = [];
-    const htmlLang = document.documentElement && document.documentElement.lang;
-    const bodyLang = document.body && document.body.lang;
-    if (htmlLang) values.push(htmlLang);
-    if (bodyLang) values.push(bodyLang);
-    if (typeof navigator !== 'undefined') {
-      if (navigator.language) values.push(navigator.language);
-      if (navigator.languages && navigator.languages.length) {
-        for (const lang of navigator.languages) values.push(lang);
+    try {
+      let lang = '';
+      if (document.documentElement) {
+        lang = document.documentElement.getAttribute('lang') || document.documentElement.lang || '';
       }
+      if (!lang && document.body) {
+        lang = document.body.getAttribute('lang') || document.body.lang || '';
+      }
+      if (!lang && typeof navigator !== 'undefined' && navigator.language) {
+        lang = navigator.language;
+      }
+      lang = String(lang || '').toLowerCase();
+      return /^zh(?:[-_]|$)/.test(lang) ? 'zh' : 'en';
+    } catch (e) {
+      return 'en';
     }
-    for (const value of values) {
-      const lang = String(value || '').trim().toLowerCase();
-      if (/^zh(?:[-_]|$)/.test(lang)) return 'zh';
-    }
-    return 'en';
   }
 
   function applyPresentationLocale(root, el) {
-    const locale = resolvePresentationLocale();
-    root.setAttribute('data-najx-moe-locale', locale);
-    el.setAttribute('data-najx-moe-locale', locale);
-    const avgLabel = el.querySelector('.najx-avg-label');
-    if (avgLabel) avgLabel.textContent = locale === 'zh' ? '平均标伤' : 'Avg. DMG';
+    try {
+      const locale = resolvePresentationLocale();
+      root.setAttribute('data-najx-moe-locale', locale);
+      el.setAttribute('data-najx-moe-locale', locale);
+      const avgLabel = el.querySelector('.najx-avg-label');
+      if (avgLabel) avgLabel.textContent = locale === 'zh' ? '平均标伤' : 'Avg. DMG';
+    } catch (e) {
+      const avgLabel = el.querySelector('.najx-avg-label');
+      if (avgLabel) avgLabel.textContent = 'Avg. DMG';
+    }
   }
 
   function createPanel(root) {
@@ -70,7 +75,7 @@
         <span class="najx-rating-delta">0.00%</span>
       </div>
       <div class="najx-avg-row">
-        <span class="najx-avg-label"></span>
+        <span class="najx-avg-label">Avg. DMG</span>
         <span class="najx-avg-value">--</span>
       </div>
       <span class="najx-threshold-label najx-t65-label">65%</span>
@@ -90,8 +95,6 @@
   function render() {
     scheduled = false;
     if (!boundRoot || !panel || !boundRoot.isConnected) return;
-
-    applyPresentationLocale(boundRoot, panel);
 
     const pct = clamp(finite(currentState.moePercent, -1), -1, 100);
     const delta = finite(currentState.moePercentDelta, 0);
@@ -146,8 +149,13 @@
     if (observer) observer.disconnect();
 
     boundRoot = root;
-    root.classList.add('najx-moe-cn-official');
     panel = root.querySelector(':scope > .najx-moe-official') || createPanel(root);
+    if (!panel || !panel.isConnected) return;
+
+    // Only after the replacement panel exists do we hide the upstream EVV
+    // presentation. If anything above fails, upstream stays visible.
+    root.classList.add('najx-moe-cn-official');
+    root.classList.add('najx-moe-adapter-ready');
     applyPresentationLocale(root, panel);
 
     observer = new MutationObserver(scheduleRender);

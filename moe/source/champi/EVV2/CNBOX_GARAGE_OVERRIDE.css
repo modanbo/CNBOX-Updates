@@ -1,10 +1,10 @@
-/* NAJXBox MoE 1.0.9 — official CN LOBBY presentation adapter
+/* NAJXBox MoE 1.0.11 — fail-safe official CN LOBBY presentation adapter
  * UI authority: wotassist.markongun.swf (2.4.0.1)
  * UI only. CHAMPi EVV model, calculation, events, Ctrl-drag and savePosition remain upstream.
  * Official logical geometry: 210 x 134.
  */
 
-#evv2-root.najx-moe-cn-official {
+#evv2-root.najx-moe-cn-official.najx-moe-adapter-ready {
   box-sizing: border-box !important;
   width: 210rem !important;
   height: 134rem !important;
@@ -24,8 +24,8 @@
 }
 
 /* Keep upstream EVV DOM alive as the mature data/render owner, but hide its presentation. */
-#evv2-root.najx-moe-cn-official > .evv2-header,
-#evv2-root.najx-moe-cn-official > .evv2-progress {
+#evv2-root.najx-moe-cn-official.najx-moe-adapter-ready > .evv2-header,
+#evv2-root.najx-moe-cn-official.najx-moe-adapter-ready > .evv2-progress {
   position: absolute !important;
   left: 0 !important;
   top: 0 !important;
