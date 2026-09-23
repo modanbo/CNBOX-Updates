@@ -102,9 +102,14 @@ jobs:
           grep -Fq 'surface.mouseEnabled = true;' "$after_host"
           grep -Fq 'surface.startDrag();' "$after_host"
           grep -Fq 'surface.stopDrag();' "$after_host"
-          grep -Fq 'dragArea.mouseEnabled = false;' "$after_host"
           ! grep -Fq 'this.dragArea.startDrag();' "$after_host"
           grep -Fq 'this.updatePosition(this._offset);' "$after_host"
+
+          # Source-level lock for disabling the legacy invisible hit surface.
+          source_host="$GITHUB_WORKSPACE/moe/source/poliroid/views/battle/gunmarks/ProGunMarks.as"
+          grep -Fq 'this.dragArea.mouseEnabled = false;' "$source_host"
+          grep -Fq 'surface.mouseEnabled = true;' "$source_host"
+          ! grep -Fq 'this.dragArea.startDrag();' "$source_host"
 
           # No custom keyboard/Ctrl implementation is allowed.
           ! grep -Fq 'ctrlKey' "$after_host"
