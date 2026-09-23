@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprnorthcentralus.oaiusercontent.com/files/00000000-6218-822f-a080-5235da2ce07b/raw?se=2026-09-22T21%3A06%3A23Z&sp=r&sv=2026-02-06&sr=b&scid=92c29831-4f96-5fce-b5ac-4f9baccbba12&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-22T16%3A46%3A48Z&ske=2026-09-23T16%3A46%3A48Z&sks=b&skv=2026-02-06&sig=8/TPVfMCyZ7SO2aF3wHwYzP/wZa1b0MWk359aM%2BZq1M%3D",
-  "destination": "manager/NAJXBox_Manager_v2.0.3.zip",
-  "sourceSha256": "3e914414c66613bafdf35671b4436f3eeb5534307cc70c4b501f8b037dae4bc6"
+  "sourceUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-e298-81f5-8f97-b8525089c59a/raw?se=2026-09-23T16%3A50%3A31Z&sp=r&sv=2026-02-06&sr=b&scid=5d593c0d-d25f-56cd-9ee3-a34ca4f0bc7d&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-23T16%3A30%3A58Z&ske=2026-09-24T16%3A30%3A58Z&sks=b&skv=2026-02-06&sig=CR271uvWIxDKCjyQYZdWWroVenqBrYICMj%2BAep/dzFA%3D",
+  "destination": "payloads/2.4.0.1/aslain-06/CNBOX_PAYLOAD.zip",
+  "sourceSha256": "65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c"
 }
