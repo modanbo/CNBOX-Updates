@@ -1,0 +1,27 @@
+--- 2.4.0.1 #06
++++ 2.4.0.1 #07
+@@ -1,5 +1,5 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<Configuration ContentVersion="v2.4.0.1 #06 (2026.09.22)">
++<Configuration ContentVersion="v2.4.0.1 #07 (2026.09.23)">
+   <Category Id="iconset" Icon="tank" Enabled="true">
+     <Group Id="iconset_direct" Exclusive="false" Enabled="true">
+       <Mod Id="iconset_aslains" Author="" SizeKb="0" File="" Enabled="true" New="false" Legacy="modpack/iconset/aslains" Radio="true" RequireRadio="true">
+@@ -905,7 +905,7 @@
+   </Category>
+   <Category Id="GarageMods" Icon="E80F" Enabled="true">
+     <Group Id="GarageMods_garage" Exclusive="false" Enabled="true">
+-      <Mod Id="GarageMods_garage_HangarManagerHangMan" Author="" SizeKb="963" File="../Files/GarageMods/GarageMods_garage_HangarManagerHangMan_24f4cefa.zip" Enabled="true" New="true" InstallOrder="2391" Preview="../Shared/GarageMods_garage_HangarManagerHangMan_803a2d6f.jpg" Legacy="modpack/GarageMods/garage/HangarManagerHangMan" NewSince="2026-09-17" />
++      <Mod Id="GarageMods_garage_HangarManagerHangMan" Author="" SizeKb="959" File="../Files/GarageMods/GarageMods_garage_HangarManagerHangMan_32caa3a7.zip" Enabled="true" New="true" InstallOrder="2391" Preview="../Shared/GarageMods_garage_HangarManagerHangMan_803a2d6f.jpg" Legacy="modpack/GarageMods/garage/HangarManagerHangMan" NewSince="2026-09-17" />
+       <Mod Id="GarageMods_garage_HangarSwitcher" Author="" SizeKb="267" File="../Files/GarageMods/GarageMods_garage_HangarSwitcher_44c571b4.zip" Enabled="true" New="false" InstallOrder="2399" Preview="../Shared/GarageMods_garage_HangarSwitcher_c4ced9ba.jpg" AuthorUrl="https://eu.protanki.tv/en/mods/mod-smeny-angarov-hangman" Legacy="modpack/GarageMods/garage/HangarSwitcher" />
+       <Mod Id="GarageMods_garage_hangar_minimalistic" Author="" SizeKb="1" File="../Files/GarageMods/GarageMods_garage_hangar_minimalistic_78b39106.zip" Enabled="false" New="false" DisabledReason="This option installs nothing." DisabledReasonPl="Ta opcja nic nie instaluje." InstallOrder="2065" Preview="../Shared/GarageMods_garage_hangar_minimalistic_6e686fc7.jpg" AuthorUrl="https://wgmods.net/996/" Legacy="modpack/GarageMods/garage/hangar_minimalistic" RequireRadio="true">
+         <Mod Id="GarageMods_garage_hangar_minimalistic_100_normal" Author="" SizeKb="5430" File="https://repo.aslain.com/WoT/Garage_Minimalistic_100_normal_HMHM_2.2.0.0.7z" Enabled="false" New="false" DisabledReason="This option installs nothing." DisabledReasonPl="Ta opcja nic nie instaluje." Preview="../Shared/GarageMods_garage_hangar_minimalistic_100_normal_6e686fc7.jpg" AuthorUrl="https://wgmods.net/996/" Legacy="modpack/GarageMods/garage/hangar_minimalistic/100_normal" Radio="true" />
+@@ -2072,7 +2072,7 @@
+       <Mod Id="various_aslainMenu" Author="" SizeKb="401" File="" Enabled="true" New="false" InstallOrder="2378" Preview="../Shared/various_aslainMenu_20ec4a21.jpg|../Shared/various_aslainMenu_9b131d05.jpg|../Shared/various_aslainMenu_f8f297cd.jpg" AuthorUrl="https://aslain.com" Legacy="modpack/various/aslainMenu">
+         <Package File="../Files/various/various_aslainMenu_part1_b6ea71b7.zip" SizeKb="401" Order="2378" />
+       </Mod>
+-      <Mod Id="various_tomatogg" Author="" SizeKb="2532" File="../Files/various/various_tomatogg_45af0f49.zip" Enabled="true" New="false" InstallOrder="2726" Preview="../Shared/various_tomatogg_de25dd4b.jpg" AuthorUrl="https://www.tomato.gg/mod-guide" Legacy="modpack/various/tomatogg" />
++      <Mod Id="various_tomatogg" Author="" SizeKb="2444" File="../Files/various/various_tomatogg_b959f3e8.zip" Enabled="true" New="false" InstallOrder="2726" Preview="../Shared/various_tomatogg_de25dd4b.jpg" AuthorUrl="https://www.tomato.gg/mod-guide" Legacy="modpack/various/tomatogg" />
+       <Mod Id="various_overmatch" Author="" SizeKb="892" File="" Enabled="true" New="false" InstallOrder="2727" Preview="../Shared/various_overmatch_7b4d441c.jpg|../Shared/various_overmatch_cc793465.jpg|../Shared/various_overmatch_52a070d9.jpg" AuthorUrl="https://overmatch.pro" Legacy="modpack/various/overmatch">
+         <Package File="../Files/various/various_overmatch_6e1972e7.zip" SizeKb="491" Order="2727" />
+         <Package File="../Files/various/various_overmatch_part1_b6ea71b7.zip" SizeKb="401" Order="2378" />
