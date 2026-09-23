@@ -110,6 +110,15 @@ jobs:
           print('PROGUNMARKS_ONLY_SKIN_ROUTE_CHANGED')
           PY
 
+          # WG/Flash registration and battle input bridge must remain byte-equivalent
+          # at decompiled source level. 1.1.2 is not allowed to implement Ctrl handling.
+          for rel in \
+            "scripts/mods/common/BattleDisplayable.as" \
+            "scripts/ProGunMarksInjector.as" \
+            "scripts/ProGunMarksUI.as"; do
+            cmp "$root/protanki_before/$rel" "$root/protanki_after/$rel"
+          done
+
           panel="$root/protanki_after/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
           grep -Fq 'private static const PANEL_W:Number = 147;' "$panel"
           grep -Fq 'private static const PANEL_H:Number = 93;' "$panel"
