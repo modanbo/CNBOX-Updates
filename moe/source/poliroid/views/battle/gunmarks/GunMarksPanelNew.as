@@ -10,7 +10,7 @@ package poliroid.views.battle.gunmarks
    import flash.text.TextFormatAlign;
 
    /**
-    * NAJXBox MoE 1.0.10 - tri-locale official CN SWF BATTLE presentation adapter.
+    * NAJXBox MoE 1.0.11 - runtime-recovery bilingual BATTLE presentation adapter.
     *
     * Authority:
     *   wotassist.markongun.swf SHA256
@@ -144,10 +144,14 @@ package poliroid.views.battle.gunmarks
          this._showNormalFields();
 
          // Mature ProTanki semantic mapping is unchanged.
-         // Static labels are intentionally taken from the original ProTanki
-         // locale-resolved data object instead of being hard-coded in presentation.
-         if(this.damageCurrentLabel) this.damageCurrentLabel.text = this._s(param1.damageCurrentLabel);
-         if(this.nextMarkLabel) this.nextMarkLabel.text = this._s(param1.nextMarkLabel);
+         // Locale is presentation-only and fail-safe: if backend locale labels are
+         // unavailable or unrecognized, use English rather than blocking the panel.
+         var cn:Boolean = this._hasCjk(this._s(param1.damageCurrentLabel)) ||
+                          this._hasCjk(this._s(param1.nextMarkLabel));
+         if(this.damageCurrentLabel)
+            this.damageCurrentLabel.text = cn ? "\u672c\u573a\u6807\u4f24" : "Battle DMG";
+         if(this.nextMarkLabel)
+            this.nextMarkLabel.text = cn ? "\u5e73\u5747\u6807\u4f24" : "Avg. DMG";
 
          this.drPredicted.text = this._ensurePercent(this._s(param1.predictedRating));
          this.nextMarkValue.text = this._cleanDamage(this._s(param1.battleMovingDamage));
@@ -387,6 +391,12 @@ package poliroid.views.battle.gunmarks
       {
          if(value === null || value === undefined) return "";
          return String(value);
+      }
+
+      private function _hasCjk(value:String) : Boolean
+      {
+         if(value == null || value.length == 0) return false;
+         return /[\u3400-\u9FFF]/.test(value);
       }
 
       private function _decodeRLE(widthValue:int, heightValue:int, data:String) : BitmapData
