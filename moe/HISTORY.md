@@ -375,3 +375,44 @@ Runtime evidence from 1.0.11:
 - EVV WOTMOD: `2fec0d57ca5e8cdabf4bf580f77c39f1974530c075533908bf6da6ad1127c0f0`.
 - Review artifact digest: `7bd1ade395bb73f351eca56fe2f2ba06c9c6c1810ac384f85f01de7fe3524c5c`.
 - Manager channel now exposes `1.1.0 / OFFICIAL_UI_RECOVERY_CANDIDATE`.
+
+
+### 1.1.2 — BATTLE_OWNER_RUNTIME_CANDIDATE
+
+Runtime evidence from 1.1.1:
+- garage official 210×134 card is correct and remains frozen;
+- battle UI was wrong and matched ProTanki's original `new-simple` behavior;
+- pressing Ctrl in battle did not make the WoT cursor visible, so the frame could not be adjusted.
+
+Targeted decomposition:
+- `GunMarksPanelNewSimple` uses only `mainLabel/helpLabel/externalLabel` and directly shows `battleMovingDamage / deltaDamage` in normal mode; this matches the observed wrong battle UI;
+- `ProGunMarks.as_setSettings` originally routes among `panel_old / panel_new / panel_new_simple` using `skinVariant`;
+- `BattleDisplayable / ProGunMarksInjector / ProGunMarksUI` contain no Ctrl-key ownership and remain unchanged;
+- ProTanki Flash drag logic starts only after mouse events reach `dragArea`: `MOUSE_DOWN -> startDrag -> updatePosition`;
+- the WoT battle Ctrl cursor is therefore an upstream/WG-native input prerequisite, not a Ctrl hotkey implemented by NAJXBox or ProTanki Flash.
+
+1.1.2 changes:
+- presentation routing only: `old / new / new-simple` all select the official `panel_new` 147×93 adapter;
+- original `dragArea / startDrag / stopDrag / updatePosition / offsetBattle` code remains intact;
+- `BattleDisplayable / ProGunMarksInjector / ProGunMarksUI` are locked identical to pinned upstream;
+- no Ctrl/key handler is added;
+- garage 1.1.1 stays frozen;
+- `battleMovingDamage` presentation strips the ProTanki target suffix after `/` so the current-battle damage value is shown alone.
+
+Build closure:
+- targeted panel variant probe: PASS;
+- targeted battle input owner probe: PASS;
+- constrained ProGunMarks diff: only skin routing may differ;
+- final build Run `35908040540`: SUCCESS;
+- `STATIC_MOE_112_BATTLE_OWNER_PASS`;
+- artifact digest `sha256:14cc149a5e700d5a5c40f548e38df860975802b4ac0a1e36711000971a2033a6`.
+
+Payload:
+`21d2a89711efd591fe7091237538871c17a83cb2c5540a6cbc2762e3792eb3cb`
+
+Runtime gate:
+1. enter battle;
+2. hold Ctrl — WoT native cursor must become visible;
+3. verify official 147×93 three-row panel instead of new-simple UI;
+4. with Ctrl held and cursor visible, drag the panel and release;
+5. verify position persistence next battle/restart.
