@@ -27,18 +27,13 @@ The result is one complete public CNBOX structure whether the user never install
 
 ## Public release security gate
 
-Starting with **NAJXBox Manager Public v2.0.4**, every Public EXE must pass the formal security gate before this repository will publish it:
+Starting with **NAJXBox Manager Public v2.0.4**, every Public EXE must pass the free formal security gate before this repository will publish it:
 
-`Build -> SelfTest -> Microsoft Artifact Signing -> Authenticode Valid -> signed SelfTest -> Microsoft Defender PASS -> VirusTotal malicious=0 / suspicious=0 -> security manifest -> publish`
+`Build -> SelfTest -> SHA256 -> Microsoft Defender PASS -> VirusTotal malicious=0 / suspicious=0 -> security manifest -> publish`
 
-The publisher hard-rejects a future Public Manager EXE unless:
-- Authenticode status is `Valid`;
-- the signed EXE SHA256 matches `NAJXBox_Public_Security.json`;
-- signature status is PASS;
-- Microsoft Defender status is PASS;
-- VirusTotal status is PASS with `malicious=0` and `suspicious=0`.
+Paid code signing is not required. Authenticode may remain `NotSigned`; this may still produce SmartScreen/unknown-publisher reputation warnings. The publisher hard-rejects a future Public Manager EXE unless its SHA256 matches `NAJXBox_Public_Security.json`, Defender status is PASS, and VirusTotal status is PASS with `malicious=0` and `suspicious=0`.
 
-v2.0.3 remains the immutable historical unsigned release and will not be silently replaced under the same version. Creator is not part of this Public signing/VT contract. Gitee may mirror only the exact same signed Public SHA that passed this gate.
+v2.0.3 remains the immutable historical unsigned release and will not be silently replaced under the same version. Creator is not part of this Public VirusTotal contract. Gitee may mirror only the exact same Public SHA that passed this gate.
 
 ## Safety model
 
