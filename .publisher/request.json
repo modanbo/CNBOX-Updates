@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "sourceUrl": "https://sdmntprnznorth.oaiusercontent.com/files/00000000-f830-820b-8a4d-efcfdd42da23/raw?se=2026-09-23T16%3A51%3A25Z&sp=r&sv=2026-02-06&sr=b&scid=9c54e4ac-1268-5c8b-b7e4-53dea2ec422f&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-23T14%3A55%3A49Z&ske=2026-09-24T14%3A55%3A49Z&sks=b&skv=2026-02-06&sig=PG40FuZCjdfvxw14AOTth9J9h8Z5h1920RdAetSgZ60%3D",
-  "destination": "payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R4.zip",
-  "sourceSha256": "0c2e990ef2a019664585de7ed98db52cdcb9227650a297ca98c3e703e3b2816a"
+  "sourceUrl": "https://sdmntprnortheu.oaiusercontent.com/files/00000000-9090-81f4-b77b-c3e20881762d/raw?se=2026-09-23T16%3A59%3A37Z&sp=r&sv=2026-02-06&sr=b&scid=701e3ab4-1aea-5594-b2a0-32242b85506e&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-23T16%3A43%3A12Z&ske=2026-09-24T16%3A43%3A12Z&sks=b&skv=2026-02-06&sig=SAARXQMKnwu9n/icAeYIW36ZTY8T2pw6BMUmHcFK5JI%3D",
+  "destination": "manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9_R4.json",
+  "sourceSha256": "a406713fe06bea53a232fc29ce99cde8dd99ab2970bd641e220368769835865b"
 }
