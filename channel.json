@@ -22,6 +22,317 @@
   },
   "releases": [
     {
+      "cnboxVersion": "2401-R34-R2F9-UNIFIED-R4",
+      "status": "FINAL_LOCK",
+      "wotVersion": "2.4.0.1",
+      "aslainVersion": "ANY",
+      "xvmVersion": "13.1.0.0090",
+      "installMode": "CNBOX_AUTHORITATIVE",
+      "managedDirectories": [
+        "res_mods/configs/xvm/Aslain",
+        "res_mods/configs/xvm/py_macro",
+        "res_mods/mods/shared_resources/xvm"
+      ],
+      "managedGlobs": [
+        "mods/{wotVersion}/com.modxvm.xvm_*.wotmod",
+        "mods/{wotVersion}/com.modxvm.xfw/com.modxvm.xfw.crashfix_*.wotmod",
+        "mods/{wotVersion}/net.openwg/net.openwg.common_*.wotmod",
+        "mods/{wotVersion}/net.openwg/net.openwg.fix.battleresultscache_*.wotmod",
+        "mods/{wotVersion}/net.openwg/net.openwg.fix.battleresultsreplays_*.wotmod",
+        "res_mods/{wotVersion}/audioww/xvm*.bnk"
+      ],
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R4.zip",
+      "payloadSha256": "0c2e990ef2a019664585de7ed98db52cdcb9227650a297ca98c3e703e3b2816a",
+      "notes": "Public standalone promotion of the Runtime-passed R4 Box owner set. Aslain remains optional. Includes complete standalone dependency closure with XVM 13.1.0.0090 and OpenWG.Common 2.8.2.0000; exact Creator R4 owner bytes were confirmed in real game Runtime on 2026-09-23 after Static Diff, two reviews and synthetic install/rollback PASS.",
+      "baselineFiles": [],
+      "installedFiles": [
+        {
+          "path": "CNBOX_UNIFIED_OWNER.json",
+          "sha256": "2831f68787b5d2f38d9edbc0ee95a9f1a6ccac6cfbeec2c99adef25480619cea",
+          "required": true
+        },
+        {
+          "path": "mods/2.4.0.1/com.modxvm.xfw/com.modxvm.xfw.crashfix_12.0.0.wotmod",
+          "sha256": "5ba7247830c411e7fa4d0711881afb5563235d4aedc3cee1c45bb56b89ce8278",
+          "required": true
+        },
+        {
+          "path": "mods/2.4.0.1/com.modxvm.xvm_13.1.0.0090.wotmod",
+          "sha256": "1ee543ca4b355e191e1a90f650355c564282c2ad7b6edee56c26fbc73399ce36",
+          "required": true
+        },
+        {
+          "path": "mods/2.4.0.1/net.openwg/net.openwg.common_2.8.2.0000.wotmod",
+          "sha256": "149ebc0f6a3422156248271960ae94532376b30140c9efe11da7061bb2547916",
+          "required": true
+        },
+        {
+          "path": "mods/2.4.0.1/net.openwg/net.openwg.fix.battleresultscache_1.8.1.wotmod",
+          "sha256": "bece7b0c6118f32b32a11b80190edd6aefa5f1bab8af6c1f01efc688e7642b0c",
+          "required": true
+        },
+        {
+          "path": "mods/2.4.0.1/net.openwg/net.openwg.fix.battleresultsreplays_1.0.5.wotmod",
+          "sha256": "9d6c66f0b0365b269c7ee787831f49c21862582b4a9856fd5ecf26f7391199c8",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/audioww/xvm.bnk",
+          "sha256": "779493ce5dd32dacca589b9dc43b45163d43eb842aa0c579a9eb8259f8894535",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/audioww/xvm_wg.bnk",
+          "sha256": "779493ce5dd32dacca589b9dc43b45163d43eb842aa0c579a9eb8259f8894535",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/xvm.xc",
+          "sha256": "d578a96ede73ad94a59b7309755be1abae402e3580895c30ebb7e1f4c3d296b3",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/@xvm.xc",
+          "sha256": "7b7208351bebecd73b24ba3ebd45d608741b75b3a224533acd84bd51ff9aedb7",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/battle.xc",
+          "sha256": "e1358abb6b236a64258fb65ba0f8e8de1e6bc1af6f5ea7e2d287727a4d68fdb0",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/iconset.xc",
+          "sha256": "ef0e5ad0c19966f80cf7f8c414d40f6b1cceea2df1b52fd768c49e68f13ec770",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/playersPanel.xc",
+          "sha256": "c6dcbaced2026c140d45c0f502d53060d42db28e20e661c25ba437d887a27edc",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/statisticForm.xc",
+          "sha256": "41bc00fab37356277bbd1afb37dcfefde02d67397b0ab27451ea290420c12a27",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/texts.xc",
+          "sha256": "5ce359686c8b282d50f84825ea3866a6dc9806bc010fd97173e39a4b8d079e35",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_auto_mode.py",
+          "sha256": "f45bec70173e36227bcaa30d33aaeb4224af68d669606f714ff0da8d308a9c2f",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_native_panel_sort.py",
+          "sha256": "d4929a80187a21a595adac4d20c535be05b5b128fa5fce8ab1cd41dd3969dc47",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_vehicle_name_color.py",
+          "sha256": "372a1db7a116040d15a6615a379f585a65538142a734c003fd58bac4c8603d17",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.dds",
+          "sha256": "73d03c6d6cf18c91485779b0dcb1ddbf0549a39d7d3d7ff436b3a6671dd83377",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.xml",
+          "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.dds",
+          "sha256": "0cd93ff07352f0bbaf3d5a6b2dcb470f734d8c1206a902a89a8b4f6049e0b77b",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.xml",
+          "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/battleVehicleMarkersApp.swf",
+          "sha256": "9bf2e758b51a8f990ebb41c43ec01a699e3c115df2b8b829ecdca6dd4291778f",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/HT.png",
+          "sha256": "1c3403b2dea847f05961616436cbe27e97f36eb6266c83c82d47fcb80995449b",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/LT.png",
+          "sha256": "9e898192899d87c490ad397424a12cbdc805117ca62488a6c465e4b07ed14ca8",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/MT.png",
+          "sha256": "ffb3d6301d8d0a5840f07465d7d95a7ed14455a4a6909734731f4c1ef76c63a2",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/SPG.png",
+          "sha256": "0bd356c8191bfdc306e9dafdbfe507d46e684d6ab667af155d9ae7bf26c37d9b",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/TD.png",
+          "sha256": "0a031f31cc7fce21a408bc30deff7f0e032c20dcee1b15e3dceecef4c3b11ea6",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/scripts/client/gui/mods/mod_cnbox_eff_bridge.pyc",
+          "sha256": "3972334669e7a831b99fc378a867d6b387d27900bb9c5249b5540a2f5080cff2",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/icons/cnbox_lighten.png",
+          "sha256": "481ff5f770c474e4114c8bf29aa8d51b453972321831a323a68cfa9372f72429",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_tier_font.py",
+          "sha256": "9de10bb2df79d09505c3aa6acf2207f51d41dd8c0c376393050c21346de12061",
+          "required": true
+        }
+      ],
+      "releaseTrack": "PUBLIC_STANDALONE",
+      "functionalId": "WOT2401-R34-R2F9",
+      "functionalManifestUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9_R4.json",
+      "functionalManifestSha256": "a406713fe06bea53a232fc29ce99cde8dd99ab2970bd641e220368769835865b"
+    },
+    {
+      "cnboxVersion": "2401-06-R34-R2F9-FINAL_LOCK-R4",
+      "status": "FINAL_LOCK",
+      "wotVersion": "2.4.0.1",
+      "aslainVersion": "2.4.0.1 #06",
+      "xvmVersion": "13.1.0.0090",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/aslain-06/CNBOX_PAYLOAD.zip",
+      "payloadSha256": "65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c",
+      "notes": "Runtime-promoted formal Creator lock for WoT 2.4.0.1 / Aslain #06 / XVM 13.1.0.0090. Exact R4 bytes passed Static Diff, Review 1, Review 2, synthetic install/whole-tree rollback and real-game Runtime on 2026-09-23. Locks isolated tier font aliasing, adaptive long vehicle-name sizing and rebuilt yellow neverSeen triangle while preserving existing panel/sort/EFF/Loading-TAB semantics.",
+      "baselineFiles": [],
+      "installedFiles": [
+        {
+          "path": "mods/2.4.0.1/com.modxvm.xvm_13.1.0.0090.wotmod",
+          "sha256": "1ee543ca4b355e191e1a90f650355c564282c2ad7b6edee56c26fbc73399ce36",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.dds",
+          "sha256": "73d03c6d6cf18c91485779b0dcb1ddbf0549a39d7d3d7ff436b3a6671dd83377",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.xml",
+          "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.dds",
+          "sha256": "0cd93ff07352f0bbaf3d5a6b2dcb470f734d8c1206a902a89a8b4f6049e0b77b",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.xml",
+          "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/flash/battleVehicleMarkersApp.swf",
+          "sha256": "9bf2e758b51a8f990ebb41c43ec01a699e3c115df2b8b829ecdca6dd4291778f",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/HT.png",
+          "sha256": "1c3403b2dea847f05961616436cbe27e97f36eb6266c83c82d47fcb80995449b",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/LT.png",
+          "sha256": "9e898192899d87c490ad397424a12cbdc805117ca62488a6c465e4b07ed14ca8",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/MT.png",
+          "sha256": "ffb3d6301d8d0a5840f07465d7d95a7ed14455a4a6909734731f4c1ef76c63a2",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/SPG.png",
+          "sha256": "0bd356c8191bfdc306e9dafdbfe507d46e684d6ab667af155d9ae7bf26c37d9b",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/TD.png",
+          "sha256": "0a031f31cc7fce21a408bc30deff7f0e032c20dcee1b15e3dceecef4c3b11ea6",
+          "required": true
+        },
+        {
+          "path": "res_mods/2.4.0.1/scripts/client/gui/mods/mod_cnbox_eff_bridge.pyc",
+          "sha256": "3972334669e7a831b99fc378a867d6b387d27900bb9c5249b5540a2f5080cff2",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/battle.xc",
+          "sha256": "e1358abb6b236a64258fb65ba0f8e8de1e6bc1af6f5ea7e2d287727a4d68fdb0",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/icons/cnbox_lighten.png",
+          "sha256": "481ff5f770c474e4114c8bf29aa8d51b453972321831a323a68cfa9372f72429",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/iconset.xc",
+          "sha256": "ef0e5ad0c19966f80cf7f8c414d40f6b1cceea2df1b52fd768c49e68f13ec770",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/playersPanel.xc",
+          "sha256": "c6dcbaced2026c140d45c0f502d53060d42db28e20e661c25ba437d887a27edc",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/statisticForm.xc",
+          "sha256": "41bc00fab37356277bbd1afb37dcfefde02d67397b0ab27451ea290420c12a27",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/Aslain/texts.xc",
+          "sha256": "5ce359686c8b282d50f84825ea3866a6dc9806bc010fd97173e39a4b8d079e35",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_auto_mode.py",
+          "sha256": "f45bec70173e36227bcaa30d33aaeb4224af68d669606f714ff0da8d308a9c2f",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_native_panel_sort.py",
+          "sha256": "d4929a80187a21a595adac4d20c535be05b5b128fa5fce8ab1cd41dd3969dc47",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_vehicle_name_color.py",
+          "sha256": "372a1db7a116040d15a6615a379f585a65538142a734c003fd58bac4c8603d17",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_tier_font.py",
+          "sha256": "9de10bb2df79d09505c3aa6acf2207f51d41dd8c0c376393050c21346de12061",
+          "required": true
+        }
+      ],
+      "releaseTrack": "CREATOR_ASLAIN",
+      "functionalId": "WOT2401-R34-R2F9"
+    },
+    {
       "cnboxVersion": "2401-R34-R2F9-UNIFIED-R2",
       "status": "FINAL_LOCK",
       "wotVersion": "2.4.0.1",
@@ -759,17 +1070,6 @@
   "creatorManagerVersion": "2.0.3",
   "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager_Creator.exe",
   "creatorManagerSha256": "d577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b",
-  "creatorTestPackage": {
-    "schemaVersion": 1,
-    "version": "2401-06-R34-R2F9-TEST-CANDIDATE-R4",
-    "status": "TEST_CANDIDATE",
-    "wotVersion": "2.4.0.1",
-    "aslainVersion": "2.4.0.1 #06",
-    "xvmVersion": "13.1.0.0090",
-    "fileName": "CNBOX_ASLAIN06_TEST_CANDIDATE_R4_FINAL_RUNTIME_HANDOFF.zip",
-    "sha256": "65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c",
-    "notes": "Creator-only Aslain #06 low-risk rebase of the byte-identical R4 test candidate. #05->#06 changes do not touch the CNBOX XVM/OpenWG/PlayersPanel owner boundary. Public release selection must ignore this TEST_CANDIDATE. RUNTIME_NOT_REQUIRED_FOR_THIS_UPSTREAM_DELTA; R4 visual delta still requires one normal real-game test before FINAL_LOCK promotion."
-  },
   "productName": "NAJXBox",
   "legacyProductName": "CNBOX",
   "managerCanonicalUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
