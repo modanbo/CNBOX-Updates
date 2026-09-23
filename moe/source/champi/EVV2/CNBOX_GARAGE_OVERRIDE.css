@@ -1,4 +1,4 @@
-/* NAJXBox MoE 1.0.11 — fail-safe official CN LOBBY presentation adapter
+/* NAJXBox MoE 1.1.1 — official CN LOBBY drag-hitarea recovery
  * UI authority: wotassist.markongun.swf (2.4.0.1)
  * UI only. CHAMPi EVV model, calculation, events, Ctrl-drag and savePosition remain upstream.
  * Official logical geometry: 210 x 134.
@@ -58,8 +58,15 @@
   font-weight: 400;
   color: #fff;
   text-shadow: 0 1rem 1rem rgba(0,0,0,.9);
-  pointer-events: none;
+  pointer-events: auto;
   user-select: none;
+}
+
+/* The overlay itself is the hit surface so EVV's mature document-level
+ * Ctrl+drag handler receives a target contained by #evv2-root.
+ * Children stay non-interactive so they cannot steal clicks. */
+#evv2-root .najx-moe-official * {
+  pointer-events: none;
 }
 
 #evv2-root:hover .najx-moe-official {
