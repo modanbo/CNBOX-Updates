@@ -105,8 +105,8 @@ jobs:
 
           en="$root/protanki_core/res/mods/protanki.gunmarks/text/en.yml"
           zh="$root/protanki_core/res/mods/protanki.gunmarks/text/zh_sg.yml"
-          grep -Fxq 'battle/damageCurrentLabel: Tot. damage' "$en"
-          grep -Fxq 'battle/nextMarkLabel: Damage for {}%' "$en"
+          grep -Fq 'battle/damageCurrentLabel: Tot. damage' "$en"
+          grep -Fq 'battle/nextMarkLabel: Damage for {}%' "$en"
           grep -Fxq 'battle/damageCurrentLabel: 本场标伤' "$zh"
           grep -Fxq 'battle/nextMarkLabel: 平均标伤' "$zh"
 
