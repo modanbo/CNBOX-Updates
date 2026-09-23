@@ -1,0 +1,199 @@
+name: Build CNBOX standalone MoE 1.0.7 candidate
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.0.7
+    paths:
+      - 'moe/source/champi/EVV2/CNBOX_GARAGE_RUNTIME_PATCH.js'
+      - '.github/workflows/build-cnbox-moe-107.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.0.7
+          fetch-depth: 0
+
+      - name: Patch EVV garage runtime interaction only
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-107"
+          payload="$root/payload"
+          evv="$root/evv"
+          out="$GITHUB_WORKSPACE/moe/1.0.7"
+          rm -rf "$root" "$out"
+          mkdir -p "$payload" "$evv" "$out"
+
+          unzip -q "$GITHUB_WORKSPACE/moe/1.0.6/CNBOX_MoE_1.0.6_WOT_2.4.0.1.zip" -d "$payload"
+          core="$payload/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod"
+          cp "$core" "$root/evv-before.wotmod"
+          unzip -q "$core" -d "$evv"
+
+          js="$evv/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js"
+          cat "$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_RUNTIME_PATCH.js" >> "$js"
+
+          cat >> "$evv/res/mods/cnbox.moe/NOTICE_GARAGE.txt" <<'EOF'
+
+          1.0.7 live-fix:
+          - force the existing EVV GameFace Ctrl+drag gate enabled for the CNBOX component
+          - if the garage card is clipped/outside the visible viewport, move it to a safe
+            location above the carousel and persist that location via EVV savePosition
+          - no MoE calculation/model semantics changed
+          EOF
+          sed -i 's/^          //' "$evv/res/mods/cnbox.moe/NOTICE_GARAGE.txt"
+
+          python3 - "$root/evv-before.wotmod" "$evv" "$core" <<'PY'
+          import hashlib, os, sys, zipfile
+          before,src,out=sys.argv[1:4]
+          with zipfile.ZipFile(before) as z:
+              original={i.filename:hashlib.sha256(z.read(i.filename)).hexdigest()
+                        for i in z.infolist() if not i.is_dir()}
+          rows=[]
+          for dp,_,fs in os.walk(src):
+              for n in fs:
+                  p=os.path.join(dp,n)
+                  rows.append((os.path.relpath(p,src).replace(os.sep,'/'),p))
+          rows.sort()
+
+          allowed={
+              'res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js',
+              'res/mods/cnbox.moe/NOTICE_GARAGE.txt',
+          }
+          assert set(a for a,_ in rows)==set(original), (set(a for a,_ in rows)-set(original), set(original)-set(a for a,_ in rows))
+          for arc,p in rows:
+              if arc in allowed:
+                  continue
+              h=hashlib.sha256(open(p,'rb').read()).hexdigest()
+              assert h==original[arc], arc
+
+          protected='res/scripts/client/gui/mods/mod_evv.pyc'
+          h=hashlib.sha256(open(os.path.join(src,protected),'rb').read()).hexdigest()
+          assert h==original[protected]
+          print('STATIC_EVV_107_ONLY_JS_NOTICE_CHANGED_OK',h)
+
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_STORED) as z:
+              for arc,p in rows:
+                  zi=zipfile.ZipInfo(arc,(1980,1,1,0,0,0))
+                  zi.compress_type=zipfile.ZIP_STORED
+                  zi.external_attr=0o644<<16
+                  z.writestr(zi,open(p,'rb').read())
+          PY
+
+          patch="$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_RUNTIME_PATCH.js"
+          grep -Fq 'currentState.moveMode = true;' "$patch"
+          grep -Fq "document.getElementById('evv2-root')" "$patch"
+          grep -Fq 'saveCurrentPosition(el);' "$patch"
+          grep -Fq 'CNBOX_CAROUSEL_CLEARANCE = 240' "$patch"
+
+      - name: Compose 1.0.7 payload and manifest
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-107"
+          payload="$root/payload"
+          out="$GITHUB_WORKSPACE/moe/1.0.7"
+
+          python3 - "$payload" "$out" "$GITHUB_WORKSPACE/moe/1.0.6/manifest.json" <<'PY'
+          import hashlib,json,os,sys,zipfile
+          payload,outdir,old_manifest=sys.argv[1:4]
+
+          def sha(p):
+              h=hashlib.sha256()
+              with open(p,'rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''):
+                      h.update(b)
+              return h.hexdigest()
+
+          rows=[]
+          for dp,_,fs in os.walk(payload):
+              for n in fs:
+                  p=os.path.join(dp,n)
+                  rows.append((os.path.relpath(p,payload).replace(os.sep,'/'),p))
+          rows.sort()
+
+          archive=os.path.join(outdir,'CNBOX_MoE_1.0.7_WOT_2.4.0.1.zip')
+          with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for arc,p in rows:
+                  zi=zipfile.ZipInfo(arc,(1980,1,1,0,0,0))
+                  zi.compress_type=zipfile.ZIP_DEFLATED
+                  zi.external_attr=0o644<<16
+                  z.writestr(zi,open(p,'rb').read())
+
+          m=json.load(open(old_manifest,encoding='utf-8'))
+          m['version']='1.0.7'
+          m['status']='GARAGE_DRAG_POSITION_FIX_CANDIDATE'
+          m['payloadUrl']='https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.7/CNBOX_MoE_1.0.7_WOT_2.4.0.1.zip'
+          m['payloadSha256']=sha(archive)
+          m['notes']='1.0.7 live-fix after user evidence showed the 1.0.6 garage card visible but clipped and non-draggable. ProTanki battle core is unchanged. EVV calculation/backend is unchanged; only EVV2.js receives a CNBOX interaction patch that forces Ctrl+drag enabled and migrates clipped cards to a safe visible position using the existing savePosition path.'
+
+          for spec in m['installedFiles']:
+              rel=spec['path'].replace('{WOT_VERSION}','2.4.0.1')
+              p=os.path.join(payload,rel.replace('/',os.sep))
+              spec['sha256']=sha(p)
+
+          # Battle core must remain byte-identical to 1.0.5/1.0.6.
+          assert sha(os.path.join(payload,'mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod')) ==               'b0120e0ebf5b1f4ac0f44d63fab594021d96e71cd7aabb0263db44b64a00a924'
+
+          with open(os.path.join(outdir,'manifest.json'),'w',encoding='utf-8') as f:
+              json.dump(m,f,ensure_ascii=False,indent=2); f.write('\n')
+          with open(os.path.join(outdir,'SHA256SUMS.txt'),'w',encoding='utf-8') as f:
+              f.write(m['payloadSha256']+'  '+os.path.basename(archive)+'\n')
+              for spec in m['installedFiles']:
+                  f.write(spec['sha256']+'  '+spec['path']+'\n')
+          print(json.dumps(m,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Static 1.0.7 closure
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import hashlib,json,zipfile
+          m=json.load(open('moe/1.0.7/manifest.json',encoding='utf-8'))
+          p='moe/1.0.7/CNBOX_MoE_1.0.7_WOT_2.4.0.1.zip'
+          assert hashlib.sha256(open(p,'rb').read()).hexdigest()==m['payloadSha256']
+          with zipfile.ZipFile(p) as z:
+              evv=z.read('mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod')
+          open('/tmp/evv107.wotmod','wb').write(evv)
+          with zipfile.ZipFile('/tmp/evv107.wotmod') as e:
+              assert all(i.compress_type==zipfile.ZIP_STORED for i in e.infolist())
+              js=e.read('res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js').decode('utf-8','replace')
+              assert 'CNBOX MoE garage runtime patch — 1.0.7' in js
+              assert 'currentState.moveMode = true;' in js
+              assert 'saveCurrentPosition(el);' in js
+          print('STATIC_MOE_107_DRAG_POSITION_FIX_OK')
+          PY
+
+      - name: Upload 1.0.7 archival artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX_MoE_1.0.7_CANDIDATE
+          path: |
+            moe/1.0.7/CNBOX_MoE_1.0.7_WOT_2.4.0.1.zip
+            moe/1.0.7/manifest.json
+            moe/1.0.7/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Commit deterministic 1.0.7 candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/1.0.7
+          if git diff --cached --quiet; then
+            echo 'No output changes.'
+            exit 0
+          fi
+          git commit -m 'Build CNBOX standalone MoE 1.0.7 candidate'
+          git pull --rebase origin work/moe-component-1.0.7
+          git push origin HEAD:work/moe-component-1.0.7
