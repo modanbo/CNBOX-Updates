@@ -150,12 +150,13 @@ jobs:
               /work/PROTANKI_inner.pyc
 
           if [ -f "$root/PROTANKI_inner.pyc" ]; then
+            strings -a -n 3 "$root/PROTANKI_inner.pyc" > "$dest/PROTANKI_inner.strings.txt"
             cp "$root/PROTANKI_inner.pyc" "$dest/PROTANKI_inner.pyc"
             uncompyle6 "$root/PROTANKI_inner.pyc" > "$dest/PROTANKI_inner.py" || true
             pydisasm "$root/PROTANKI_inner.pyc" > "$dest/PROTANKI_inner.dis.txt" || true
             {
               echo '=== ProTanki inner bridge candidates ==='
-              grep -En 'predictedRating|deltaRating|battleMovingDamage|predictedMovingDamage|deltaDamage|setData|flash|component|update|rating|moving|damage|GunMarks' "$dest/PROTANKI_inner.py" "$dest/PROTANKI_inner.dis.txt" || true
+              grep -Ein 'predictedRating|deltaRating|battleMovingDamage|predictedMovingDamage|deltaDamage|setData|flash|component|update|rating|moving|damage|GunMarks|offsetBattle|skinVariant' "$dest/PROTANKI_inner.py" "$dest/PROTANKI_inner.dis.txt" "$dest/PROTANKI_inner.strings.txt" || true
             } > "$dest/PROTANKI_INNER_INDEX.txt"
           fi
 
