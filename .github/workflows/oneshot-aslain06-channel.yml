@@ -8,52 +8,90 @@ permissions:
   contents: write
 jobs:
   update:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 1
-      - name: Update channel metadata
-        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
+          fetch-depth: 0
+      - name: Restore UTF-8 authority and patch only Creator metadata
+        shell: python
         run: |
-          $ErrorActionPreference = 'Stop'
-          $path = Join-Path $env:GITHUB_WORKSPACE 'channel.json'
-          $j = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json
-          if ($j.managerVersion -ne '2.0.3') { throw "Public Manager authority mismatch: $($j.managerVersion)" }
-          if ($j.latestAslainVersion -ne '2.4.0.1 #06') { throw "Expected latestAslainVersion #06, got $($j.latestAslainVersion)" }
-          if ($j.creatorTestPackage.status -ne 'TEST_CANDIDATE') { throw "Creator test package must remain TEST_CANDIDATE" }
-          if ($j.creatorTestPackage.sha256 -ne '65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c') { throw "Unexpected R4 payload hash" }
+          import copy, hashlib, json, pathlib, subprocess
 
-          $j.creatorManagerVersion = '2.0.3'
-          $j.creatorManagerSha256 = 'd577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b'
-          $j.creatorTestPackage.version = '2401-06-R34-R2F9-TEST-CANDIDATE-R4'
-          $j.creatorTestPackage.wotVersion = '2.4.0.1'
-          $j.creatorTestPackage.aslainVersion = '2.4.0.1 #06'
-          $j.creatorTestPackage.xvmVersion = '13.1.0.0090'
-          $j.creatorTestPackage.fileName = 'CNBOX_ASLAIN06_TEST_CANDIDATE_R4_FINAL_RUNTIME_HANDOFF.zip'
-          $j.creatorTestPackage.sha256 = '65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c'
-          $j.creatorTestPackage.notes = 'Creator-only Aslain #06 low-risk rebase of the byte-identical R4 test candidate. #05->#06 changes do not touch the CNBOX XVM/OpenWG/PlayersPanel owner boundary. Public release selection must ignore this TEST_CANDIDATE. RUNTIME_NOT_REQUIRED_FOR_THIS_UPSTREAM_DELTA; R4 visual delta still requires one normal real-game test before FINAL_LOCK promotion.'
-          $json = $j | ConvertTo-Json -Depth 100
-          [IO.File]::WriteAllText($path, $json + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
-          $check = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json
-          if ($check.creatorTestPackage.aslainVersion -ne '2.4.0.1 #06') { throw 'Channel round-trip validation failed' }
-          if ($check.creatorTestPackage.status -ne 'TEST_CANDIDATE') { throw 'Track separation regression' }
-          $formal = @($check.releases | Where-Object { $_.status -eq 'FINAL_LOCK' -and $_.releaseTrack -eq 'CREATOR_ASLAIN' -and $_.aslainVersion -eq '2.4.0.1 #04' })
-          if ($formal.Count -lt 1) { throw 'Formal #04 Creator FINAL_LOCK missing' }
-          Write-Host "Formal #04 Creator locks: $($formal.Count)"
-          Write-Host "Creator candidate: $($check.creatorTestPackage.version) / $($check.creatorTestPackage.aslainVersion)"
-          Write-Host "Creator Manager: $($check.creatorManagerVersion) $($check.creatorManagerSha256)"
-      - name: Commit channel rebase
-        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
+          GOOD = '99d9f3231dc24be8b2b7bf28eb55cc7a49e729c7'
+          path = pathlib.Path('channel.json')
+          raw = subprocess.check_output(['git', 'show', f'{GOOD}:channel.json'])
+          text = raw.decode('utf-8-sig')
+          base = json.loads(text)
+
+          assert base['managerVersion'] == '2.0.3'
+          assert base['latestAslainVersion'] == '2.4.0.1 #06'
+          assert base['creatorTestPackage']['status'] == 'TEST_CANDIDATE'
+          assert base['creatorTestPackage']['sha256'] == '65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c'
+          formal = [r for r in base['releases'] if r.get('status') == 'FINAL_LOCK' and r.get('releaseTrack') == 'CREATOR_ASLAIN' and r.get('aslainVersion') == '2.4.0.1 #04']
+          assert formal, 'formal #04 Creator FINAL_LOCK missing in good authority'
+
+          target = copy.deepcopy(base)
+          target['creatorManagerVersion'] = '2.0.3'
+          target['creatorManagerSha256'] = 'd577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b'
+          p = target['creatorTestPackage']
+          p['version'] = '2401-06-R34-R2F9-TEST-CANDIDATE-R4'
+          p['wotVersion'] = '2.4.0.1'
+          p['aslainVersion'] = '2.4.0.1 #06'
+          p['xvmVersion'] = '13.1.0.0090'
+          p['fileName'] = 'CNBOX_ASLAIN06_TEST_CANDIDATE_R4_FINAL_RUNTIME_HANDOFF.zip'
+          p['sha256'] = '65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c'
+          p['notes'] = 'Creator-only Aslain #06 low-risk rebase of the byte-identical R4 test candidate. #05->#06 changes do not touch the CNBOX XVM/OpenWG/PlayersPanel owner boundary. Public release selection must ignore this TEST_CANDIDATE. RUNTIME_NOT_REQUIRED_FOR_THIS_UPSTREAM_DELTA; R4 visual delta still requires one normal real-game test before FINAL_LOCK promotion.'
+
+          def diff(a, b, prefix=''):
+              out = []
+              if type(a) is not type(b):
+                  return [prefix]
+              if isinstance(a, dict):
+                  for k in sorted(set(a) | set(b)):
+                      q = f'{prefix}.{k}' if prefix else k
+                      if k not in a or k not in b:
+                          out.append(q)
+                      else:
+                          out += diff(a[k], b[k], q)
+              elif isinstance(a, list):
+                  if a != b:
+                      out.append(prefix)
+              elif a != b:
+                  out.append(prefix)
+              return out
+
+          changed = diff(base, target)
+          allowed = {
+              'creatorManagerVersion',
+              'creatorManagerSha256',
+              'creatorTestPackage.version',
+              'creatorTestPackage.aslainVersion',
+              'creatorTestPackage.fileName',
+              'creatorTestPackage.notes',
+          }
+          assert set(changed) == allowed, (changed, allowed)
+          assert target['releases'] == base['releases']
+          for key in ('collectionProfile','aslainFingerprints','languagePacks','moePacks'):
+              assert target.get(key) == base.get(key), key
+
+          payload = json.dumps(target, ensure_ascii=False, indent=2) + '\n'
+          path.write_text(payload, encoding='utf-8', newline='\n')
+          check = json.loads(path.read_text(encoding='utf-8'))
+          assert check['creatorTestPackage']['aslainVersion'] == '2.4.0.1 #06'
+          assert 'NAJXBox 依赖诊断' in check['collectionProfile']['description']
+          print('Changed semantic paths:', changed)
+          print('channel SHA256:', hashlib.sha256(path.read_bytes()).hexdigest())
+          print('Creator candidate:', check['creatorTestPackage']['version'])
+          print('Creator Manager:', check['creatorManagerVersion'], check['creatorManagerSha256'])
+      - name: Commit repaired channel
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add channel.json
-          if (-not (git diff --cached --quiet)) {
-            git commit -m 'Rebase Creator test candidate to Aslain #06'
-            git push origin HEAD:main
-          } else {
-            Write-Host 'No channel change required.'
-          }
+          git diff --cached --check
+          git commit -m 'Repair UTF-8 channel and rebase Creator candidate to Aslain #06'
+          git push origin HEAD:main
