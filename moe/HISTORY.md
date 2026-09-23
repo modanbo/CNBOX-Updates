@@ -97,3 +97,32 @@ Static combined-package closure: PASS.
 The Manager still exposes one independent “打环插件” component. Box owns none of these files.
 
 History rule: do not re-decompose EVV while version remains 2.05.000 and the pinned package SHA256 remains unchanged.
+
+
+### 1.0.7 — GARAGE_DRAG_POSITION_FIX_CANDIDATE
+
+Live trigger:
+- 1.0.6 garage card rendered, proving model/injection alive;
+- card appeared clipped at the bottom-right;
+- user could not drag it.
+
+Payload:
+`7e26d95369f9929b1149412ec1952665ff9622dc28f86e7d942f178311f1cef6`
+
+ProTanki battle core remains unchanged:
+`b0120e0ebf5b1f4ac0f44d63fab594021d96e71cd7aabb0263db44b64a00a924`
+
+CHAMPi EVV garage core:
+`52ab79d3b4384433abf20dab1af63d34486f54cacf58f3ae40d67d87501d0cc8`
+
+1.0.7 changes only EVV garage interaction:
+- force `currentState.moveMode = true` after every model refresh so Ctrl+drag cannot be silently disabled by upstream settings state;
+- after paint, detect a clipped/out-of-viewport `#evv2-root`;
+- migrate it to a safe visible location above the vehicle carousel;
+- persist the repaired location through EVV's existing `saveCurrentPosition -> savePosition` path;
+- calculation/backend, ProTanki battle core, EVV garage data model, thresholds, and CN visual skin remain unchanged.
+
+Static closure: PASS.
+
+Runtime screenshot evidence is archived in Google Drive as:
+`RUNTIME_MOE_1.0.6_GARAGE_VISIBLE_CLIPPED_DRAG_FAIL_20260923.png`.

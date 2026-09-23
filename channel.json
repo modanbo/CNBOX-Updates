@@ -697,14 +697,14 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.0.6",
-      "status": "GARAGE_INTEGRATION_CANDIDATE",
+      "version": "1.0.7",
+      "status": "GARAGE_DRAG_POSITION_FIX_CANDIDATE",
       "wotVersion": "2.4.0.1",
       "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
       "sourceUrl": "https://protanki.tv/ ; https://wgmods.net/4322/",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.6/CNBOX_MoE_1.0.6_WOT_2.4.0.1.zip",
-      "payloadSha256": "80faef4b00bacc441cc68db9dd40566206149eb0f3f00718ecc6881cb34e0772",
-      "notes": "Independent Manager MoE candidate. ProTanki owns battle UI/calculation; CHAMPi EVV provides garage MoE model/65-85-95-100 thresholds/drag persistence. EVV battle presentation is callback-compatible but intentionally blank. Box remains unrelated.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.7/CNBOX_MoE_1.0.7_WOT_2.4.0.1.zip",
+      "payloadSha256": "7e26d95369f9929b1149412ec1952665ff9622dc28f86e7d942f178311f1cef6",
+      "notes": "1.0.7 live-fix after user evidence showed the 1.0.6 garage card visible but clipped and non-draggable. ProTanki battle core is unchanged. EVV calculation/backend is unchanged; only EVV2.js receives a CNBOX interaction patch that forces Ctrl+drag enabled and migrates clipped cards to a safe visible position using the existing savePosition path.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -750,7 +750,7 @@
         },
         {
           "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
-          "sha256": "47811ac68dbf4d7e2fe539a161b38d06d33a9e79f697c1007948b8f27491eee2",
+          "sha256": "52ab79d3b4384433abf20dab1af63d34486f54cacf58f3ae40d67d87501d0cc8",
           "required": true,
           "shared": false
         }
