@@ -10,7 +10,7 @@ package poliroid.views.battle.gunmarks
    import flash.text.TextFormatAlign;
 
    /**
-    * NAJXBox MoE 1.0.11 - runtime-recovery bilingual BATTLE presentation adapter.
+    * NAJXBox MoE 1.1.3 - CN Contract Battle Host presentation.
     *
     * Authority:
     *   wotassist.markongun.swf SHA256
@@ -116,7 +116,7 @@ package poliroid.views.battle.gunmarks
       {
          this._ensureUi();
          mouseChildren = false;
-         mouseEnabled = false;
+         mouseEnabled = true;
       }
 
       public function get panelHeight() : int
