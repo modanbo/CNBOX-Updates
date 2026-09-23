@@ -363,7 +363,11 @@ package poliroid.views.battle.gunmarks
 
       private function _cleanDamage(value:String) : String
       {
-         return value.replace(/^\s*\/\s*/,"");
+         var s:String = value == null ? "" : value;
+         var slash:int = s.indexOf("/");
+         if(slash >= 0) s = s.substring(0,slash);
+         s = s.replace(/^\s+|\s+$/g,"");
+         return s;
       }
 
       private function _ensurePercent(value:String) : String
