@@ -97,6 +97,68 @@ jobs:
             grep -En 'moePercent|moeAVG|moeMarks|moe1|moe2|moe3|moe4|MoEGarageGameFaceView|model|state|update|vehicle|expected|garage' "$dest/EVV_mod_evv.dis.txt" || true
           } > "$dest/BYTECODE_BRIDGE_INDEX.txt"
 
+
+      - name: Peel ProTanki PjOrion marshal layer
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-na-data"
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/data_bridge"
+          cat > "$root/peel_pjorion.py" <<'PY'
+          import __builtin__, imp, os, sys, zlib
+
+          source = sys.argv[1]
+          out = sys.argv[2]
+          real_decompress = zlib.decompress
+          real_reload = __builtin__.reload
+
+          def capture_decompress(data, *args):
+              value = real_decompress(data, *args)
+              try:
+                  open(out + '.zlib.bin', 'wb').write(value)
+              except Exception:
+                  pass
+              return value
+
+          def safe_reload(mod):
+              if getattr(mod, '__name__', '') == 'zlib':
+                  return mod
+              return real_reload(mod)
+
+          zlib.decompress = capture_decompress
+          __builtin__.reload = safe_reload
+          try:
+              imp.load_compiled('probe_mod_pro_gunmarks', source)
+          except Exception as e:
+              open(out + '.exception.txt','wb').write(repr(e))
+          finally:
+              __builtin__.reload = real_reload
+
+          if os.path.exists(out + '.zlib.bin'):
+              data=open(out + '.zlib.bin','rb').read()
+              open(out,'wb').write('\x03\xf3\x0d\x0a' + '\x00'*4 + data)
+              print('captured', len(data))
+          else:
+              print('no capture')
+          PY
+
+          docker run --rm \
+            -v "$root:/work" \
+            python:2.7 \
+            python /work/peel_pjorion.py \
+              /work/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc \
+              /work/PROTANKI_inner.pyc
+
+          if [ -f "$root/PROTANKI_inner.pyc" ]; then
+            cp "$root/PROTANKI_inner.pyc" "$dest/PROTANKI_inner.pyc"
+            uncompyle6 "$root/PROTANKI_inner.pyc" > "$dest/PROTANKI_inner.py" || true
+            pydisasm "$root/PROTANKI_inner.pyc" > "$dest/PROTANKI_inner.dis.txt" || true
+            {
+              echo '=== ProTanki inner bridge candidates ==='
+              grep -En 'predictedRating|deltaRating|battleMovingDamage|predictedMovingDamage|deltaDamage|setData|flash|component|update|rating|moving|damage|GunMarks' "$dest/PROTANKI_inner.py" "$dest/PROTANKI_inner.dis.txt" || true
+            } > "$dest/PROTANKI_INNER_INDEX.txt"
+          fi
+
       - name: Commit targeted diagnostics
         shell: bash
         run: |
