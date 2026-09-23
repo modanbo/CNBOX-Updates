@@ -1,0 +1,9 @@
+0cdf01752860e172ae52bcd75ad31993bf13a5698662910f76b8f699f2aa2744  CNBOX_MoE_1.0.9_WOT_2.4.0.1.zip
+e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca  mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod
+d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283  mods/{WOT_VERSION}/me.poliroid.modslistapi_1.7.9.wotmod
+26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1  mods/{WOT_VERSION}/net.openwg/net.openwg.gameface_1.1.6.wotmod
+ad5711a41458afa38055182792773aced86b91add91e11644d6b5c273beea94b  mods/{WOT_VERSION}/aslain.modmenu_2.0.17.wotmod
+2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805  mods/{WOT_VERSION}/champi.settingsgui_1.81.wotmod
+a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5  mods/{WOT_VERSION}/gambiter.guiflash_0.6.6.wotmod
+8728f3d3a15a17e98873bf4e51ae32ec96fb01053ffd119f5f276b332b24e2f4  mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod
+fc22480047e9f64e14fe5f0a38e283bfe4f7382250246b36b07ec0829968b4d6  mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod
