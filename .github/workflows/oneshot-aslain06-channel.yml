@@ -35,11 +35,13 @@ jobs:
           $j.creatorTestPackage.sha256 = '65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c'
           $j.creatorTestPackage.notes = 'Creator-only Aslain #06 low-risk rebase of the byte-identical R4 test candidate. #05->#06 changes do not touch the CNBOX XVM/OpenWG/PlayersPanel owner boundary. Public release selection must ignore this TEST_CANDIDATE. RUNTIME_NOT_REQUIRED_FOR_THIS_UPSTREAM_DELTA; R4 visual delta still requires one normal real-game test before FINAL_LOCK promotion.'
           $json = $j | ConvertTo-Json -Depth 100
-          Set-Content -LiteralPath $path -Value $json -Encoding UTF8
+          [IO.File]::WriteAllText($path, $json + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
           $check = Get-Content -Raw -LiteralPath $path | ConvertFrom-Json
           if ($check.creatorTestPackage.aslainVersion -ne '2.4.0.1 #06') { throw 'Channel round-trip validation failed' }
           if ($check.creatorTestPackage.status -ne 'TEST_CANDIDATE') { throw 'Track separation regression' }
-          if (($check.releases | Where-Object { $_.status -eq 'FINAL_LOCK' -and $_.releaseTrack -eq 'CREATOR_ASLAIN' -and $_.aslainVersion -eq '2.4.0.1 #04' }).Count -lt 1) { throw 'Formal #04 Creator FINAL_LOCK missing' }
+          $formal = @($check.releases | Where-Object { $_.status -eq 'FINAL_LOCK' -and $_.releaseTrack -eq 'CREATOR_ASLAIN' -and $_.aslainVersion -eq '2.4.0.1 #04' })
+          if ($formal.Count -lt 1) { throw 'Formal #04 Creator FINAL_LOCK missing' }
+          Write-Host "Formal #04 Creator locks: $($formal.Count)"
           Write-Host "Creator candidate: $($check.creatorTestPackage.version) / $($check.creatorTestPackage.aslainVersion)"
           Write-Host "Creator Manager: $($check.creatorManagerVersion) $($check.creatorManagerSha256)"
       - name: Commit channel rebase
