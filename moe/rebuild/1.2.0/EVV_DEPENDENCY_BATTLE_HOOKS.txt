@@ -1,0 +1,14 @@
+# EVV package and dependency battle/cursor hook strings
+
+## aslain.modmenu_2.0.17.wotmod
+
+## champi.expectedvehiclevalues2_2.05.000.wotmod
+
+## champi.settingsgui_1.81.wotmod
+
+## gambiter.guiflash_0.6.6.wotmod
+### res/scripts/client/gui/mods/gambiter/flash.pyc
+HIDE_CURSORt
+SHOW_CURSORt
+
+## net.openwg.gameface_1.1.6.wotmod

@@ -1,0 +1,3 @@
+captures=1
+capture[0].size=176888
+capture[0].marshal_error=ValueError('bad marshal data (unknown type code)',)

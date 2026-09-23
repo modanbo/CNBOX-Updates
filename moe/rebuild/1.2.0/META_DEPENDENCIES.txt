@@ -1,0 +1,87 @@
+# Meta dependency declarations
+
+## aslain.modmenu_2.0.17.wotmod
+<root>
+  <id>aslain.modmenu</id>
+  <version>2.0.17</version>
+  <name>Mod Menu</name>
+  <description>One window in the garage for the settings of the mods that use it. Speaks the Python API mods already use, so an existing mod needs no change. Needs OpenWG Gameface 1.1.6 or newer. https://github.com/Aslain/modmenu</description>
+</root>
+
+## champi.expectedvehiclevalues2_2.05.000.wotmod
+<root>
+	<!-- Technical MOD ID -->
+	<id>champi.expectedVehicleValues2</id>
+	<!-- Package version -->
+	<version>2.05.000</version>
+	<!-- Human readable name -->
+	<name>Expected Vehicle Values v2</name>
+	<!-- Human readable description -->
+	<description>display MoE, Mastery, WNX and expected damage value information in garage and battle</description>
+</root>
+## champi.settingsgui_1.81.wotmod
+<root>
+	<!-- Technical MOD ID -->
+	<id>champi.settingsgui</id>
+	<!-- Package version -->
+	<version>1.81</version>
+	<!-- Human readable name -->
+	<name>CHAMPi's Mods Settings GUI</name>
+	<!-- Human readable description -->
+	<description>A GUI for champi mods settings</description>
+</root>
+## gambiter.guiflash_0.6.6.wotmod
+<root>
+	<!-- Technical MOD ID -->
+	<id>gambiter.guiflash</id>
+	<!-- Package version -->
+	<version>0.6.6</version>
+	<!-- Human readable name -->
+	<name>GUIFlash</name>
+	<!-- Human readable description -->
+	<description>Flash components for use in python mods.</description>
+</root>
+## net.openwg.gameface_1.1.6.wotmod
+<root>
+    <id>net.openwg.gameface</id>
+    <version>1.1.6</version>
+    <name>net.openwg.gameface</name>
+    <description>Generate res_map.json file with mod items for ingame UiResourceManager, provide Gameface injector and wrappers</description>
+</root>
+## izeberg.modssettingsapi_1.7.0.wotmod
+<root>
+	<version>1.7.0</version>
+	<description>This mod allows you to easily configure installed mods</description>
+	<name>ModsSettings API</name>
+	<id>izeberg.modssettingsapi</id>
+</root>
+
+## me.poliroid.modslistapi_1.7.9.wotmod
+<root>
+    <id>me.poliroid.modslistapi</id>
+    <version>1.7.9</version>
+    <name>Modifications list</name>
+    <description>Modifications list - comfortable run, setup and alert</description>
+</root>
+## net.openwg.gameface_1.1.6.wotmod
+<root>
+    <id>net.openwg.gameface</id>
+    <version>1.1.6</version>
+    <name>net.openwg.gameface</name>
+    <description>Generate res_map.json file with mod items for ingame UiResourceManager, provide Gameface injector and wrappers</description>
+</root>
+## tv.protanki.gunmarkscalc_8.1.01.wotmod
+<root>
+
+	<!-- Techical MOD ID -->
+	<id>tv.protanki.gunmarkscalc</id>
+
+	<!-- Package version -->
+	<version>8.1.01</version>
+
+	<!-- Human readable name -->
+	<name>Gun marks achivment calculator</name>
+
+	<!-- Human readable description -->
+	<description>Help player calculate current achivment progress in battle</description>
+</root>
