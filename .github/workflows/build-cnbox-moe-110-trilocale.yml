@@ -79,7 +79,7 @@ jobs:
                       out.append(line)
               if not found:
                   raise SystemExit('missing locale key: '+key)
-              return '\\n'.join(out)+'\\n'
+              return '\n'.join(out)+'\n'
 
           en=set_key(src,'battle/damageCurrentLabel','Battle DMG')
           en=set_key(en,'battle/nextMarkLabel','Avg. DMG')
