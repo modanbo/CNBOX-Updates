@@ -1,0 +1,21 @@
+__future__ | from=('absolute_import',) | level=0
+sys | from=() | level=-1
+hashlib | from=() | level=-1
+_hashlib | from=() | level=-1
+_hashlib | from=('pbkdf2_hmac',) | level=-1
+hmac | from=() | level=-1
+warnings | from=() | level=-1
+operator | from=('_compare_digest',) | level=-1
+marshal | from=() | level=-1
+struct | from=() | level=-1
+_struct | from=('*',) | level=-1
+_struct | from=('_clearcache',) | level=-1
+_struct | from=('__doc__',) | level=-1
+
+=== EXCEPTION ===
+Traceback (most recent call last):
+  File "/work/trace_imports.py", line 17, in <module>
+    imp.load_compiled('probe_target',source)
+  File "<module>", line 1, in <pycshield>
+  File "<module>", line 1, in _132001adf828d75
+ImportError

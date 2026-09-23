@@ -1,0 +1,6 @@
+# Raw dependency tokens
+
+## /home/runner/work/_temp/moe120trace/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc
+mod_pro_gunmarkss
+
+## /home/runner/work/_temp/moe120trace/evv_core/res/scripts/client/gui/mods/mod_evv.pyc
