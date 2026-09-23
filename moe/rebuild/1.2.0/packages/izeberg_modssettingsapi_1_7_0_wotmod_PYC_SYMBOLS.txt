@@ -1,0 +1,266 @@
+WOTMOD=/home/runner/work/_temp/moe120/protanki/mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod
+SHA256=e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca
+
+### PYC res/scripts/client/gui/modsSettingsApi/__init__.pyc
+		:param newSettings: 
+IModsSettingsApi(
+ModsSettingsApi(
+_ModsSettingsApi__instanceR
+_ModsSettingsApic
+g_modsSettingsApiR
+getModSettings(
+https://wiki.wargaming.net/ru/ModsettingsAPIi
+newSettings(
+registerCallback(
+saveModData(
+scripts/client/gui/modsSettingsApi/__init__.pyR
+scripts/client/gui/modsSettingsApi/__init__.pys
+updateModSettings(
+
+### PYC res/scripts/client/gui/modsSettingsApi/_constants.pyc
+COMPONENT_TYPEc
+KEY_LEFTMOUSEt
+KEY_MIDDLEMOUSEt
+KEY_MOUSE0t
+KEY_MOUSE1t
+KEY_MOUSE2t
+KEY_RIGHTMOUSEt
+ModsSettingsApiWindows
+TEXT_INPUTt
+TextInputt
+USER_SETTINGS_PATHt
+VIEW_ALIASt
+VIEW_SWFt!
+gui/maps/icons/modsSettingsApi/icon.pngt
+mods/izeberg.modssettingsapi/text/s
+modsSettingsApi.jsoni
+modsSettingsApis'
+modsSettingsHotkeyContextMenuHandlert
+modsSettingsWindow.swft$
+modsettings.dats"
+scripts/client/gui/modsSettingsApi/_constants.pyR
+scripts/client/gui/modsSettingsApi/_constants.pyR'
+scripts/client/gui/modsSettingsApi/_constants.pyR,
+scripts/client/gui/modsSettingsApi/_constants.pyR1
+scripts/client/gui/modsSettingsApi/_constants.pys
+
+### PYC res/scripts/client/gui/modsSettingsApi/api.pyc
+Error occured when trying to load user settings!(
+Error occured when trying to register mod template!(
+Error occured when trying to save state!(
+Eventt
+IModsSettingsApiInternal(
+ModsSettingsApic
+USER_SETTINGS_PATHt
+_ModsSettingsApi__migrateStateR:
+_ModsSettingsApi__save(
+_ModsSettingsApi__saveCallbackIDt
+__saveY
+component(
+g_modsListApii
+generateSettingsData
+getModSettingsR:
+getSettingsFromColumn(
+getSettingsFromTemplateR?
+gui.modsListApiR
+loadSettingst	
+loadView(
+lobbyt
+modsListApiDescriptiont
+modsListApiIcont
+modsListApiNamet
+newSettings(
+onHotkeysUpdatedt
+onSettingsChangedt
+registerCallback
+saveModDatat
+saveStateR9
+scripts/client/gui/modsSettingsApi/api.pyR
+scripts/client/gui/modsSettingsApi/api.pyR(
+scripts/client/gui/modsSettingsApi/api.pyR)
+scripts/client/gui/modsSettingsApi/api.pyR?
+scripts/client/gui/modsSettingsApi/api.pyRS
+scripts/client/gui/modsSettingsApi/api.pyRT
+scripts/client/gui/modsSettingsApi/api.pyRU
+scripts/client/gui/modsSettingsApi/api.pyR]
+scripts/client/gui/modsSettingsApi/api.pyRe
+scripts/client/gui/modsSettingsApi/api.pyRm
+scripts/client/gui/modsSettingsApi/api.pyR{
+scripts/client/gui/modsSettingsApi/api.pys
+scripts/client/gui/modsSettingsApi/api.pyt
+settingsFile(
+settingsVersion(
+settingst	
+updateModSettings
+updatet
+userSettingsR
+viewR
+
+### PYC res/scripts/client/gui/modsSettingsApi/context_menu.pyc
+IModsSettingsApiInternalt
+_clearFlashValues
+_initFlashValues
+registerContextMenuHandlerst
+registerHandlers(
+scripts/client/gui/modsSettingsApi/context_menu.pyR
+scripts/client/gui/modsSettingsApi/context_menu.pys
+scripts/client/gui/modsSettingsApi/context_menu.pyt
+userSettingst
+
+### PYC res/scripts/client/gui/modsSettingsApi/hotkeys.pyc
+COMPONENT_TYPEt
+You are using deprecated controller class. Please use HotkeysController instead. The backwards compatibility support will be removed in future updates.(
+_game_handleKeyEvent(
+componentt
+defaultSettings(
+eventt
+getSettingsFromTemplateR
+handleKeyEvent(
+onHotkeysUpdated(
+scripts/client/gui/modsSettingsApi/hotkeys.pyR
+scripts/client/gui/modsSettingsApi/hotkeys.pyR	
+scripts/client/gui/modsSettingsApi/hotkeys.pyR`
+scripts/client/gui/modsSettingsApi/hotkeys.pys
+scripts/client/gui/modsSettingsApi/hotkeys.pyt
+settings(
+
+### PYC res/scripts/client/gui/modsSettingsApi/l10n.pyc
+scripts/client/gui/modsSettingsApi/l10n.pyR
+scripts/client/gui/modsSettingsApi/l10n.pys
+scripts/client/gui/modsSettingsApi/l10n.pyt
+
+### PYC res/scripts/client/gui/modsSettingsApi/skeleton.pyc
+		:param newSettings: 
+IModsSettingsApiInternalc
+IModsSettingsApic
+getModSettings
+newSettings(
+registerCallback
+scripts/client/gui/modsSettingsApi/skeleton.pyR
+scripts/client/gui/modsSettingsApi/skeleton.pys
+scripts/client/gui/modsSettingsApi/skeleton.pyt
+updateModSettings#
+
+### PYC res/scripts/client/gui/modsSettingsApi/templates.pyc
+	:param button: Component button, optional
+	:param format: Component value format template, defaults to '{{value}}' optional
+	:param height: Component height, useful for necessary margins, optional, default: 20px
+	:param labelPostfix: Postfix of component labels
+	:param labelStep: Steps of component labels
+	:param max: Maximum value of stepper component
+	:param min: Minimum value of stepper component
+	:param offsetLeft: Button left offset relatively to component, optional
+	:param offsetTop: Button top offset relatively to component, optional
+	:param options: List of string value for component options
+	:param text: Component text
+	:param tooltip: Component tooltip, optional
+	:param tooltipIcon: Component tooltip icon, optional
+	:param type: Component type, MUST be one of COMPONENT_TYPE
+	:param value: Component value
+	:param value: Component value, index of options
+	:param varName: Variable name bound to this component that will store component's value in onModSettingsChanged callback
+	:param width: Component width, optional
+	:return: Base component
+	:return: Checkbox component
+	:return: Component button
+	:return: Control component
+	:return: Control component with options
+	:return: Dropdown component
+	:return: Empty component
+	:return: Hotkey component
+	:return: Input component
+	:return: Label component
+	:return: NumericStepper component
+	:return: Options dictionary for supported AS3 components (dropdown and radio button group)
+	:return: RadioButtonGroup component
+	:return: RangeSlider component
+	:return: Slider component
+	:return: StepSlider component
+	:return: Stepper component
+ Helper to create Checkbox component
+ Helper to create Dropdown component
+ Helper to create Hotkey component
+ Helper to create Input component
+ Helper to create Label component
+ Helper to create NumericStepper component
+ Helper to create RadioButtonGroup component
+ Helper to create RangeSlider component
+ Helper to create Slider component
+ Helper to create StepSlider component
+ Helper to create base component
+ Helper to create button for component
+ Helper to create control component
+ Helper to create control with options component
+ Helper to create empty component
+ Helper to create stepper component (Slider, NumericStepper and RangeSlider)
+COMPONENT_TYPEc
+TEXT_INPUTR
+canManualInput(
+component(
+createInput
+scripts/client/gui/modsSettingsApi/templates.pys
+scripts/client/gui/modsSettingsApi/templates.pyt
+updateR
+
+### PYC res/scripts/client/gui/modsSettingsApi/utils.pyc
+	:param obj: Dictionary to be updated
+	:param vehicle: Entity ID or object
+ Checks is vehicle in player's team
+EPIC_BATTLEt
+EVENT_BATTLESR
+deepUpdateR7
+isDisabledByBattleType]
+playerVehicleID(
+scripts/client/gui/modsSettingsApi/utils.pyR
+scripts/client/gui/modsSettingsApi/utils.pyR-
+scripts/client/gui/modsSettingsApi/utils.pyRG
+scripts/client/gui/modsSettingsApi/utils.pyR\
+scripts/client/gui/modsSettingsApi/utils.pyRi
+scripts/client/gui/modsSettingsApi/utils.pys
+scripts/client/gui/modsSettingsApi/utils.pyt
+scripts/client/gui/modsSettingsApi/utils.pyt	
+updateR
+vehicleID(
+vehicleR
+vehiclesR)
+
+### PYC res/scripts/client/gui/modsSettingsApi/view.pyc
+IModsSettingsApiInternal(
+ModsSettingsApiWindowMetac
+ModsSettingsApiWindowc
+SFViewLoadParams(
+VIEW_ALIAS(
+VIEW_SWFR
+View(
+ViewSettingst
+_ModsSettingsApiWindow__onHotkeysUpdatedR
+__onHotkeysUpdateds
+addSettings(
+closeView(
+flashObjectt
+generateSettingsDataR8
+getDefLobbyAppR
+getViewSettingsx
+gui.Scaleform.framework.entities.ViewR
+gui.shared.view_helpers.blur_managerR
+loadViewc
+onHotkeysUpdatedt(
+saveState(
+scripts/client/gui/modsSettingsApi/view.pyR
+scripts/client/gui/modsSettingsApi/view.pyR#
+scripts/client/gui/modsSettingsApi/view.pyR$
+scripts/client/gui/modsSettingsApi/view.pyR'
+scripts/client/gui/modsSettingsApi/view.pyR-
+scripts/client/gui/modsSettingsApi/view.pyR.
+scripts/client/gui/modsSettingsApi/view.pyR0
+scripts/client/gui/modsSettingsApi/view.pyR>
+scripts/client/gui/modsSettingsApi/view.pyRB
+scripts/client/gui/modsSettingsApi/view.pyRL
+scripts/client/gui/modsSettingsApi/view.pys
+scripts/client/gui/modsSettingsApi/view.pyt
+scripts/client/gui/modsSettingsApi/view.pyt	
+settings(
+updateModSettingst	
+userSettings(
+view.py
+viewSettingst

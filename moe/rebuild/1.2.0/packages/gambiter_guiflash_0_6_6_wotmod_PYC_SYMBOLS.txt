@@ -1,0 +1,169 @@
+WOTMOD=/home/runner/work/_temp/moe120/evv/mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod
+SHA256=a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5
+
+### PYC res/scripts/client/gui/mods/gambiter/__init__.pyc
+GUIFLASH_VERSION(
+GUIFlash v%s by GambitER initialized. (maintained by CHAMPi - fork: https://github.com/CH4MPi/GUIFlash)N(
+GUIFlashs
+flashR
+g_guiFlash(
+
+### PYC res/scripts/client/gui/mods/gambiter/flash.pyc
+    The listener deliberately has no Battle Royale imports.  SpawnController
+    uses this interface structurally, so GUIFlash remains loadable on clients
+    where the Battle Royale package is not installed.
+ALL_COMPONENT_TYPES(
+BATTLE_LOADINGt
+BATTLEt
+Battle Royale spawn listener cleanup failed: %s(
+Battle Royale spawn listener registered!s,
+Battle Royale spawn listener unavailable: %s(
+BattleReplayt	
+BattleRoyaleSpawnListenerc
+COMPONENT_ALIGNt
+COMPONENT_EVENTt
+COMPONENT_STATEc
+COMPONENT_TYPEt
+Change component: '%s' -> Properties: %s | Parameters: %s(
+Component '%s' already exists!(
+Component '%s' not found!(
+Component '%s' not found(
+Create cache: '%s' [%s] -> Properties: %s, battle: %s, lobby: %st
+Create component: '%s' [%s] -> Properties: %s(
+DeathCamEvent(
+Destroy component: '%s'(
+EVENT_BUS_SCOPEt
+Eventsc
+Eventt
+Flash_Metac
+Flash_UIR
+GO_TO_PREBATTLE_HIGHLIGHTSt 
+GUIFlash.swfR
+GUIFlashi
+GameEvent(
+HIDE_CURSORt
+IBattleSessionProvider(
+Invalid component type '%s'!s
+LOBBYt	
+RETURN_FROM_PREBATTLE_HIGHLIGHTSc
+Receives Battle Royale spawn-selection state from SpawnController.
+Register only when the optional Battle Royale controller is available.t
+SFViewLoadParams(
+SHOW_CURSORt
+Save config in file '%s'.t
+Settingsc
+UPDATEDt
+VIEW_ALIAS(
+View(
+ViewSettings(
+Viewsc
+_Hooks__battleRoyaleSpawnCtrlR
+_Hooks__battleRoyaleSpawnListener(
+_Hooks__handleHideCursort
+_Hooks__handleShowCursorR
+_Hooks__onPreBattleHighlightsActiveR
+_Hooks__onPreBattleHighlightsDeactivatedR
+_Hooks__registerBattleRoyaleSpawnListener(
+_Hooks__unregisterBattleRoyaleSpawnListenerR
+__handleHideCursor|
+__handleShowCursory
+__onPreBattleHighlightsActive
+__onPreBattleHighlightsDeactivated
+__registerBattleRoyaleSpawnListenerH
+__unregisterBattleRoyaleSpawnListener[
+_eventNamesR
+addRuntimeViewt
+addSettingsR
+as_battleRoyaleRespawnVisibilityRM
+as_battleRoyaleRespawnVisibilityS(
+as_cursorRM
+as_cursorS(
+as_setPreBattleHighlightsStateRM
+as_setPreBattleHighlightsStateS(
+as_updateRM
+as_updateS(
+battleRoyaleSpawnVisibility
+battlet
+component(
+componentChanged
+components(
+createComponentI
+cursorRi
+deleteComponent]
+eventName(
+eventR
+eventst
+flashObjectt	
+g_eventBus(
+g_guiEventsR
+g_guiSettingsR
+g_guiViewsRl
+getComponent[
+goToBattle(
+goToBattleLoadingR
+goToLobbyt
+gui.Scaleform.framework.entities.ViewR	
+gui.shared.eventsR
+isActiveComponentV
+isComponentS
+leaveBattle(
+leaveLobbyR
+loadViewR
+lobby(
+onBattleRoyaleSpawnVisibilityChanged
+py_update(
+removeRuntimeViewNs(
+removeSettingsR
+res/scripts/client/gui/mods/gambiter/flash.pyR
+res/scripts/client/gui/mods/gambiter/flash.pyR	
+res/scripts/client/gui/mods/gambiter/flash.pyR$
+res/scripts/client/gui/mods/gambiter/flash.pyR&
+res/scripts/client/gui/mods/gambiter/flash.pyR*
+res/scripts/client/gui/mods/gambiter/flash.pyR+
+res/scripts/client/gui/mods/gambiter/flash.pyR-
+res/scripts/client/gui/mods/gambiter/flash.pyR/
+res/scripts/client/gui/mods/gambiter/flash.pyR8
+res/scripts/client/gui/mods/gambiter/flash.pyR;
+res/scripts/client/gui/mods/gambiter/flash.pyRB
+res/scripts/client/gui/mods/gambiter/flash.pyRD
+res/scripts/client/gui/mods/gambiter/flash.pyRE
+res/scripts/client/gui/mods/gambiter/flash.pyRk
+res/scripts/client/gui/mods/gambiter/flash.pyRn
+res/scripts/client/gui/mods/gambiter/flash.pyRq
+res/scripts/client/gui/mods/gambiter/flash.pyRr
+res/scripts/client/gui/mods/gambiter/flash.pyRt
+res/scripts/client/gui/mods/gambiter/flash.pyRz
+res/scripts/client/gui/mods/gambiter/flash.pys	
+res/scripts/client/gui/mods/gambiter/flash.pyt
+res/scripts/client/gui/mods/gambiter/flash.pyt	
+res/scripts/client/gui/mods/gambiter/flash.pyt!
+res/scripts/client/gui/mods/gambiter/flash.pyt"
+res/scripts/client/gui/mods/gambiter/flash.pyt#
+res/scripts/client/gui/mods/gambiter/flash.pyt$
+res/scripts/client/gui/mods/gambiter/flash.pyt%
+saveConfigm
+setPreBattleHighlightsState
+settingsCoret
+skeletons.gui.battle_sessionR
+toggleCursorRi
+update(
+updateBlockToResurrectTime
+updateCloseTime
+updateComponentU
+updateLives
+updatePoint
+updateRespawnTime
+updateTeammateRespawnTime
+vehicleIdt
+
+### PYC res/scripts/client/gui/mods/gambiter/utils.pyc
+EventHookc
+GUIFlash: [DEBUG](
+GUIFlash: [DIR]s
+GUIFlash: [ERROR](
+GUIFlash: [NOTE](
+_EventHook__handlers(
+_RegisterEventc
+__event_%i_%si
+__event_handler(
+registerEventt

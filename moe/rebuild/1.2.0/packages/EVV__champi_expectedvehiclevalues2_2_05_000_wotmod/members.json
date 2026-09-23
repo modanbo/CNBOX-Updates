@@ -1,0 +1,777 @@
+[
+  {
+    "path": "meta.xml",
+    "size": 366,
+    "crc": 3527586129
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/evv_battle.swf",
+    "size": 10005,
+    "crc": 1114043596
+  },
+  {
+    "path": "res/gui/flash/evv_garage.swf",
+    "size": 9490,
+    "crc": 711754935
+  },
+  {
+    "path": "res/gui/gameface/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/CHAMPi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/CHAMPi/EVV2/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css",
+    "size": 7798,
+    "crc": 337515467
+  },
+  {
+    "path": "res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js",
+    "size": 36575,
+    "crc": 1614660088
+  },
+  {
+    "path": "res/gui/gen_resources/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gen_resources/de.champi.evv2.garage.json",
+    "size": 289,
+    "crc": 2332213613
+  },
+  {
+    "path": "res/gui/maps/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_1.png",
+    "size": 1544,
+    "crc": 2211094428
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_10.png",
+    "size": 1494,
+    "crc": 4092366432
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_11.png",
+    "size": 1476,
+    "crc": 2297028447
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_12.png",
+    "size": 1494,
+    "crc": 1740287651
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_13.png",
+    "size": 1501,
+    "crc": 2294323576
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_14.png",
+    "size": 1508,
+    "crc": 2243244370
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_15.png",
+    "size": 1482,
+    "crc": 567481735
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_16.png",
+    "size": 1490,
+    "crc": 191224455
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_17.png",
+    "size": 1484,
+    "crc": 1979685234
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_18.png",
+    "size": 1509,
+    "crc": 4257190851
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_19.png",
+    "size": 1518,
+    "crc": 3814762542
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_2.png",
+    "size": 1529,
+    "crc": 3517379854
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_20.png",
+    "size": 1504,
+    "crc": 3147757896
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_21.png",
+    "size": 1532,
+    "crc": 2791426426
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_22.png",
+    "size": 1516,
+    "crc": 2307571455
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_23.png",
+    "size": 1534,
+    "crc": 2872013307
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_24.png",
+    "size": 1539,
+    "crc": 877190439
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_3.png",
+    "size": 1540,
+    "crc": 2025424537
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_4.png",
+    "size": 1522,
+    "crc": 2461387585
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_5.png",
+    "size": 1534,
+    "crc": 2484032112
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_6.png",
+    "size": 1524,
+    "crc": 1253264146
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_7.png",
+    "size": 1524,
+    "crc": 1962629893
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_8.png",
+    "size": 1516,
+    "crc": 1903291722
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_9.png",
+    "size": 1528,
+    "crc": 1156726056
+  },
+  {
+    "path": "res/gui/maps/icons/champi/color_scale/color_scale_off.png",
+    "size": 1237,
+    "crc": 740245068
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0000.png",
+    "size": 7904,
+    "crc": 3160580558
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0001.png",
+    "size": 7887,
+    "crc": 3975969379
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0002.png",
+    "size": 7876,
+    "crc": 1290564323
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0003.png",
+    "size": 7880,
+    "crc": 2998957927
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0004.png",
+    "size": 7800,
+    "crc": 4003454523
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0005.png",
+    "size": 7884,
+    "crc": 4017779256
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0006.png",
+    "size": 7807,
+    "crc": 1301270031
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0007.png",
+    "size": 7709,
+    "crc": 2866116392
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0008.png",
+    "size": 7772,
+    "crc": 275347103
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0009.png",
+    "size": 7816,
+    "crc": 1811318084
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0010.png",
+    "size": 7892,
+    "crc": 1281415261
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0011.png",
+    "size": 7900,
+    "crc": 3294434990
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0012.png",
+    "size": 7899,
+    "crc": 2275517256
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0013.png",
+    "size": 7925,
+    "crc": 1263262998
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0014.png",
+    "size": 7893,
+    "crc": 50221436
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0015.png",
+    "size": 7831,
+    "crc": 1158209406
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0016.png",
+    "size": 7884,
+    "crc": 3902327967
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0017.png",
+    "size": 7947,
+    "crc": 2775269793
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0018.png",
+    "size": 7911,
+    "crc": 1360398500
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0019.png",
+    "size": 7833,
+    "crc": 965127414
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0020.png",
+    "size": 7875,
+    "crc": 2838344452
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0021.png",
+    "size": 7904,
+    "crc": 2124271728
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0022.png",
+    "size": 7868,
+    "crc": 1797863508
+  },
+  {
+    "path": "res/gui/maps/icons/champi/display/display0023.png",
+    "size": 7812,
+    "crc": 585343359
+  },
+  {
+    "path": "res/gui/maps/icons/champi/dowjones_down.png",
+    "size": 2134,
+    "crc": 732386240
+  },
+  {
+    "path": "res/gui/maps/icons/champi/dowjones_flat.png",
+    "size": 2014,
+    "crc": 3760134314
+  },
+  {
+    "path": "res/gui/maps/icons/champi/dowjones_up.png",
+    "size": 2090,
+    "crc": 364200463
+  },
+  {
+    "path": "res/gui/maps/icons/champi/honor_m.png",
+    "size": 3284,
+    "crc": 3555824786
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery/mastery1.png",
+    "size": 3043,
+    "crc": 1924575587
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery/mastery2.png",
+    "size": 3037,
+    "crc": 3029929170
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery/mastery3.png",
+    "size": 2982,
+    "crc": 1130008580
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery/mastery4.png",
+    "size": 3199,
+    "crc": 3005417275
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery1.png",
+    "size": 3228,
+    "crc": 1064670743
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery2.png",
+    "size": 3234,
+    "crc": 396281196
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery3.png",
+    "size": 3104,
+    "crc": 3692086255
+  },
+  {
+    "path": "res/gui/maps/icons/champi/mastery4.png",
+    "size": 3403,
+    "crc": 3481457504
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/canon_sword_32x32.png",
+    "size": 2771,
+    "crc": 1278709140
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/combined_damage.png",
+    "size": 3221,
+    "crc": 2734629186
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/combined_damage_16x16.png",
+    "size": 1553,
+    "crc": 106567769
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/combined_damage_24x24.png",
+    "size": 2267,
+    "crc": 691872110
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/moe1.png",
+    "size": 3101,
+    "crc": 263606105
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/moe2.png",
+    "size": 3287,
+    "crc": 2968491270
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/moe3.png",
+    "size": 3369,
+    "crc": 2050343279
+  },
+  {
+    "path": "res/gui/maps/icons/champi/moe/moe4.png",
+    "size": 3389,
+    "crc": 395179292
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-blue.png",
+    "size": 19464,
+    "crc": 1161882290
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-champi1.png",
+    "size": 18904,
+    "crc": 3598532709
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-champi2.png",
+    "size": 17060,
+    "crc": 730861887
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-dark.png",
+    "size": 19268,
+    "crc": 742268791
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-gold.png",
+    "size": 19653,
+    "crc": 3780535398
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-green.png",
+    "size": 18883,
+    "crc": 2176155457
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-pink.png",
+    "size": 18672,
+    "crc": 3528899258
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-red.png",
+    "size": 18633,
+    "crc": 3378357647
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-violet.png",
+    "size": 20073,
+    "crc": 112357175
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/colorpreset-white.png",
+    "size": 15810,
+    "crc": 4036341902
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/garage_layout2.png",
+    "size": 13461,
+    "crc": 3358282258
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/garage_layout3.png",
+    "size": 11475,
+    "crc": 652404278
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/garage_layout4.png",
+    "size": 8823,
+    "crc": 1945916183
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/garage_layout5.png",
+    "size": 19915,
+    "crc": 2508672806
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/garage_layout6.png",
+    "size": 12012,
+    "crc": 1831566257
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/garage/garage_layout7.png",
+    "size": 13196,
+    "crc": 2811534084
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/inbattle_moe_layout2.png",
+    "size": 6966,
+    "crc": 3156784793
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/inbattle_moe_layout3.png",
+    "size": 6510,
+    "crc": 3069744875
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/inbattle_moe_layout4.png",
+    "size": 7498,
+    "crc": 965528306
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/inbattle_moe_layout5.png",
+    "size": 10230,
+    "crc": 780042301
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/inbattle_moe_layout6.png",
+    "size": 4983,
+    "crc": 1413362166
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settings/inbattle_moe_layout_todo.png",
+    "size": 8863,
+    "crc": 214641815
+  },
+  {
+    "path": "res/gui/maps/icons/champi/sigma2.png",
+    "size": 2845,
+    "crc": 3638457765
+  },
+  {
+    "path": "res/gui/maps/icons/champi/star_off.png",
+    "size": 1808,
+    "crc": 2333708875
+  },
+  {
+    "path": "res/gui/maps/icons/champi/star_on.png",
+    "size": 1750,
+    "crc": 2453063317
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/assistance.png",
+    "size": 2180,
+    "crc": 3906477638
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/battles_32x32.png",
+    "size": 1220,
+    "crc": 3571458689
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/battles_lord.png",
+    "size": 2864,
+    "crc": 2704827030
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/blocked.png",
+    "size": 2715,
+    "crc": 3737558852
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/damage_24.png",
+    "size": 821,
+    "crc": 2248635414
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/damage_32.png",
+    "size": 1241,
+    "crc": 2789778425
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/impact_24x24.png",
+    "size": 1854,
+    "crc": 309673436
+  },
+  {
+    "path": "res/gui/maps/icons/champi/summary/impact_32x32.png",
+    "size": 2558,
+    "crc": 2948770163
+  },
+  {
+    "path": "res/gui/maps/icons/champi/wnx/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/wnx/wnx1.png",
+    "size": 1856,
+    "crc": 1306844136
+  },
+  {
+    "path": "res/gui/maps/icons/champi/wnx/wnx2.png",
+    "size": 1566,
+    "crc": 446503478
+  },
+  {
+    "path": "res/gui/maps/icons/champi/wnx/wnx3.png",
+    "size": 2659,
+    "crc": 3520745658
+  },
+  {
+    "path": "res/gui/maps/icons/champi/wnx/wnx4.png",
+    "size": 5025,
+    "crc": 2192287178
+  },
+  {
+    "path": "res/gui/maps/icons/champi/wnx/wnx5.png",
+    "size": 12794,
+    "crc": 2062750341
+  },
+  {
+    "path": "res/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/cs.yml",
+    "size": 13001,
+    "crc": 1564906780
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/de.yml",
+    "size": 15095,
+    "crc": 691252518
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/ja.yml",
+    "size": 13276,
+    "crc": 2868407270
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/ko.yml",
+    "size": 12878,
+    "crc": 731968647
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/pl.yml",
+    "size": 12918,
+    "crc": 537797028
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/ru.yml",
+    "size": 16807,
+    "crc": 3981895593
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/th.yml",
+    "size": 19640,
+    "crc": 1243346595
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/uk.yml",
+    "size": 16775,
+    "crc": 2817135286
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/vi.yml",
+    "size": 13845,
+    "crc": 631948280
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/zh_cn.yml",
+    "size": 11749,
+    "crc": 724191818
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/zh_sg.yml",
+    "size": 11797,
+    "crc": 3475235410
+  },
+  {
+    "path": "res/mods/champi.expectedvehiclevalues2/text/zh_tw.yml",
+    "size": 11845,
+    "crc": 4143090690
+  },
+  {
+    "path": "res/mods/configs/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/res_map/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/res_map/MoEGarageGameFaceView.json",
+    "size": 304,
+    "crc": 1885570612
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/mod_evv.pyc",
+    "size": 185755,
+    "crc": 106750614
+  }
+]

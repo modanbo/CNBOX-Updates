@@ -1,0 +1,668 @@
+WOTMOD=izeberg.modssettingsapi_1.7.0.wotmod
+SWF=res/gui/flash/modsSettingsWindow.swf
+
+### scripts/ColorChoiceButtonUI.as
+   import poliroid.gui.lobby.modsSettings.controls.ColorChoiceButton;
+      public function ColorChoiceButtonUI()
+      internal function frame10() : *
+      internal function frame20() : *
+      internal function frame30() : *
+      internal function frame40() : *
+      internal function frame50() : *
+
+### scripts/ColorChoicePopupUI.as
+   import adobe.utils.*;
+   import flash.accessibility.*;
+   import flash.desktop.*;
+   import flash.display.*;
+   import flash.errors.*;
+   import flash.events.*;
+   import flash.external.*;
+   import flash.filters.*;
+   import flash.geom.*;
+   import flash.globalization.*;
+   import flash.media.*;
+   import flash.net.*;
+   import flash.net.drm.*;
+   import flash.printing.*;
+   import flash.profiler.*;
+   import flash.sampler.*;
+   import flash.sensors.*;
+   import flash.system.*;
+   import flash.text.*;
+   import flash.text.engine.*;
+   import flash.text.ime.*;
+   import flash.ui.*;
+   import flash.utils.*;
+   import flash.xml.*;
+   import poliroid.gui.lobby.modsSettings.controls.ColorChoicePopup;
+      public function ColorChoicePopupUI()
+      internal function __setProp_redSlider_ColorChoicePopupUI_elements_0() : *
+      internal function __setProp_greenSlider_ColorChoicePopupUI_elements_0() : *
+      internal function __setProp_blueSlider_ColorChoicePopupUI_elements_0() : *
+
+### scripts/HotkeyControlUI.as
+   import poliroid.gui.lobby.modsSettings.controls.HotkeyControl;
+      public function HotkeyControlUI()
+      internal function frame10() : *
+      internal function frame20() : *
+      internal function frame30() : *
+      internal function frame40() : *
+      internal function frame50() : *
+
+### scripts/ModsSettingsApiImports.as
+   import flash.display.MovieClip;
+      public function ModsSettingsApiImports()
+
+### scripts/ModsSettingsWindowBackgroundUI.as
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowBackground;
+      public function ModsSettingsWindowBackgroundUI()
+
+### scripts/ModsSettingsWindowContentUI.as
+   import adobe.utils.*;
+   import flash.accessibility.*;
+   import flash.desktop.*;
+   import flash.display.*;
+   import flash.errors.*;
+   import flash.events.*;
+   import flash.external.*;
+   import flash.filters.*;
+   import flash.geom.*;
+   import flash.globalization.*;
+   import flash.media.*;
+   import flash.net.*;
+   import flash.net.drm.*;
+   import flash.printing.*;
+   import flash.profiler.*;
+   import flash.sampler.*;
+   import flash.sensors.*;
+   import flash.system.*;
+   import flash.text.*;
+   import flash.text.engine.*;
+   import flash.text.ime.*;
+   import flash.ui.*;
+   import flash.utils.*;
+   import flash.xml.*;
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowContent;
+      public function ModsSettingsWindowContentUI()
+      internal function __setProp_scrollBar_ModsSettingsWindowContentUI_scrollBar_0() : *
+
+### scripts/ModsSettingsWindowFooterUI.as
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowFooter;
+      public function ModsSettingsWindowFooterUI()
+
+### scripts/ModsSettingsWindowHeaderUI.as
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowHeader;
+      public function ModsSettingsWindowHeaderUI()
+
+### scripts/ModsSettingsWindowUI.as
+   import poliroid.gui.lobby.modsSettings.ModsSettingsWindow;
+      public function ModsSettingsWindowUI()
+
+### scripts/SmoothResizableScrollPaneUI.as
+   import poliroid.gui.lobby.modsSettings.controls.SmoothResizableScrollPane;
+      public function SmoothResizableScrollPaneUI()
+
+### scripts/StateSwitcherUI.as
+   import poliroid.gui.lobby.modsSettings.controls.StateSwitcher;
+      public function StateSwitcherUI()
+      internal function frame10() : *
+      internal function frame20() : *
+      internal function frame30() : *
+      internal function frame40() : *
+      internal function frame50() : *
+
+### scripts/modsSettingsWindow_fla/buttonIcon_21.as
+   import flash.display.MovieClip;
+      public function buttonIcon_21()
+      internal function frame1() : *
+      internal function frame10() : *
+
+### scripts/modsSettingsWindow_fla/modifiers_17.as
+   import flash.display.MovieClip;
+      public function modifiers_17()
+      internal function frame1() : *
+      internal function frame8() : *
+      internal function frame16() : *
+      internal function frame24() : *
+      internal function frame33() : *
+      internal function frame42() : *
+      internal function frame52() : *
+      internal function frame62() : *
+
+### scripts/modsSettingsWindow_fla/states_18.as
+   import flash.display.MovieClip;
+      public function states_18()
+      internal function frame30() : *
+      internal function frame80() : *
+
+### scripts/poliroid/gui/lobby/modsSettings/ModsSettingsWindow.as
+   import flash.events.KeyboardEvent;
+   import flash.ui.Keyboard;
+   import net.wg.infrastructure.base.AbstractView;
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsComponent;
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowBackground;
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowContent;
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowFooter;
+   import poliroid.gui.lobby.modsSettings.components.ModsSettingsWindowHeader;
+   import poliroid.gui.lobby.modsSettings.data.HotkeyControlVO;
+   import poliroid.gui.lobby.modsSettings.data.ModsSettingsLocalizationVO;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import poliroid.gui.lobby.modsSettings.lang.STRINGS;
+   import scaleform.clik.events.InputEvent;
+   public class ModsSettingsWindow extends AbstractView
+      public var header:ModsSettingsWindowHeader;
+      public var content:ModsSettingsWindowContent;
+      public var footer:ModsSettingsWindowFooter;
+      public var background:ModsSettingsWindowBackground;
+      public var requestModsData:Function;
+      public var sendModsData:Function;
+      public var buttonAction:Function;
+      public var hotkeyAction:Function;
+      public var closeView:Function;
+      private var modsArray:Array;
+      private var templates:Object;
+      private var configChanged:Boolean = false;
+      private var configChangedLinkages:Array;
+      public function ModsSettingsWindow()
+      public function as_setLocalization(param1:Object) : void
+         var _loc2_:ModsSettingsLocalizationVO = new ModsSettingsLocalizationVO(param1);
+      public function as_setData(param1:Array) : void
+         var _loc2_:Object = null;
+         var _loc3_:ModsSettingsComponent = null;
+      public function as_setHotkeys(param1:Object) : void
+         var _loc2_:ModsSettingsComponent = null;
+         var _loc3_:String = null;
+         var _loc4_:Object = null;
+         var _loc5_:Object = null;
+         var _loc6_:Object = null;
+      private function collectModsData() : Object
+         var _loc2_:ModsSettingsComponent = null;
+         var _loc3_:String = null;
+         var _loc1_:Object = new Object();
+      private function syncModsData() : void
+         var _loc1_:Object = this.collectModsData();
+      private function handleModSettingsChanged(param1:InteractiveEvent) : void
+      private function handleModSettingsButtonClick(param1:InteractiveEvent) : void
+      private function handleModSettingsHotkeyAction(param1:InteractiveEvent) : void
+      private function handleOkButtonClick(param1:InteractiveEvent) : void
+      private function handleApplyButtonClick(param1:InteractiveEvent) : void
+      private function handleCancelButtonClick(param1:InteractiveEvent) : void
+      private function handleCloseButtonClick(param1:InteractiveEvent) : void
+      private function onEscapeKeyDownHandler(param1:InputEvent) : void
+
+### scripts/poliroid/gui/lobby/modsSettings/components/ModsSettingsComponent.as
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import flash.events.Event;
+   import flash.text.TextFieldAutoSize;
+   import flash.text.TextFormat;
+   import net.wg.gui.components.advanced.FieldSet;
+   import poliroid.gui.lobby.modsSettings.controls.StateSwitcher;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import poliroid.gui.lobby.modsSettings.shared.ComponentsFactory;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   import scaleform.clik.constants.InvalidationType;
+   import scaleform.clik.core.UIComponent;
+   public class ModsSettingsComponent extends UIComponent
+      public var modLinkage:String;
+      public var modEnabled:Boolean = true;
+      public var data:Object;
+      public var components:Array;
+      private var _stateSwitcher:StateSwitcher;
+      public function ModsSettingsComponent(param1:String)
+      public function setData(param1:Object) : void
+      public function getConfigData() : Object
+         var _loc3_:Object = null;
+         var _loc1_:Object = new Object();
+         var _loc2_:Number = 0;
+      private function setup() : void
+         var _loc7_:Number = NaN;
+         var _loc1_:Array = this.data.column1;
+         var _loc2_:Array = this.data.column2;
+         var _loc3_:Number = Constants.MOD_PADDING_TOP;
+         var _loc4_:Number = 0;
+         var _loc5_:FieldSet = FieldSet(App.utils.classFactory.getObject("FieldSet"));
+         var _loc6_:TextFormat = _loc5_.textField.getTextFormat();
+      private function handleComponentEvent(param1:InteractiveEvent = null) : void
+      private function createComponents(param1:UIComponent, param2:Array, param3:Number, param4:Number) : Number
+         var _loc7_:DisplayObject = null;
+         var _loc5_:Number = param4;
+         var _loc6_:Number = 0;
+      private function createStateSwitcher() : void
+      private function handleStateSwitcherClick(param1:Event) : void
+         var _loc2_:StateSwitcher = StateSwitcher(param1.target);
+      private function updateComponentsState() : void
+         var _loc2_:MovieClip = null;
+         var _loc1_:Number = 0;
+      private function getComponentByType(param1:Object) : DisplayObject
+
+### scripts/poliroid/gui/lobby/modsSettings/components/ModsSettingsWindowBackground.as
+   import flash.display.MovieClip;
+   import net.wg.gui.components.controls.BitmapFill;
+   import net.wg.gui.components.controls.UILoaderAlt;
+   import net.wg.gui.events.UILoaderEvent;
+   import net.wg.infrastructure.base.UIComponentEx;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   public class ModsSettingsWindowBackground extends UIComponentEx
+      public var bgLoader:UILoaderAlt;
+      public var bgFill:BitmapFill;
+      public var bgImage:MovieClip;
+      private var _originalBgWidth:Number = 0;
+      private var _originalBgHeight:Number = 0;
+      public function ModsSettingsWindowBackground()
+      public function updateStage(param1:Number, param2:Number) : void
+      private function onBgLoaderCompleteHandler(param1:UILoaderEvent) : void
+         var _loc2_:Number = Number(App.appWidth);
+         var _loc3_:Number = Number(App.appHeight);
+
+### scripts/poliroid/gui/lobby/modsSettings/components/ModsSettingsWindowContent.as
+   import flash.display.MovieClip;
+   import net.wg.gui.components.controls.ScrollBar;
+   import net.wg.infrastructure.base.UIComponentEx;
+   import poliroid.gui.lobby.modsSettings.controls.SmoothResizableScrollPane;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   public class ModsSettingsWindowContent extends UIComponentEx
+      public var scrollPane:SmoothResizableScrollPane;
+      public var scrollBar:ScrollBar;
+      public var container:MovieClip;
+      public var background:MovieClip;
+      public function ModsSettingsWindowContent()
+      public function updateStage(param1:Number, param2:Number) : void
+      public function addMod(param1:Object) : ModsSettingsComponent
+         var _loc6_:ModsSettingsComponent = null;
+         var _loc7_:int = 0;
+         var _loc2_:String = param1.linkage;
+         var _loc3_:ModsSettingsComponent = new ModsSettingsComponent(_loc2_);
+         var _loc4_:int = 0;
+         var _loc5_:int = 0;
+
+### scripts/poliroid/gui/lobby/modsSettings/components/ModsSettingsWindowFooter.as
+   import net.wg.gui.components.controls.SoundButtonEx;
+   import net.wg.infrastructure.base.UIComponentEx;
+   import poliroid.gui.lobby.modsSettings.data.ModsSettingsLocalizationVO;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   import scaleform.clik.events.ButtonEvent;
+   public class ModsSettingsWindowFooter extends UIComponentEx
+      public var okButton:SoundButtonEx;
+      public var cancelButton:SoundButtonEx;
+      public var applyButton:SoundButtonEx;
+      public function ModsSettingsWindowFooter()
+      public function updateStage(param1:Number, param2:Number) : void
+      public function setLocalization(param1:ModsSettingsLocalizationVO) : void
+      private function handleOkButtonClick(param1:ButtonEvent) : void
+      private function handleCancelButtonClick(param1:ButtonEvent) : void
+      private function handleApplyButtonClick(param1:ButtonEvent) : void
+
+### scripts/poliroid/gui/lobby/modsSettings/components/ModsSettingsWindowHeader.as
+   import flash.text.TextField;
+   import net.wg.gui.components.controls.CloseButtonText;
+   import net.wg.infrastructure.base.UIComponentEx;
+   import poliroid.gui.lobby.modsSettings.data.ModsSettingsLocalizationVO;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   import scaleform.clik.events.ButtonEvent;
+   public class ModsSettingsWindowHeader extends UIComponentEx
+      public var titleTF:TextField;
+      public var closeButton:CloseButtonText;
+      public function ModsSettingsWindowHeader()
+      public function updateStage(param1:Number, param2:Number) : void
+      public function setLocalization(param1:ModsSettingsLocalizationVO) : void
+      private function handleCloseButtonClick(param1:ButtonEvent) : void
+
+### scripts/poliroid/gui/lobby/modsSettings/controls/ColorChoiceButton.as
+   import flash.display.MovieClip;
+   import flash.events.MouseEvent;
+   import flash.geom.Point;
+   import net.wg.gui.components.controls.SoundButtonEx;
+   import net.wg.gui.components.popovers.PopOverConst;
+   import net.wg.gui.interfaces.ISoundButtonEx;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   import scaleform.clik.constants.InvalidationType;
+   public class ColorChoiceButton extends SoundButtonEx implements ISoundButtonEx
+      public var hitAreaA:MovieClip;
+      public var colorFill:MovieClip;
+      private var _color:String;
+      public function ColorChoiceButton()
+         var _loc2_:ColorChoicePopup = null;
+      private function getPopupArrowDirection() : int
+         var _loc1_:Point = localToGlobal(new Point());
+         var _loc2_:int = _loc1_.y / App.appScale >> 0;
+         var _loc3_:int = _loc2_ + Constants.MAX_BOTTOM_OFFSET;
+      private function getPopupPosition(param1:ColorChoicePopup) : Point
+         var _loc2_:Point = localToGlobal(new Point());
+         var _loc3_:int = _loc2_.x / App.appScale >> 0;
+         var _loc4_:int = _loc2_.y / App.appScale >> 0;
+         var _loc5_:int = _loc4_ + Constants.MAX_BOTTOM_OFFSET;
+      public function onValueChanged(param1:String) : void
+      public function set color(param1:String) : void
+      public function get color() : String
+
+### scripts/poliroid/gui/lobby/modsSettings/controls/ColorChoicePopup.as
+   import flash.display.BitmapData;
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import flash.events.Event;
+   import flash.events.KeyboardEvent;
+   import flash.events.MouseEvent;
+   import flash.geom.Point;
+   import flash.text.TextField;
+   import flash.ui.Keyboard;
+   import net.wg.gui.components.assets.GlowArrowAsset;
+   import net.wg.gui.components.controls.Slider;
+   import net.wg.gui.components.controls.SoundButton;
+   import net.wg.gui.components.controls.TextInput;
+   import net.wg.gui.components.popovers.PopOverConst;
+   import net.wg.infrastructure.base.UIComponentEx;
+   import poliroid.gui.lobby.modsSettings.lang.STRINGS;
+   import scaleform.clik.constants.InvalidationType;
+   import scaleform.clik.events.ButtonEvent;
+   import scaleform.clik.events.InputEvent;
+   import scaleform.clik.events.SliderEvent;
+   public class ColorChoicePopup extends UIComponentEx
+      public var hitAreaA:MovieClip;
+      public var background:MovieClip;
+      public var arrowTop:GlowArrowAsset;
+      public var arrowBottom:GlowArrowAsset;
+      public var colorLabel:TextField;
+      public var redSlider:Slider;
+      public var greenSlider:Slider;
+      public var blueSlider:Slider;
+      public var hexTextInput:TextInput;
+      public var colorSpectrum:MovieClip;
+      public var colorPreview:MovieClip;
+      public var acceptButton:SoundButton;
+      private var _onValueChanged:Function;
+      private var _color:String;
+      private var _position:Point;
+      private var _spectrumData:BitmapData;
+      public function ColorChoicePopup()
+         var _loc1_:uint = 0;
+         var _loc2_:Object = null;
+      public function show() : void
+      private function handleSlider(param1:SliderEvent) : void
+         var _loc2_:String = (this.redSlider.value << 16 | this.greenSlider.value << 8 | this.blueSlider.value).toString(16);
+      private function handleTextInput(param1:InputEvent) : void
+         var _loc2_:String = null;
+      private function handleAccept(param1:ButtonEvent) : void
+      private function handleSpectrumClick(param1:MouseEvent) : void
+      private function _handleEscKey() : void
+      private function handleClose() : void
+      private function onAppMouseHandler(param1:MouseEvent) : void
+      public function set onValueChanged(param1:Function) : void
+      public function set color(param1:String) : void
+      public function get color() : String
+      public function set position(param1:Point) : void
+      public function get position() : Point
+      public function set arrowDirection(param1:int) : void
+
+### scripts/poliroid/gui/lobby/modsSettings/controls/HotkeyControl.as
+   import flash.display.MovieClip;
+   import flash.events.MouseEvent;
+   import flash.text.TextField;
+   import net.wg.gui.components.controls.SoundButtonEx;
+   import poliroid.gui.lobby.modsSettings.data.HotkeyControlVO;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import poliroid.gui.lobby.modsSettings.shared.Constants;
+   public class HotkeyControl extends SoundButtonEx
+      public var valueTF:TextField;
+      public var statesMC:MovieClip;
+      public var modifiersMC:MovieClip;
+      public var hitAreaA:MovieClip;
+      private var _model:HotkeyControlVO;
+      private var _keyset:Array;
+      public function HotkeyControl()
+      public function setData(param1:HotkeyControlVO) : void
+         var _loc2_:String = MODIFIERS_PREFIX;
+      public function get keyset() : Array
+
+### scripts/poliroid/gui/lobby/modsSettings/controls/SmoothResizableScrollPane.as
+   import flash.events.Event;
+   import flash.utils.getTimer;
+   import net.wg.gui.components.controls.ResizableScrollPane;
+   import net.wg.gui.components.controls.events.ScrollBarEvent;
+   import net.wg.gui.components.controls.events.ScrollPaneEvent;
+   import scaleform.clik.constants.InvalidationType;
+   public class SmoothResizableScrollPane extends ResizableScrollPane
+      private var _smoothScrollPosition:Number = 0;
+      private var _smoothScrollStepFactor:Number = 100;
+      private var _smoothScrollDuration:Number = 1000;
+      private var _restoreBottomPosition:Boolean = false;
+      private var _scrollStartTime:Number = NaN;
+      private var _scrollStartPosition:Number = NaN;
+      private var _isScrolling:Boolean = false;
+      private var _cachedMaxScroll:Number = NaN;
+      public function SmoothResizableScrollPane()
+         var _loc2_:* = param1 > 0 ? this._smoothScrollStepFactor : -this._smoothScrollStepFactor;
+      private function _smoothScrollStart() : void
+      private function _smoothScrollStop() : void
+      private function _smoothScrollAnimation() : void
+         var _loc1_:Number = (getTimer() - this._scrollStartTime) / this._smoothScrollDuration;
+         var _loc2_:* = _loc1_ - 1;
+         var _loc3_:Number = _loc2_ * _loc2_ * _loc2_ + 1;
+      private function normalizeTargetPosition() : void
+      public function get smoothScrollDuration() : Number
+      public function set smoothScrollDuration(param1:Number) : void
+      public function get smoothScrollPosition() : Number
+      public function set smoothScrollPosition(param1:Number) : void
+      public function get smoothScrollStepFactor() : Number
+      public function set smoothScrollStepFactor(param1:Number) : void
+      public function get restoreBottomPosition() : Boolean
+      public function set restoreBottomPosition(param1:Boolean) : void
+      private function onScrollPanePositionChange(param1:ScrollPaneEvent) : void
+      private function onScrollBarEndDrag(param1:ScrollBarEvent) : void
+
+### scripts/poliroid/gui/lobby/modsSettings/controls/StateSwitcher.as
+   import flash.display.MovieClip;
+   import net.wg.gui.components.controls.SoundButtonEx;
+   import poliroid.gui.lobby.modsSettings.lang.STRINGS;
+   public class StateSwitcher extends SoundButtonEx
+      public var icon:MovieClip;
+      public function StateSwitcher()
+
+### scripts/poliroid/gui/lobby/modsSettings/data/HotkeyControlVO.as
+   import net.wg.data.daapi.base.DAAPIDataClass;
+   public class HotkeyControlVO extends DAAPIDataClass
+      public var linkage:String = "";
+      public var varName:String = "";
+      public var text:String = "";
+      public var isEmpty:Boolean = false;
+      public var isAccepting:Boolean = false;
+      public var modifierCtrl:Boolean = false;
+      public var modifierAlt:Boolean = false;
+      public var modiferShift:Boolean = false;
+      public var keyset:Array = [];
+      public function HotkeyControlVO(param1:Object)
+
+### scripts/poliroid/gui/lobby/modsSettings/data/ModsSettingsLocalizationVO.as
+   import net.wg.data.daapi.base.DAAPIDataClass;
+   public class ModsSettingsLocalizationVO extends DAAPIDataClass
+      public var windowTitle:String = "";
+      public var stateTooltip:String = "";
+      public var popupColor:String = "";
+      public var buttonOK:String = "";
+      public var buttonCancel:String = "";
+      public var buttonApply:String = "";
+      public var buttonClose:String = "";
+      public function ModsSettingsLocalizationVO(param1:Object)
+
+### scripts/poliroid/gui/lobby/modsSettings/events/InteractiveEvent.as
+   import flash.events.Event;
+   public class InteractiveEvent extends Event
+      private var _modLinkage:String = "";
+      private var _varName:String = "";
+      private var _value:* = null;
+      public function InteractiveEvent(param1:String, param2:String = "", param3:String = "", param4:* = null, param5:Boolean = true, param6:Boolean = false)
+      public function get linkage() : String
+      public function get varName() : String
+      public function get value() : *
+
+### scripts/poliroid/gui/lobby/modsSettings/lang/STRINGS.as
+   import poliroid.gui.lobby.modsSettings.data.ModsSettingsLocalizationVO;
+   public class STRINGS
+      public function STRINGS()
+
+### scripts/poliroid/gui/lobby/modsSettings/shared/ComponentsFactory.as
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import flash.events.Event;
+   import flash.events.MouseEvent;
+   import flash.text.TextFieldAutoSize;
+   import net.wg.gui.components.controls.ButtonIconNormal;
+   import net.wg.gui.components.controls.CheckBox;
+   import net.wg.gui.components.controls.DropdownMenu;
+   import net.wg.gui.components.controls.InfoIcon;
+   import net.wg.gui.components.controls.LabelControl;
+   import net.wg.gui.components.controls.NumericStepper;
+   import net.wg.gui.components.controls.RadioButton;
+   import net.wg.gui.components.controls.RangeSlider;
+   import net.wg.gui.components.controls.Slider;
+   import net.wg.gui.components.controls.SoundButtonEx;
+   import net.wg.gui.components.controls.StepSlider;
+   import net.wg.gui.components.controls.TextInput;
+   import poliroid.gui.lobby.modsSettings.controls.ColorChoiceButton;
+   import poliroid.gui.lobby.modsSettings.controls.HotkeyControl;
+   import poliroid.gui.lobby.modsSettings.events.InteractiveEvent;
+   import scaleform.clik.controls.ButtonGroup;
+   import scaleform.clik.core.UIComponent;
+   import scaleform.clik.data.DataProvider;
+   import scaleform.clik.events.ButtonEvent;
+   import scaleform.clik.events.IndexEvent;
+   import scaleform.clik.events.InputEvent;
+   import scaleform.clik.events.ListEvent;
+   import scaleform.clik.events.SliderEvent;
+   public class ComponentsFactory
+      public function ComponentsFactory()
+         var _loc3_:MovieClip = new MovieClip();
+         var _loc4_:UIComponent = new UIComponent();
+         var _loc5_:LabelControl = LabelControl(App.utils.classFactory.getComponent("LabelControl",LabelControl));
+         var _loc6_:InfoIcon = _loc5_["_infoIco"];
+         var _loc7_:MovieClip = new MovieClip();
+         var infoIcon:InfoIcon;
+         var result:MovieClip;
+         var checkbox:CheckBox = null;
+         var positionY:Number = NaN;
+         var positionX:Number = NaN;
+         var button:DisplayObject = null;
+         var componentConfig:Object = param1;
+         var modLinkage:String = param2;
+         var text:String = param3;
+         var value:Boolean = param4;
+         var tooltip:String = param5;
+         var tooltipIcon:String = param6;
+         var ui:UIComponent = new UIComponent();
+         var i:Number;
+         var result:MovieClip;
+         var buttonGroup:ButtonGroup = null;
+         var label:DisplayObject = null;
+         var radioButton:RadioButton = null;
+         var positionX:Number = NaN;
+         var positionY:Number = NaN;
+         var button:DisplayObject = null;
+         var componentConfig:Object = param1;
+         var modLinkage:String = param2;
+         var groupName:String = param3;
+         var options:Array = param4;
+         var text:String = param5;
+         var tooltip:String = param6;
+         var tooltipIcon:String = param7;
+         var value:Number = param8;
+         var ui:UIComponent = new UIComponent();
+         var margin:Number = text ? Constants.COMPONENT_HEADER_MARGIN : 0;
+         var result:MovieClip;
+         var dropdown:DropdownMenu = null;
+         var label:DisplayObject = null;
+         var positionY:Number = NaN;
+         var positionX:Number = NaN;
+         var button:DisplayObject = null;
+         var componentConfig:Object = param1;
+         var modLinkage:String = param2;
+         var options:Array = param3;
+         var text:String = param4;
+         var tooltip:String = param5;
+         var tooltipIcon:String = param6;
+         var value:Number = param7;
+         var ui:UIComponent = new UIComponent();
+         var margin:Number = text ? Constants.COMPONENT_HEADER_MARGIN : 0;
+         var slider:Slider = null;
+         var result:MovieClip = null;
+         var label:DisplayObject = null;
+         var formattedString:String = null;
+         var valueLabel:DisplayObject = null;
+         var positionY:Number = NaN;
+         var positionX:Number = NaN;
+         var button:DisplayObject = null;
+         var componentConfig:Object = param1;
+         var modLinkage:String = param2;
+         var min:Number = param3;
+         var max:Number = param4;
+         var interval:Number = param5;
+         var value:Number = param6;
+         var format:String = param7;
+         var text:String = param8;
+         var tooltip:String = param9;
+         var tooltipIcon:String = param10;
+         var ui:UIComponent = new UIComponent();
+         var margin:Number = text ? Constants.COMPONENT_HEADER_MARGIN : 0;
+         var itemLabel:String;
+         var formattedItemLabel:String;
+         var stepSlider:StepSlider = null;
+         var valueLabel:DisplayObject = null;
+         var result:MovieClip = null;
+         var label:DisplayObject = null;
+         var positionY:Number = NaN;
+         var positionX:Number = NaN;
+         var button:DisplayObject = null;
+         var componentConfig:Object = param1;
+         var modLinkage:String = param2;
+         var options:Array = param3;
+         var format:String = param4;
+         var text:String = param5;
+         var tooltip:String = param6;
+         var tooltipIcon:String = param7;
+         var selectedIndex:Number = param8;
+         var ui:UIComponent = new UIComponent();
+         var margin:Number = text ? Constants.COMPONENT_HEADER_MARGIN : 0;
+            var _loc2_:String = stepSlider["getItemLabel"](stepSlider.dataProvider.requestItemAt(param1.value));
+         var _loc10_:DisplayObject = null;
+         var _loc6_:UIComponent = new UIComponent();
+         var _loc7_:Number = param2 ? Constants.COMPONENT_HEADER_MARGIN : 0;
+         var _loc8_:TextInput = TextInput(App.utils.classFactory.getComponent("TextInput",TextInput));
+         var _loc9_:MovieClip = new MovieClip();
+         var _loc13_:* = undefined;
+         var _loc10_:UIComponent = new UIComponent();
+         var _loc11_:NumericStepper = NumericStepper(App.utils.classFactory.getComponent("NumericStepper",NumericStepper));
+         var _loc12_:MovieClip = new MovieClip();
+         var _loc7_:UIComponent = new UIComponent();
+         var _loc8_:DisplayObject = ComponentsFactory.createLabel(param4,param5,param6);
+         var _loc9_:HotkeyControl = App.utils.classFactory.getComponent("HotkeyControlUI",HotkeyControl);
+         var _loc10_:MovieClip = new MovieClip();
+         var _loc7_:UIComponent = new UIComponent();
+         var _loc8_:DisplayObject = ComponentsFactory.createLabel(param4,param5,param6);
+         var _loc9_:ColorChoiceButton = App.utils.classFactory.getComponent("ColorChoiceButtonUI",ColorChoiceButton);
+         var _loc10_:MovieClip = new MovieClip();
+         var result:MovieClip;
+         var rangeSlider:RangeSlider = null;
+         var valueLabel:DisplayObject = null;
+         var componentConfig:Object = param1;
+         var modLinkage:String = param2;
+         var ui:UIComponent = new UIComponent();
+         var label:DisplayObject = ComponentsFactory.createLabel(componentConfig.text,componentConfig.tooltip,componentConfig.tooltipIcon);
+         var _loc4_:* = undefined;
+
+### scripts/poliroid/gui/lobby/modsSettings/shared/Constants.as
+   public class Constants
+      public function Constants()
+
+### scripts/poliroid/gui/lobby/modsSettings/shared/Utilities.as
+   public class Utilities
+      public function Utilities()
+
+### scripts/poliroid/gui/lobby/modsSettings/shared/ValueProxy.as
+   public class ValueProxy
+      private var _target:*;
+      private var _key:*;
+      public function ValueProxy(param1:*, param2:*)
+      public function get value() : *

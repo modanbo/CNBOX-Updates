@@ -1,0 +1,40 @@
+WOTMOD=/home/runner/work/_temp/moe120/evv/mods/2.4.0.1/aslain.modmenu_2.0.17.wotmod
+SHA256=ad5711a41458afa38055182792773aced86b91add91e11644d6b5c273beea94b
+
+### PYC res/scripts/client/gui/aslainMenu/__init__.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/_constants.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/_diag.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/api.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/button.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/context_menu.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/entries.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/frontend.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/hotkeys.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/l10n.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/login.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/modslist_shim.pyc
+<aslain:modslist_shim>s
+<aslain:modslist_shim>t
+
+### PYC res/scripts/client/gui/aslainMenu/skeleton.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/templates.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/utils.pyc
+
+### PYC res/scripts/client/gui/aslainMenu/view.pyc
+<aslain:view>s
+<aslain:view>t
+
+### PYC res/scripts/client/gui/mods/mod_modmenu.pyc

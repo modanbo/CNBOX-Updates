@@ -1,0 +1,17 @@
+origin=EVV
+outerPath=mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod
+sha256=a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5
+
+[pyc]
+res/scripts/client/gui/mods/gambiter/__init__.pyc
+res/scripts/client/gui/mods/gambiter/flash.pyc
+res/scripts/client/gui/mods/gambiter/utils.pyc
+
+[swf]
+res/gui/flash/GUIFlash.swf
+
+[gameface]
+
+
+[configs]
+meta.xml

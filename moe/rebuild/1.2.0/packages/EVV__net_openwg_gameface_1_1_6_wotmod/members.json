@@ -1,0 +1,92 @@
+[
+  {
+    "path": "meta.xml",
+    "size": 260,
+    "crc": 2746599076
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/js/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/js/index.js",
+    "size": 4900,
+    "crc": 906852635
+  },
+  {
+    "path": "res/gui/gameface/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/common.js",
+    "size": 905,
+    "crc": 379468043
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/debug.js",
+    "size": 5338,
+    "crc": 2807734865
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/media.js",
+    "size": 5159,
+    "crc": 3415615619
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/model.js",
+    "size": 3351,
+    "crc": 1805691540
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/sound.js",
+    "size": 345,
+    "crc": 427237281
+  },
+  {
+    "path": "res/gui/gameface/mods/libs/views.js",
+    "size": 6230,
+    "crc": 2453613684
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/openwg_gameface.pyc",
+    "size": 13969,
+    "crc": 4136892657
+  }
+]

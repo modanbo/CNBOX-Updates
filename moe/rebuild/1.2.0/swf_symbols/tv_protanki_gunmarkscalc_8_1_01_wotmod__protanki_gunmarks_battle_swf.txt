@@ -1,0 +1,216 @@
+WOTMOD=tv.protanki.gunmarkscalc_8.1.01.wotmod
+SWF=res/gui/flash/protanki_gunmarks_battle.swf
+
+### scripts/GunMarksMinimizerUI.as
+   import poliroid.views.battle.gunmarks.GunMarksMinimizer;
+      public function GunMarksMinimizerUI()
+      internal function frame1() : *
+      internal function frame2() : *
+
+### scripts/GunMarksPanelNewSimpleUI.as
+   import poliroid.views.battle.gunmarks.GunMarksPanelNewSimple;
+      public function GunMarksPanelNewSimpleUI()
+
+### scripts/GunMarksPanelNewUI.as
+   import poliroid.views.battle.gunmarks.GunMarksPanelNew;
+      public function GunMarksPanelNewUI()
+      internal function frame1() : *
+      internal function frame7() : *
+      internal function frame13() : *
+      internal function frame19() : *
+      internal function frame25() : *
+      internal function frame32() : *
+      internal function frame39() : *
+      internal function frame46() : *
+      internal function frame53() : *
+
+### scripts/GunMarksPanelOld.as
+   import poliroid.views.battle.gunmarks.GunMarksPanelOld;
+      public function GunMarksPanelOld()
+
+### scripts/ProGunMarksInjector.as
+   import mods.common.AbstractComponentInjector;
+   public class ProGunMarksInjector extends AbstractComponentInjector
+      public function ProGunMarksInjector()
+
+### scripts/ProGunMarksUI.as
+   import poliroid.views.battle.gunmarks.ProGunMarks;
+      public function ProGunMarksUI()
+
+### scripts/mods/common/AbstractComponentInjector.as
+   import net.wg.data.constants.generated.LAYER_NAMES;
+   import net.wg.gui.battle.views.BaseBattlePage;
+   import net.wg.gui.components.containers.MainViewContainer;
+   import net.wg.infrastructure.base.AbstractView;
+   import net.wg.infrastructure.interfaces.ISimpleManagedContainer;
+   public class AbstractComponentInjector extends AbstractView
+      public var componentUI:Class = null;
+      public var componentName:String = null;
+      public var autoDestroy:Boolean = false;
+      public var destroy:Function = null;
+      public function AbstractComponentInjector()
+      private function createComponent() : BattleDisplayable
+         var _loc1_:BattleDisplayable = new this.componentUI() as BattleDisplayable;
+      protected function configureComponent(param1:BattleDisplayable) : void
+         var mainViewContainer:MainViewContainer;
+         var windowContainer:ISimpleManagedContainer;
+         var idx:int;
+         var view:BaseBattlePage = null;
+         var component:BattleDisplayable = null;
+
+### scripts/mods/common/BattleDisplayable.as
+   import flash.events.Event;
+   import net.wg.gui.battle.components.BattleUIDisplayable;
+   import net.wg.gui.battle.views.BaseBattlePage;
+   public class BattleDisplayable extends BattleUIDisplayable
+      public var battlePage:BaseBattlePage;
+      public var componentName:String;
+      public function BattleDisplayable()
+      public function initBattle() : void
+      public function finiBattle() : void
+      private function _handleResize(param1:Event) : void
+      protected function onResized() : void
+
+### scripts/poliroid/views/battle/gunmarks/GunMarksMinimizer.as
+   import flash.events.MouseEvent;
+   import net.wg.gui.components.controls.SoundButtonEx;
+   public class GunMarksMinimizer extends SoundButtonEx
+      private var _minimized:Boolean = false;
+      private var _labelShowPanel:String = "";
+      private var _labelHidePanel:String = "";
+      public function GunMarksMinimizer()
+      public function setSettings(param1:Object) : void
+      public function setData(param1:Object) : void
+
+### scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as
+   import flash.display.MovieClip;
+   import flash.text.TextField;
+   public class GunMarksPanelNew extends MovieClip implements IGunMarksPanel
+      public var hitAreaA:MovieClip;
+      public var progressBar:MovieClip = null;
+      public var drPredicted:TextField = null;
+      public var drPredictedDelta:TextField = null;
+      public var nextMarkLabel:TextField = null;
+      public var nextMarkValue:TextField = null;
+      public var currentMovingDamage:TextField;
+      public var predictedMovingDamage:TextField;
+      public var damageCurrentLabel:TextField;
+      public var accountInfoLabel:TextField;
+      public var background:MovieClip;
+      public function GunMarksPanelNew()
+      public function setSettings(param1:Object) : void
+      public function get panelHeight() : int
+      public function get panelWidth() : int
+      public function setData(param1:Object) : void
+      private function _updateElements(param1:Object) : void
+         var _loc2_:* = "";
+      private function _updateLayout(param1:Object) : void
+         var _loc2_:* = int(this.drPredicted.textWidth) + int(this.drPredictedDelta.textWidth) + 20;
+         var _loc3_:* = int((190 - _loc2_) / 2) + 5;
+      private function _updateLabels(param1:Object) : void
+      private function _updateLabel(param1:TextField, param2:String) : void
+
+### scripts/poliroid/views/battle/gunmarks/GunMarksPanelNewSimple.as
+   import flash.display.MovieClip;
+   import flash.text.TextField;
+   public class GunMarksPanelNewSimple extends MovieClip implements IGunMarksPanel
+      public var hitAreaA:MovieClip;
+      public var progress:MovieClip;
+      public var mainLabel:TextField;
+      public var helpLabel:TextField;
+      public var externalLabel:TextField;
+      public function GunMarksPanelNewSimple()
+      public function setData(param1:Object) : void
+      public function setSettings(param1:Object) : void
+      public function get panelHeight() : int
+      public function get panelWidth() : int
+
+### scripts/poliroid/views/battle/gunmarks/GunMarksPanelOld.as
+   import flash.display.MovieClip;
+   import flash.text.TextField;
+   public class GunMarksPanelOld extends MovieClip implements IGunMarksPanel
+      public var labelText1:TextField;
+      public var labelText2:TextField;
+      public var labelText3:TextField;
+      public var hitAreaA:MovieClip;
+      public function GunMarksPanelOld()
+      public function setData(param1:Object) : void
+      public function setSettings(param1:Object) : void
+      public function get panelHeight() : int
+      public function get panelWidth() : int
+
+### scripts/poliroid/views/battle/gunmarks/IGunMarksPanel.as
+   import net.wg.infrastructure.interfaces.IMovieClip;
+   public interface IGunMarksPanel extends IMovieClip
+      function setData(param1:Object) : void;
+      function setSettings(param1:Object) : void;
+      function get panelHeight() : int;
+      function get panelWidth() : int;
+
+### scripts/poliroid/views/battle/gunmarks/ProGunMarks.as
+   import flash.display.MovieClip;
+   import flash.events.MouseEvent;
+   import flash.geom.Point;
+   import mods.common.BattleDisplayable;
+   import net.wg.data.constants.Cursors;
+   import scaleform.clik.events.ButtonEvent;
+   public class ProGunMarks extends BattleDisplayable
+      public var dragArea:MovieClip;
+      public var minimizer:GunMarksMinimizer = null;
+      public var panel_old:IGunMarksPanel = null;
+      public var panel_new:IGunMarksPanel = null;
+      public var panel_new_simple:IGunMarksPanel = null;
+      private var panel:IGunMarksPanel = null;
+      public var updatePosition:Function = null;
+      public var updateMinimized:Function = null;
+      private var _dragging:Boolean = false;
+      private var _offset:Array = [0,0];
+      private var anchorPoint:Point = null;
+      private var anchorPointType:String = null;
+      public function ProGunMarks()
+      public function as_setSettings(param1:Object) : void
+      public function as_setData(param1:Object) : void
+      public function as_setVisible(param1:Boolean) : void
+      private function updateAnchorPoint() : void
+         var _loc1_:int = 100;
+         var _loc2_:int = _loc1_;
+         var _loc3_:int = _loc1_;
+      private function updateFrame() : void
+      private function handleMouseDown() : void
+      private function handleMouseMove() : void
+      private function handleMouseUp() : void
+         var _loc1_:Point = null;
+      private function handleMouseOver() : void
+      private function handleMouseOut() : void
+      private function handleMinimizerClick() : void
+      private function _syncPositions() : void
+         var _loc1_:int = int(Math.max(0,Math.min(App.appWidth - this.dragArea.width,this.dragArea.x)));
+         var _loc2_:int = int(Math.max(0,Math.min(App.appHeight - this.dragArea.height,this.dragArea.y)));
+      private function getAncor() : Point
+
+### scripts/protanki_gunmarks_battle_fla/background_1_7.as
+   import flash.display.MovieClip;
+      public function background_1_7()
+      internal function frame6() : *
+      internal function frame12() : *
+      internal function frame18() : *
+      internal function frame24() : *
+      internal function frame30() : *
+
+### scripts/protanki_gunmarks_battle_fla/background_2_12.as
+   import flash.display.MovieClip;
+      public function background_2_12()
+      internal function frame6() : *
+      internal function frame12() : *
+      internal function frame18() : *
+      internal function frame24() : *
+      internal function frame30() : *
+
+### scripts/protanki_gunmarks_battle_fla/background_3_13.as
+   import flash.display.MovieClip;
+      public function background_3_13()
+      internal function frame6() : *
+      internal function frame12() : *
+      internal function frame18() : *
+      internal function frame24() : *
+      internal function frame30() : *

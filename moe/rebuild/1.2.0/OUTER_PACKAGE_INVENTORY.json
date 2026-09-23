@@ -1,0 +1,56 @@
+[
+  {
+    "origin": "PROTANKI",
+    "path": "mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod",
+    "size": 167290,
+    "sha256": "d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283"
+  },
+  {
+    "origin": "PROTANKI",
+    "path": "mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod",
+    "size": 162084,
+    "sha256": "e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca"
+  },
+  {
+    "origin": "PROTANKI",
+    "path": "mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod",
+    "size": 264323,
+    "sha256": "e83eeab978e7599fb0924e01933df1c863977ee33984e2701270b23cda27a408"
+  },
+  {
+    "origin": "PROTANKI",
+    "path": "mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod",
+    "size": 42703,
+    "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1"
+  },
+  {
+    "origin": "EVV",
+    "path": "mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod",
+    "size": 62862,
+    "sha256": "a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5"
+  },
+  {
+    "origin": "EVV",
+    "path": "mods/2.4.0.1/champi.settingsgui_1.81.wotmod",
+    "size": 215491,
+    "sha256": "2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805"
+  },
+  {
+    "origin": "EVV",
+    "path": "mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod",
+    "size": 1086098,
+    "sha256": "0bca710cb4d112659f8286b0a006b7375e39eccaadada79a477e0589e8d50b2e"
+  },
+  {
+    "origin": "EVV",
+    "path": "mods/2.4.0.1/aslain.modmenu_2.0.17.wotmod",
+    "size": 789253,
+    "sha256": "ad5711a41458afa38055182792773aced86b91add91e11644d6b5c273beea94b"
+  },
+  {
+    "origin": "EVV",
+    "path": "mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod",
+    "size": 42703,
+    "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1"
+  }
+]

@@ -1,0 +1,4 @@
+WOTMOD=/home/runner/work/_temp/moe120/evv/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod
+SHA256=0bca710cb4d112659f8286b0a006b7375e39eccaadada79a477e0589e8d50b2e
+
+### PYC res/scripts/client/gui/mods/mod_evv.pyc

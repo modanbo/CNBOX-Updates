@@ -1,0 +1,117 @@
+[
+  {
+    "path": "meta.xml",
+    "size": 331,
+    "crc": 3618445611
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/protanki_gunmarks_battle.swf",
+    "size": 23132,
+    "crc": 709251345
+  },
+  {
+    "path": "res/gui/maps/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/mods/gunmarks/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/mods/gunmarks/new-simple.png",
+    "size": 17130,
+    "crc": 2665115791
+  },
+  {
+    "path": "res/gui/maps/mods/gunmarks/new.png",
+    "size": 50459,
+    "crc": 4127801276
+  },
+  {
+    "path": "res/gui/maps/mods/gunmarks/old.png",
+    "size": 27498,
+    "crc": 2001307614
+  },
+  {
+    "path": "res/gui/maps/mods/gunmarks/screen.png",
+    "size": 1397,
+    "crc": 481849324
+  },
+  {
+    "path": "res/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/protanki.gunmarks/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/protanki.gunmarks/text/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/protanki.gunmarks/text/en.yml",
+    "size": 2350,
+    "crc": 1861768543
+  },
+  {
+    "path": "res/mods/protanki.gunmarks/text/ru.yml",
+    "size": 3540,
+    "crc": 798369480
+  },
+  {
+    "path": "res/mods/protanki.gunmarks/text/uk.yml",
+    "size": 3544,
+    "crc": 3420111987
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/mod_pro_gunmarks.pyc",
+    "size": 131988,
+    "crc": 1239924218
+  }
+]

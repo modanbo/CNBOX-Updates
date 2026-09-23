@@ -1,0 +1,337 @@
+[
+  {
+    "path": "meta.xml",
+    "size": 206,
+    "crc": 3741749822
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/modsListButton.swf",
+    "size": 2039,
+    "crc": 1496860464
+  },
+  {
+    "path": "res/gui/flash/modsListPopover.swf",
+    "size": 21953,
+    "crc": 1994114780
+  },
+  {
+    "path": "res/gui/gameface/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/poliroid/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/poliroid/ModsListButton/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/poliroid/ModsListButton/ModsListButton.css",
+    "size": 2428,
+    "crc": 2024732630
+  },
+  {
+    "path": "res/gui/gameface/mods/poliroid/ModsListButton/ModsListButton.html",
+    "size": 863,
+    "crc": 429641374
+  },
+  {
+    "path": "res/gui/gameface/mods/poliroid/ModsListButton/ModsListButton.js",
+    "size": 5781,
+    "crc": 2607359249
+  },
+  {
+    "path": "res/gui/maps/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/modslist/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/modslist/button-icon.png",
+    "size": 77561,
+    "crc": 97307872
+  },
+  {
+    "path": "res/gui/maps/modslist/default-mod-icon.png",
+    "size": 1774,
+    "crc": 3976390141
+  },
+  {
+    "path": "res/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/res_map/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/res_map/ModsListButton.json",
+    "size": 312,
+    "crc": 3654928990
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/be.yml",
+    "size": 134,
+    "crc": 2714377757
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/bg.yml",
+    "size": 128,
+    "crc": 2233572232
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/cs.yml",
+    "size": 72,
+    "crc": 2272823069
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/de.yml",
+    "size": 94,
+    "crc": 3721100645
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/el.yml",
+    "size": 107,
+    "crc": 2763227239
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/en.yml",
+    "size": 89,
+    "crc": 3564571843
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/es.yml",
+    "size": 88,
+    "crc": 292489240
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/es_ar.yml",
+    "size": 89,
+    "crc": 3513824988
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/et.yml",
+    "size": 81,
+    "crc": 3727946901
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/fi.yml",
+    "size": 68,
+    "crc": 2000748844
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/fr.yml",
+    "size": 80,
+    "crc": 2706163522
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/hr.yml",
+    "size": 73,
+    "crc": 1760282813
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/hu.yml",
+    "size": 65,
+    "crc": 2563063506
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/it.yml",
+    "size": 75,
+    "crc": 1981846672
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/ja.yml",
+    "size": 84,
+    "crc": 69933625
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/kk.yml",
+    "size": 95,
+    "crc": 3768129005
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/lt.yml",
+    "size": 75,
+    "crc": 4034641055
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/lv.yml",
+    "size": 90,
+    "crc": 990780357
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/no.yml",
+    "size": 76,
+    "crc": 4255413998
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/pl.yml",
+    "size": 79,
+    "crc": 1999684395
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/pt.yml",
+    "size": 83,
+    "crc": 3652106464
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/pt_br.yml",
+    "size": 89,
+    "crc": 4175972141
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/ro.yml",
+    "size": 66,
+    "crc": 2713444817
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/ru.yml",
+    "size": 144,
+    "crc": 1716906880
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/sv.yml",
+    "size": 73,
+    "crc": 566823638
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/tr.yml",
+    "size": 91,
+    "crc": 2265128135
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/uk.yml",
+    "size": 148,
+    "crc": 4270423458
+  },
+  {
+    "path": "res/mods/poliroid.modslistapi/text/zh_cn.yml",
+    "size": 82,
+    "crc": 79295930
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/__init__.pyc",
+    "size": 3837,
+    "crc": 2516979504
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/_constants.pyc",
+    "size": 539,
+    "crc": 4030860283
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/controller.pyc",
+    "size": 4327,
+    "crc": 485701119
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/data.pyc",
+    "size": 7463,
+    "crc": 1701368686
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/events.pyc",
+    "size": 749,
+    "crc": 1644577733
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/hooks.pyc",
+    "size": 5395,
+    "crc": 3258528249
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/lang.pyc",
+    "size": 2639,
+    "crc": 3238286146
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/utils.pyc",
+    "size": 5919,
+    "crc": 1021040281
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/views/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/views/__init__.pyc",
+    "size": 1214,
+    "crc": 2905061401
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/views/modsButton.pyc",
+    "size": 6189,
+    "crc": 1594488048
+  },
+  {
+    "path": "res/scripts/client/gui/modsListApi/views/modsPopover.pyc",
+    "size": 3478,
+    "crc": 2374350434
+  }
+]

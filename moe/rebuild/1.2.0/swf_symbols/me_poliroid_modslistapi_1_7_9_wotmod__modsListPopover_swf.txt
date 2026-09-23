@@ -1,0 +1,144 @@
+WOTMOD=me.poliroid.modslistapi_1.7.9.wotmod
+SWF=res/gui/flash/modsListPopover.swf
+
+### scripts/ModsListItemRendererUI.as
+   import me.poliroid.modsList.controls.ModsListItemRenderer;
+      public function ModsListItemRendererUI()
+      internal function frame10() : *
+      internal function frame20() : *
+      internal function frame30() : *
+      internal function frame40() : *
+      internal function frame50() : *
+      internal function frame60() : *
+
+### scripts/ModsListPopoverUI.as
+   import adobe.utils.*;
+   import flash.accessibility.*;
+   import flash.desktop.*;
+   import flash.display.*;
+   import flash.errors.*;
+   import flash.events.*;
+   import flash.external.*;
+   import flash.filters.*;
+   import flash.geom.*;
+   import flash.globalization.*;
+   import flash.media.*;
+   import flash.net.*;
+   import flash.net.drm.*;
+   import flash.printing.*;
+   import flash.profiler.*;
+   import flash.sampler.*;
+   import flash.sensors.*;
+   import flash.system.*;
+   import flash.text.*;
+   import flash.text.engine.*;
+   import flash.text.ime.*;
+   import flash.ui.*;
+   import flash.utils.*;
+   import flash.xml.*;
+   import me.poliroid.modsList.ModsListPopover;
+      public function ModsListPopoverUI()
+      internal function __setProp_modsList_ModsListPopoverUI_modsList_0() : *
+      internal function __setProp_scrollBar_ModsListPopoverUI_modsList_0() : *
+
+### scripts/me/poliroid/modsList/ModsListPopover.as
+   import me.poliroid.modsList.data.ModsListItemRendererVO;
+   import me.poliroid.modsList.data.ModsListModsVO;
+   import me.poliroid.modsList.data.ModsListStaticDataVO;
+   import net.wg.data.constants.Linkages;
+   import net.wg.gui.components.controls.ScrollBar;
+   import net.wg.gui.components.popovers.PopOver;
+   import net.wg.infrastructure.base.SmartPopOverView;
+   import scaleform.clik.constants.InvalidationType;
+   import scaleform.clik.controls.ScrollingList;
+   import scaleform.clik.data.DataProvider;
+   import scaleform.clik.events.ListEvent;
+   public class ModsListPopover extends SmartPopOverView
+      public var modsList:ScrollingList = null;
+      public var scrollBar:ScrollBar = null;
+      public var invokeModification:Function;
+      public var getModsList:Function;
+      public function ModsListPopover()
+      public function get wrapperLinkage() : String
+         var _loc1_:int = 0;
+         var _loc2_:int = 0;
+         var _loc2_:ModsListStaticDataVO = new ModsListStaticDataVO(param1);
+         var _loc3_:PopOver = PopOver(wrapper);
+         var _loc2_:ModsListModsVO = new ModsListModsVO(param1);
+      private function handleModsListItemClick(param1:ListEvent) : void
+         var _loc2_:Number = (param1.itemData as ModsListItemRendererVO).id;
+
+### scripts/me/poliroid/modsList/controls/ModsListItemRenderer.as
+   import flash.events.MouseEvent;
+   import flash.text.TextField;
+   import me.poliroid.modsList.data.ModsListItemRendererVO;
+   import net.wg.gui.components.assets.NewIndicator;
+   import net.wg.gui.components.controls.Image;
+   import net.wg.gui.components.controls.SoundListItemRenderer;
+   import org.idmedia.as3commons.util.StringUtils;
+   import scaleform.clik.constants.InvalidationType;
+   public class ModsListItemRenderer extends SoundListItemRenderer
+      public var alertMC:NewIndicator = null;
+      public var modIcon:Image = null;
+      public var modNameTF:TextField = null;
+      private var model:ModsListItemRendererVO = null;
+      public function ModsListItemRenderer()
+
+### scripts/me/poliroid/modsList/data/ModsListItemRendererVO.as
+   import net.wg.data.daapi.base.DAAPIDataClass;
+   public class ModsListItemRendererVO extends DAAPIDataClass
+      public var id:Number = 0;
+      public var isEnabled:Boolean = false;
+      public var isAlerting:Boolean = false;
+      public var nameLabel:String = "";
+      public var tooltipLabel:String = "";
+      public var icon:String = "";
+      public function ModsListItemRendererVO(param1:Object)
+
+### scripts/me/poliroid/modsList/data/ModsListModsVO.as
+   import net.wg.data.constants.Errors;
+   import net.wg.data.daapi.base.DAAPIDataClass;
+   import net.wg.infrastructure.interfaces.entity.IDisposable;
+   public class ModsListModsVO extends DAAPIDataClass
+      public var modsList:Array = null;
+      public function ModsListModsVO(param1:Object)
+         var _loc3_:Array = null;
+         var _loc4_:Object = null;
+         var _loc1_:IDisposable = null;
+
+### scripts/me/poliroid/modsList/data/ModsListStaticDataVO.as
+   import net.wg.data.daapi.base.DAAPIDataClass;
+   public class ModsListStaticDataVO extends DAAPIDataClass
+      public var titleLabel:String = "";
+      public var tooltipLabel:String = "";
+      public var closeButtonVisible:Boolean = false;
+      public function ModsListStaticDataVO(param1:Object)
+
+### scripts/modsListPopover_fla/MainTimeline.as
+   import adobe.utils.*;
+   import flash.accessibility.*;
+   import flash.desktop.*;
+   import flash.display.*;
+   import flash.errors.*;
+   import flash.events.*;
+   import flash.external.*;
+   import flash.filters.*;
+   import flash.geom.*;
+   import flash.globalization.*;
+   import flash.media.*;
+   import flash.net.*;
+   import flash.net.drm.*;
+   import flash.printing.*;
+   import flash.profiler.*;
+   import flash.sampler.*;
+   import flash.sensors.*;
+   import flash.system.*;
+   import flash.text.*;
+   import flash.text.engine.*;
+   import flash.text.ime.*;
+   import flash.ui.*;
+   import flash.utils.*;
+   import flash.xml.*;
+      public var main:ModsListPopoverUI;
+      public function MainTimeline()
+      internal function __setProp_main_Scene1_Layer1_0() : *

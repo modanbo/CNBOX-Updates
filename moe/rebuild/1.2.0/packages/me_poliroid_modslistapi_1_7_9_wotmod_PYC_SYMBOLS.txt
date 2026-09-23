@@ -1,0 +1,220 @@
+WOTMOD=/home/runner/work/_temp/moe120/protanki/mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod
+SHA256=d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283
+
+### PYC res/scripts/client/gui/modsListApi/__init__.pyc
+        :param description: Modification hint (mouse over) - optional
+        :param description: Modification hint (mouse over) - required
+        :param lobby: Show modification in Lobby - optional
+        :param lobby: Show modification in Lobby - required
+        Updates an existing modification.
+    ModsListApiRepresentation provides a static interface to the mods list controller.
+!!!   ModsListAPI requires the openwg_gameface module to function.
+!!!   Please download and install it from: https://gitlab.com/openwg/wot.gameface/-/releases/
+ModsListApiRepresentationc
+g_modsListApi(
+openwg_gamefacet
+python\gui\modsListApi\__init__.pyR
+python\gui\modsListApi\__init__.pyR	
+python\gui\modsListApi\__init__.pyt
+updateModification(
+viewst
+
+### PYC res/scripts/client/gui/modsListApi/_constants.pyc
+../../gui/maps/modslist/default-mod-icon.pngN(
+MODS_LIST_BUTTON_VIEWt
+ModsListButtonInjects
+ModsListButtont
+ModsListPopovert
+mods/poliroid.modslistapi/textt
+python\gui\modsListApi\_constants.pyt
+
+### PYC res/scripts/client/gui/modsListApi/controller.pyc
+        A boolean indicating if any modifications are registered.
+        A boolean indicating if the player is currently in the lobby.
+        A dictionary of all registered modifications.
+        Adds a new modification or updates an existing one.
+        Sets the lobby status.
+        Updates an existing modification.
+    The main controller for the ModsList API.
+Method @addModification requires mandatory parameters [name, description, enabled, login, lobby, callback]Ni
+Method @updateModification requires a ModificationItem instance. Use @addModification instead.N(
+_ApiLogicController__isInLobby(
+eventsR
+g_eventsManager(
+isInLobby
+lobbyt
+onListUpdated(
+python\gui\modsListApi\controller.pyR
+python\gui\modsListApi\controller.pyt
+python\gui\modsListApi\controller.pyt	
+updateModificationt
+
+### PYC res/scripts/client/gui/modsListApi/data.pyc
+        Generates and returns static data for the ModsList views.
+        The return value is represented by ModsListModsVO in ActionScript.
+        The return value is represented by ModsListStaticDataVO in ActionScript.
+    Provides data for the ModsList API views.
+_ModificationItem__availableInLobbyt#
+eventsR
+g_eventsManager(
+isInLobbyR:
+lobbyt
+onListUpdated(	
+python\gui\modsListApi\data.pyR
+python\gui\modsListApi\data.pyR	
+python\gui\modsListApi\data.pyR 
+python\gui\modsListApi\data.pyR"
+python\gui\modsListApi\data.pys	
+python\gui\modsListApi\data.pyt
+python\gui\modsListApi\data.pyt	
+
+### PYC res/scripts/client/gui/modsListApi/events.pyc
+        Initializes the event manager.
+    Manages custom events for the ModsList API.
+EventsManagerc
+Eventt
+g_eventsManager(
+onListUpdatedt
+python\gui\modsListApi\events.pyR
+python\gui\modsListApi\events.pyt
+
+### PYC res/scripts/client/gui/modsListApi/hooks.pyc
+    Handles the application initialization event.
+    Handles the application view loading to switch lobby/login state.
+    Handles the list updated event.
+    Injects the button view into the lobby footer.
+    Loads the button view if UiResourceManager is validated.
+    Loads the popover view when the button is clicked.
+AppLifeCycleEventt
+BattleRoyaleLobbyFooterc
+Comp7LightLobbyFooters.
+Comp7LobbyFooters,
+EVENT_BUS_SCOPEt
+LEGACY_LOBBY_HANGARt
+LOAD_VIEWR%
+LOBBY_HANGARt
+LOBBYt
+LSLobbyFootersN
+LobbyFooter(
+MODS_LIST_BUTTON_VIEW(
+ModsButtonView(
+SFViewLoadParams(
+SF_LOBBYt
+VIEW_ALIAS(
+ViewEventTypet	
+battle_royale.gui.Scaleform.daapi.view.lobby.footer.battle_royale_lobby_footerRK
+battle_royale.gui.Scaleform.daapi.view.lobby.footer.battle_royale_lobby_footert
+comp7.gui.impl.lobby.page.lobby_footerRH
+comp7.gui.impl.lobby.page.lobby_footert
+comp7_light.gui.impl.lobby.page.lobby_footerRI
+comp7_light.gui.impl.lobby.page.lobby_footert
+event(
+eventst
+g_eventBus(
+g_eventsManager(
+getViewR
+gui.Scaleform.daapi.settings.viewsR
+gui.app_loader.settingsR
+gui.impl.lobby.page.lobby_footerR
+isInLobbyt
+last_stand.gui.impl.lobby.page.ls_lobby_footerRJ
+last_stand.gui.impl.lobby.page.ls_lobby_footert
+loadViewR
+onListUpdatedJ
+on_view_loaded?
+openwg_gamefaceR
+python\gui\modsListApi\hooks.pyt
+setChildViewR
+view(
+viewLayoutID(
+views.modsButtonR
+
+### PYC res/scripts/client/gui/modsListApi/lang.pyc
+python\gui\modsListApi\lang.pyR
+python\gui\modsListApi\lang.pyt
+
+### PYC res/scripts/client/gui/modsListApi/utils.pyc
+python\gui\modsListApi\utils.pyR
+python\gui\modsListApi\utils.pyR	
+python\gui\modsListApi\utils.pys
+python\gui\modsListApi\utils.pyt
+
+### PYC res/scripts/client/gui/modsListApi/views/__init__.pyc
+ComponentSettingst
+GroupedViewSettingst
+MODS_LIST_BUTTON_VIEWt
+ModsButtonInjectComponents
+ModsListPopoverView(
+This package contains the view definitions for the ModsList API.
+ViewSettingsR
+Viewi
+WINDOW_VIEWED_MULTISCOPEt
+addSettingst
+gui.Scaleform.framework.entities.ViewR
+modsListButton.swfN(
+modsListPopover.swfs
+python\gui\modsListApi\views\__init__.pyt
+
+### PYC res/scripts/client/gui/modsListApi/views/modsButton.pyc
+        Creates the inject view.
+        Disposes of the view.
+        Gets the view events.
+        Gets the view model.
+        Handles the button click event.
+        Handles the list updated event.
+        Initializes the view model.
+        Initializes the view.
+    The view for the ModsList API button.
+    The view model for the ModsList API button.
+InjectComponentAdaptor(
+MODS_LIST_BUTTON_VIEW(
+ModsButtonInjectComponentc
+ModsButtonViewc
+This module contains the view for the ModsList API button.
+ViewComponent(
+ViewModel(
+_ModsButtonView__onButtonClick(
+_ModsButtonView__onListUpdatedR
+__onListUpdatedu
+_getEvents}
+_makeInjectView
+coui://gui/gameface/mods/poliroid/ModsListButton/ModsListButton.csst
+coui://gui/gameface/mods/poliroid/ModsListButton/ModsListButton.jsN(
+eventsR
+g_eventsManager(
+getViewModel(
+gui.Scaleform.framework.entities.inject_component_adaptorR
+gui.impl.pub.view_componentR
+isInLobbyR
+onListUpdatedt
+openwg_gamefaceR
+python\gui\modsListApi\views\modsButton.pyR
+python\gui\modsListApi\views\modsButton.pyR,
+python\gui\modsListApi\views\modsButton.pyR4
+python\gui\modsListApi\views\modsButton.pyR5
+python\gui\modsListApi\views\modsButton.pyRC
+python\gui\modsListApi\views\modsButton.pyt
+python\gui\modsListApi\views\modsButton.pyt	
+viewLayoutIDR
+viewModel]
+
+### PYC res/scripts/client/gui/modsListApi/views/modsPopover.pyc
+        :param data: Represented by ModsListModsVO (AS)
+        :param data: Represented by ModsListStaticDataVO (AS)
+        Disposes of the view.
+        Initializes the view.
+    Meta class for the ModsListPopoverView.
+    The popover view for the ModsList API.
+AbstractPopOverViewi
+ModsListPopoverViewMetac
+ModsListPopoverViewc
+This module contains the popover view for the ModsList API.
+_ModsListPopoverView__collectModsDataR
+eventsR
+flashObjectt
+g_eventsManagert
+getModsListN(
+gui.Scaleform.framework.entities.abstract.AbstractPopOverViewR
+onListUpdatedt%
+python\gui\modsListApi\views\modsPopover.pyR
+python\gui\modsListApi\views\modsPopover.pyt

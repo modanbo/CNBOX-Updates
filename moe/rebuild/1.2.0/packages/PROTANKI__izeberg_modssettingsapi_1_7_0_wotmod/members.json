@@ -1,0 +1,167 @@
+[
+  {
+    "path": "meta.xml",
+    "size": 189,
+    "crc": 4101077686
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/modsSettingsWindow.swf",
+    "size": 80632,
+    "crc": 1332514023
+  },
+  {
+    "path": "res/gui/maps/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/modsSettingsApi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/modsSettingsApi/icon.png",
+    "size": 6332,
+    "crc": 3096186387
+  },
+  {
+    "path": "res/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/be.yml",
+    "size": 605,
+    "crc": 960572
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/de.yml",
+    "size": 463,
+    "crc": 3270862339
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/en.yml",
+    "size": 394,
+    "crc": 3190550808
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/hu.yml",
+    "size": 452,
+    "crc": 71214475
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/pl.yml",
+    "size": 434,
+    "crc": 1699185743
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/ru.yml",
+    "size": 665,
+    "crc": 2279158031
+  },
+  {
+    "path": "res/mods/izeberg.modssettingsapi/text/uk.yml",
+    "size": 691,
+    "crc": 4093748995
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/__init__.pyc",
+    "size": 4961,
+    "crc": 2522177660
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/_constants.pyc",
+    "size": 3313,
+    "crc": 2472187114
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/api.pyc",
+    "size": 9190,
+    "crc": 4096568226
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/context_menu.pyc",
+    "size": 2810,
+    "crc": 2908362097
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/hotkeys.pyc",
+    "size": 5646,
+    "crc": 1906793742
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/l10n.pyc",
+    "size": 2594,
+    "crc": 1759784231
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/skeleton.pyc",
+    "size": 2846,
+    "crc": 4011640867
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/templates.pyc",
+    "size": 15164,
+    "crc": 3544474628
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/utils.pyc",
+    "size": 12895,
+    "crc": 4168680733
+  },
+  {
+    "path": "res/scripts/client/gui/modsSettingsApi/view.pyc",
+    "size": 6956,
+    "crc": 2095707884
+  }
+]

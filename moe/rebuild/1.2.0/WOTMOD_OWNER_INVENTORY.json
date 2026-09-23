@@ -1,0 +1,335 @@
+[
+  {
+    "origin": "PROTANKI",
+    "outerPath": "mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod",
+    "file": "me.poliroid.modslistapi_1.7.9.wotmod",
+    "sha256": "d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283",
+    "size": 167290,
+    "pyc": [
+      "res/scripts/client/gui/modsListApi/__init__.pyc",
+      "res/scripts/client/gui/modsListApi/_constants.pyc",
+      "res/scripts/client/gui/modsListApi/controller.pyc",
+      "res/scripts/client/gui/modsListApi/data.pyc",
+      "res/scripts/client/gui/modsListApi/events.pyc",
+      "res/scripts/client/gui/modsListApi/hooks.pyc",
+      "res/scripts/client/gui/modsListApi/lang.pyc",
+      "res/scripts/client/gui/modsListApi/utils.pyc",
+      "res/scripts/client/gui/modsListApi/views/__init__.pyc",
+      "res/scripts/client/gui/modsListApi/views/modsButton.pyc",
+      "res/scripts/client/gui/modsListApi/views/modsPopover.pyc"
+    ],
+    "swf": [
+      "res/gui/flash/modsListButton.swf",
+      "res/gui/flash/modsListPopover.swf"
+    ],
+    "gameface": [
+      "res/gui/gameface/",
+      "res/gui/gameface/mods/",
+      "res/gui/gameface/mods/poliroid/",
+      "res/gui/gameface/mods/poliroid/ModsListButton/",
+      "res/gui/gameface/mods/poliroid/ModsListButton/ModsListButton.css",
+      "res/gui/gameface/mods/poliroid/ModsListButton/ModsListButton.html",
+      "res/gui/gameface/mods/poliroid/ModsListButton/ModsListButton.js"
+    ],
+    "configs": [
+      "meta.xml",
+      "res/mods/configs/",
+      "res/mods/configs/res_map/",
+      "res/mods/configs/res_map/ModsListButton.json",
+      "res/mods/poliroid.modslistapi/text/",
+      "res/mods/poliroid.modslistapi/text/be.yml",
+      "res/mods/poliroid.modslistapi/text/bg.yml",
+      "res/mods/poliroid.modslistapi/text/cs.yml",
+      "res/mods/poliroid.modslistapi/text/de.yml",
+      "res/mods/poliroid.modslistapi/text/el.yml",
+      "res/mods/poliroid.modslistapi/text/en.yml",
+      "res/mods/poliroid.modslistapi/text/es.yml",
+      "res/mods/poliroid.modslistapi/text/es_ar.yml",
+      "res/mods/poliroid.modslistapi/text/et.yml",
+      "res/mods/poliroid.modslistapi/text/fi.yml",
+      "res/mods/poliroid.modslistapi/text/fr.yml",
+      "res/mods/poliroid.modslistapi/text/hr.yml",
+      "res/mods/poliroid.modslistapi/text/hu.yml",
+      "res/mods/poliroid.modslistapi/text/it.yml",
+      "res/mods/poliroid.modslistapi/text/ja.yml",
+      "res/mods/poliroid.modslistapi/text/kk.yml",
+      "res/mods/poliroid.modslistapi/text/lt.yml",
+      "res/mods/poliroid.modslistapi/text/lv.yml",
+      "res/mods/poliroid.modslistapi/text/no.yml",
+      "res/mods/poliroid.modslistapi/text/pl.yml",
+      "res/mods/poliroid.modslistapi/text/pt.yml",
+      "res/mods/poliroid.modslistapi/text/pt_br.yml",
+      "res/mods/poliroid.modslistapi/text/ro.yml",
+      "res/mods/poliroid.modslistapi/text/ru.yml",
+      "res/mods/poliroid.modslistapi/text/sv.yml",
+      "res/mods/poliroid.modslistapi/text/tr.yml",
+      "res/mods/poliroid.modslistapi/text/uk.yml",
+      "res/mods/poliroid.modslistapi/text/zh_cn.yml"
+    ]
+  },
+  {
+    "origin": "PROTANKI",
+    "outerPath": "mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod",
+    "file": "izeberg.modssettingsapi_1.7.0.wotmod",
+    "sha256": "e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca",
+    "size": 162084,
+    "pyc": [
+      "res/scripts/client/gui/modsSettingsApi/__init__.pyc",
+      "res/scripts/client/gui/modsSettingsApi/_constants.pyc",
+      "res/scripts/client/gui/modsSettingsApi/api.pyc",
+      "res/scripts/client/gui/modsSettingsApi/context_menu.pyc",
+      "res/scripts/client/gui/modsSettingsApi/hotkeys.pyc",
+      "res/scripts/client/gui/modsSettingsApi/l10n.pyc",
+      "res/scripts/client/gui/modsSettingsApi/skeleton.pyc",
+      "res/scripts/client/gui/modsSettingsApi/templates.pyc",
+      "res/scripts/client/gui/modsSettingsApi/utils.pyc",
+      "res/scripts/client/gui/modsSettingsApi/view.pyc"
+    ],
+    "swf": [
+      "res/gui/flash/modsSettingsWindow.swf"
+    ],
+    "gameface": [],
+    "configs": [
+      "meta.xml",
+      "res/mods/izeberg.modssettingsapi/text/",
+      "res/mods/izeberg.modssettingsapi/text/be.yml",
+      "res/mods/izeberg.modssettingsapi/text/de.yml",
+      "res/mods/izeberg.modssettingsapi/text/en.yml",
+      "res/mods/izeberg.modssettingsapi/text/hu.yml",
+      "res/mods/izeberg.modssettingsapi/text/pl.yml",
+      "res/mods/izeberg.modssettingsapi/text/ru.yml",
+      "res/mods/izeberg.modssettingsapi/text/uk.yml"
+    ]
+  },
+  {
+    "origin": "PROTANKI",
+    "outerPath": "mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod",
+    "file": "tv.protanki.gunmarkscalc_8.1.01.wotmod",
+    "sha256": "e83eeab978e7599fb0924e01933df1c863977ee33984e2701270b23cda27a408",
+    "size": 264323,
+    "pyc": [
+      "res/scripts/client/gui/mods/mod_pro_gunmarks.pyc"
+    ],
+    "swf": [
+      "res/gui/flash/protanki_gunmarks_battle.swf"
+    ],
+    "gameface": [],
+    "configs": [
+      "meta.xml",
+      "res/mods/protanki.gunmarks/text/",
+      "res/mods/protanki.gunmarks/text/en.yml",
+      "res/mods/protanki.gunmarks/text/ru.yml",
+      "res/mods/protanki.gunmarks/text/uk.yml"
+    ]
+  },
+  {
+    "origin": "PROTANKI",
+    "outerPath": "mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod",
+    "file": "net.openwg.gameface_1.1.6.wotmod",
+    "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+    "size": 42703,
+    "pyc": [
+      "res/scripts/client/openwg_gameface.pyc"
+    ],
+    "swf": [],
+    "gameface": [
+      "res/gui/gameface/",
+      "res/gui/gameface/js/",
+      "res/gui/gameface/js/index.js",
+      "res/gui/gameface/mods/",
+      "res/gui/gameface/mods/libs/",
+      "res/gui/gameface/mods/libs/common.js",
+      "res/gui/gameface/mods/libs/debug.js",
+      "res/gui/gameface/mods/libs/media.js",
+      "res/gui/gameface/mods/libs/model.js",
+      "res/gui/gameface/mods/libs/sound.js",
+      "res/gui/gameface/mods/libs/views.js"
+    ],
+    "configs": [
+      "meta.xml"
+    ]
+  },
+  {
+    "origin": "EVV",
+    "outerPath": "mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod",
+    "file": "gambiter.guiflash_0.6.6.wotmod",
+    "sha256": "a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5",
+    "size": 62862,
+    "pyc": [
+      "res/scripts/client/gui/mods/gambiter/__init__.pyc",
+      "res/scripts/client/gui/mods/gambiter/flash.pyc",
+      "res/scripts/client/gui/mods/gambiter/utils.pyc"
+    ],
+    "swf": [
+      "res/gui/flash/GUIFlash.swf"
+    ],
+    "gameface": [],
+    "configs": [
+      "meta.xml"
+    ]
+  },
+  {
+    "origin": "EVV",
+    "outerPath": "mods/2.4.0.1/champi.settingsgui_1.81.wotmod",
+    "file": "champi.settingsgui_1.81.wotmod",
+    "sha256": "2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805",
+    "size": 215491,
+    "pyc": [
+      "res/scripts/client/champisettingsgui.pyc"
+    ],
+    "swf": [],
+    "gameface": [],
+    "configs": [
+      "meta.xml"
+    ]
+  },
+  {
+    "origin": "EVV",
+    "outerPath": "mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod",
+    "file": "champi.expectedvehiclevalues2_2.05.000.wotmod",
+    "sha256": "0bca710cb4d112659f8286b0a006b7375e39eccaadada79a477e0589e8d50b2e",
+    "size": 1086098,
+    "pyc": [
+      "res/scripts/client/gui/mods/mod_evv.pyc"
+    ],
+    "swf": [
+      "res/gui/flash/evv_battle.swf",
+      "res/gui/flash/evv_garage.swf"
+    ],
+    "gameface": [
+      "res/gui/gameface/",
+      "res/gui/gameface/mods/",
+      "res/gui/gameface/mods/CHAMPi/",
+      "res/gui/gameface/mods/CHAMPi/EVV2/",
+      "res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css",
+      "res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js"
+    ],
+    "configs": [
+      "meta.xml",
+      "res/gui/gen_resources/de.champi.evv2.garage.json",
+      "res/mods/champi.expectedvehiclevalues2/text/",
+      "res/mods/champi.expectedvehiclevalues2/text/cs.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/de.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/ja.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/ko.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/pl.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/ru.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/th.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/uk.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/vi.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/zh_cn.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/zh_sg.yml",
+      "res/mods/champi.expectedvehiclevalues2/text/zh_tw.yml",
+      "res/mods/configs/",
+      "res/mods/configs/res_map/",
+      "res/mods/configs/res_map/MoEGarageGameFaceView.json"
+    ]
+  },
+  {
+    "origin": "EVV",
+    "outerPath": "mods/2.4.0.1/aslain.modmenu_2.0.17.wotmod",
+    "file": "aslain.modmenu_2.0.17.wotmod",
+    "sha256": "ad5711a41458afa38055182792773aced86b91add91e11644d6b5c273beea94b",
+    "size": 789253,
+    "pyc": [
+      "res/scripts/client/gui/aslainMenu/__init__.pyc",
+      "res/scripts/client/gui/aslainMenu/_constants.pyc",
+      "res/scripts/client/gui/aslainMenu/_diag.pyc",
+      "res/scripts/client/gui/aslainMenu/api.pyc",
+      "res/scripts/client/gui/aslainMenu/button.pyc",
+      "res/scripts/client/gui/aslainMenu/context_menu.pyc",
+      "res/scripts/client/gui/aslainMenu/entries.pyc",
+      "res/scripts/client/gui/aslainMenu/frontend.pyc",
+      "res/scripts/client/gui/aslainMenu/hotkeys.pyc",
+      "res/scripts/client/gui/aslainMenu/l10n.pyc",
+      "res/scripts/client/gui/aslainMenu/login.pyc",
+      "res/scripts/client/gui/aslainMenu/modslist_shim.pyc",
+      "res/scripts/client/gui/aslainMenu/skeleton.pyc",
+      "res/scripts/client/gui/aslainMenu/templates.pyc",
+      "res/scripts/client/gui/aslainMenu/utils.pyc",
+      "res/scripts/client/gui/aslainMenu/view.pyc",
+      "res/scripts/client/gui/mods/mod_modmenu.pyc"
+    ],
+    "swf": [
+      "res/gui/flash/ModMenuLoginButton.swf"
+    ],
+    "gameface": [
+      "res/gui/gameface/",
+      "res/gui/gameface/mods/",
+      "res/gui/gameface/mods/aslain/",
+      "res/gui/gameface/mods/aslain/ModMenu/",
+      "res/gui/gameface/mods/aslain/ModMenu/ModMenu.css",
+      "res/gui/gameface/mods/aslain/ModMenu/ModMenu.html",
+      "res/gui/gameface/mods/aslain/ModMenu/ModMenu.js",
+      "res/gui/gameface/mods/aslain/ModMenu/fonts/",
+      "res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt",
+      "res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf",
+      "res/gui/gameface/mods/aslain/ModMenu/img/",
+      "res/gui/gameface/mods/aslain/ModMenu/img/play.png",
+      "res/gui/gameface/mods/aslain/ModMenuButton/",
+      "res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css",
+      "res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html",
+      "res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js"
+    ],
+    "configs": [
+      "meta.xml",
+      "res/mods/aslain.modmenu/text/",
+      "res/mods/aslain.modmenu/text/be.yml",
+      "res/mods/aslain.modmenu/text/bg.yml",
+      "res/mods/aslain.modmenu/text/cs.yml",
+      "res/mods/aslain.modmenu/text/da.yml",
+      "res/mods/aslain.modmenu/text/de.yml",
+      "res/mods/aslain.modmenu/text/el.yml",
+      "res/mods/aslain.modmenu/text/en.yml",
+      "res/mods/aslain.modmenu/text/es.yml",
+      "res/mods/aslain.modmenu/text/fi.yml",
+      "res/mods/aslain.modmenu/text/fr.yml",
+      "res/mods/aslain.modmenu/text/hr.yml",
+      "res/mods/aslain.modmenu/text/hu.yml",
+      "res/mods/aslain.modmenu/text/it.yml",
+      "res/mods/aslain.modmenu/text/lt.yml",
+      "res/mods/aslain.modmenu/text/lv.yml",
+      "res/mods/aslain.modmenu/text/nl.yml",
+      "res/mods/aslain.modmenu/text/no.yml",
+      "res/mods/aslain.modmenu/text/pl.yml",
+      "res/mods/aslain.modmenu/text/pt.yml",
+      "res/mods/aslain.modmenu/text/ro.yml",
+      "res/mods/aslain.modmenu/text/ru.yml",
+      "res/mods/aslain.modmenu/text/sr.yml",
+      "res/mods/aslain.modmenu/text/sv.yml",
+      "res/mods/aslain.modmenu/text/tr.yml",
+      "res/mods/aslain.modmenu/text/uk.yml",
+      "res/mods/configs/",
+      "res/mods/configs/res_map/",
+      "res/mods/configs/res_map/ModMenu.json",
+      "res/mods/configs/res_map/ModMenuButton.json"
+    ]
+  },
+  {
+    "origin": "EVV",
+    "outerPath": "mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod",
+    "file": "net.openwg.gameface_1.1.6.wotmod",
+    "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+    "size": 42703,
+    "pyc": [
+      "res/scripts/client/openwg_gameface.pyc"
+    ],
+    "swf": [],
+    "gameface": [
+      "res/gui/gameface/",
+      "res/gui/gameface/js/",
+      "res/gui/gameface/js/index.js",
+      "res/gui/gameface/mods/",
+      "res/gui/gameface/mods/libs/",
+      "res/gui/gameface/mods/libs/common.js",
+      "res/gui/gameface/mods/libs/debug.js",
+      "res/gui/gameface/mods/libs/media.js",
+      "res/gui/gameface/mods/libs/model.js",
+      "res/gui/gameface/mods/libs/sound.js",
+      "res/gui/gameface/mods/libs/views.js"
+    ],
+    "configs": [
+      "meta.xml"
+    ]
+  }
+]

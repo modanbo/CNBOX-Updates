@@ -1,0 +1,503 @@
+WOTMOD=gambiter.guiflash_0.6.6.wotmod
+SWF=res/gui/flash/GUIFlash.swf
+
+### scripts/com/greensock/TweenLite.as
+   import com.greensock.core.Animation;
+   import com.greensock.core.PropTween;
+   import com.greensock.core.SimpleTimeline;
+   import com.greensock.easing.Ease;
+   import flash.display.Shape;
+   import flash.events.Event;
+   import flash.utils.Dictionary;
+   import flash.utils.getDefinitionByName;
+   public class TweenLite extends Animation
+      public var target:Object;
+      public var ratio:Number;
+      public var _propLookup:Object;
+      public var _firstPT:PropTween;
+      protected var _targets:Array;
+      public var _ease:Ease;
+      protected var _easeType:int;
+      protected var _easePower:int;
+      protected var _siblings:Array;
+      protected var _overwrite:int;
+      protected var _overwrittenProps:Object;
+      protected var _notifyPluginsOfEnabled:Boolean;
+      protected var _startAt:TweenLite;
+      public function TweenLite(param1:Object, param2:Number, param3:Object)
+         var _loc4_:int = 0;
+         var _loc2_:int = 0;
+         var _loc3_:Array = null;
+         var _loc4_:Object = null;
+         var _loc4_:Array = TweenLite.getTweensOf(param1,param2);
+         var _loc5_:int = int(_loc4_.length);
+         var _loc3_:int = 0;
+         var _loc4_:Array = null;
+         var _loc5_:int = 0;
+         var _loc6_:TweenLite = null;
+         var _loc5_:int = 0;
+         var _loc4_:Array = _tweenLookup[param1];
+         var _loc6_:int = 0;
+         var _loc7_:Boolean = false;
+         var _loc8_:TweenLite = null;
+         var _loc13_:Number = NaN;
+         var _loc14_:int = 0;
+         var _loc9_:Number = param2._startTime + 1e-10;
+         var _loc10_:Array = [];
+         var _loc11_:* = 0;
+         var _loc12_:Boolean = param2._duration == 0;
+                     var _loc15_:Number;
+         var _loc4_:SimpleTimeline = param1._timeline;
+         var _loc5_:Number = _loc4_._timeScale;
+         var _loc6_:Number = param1._startTime;
+         var _loc7_:Number = 1e-10;
+      protected function _init() : void
+         var _loc2_:int = 0;
+         var _loc3_:Boolean = false;
+         var _loc4_:PropTween = null;
+         var _loc5_:String = null;
+         var _loc6_:Object = null;
+         var _loc1_:Boolean = Boolean(vars.immediateRender);
+            vars.startAt.overwrite = 0;
+            vars.startAt.immediateRender = true;
+      protected function _initProps(param1:Object, param2:Object, param3:Array, param4:Object) : Boolean
+         var _loc6_:String = null;
+         var _loc7_:int = 0;
+         var _loc8_:Boolean = false;
+         var _loc9_:Object = null;
+         var _loc10_:Object = null;
+         var _loc5_:Object = this.vars;
+         var _loc4_:Boolean = false;
+         var _loc5_:String = null;
+         var _loc6_:PropTween = null;
+         var _loc7_:Number = NaN;
+         var _loc9_:Number = NaN;
+         var _loc8_:Number = _time;
+                     vars.onStart.apply(null,vars.onStartParams);
+                     vars[_loc5_].apply(null,vars[_loc5_ + "Params"]);
+         var _loc3_:int = 0;
+         var _loc4_:Object = null;
+         var _loc5_:String = null;
+         var _loc6_:PropTween = null;
+         var _loc7_:Object = null;
+         var _loc8_:Boolean = false;
+         var _loc9_:Object = null;
+         var _loc10_:Boolean = false;
+         var _loc3_:int = 0;
+
+### scripts/com/greensock/core/Animation.as
+   import flash.display.Shape;
+   import flash.events.Event;
+   import flash.utils.getTimer;
+   public class Animation
+      protected var _onUpdate:Function;
+      public var _delay:Number;
+      public var _rawPrevTime:Number;
+      public var _active:Boolean;
+      public var _gc:Boolean;
+      public var _initted:Boolean;
+      public var _startTime:Number;
+      public var _time:Number;
+      public var _totalTime:Number;
+      public var _duration:Number;
+      public var _totalDuration:Number;
+      public var _pauseTime:Number;
+      public var _timeScale:Number;
+      public var _reversed:Boolean;
+      public var _timeline:SimpleTimeline;
+      public var _dirty:Boolean;
+      public var _paused:Boolean;
+      public var _next:Animation;
+      public var _prev:Animation;
+      public var vars:Object;
+      public var timeline:SimpleTimeline;
+      public var data:*;
+      public function Animation(param1:Number = 0, param2:Object = null)
+         var _loc3_:SimpleTimeline = this.vars.useFrames ? _rootFramesTimeline : _rootTimeline;
+      public function play(param1:* = null, param2:Boolean = true) : *
+      public function pause(param1:* = null, param2:Boolean = true) : *
+      public function resume(param1:* = null, param2:Boolean = true) : *
+      public function seek(param1:*, param2:Boolean = true) : *
+      public function restart(param1:Boolean = false, param2:Boolean = true) : *
+      public function reverse(param1:* = null, param2:Boolean = true) : *
+      public function render(param1:Number, param2:Boolean = false, param3:Boolean = false) : void
+      public function invalidate() : *
+      public function isActive() : Boolean
+         var _loc2_:Number = NaN;
+         var _loc1_:SimpleTimeline = this._timeline;
+      public function _enabled(param1:Boolean, param2:Boolean = false) : Boolean
+      public function _kill(param1:Object = null, param2:Object = null) : Boolean
+      public function kill(param1:Object = null, param2:Object = null) : *
+      protected function _uncache(param1:Boolean) : *
+         var _loc2_:Animation = param1 ? this : this.timeline;
+      protected function _swapSelfInParams(param1:Array) : Array
+         var _loc2_:int = int(param1.length);
+         var _loc3_:Array = param1.concat();
+      public function eventCallback(param1:String, param2:Function = null, param3:Array = null) : *
+      public function delay(param1:Number = NaN) : *
+      public function duration(param1:Number = NaN) : *
+      public function totalDuration(param1:Number = NaN) : *
+      public function time(param1:Number = NaN, param2:Boolean = false) : *
+      public function totalTime(param1:Number = NaN, param2:Boolean = false, param3:Boolean = false) : *
+         var _loc5_:SimpleTimeline = null;
+      public function progress(param1:Number = NaN, param2:Boolean = false) : *
+      public function totalProgress(param1:Number = NaN, param2:Boolean = false) : *
+      public function startTime(param1:Number = NaN) : *
+      public function timeScale(param1:Number = NaN) : *
+         var _loc3_:Number = NaN;
+      public function reversed(param1:Boolean = false) : *
+      public function paused(param1:Boolean = false) : *
+         var _loc3_:Number = NaN;
+         var _loc4_:Number = NaN;
+
+### scripts/com/greensock/core/PropTween.as
+      public var t:Object;
+      public var p:String;
+      public var s:Number;
+      public var c:Number;
+      public var f:Boolean;
+      public var pr:int;
+      public var pg:Boolean;
+      public var n:String;
+      public var r:Boolean;
+      public var _next:PropTween;
+      public var _prev:PropTween;
+      public function PropTween(param1:Object, param2:String, param3:Number, param4:Number, param5:String, param6:Boolean, param7:PropTween = null, param8:int = 0)
+
+### scripts/com/greensock/core/SimpleTimeline.as
+   public class SimpleTimeline extends Animation
+      public var autoRemoveChildren:Boolean;
+      public var smoothChildTiming:Boolean;
+      public var _sortChildren:Boolean;
+      public var _first:Animation;
+      public var _last:Animation;
+      public function SimpleTimeline(param1:Object = null)
+      public function insert(param1:*, param2:* = 0) : *
+      public function add(param1:*, param2:* = "+=0", param3:String = "normal", param4:Number = 0) : *
+         var _loc6_:Number = NaN;
+         var _loc5_:Animation = this._last;
+      public function _remove(param1:Animation, param2:Boolean = false) : *
+         var _loc5_:Animation = null;
+         var _loc4_:Animation = this._first;
+      public function rawTime() : Number
+
+### scripts/com/greensock/easing/Ease.as
+   public class Ease
+      protected var _func:Function;
+      protected var _params:Array;
+      protected var _p1:Number;
+      protected var _p2:Number;
+      protected var _p3:Number;
+      public var _type:int;
+      public var _power:int;
+      public var _calcEnd:Boolean;
+      public function Ease(param1:Function = null, param2:Array = null, param3:Number = 0, param4:Number = 0)
+      public function getRatio(param1:Number) : Number
+         var _loc2_:Number = NaN;
+
+### scripts/net/gambiter/FlashUI.as
+   import flash.display.DisplayObject;
+   import flash.display.DisplayObjectContainer;
+   import net.gambiter.utils.Components;
+   import net.gambiter.utils.Properties;
+   import net.wg.data.constants.generated.LAYER_NAMES;
+   import net.wg.gui.components.containers.MainViewContainer;
+   import net.wg.infrastructure.base.AbstractView;
+   import net.wg.infrastructure.interfaces.IManagedContent;
+   import net.wg.infrastructure.interfaces.ISimpleManagedContainer;
+   public class FlashUI extends AbstractView
+      public var py_log:Function;
+      public var py_update:Function;
+      public var showCursor:Boolean;
+      public var showRadialMenu:Boolean;
+      public var showFullStats:Boolean;
+      public var showFullStatsQuestProgress:Boolean;
+      public var showFullStatsPersonalReserves:Boolean;
+      public var isPreBattleHighlightsVisible:Boolean;
+      public var epicMapOverlayVisibility:Boolean;
+      public var epicRespawnOverlayVisibility:Boolean;
+      public var battleRoyaleRespawnVisibility:Boolean;
+      public var killCamVisibility:Boolean;
+      public var screenSize:Object;
+      private var viewPage:DisplayObjectContainer;
+      private var components:Object;
+      public function FlashUI()
+         var viewContainer:MainViewContainer = null;
+         var topmostView:IManagedContent = null;
+      private function _getContainer(param1:String) : ISimpleManagedContainer
+      public function as_resize(param1:Number, param2:Number) : void
+         var _loc3_:String = null;
+      public function as_cursor(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_radialMenu(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_fullStats(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_fullStatsQuestProgress(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_fullStatsPersonalReserves(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_setPreBattleHighlightsState(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_epicMapOverlayVisibility(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_epicRespawnOverlayVisibility(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_battleRoyaleRespawnVisibility(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_killCamVisibility(param1:Boolean) : void
+         var _loc2_:String = null;
+      public function as_create(param1:String, param2:String, param3:Object) : void
+      public function as_update(param1:String, param2:Object, param3:Object) : void
+      public function as_delete(param1:String) : void
+      private function createComponent(param1:String, param2:String, param3:Object) : void
+         var _path:Array = null;
+         var _name:String = null;
+         var _container:DisplayObjectContainer = null;
+         var alias:String = param1;
+         var type:String = param2;
+         var props:Object = param3;
+      private function updateComponent(param1:String, param2:Object, param3:Object = null) : void
+         var obj:DisplayObject = null;
+         var alias:String = param1;
+         var props:Object = param2;
+         var params:Object = param3;
+      private function deleteComponent(param1:String) : void
+         var alias:String = param1;
+
+### scripts/net/gambiter/components/ImageEx.as
+   import flash.display.Loader;
+   import flash.events.Event;
+   import flash.events.IOErrorEvent;
+   import flash.net.URLRequest;
+   import net.gambiter.core.UIComponentEx;
+   public class ImageEx extends UIComponentEx
+      private var loader:Loader;
+      private var _source:String;
+      private var _sourceAlt:String;
+      private var _loadFailed:Boolean;
+      private var _loadInProgress:Boolean;
+      private var _previousContentUnloaded:Boolean;
+      public function ImageEx()
+      private function startLoad(param1:String) : void
+      private function startLoadAlt() : void
+      private function loadComplete() : void
+      private function unload() : void
+      private function addLoaderListener() : void
+      private function removeLoaderListener() : void
+      private function onLoaderCompleteHandler(param1:Event) : void
+      private function onLoaderIoErrorHandler(param1:IOErrorEvent) : void
+      private function onLoaderUnloadHandler(param1:Event) : void
+      public function get image() : String
+      public function set image(param1:String) : void
+      public function get imageAlt() : String
+      public function set imageAlt(param1:String) : void
+
+### scripts/net/gambiter/components/LabelEx.as
+   import flash.display.CapsStyle;
+   import flash.display.JointStyle;
+   import flash.display.LineScaleMode;
+   import flash.display.Sprite;
+   import flash.text.AntiAliasType;
+   import flash.text.TextField;
+   import flash.text.TextFieldAutoSize;
+   import flash.text.TextFormat;
+   import net.gambiter.core.UIComponentEx;
+   import net.gambiter.utils.Align;
+   import net.gambiter.utils.Properties;
+   public class LabelEx extends UIComponentEx
+      private var textField:TextField;
+      private var customBG:Sprite;
+      private var _text:String;
+      private var _isHtml:Boolean;
+      private var _hAlign:String;
+      private var _vAlign:String;
+      private var bg_alpha:Number;
+      private var bg_border:Boolean;
+      private var bg_borderColor:uint;
+      private var bg_caps:String;
+      private var bg_color:uint;
+      private var bg_ellipseWidth:Number;
+      private var bg_fill:Boolean;
+      private var bg_joints:String;
+      private var bg_margin:Number;
+      private var bg_miterLimit:Number;
+      private var bg_pixelHinting:Boolean;
+      private var bg_scaleMode:String;
+      private var bg_thickness:Number;
+      public function LabelEx()
+      private function updateText() : void
+      public function get text() : String
+      public function set text(param1:String) : void
+      public function get isHtml() : Boolean
+      public function set isHtml(param1:Boolean) : void
+      public function get hAlign() : String
+      public function set hAlign(param1:String) : void
+      public function get vAlign() : String
+      public function set vAlign(param1:String) : void
+      public function get multiline() : Boolean
+      public function set multiline(param1:Boolean) : void
+      public function get selectable() : Boolean
+      public function set selectable(param1:Boolean) : void
+      public function set wordWrap(param1:Boolean) : void
+      public function get wordWrap() : Boolean
+      public function set background(param1:Boolean) : void
+      public function get background() : Boolean
+      public function set backgroundColor(param1:uint) : void
+      public function get backgroundColor() : uint
+      public function set shadow(param1:Object) : void
+      public function set glowfilter(param1:Object) : void
+      protected function updateCustomBackground() : void
+      public function set customBackground(param1:Object) : void
+
+### scripts/net/gambiter/components/PanelEx.as
+   import net.gambiter.core.UIComponentEx;
+   public class PanelEx extends UIComponentEx
+      public function PanelEx()
+
+### scripts/net/gambiter/core/UIBorderEx.as
+   import flash.display.DisplayObject;
+   import flash.display.Shape;
+   import flash.geom.Rectangle;
+   public class UIBorderEx extends Shape
+      private var _rect:Rectangle;
+      private var _obj:DisplayObject;
+      public function UIBorderEx()
+      private function draw() : void
+      public function show() : void
+      public function hide() : void
+      public function update(param1:Number, param2:Number, param3:Number, param4:Number) : void
+      public function get obj() : DisplayObject
+      public function set obj(param1:DisplayObject) : void
+
+### scripts/net/gambiter/core/UIComponentEx.as
+   import flash.display.InteractiveObject;
+   import flash.events.MouseEvent;
+   import net.gambiter.FlashUI;
+   import net.gambiter.utils.Align;
+   import net.gambiter.utils.Properties;
+   import net.wg.data.constants.DragType;
+   import net.wg.infrastructure.interfaces.entity.IDraggable;
+   import scaleform.clik.core.UIComponent;
+   public class UIComponentEx extends UIComponent implements IDraggable
+      protected var borderEx:UIBorderEx;
+      public var _x:Number;
+      public var _y:Number;
+      private var _autoSize:Boolean;
+      private var _alignX:String;
+      private var _alignY:String;
+      private var _drag:Boolean;
+      private var _limit:Boolean;
+      private var _isDragging:Boolean;
+      private var _border:Boolean;
+      private var _tooltip:String;
+      private var _alias:String;
+      private var _index:Number;
+      private var _visible:Boolean;
+      private var _radialMenu:Boolean;
+      private var _fullStats:Boolean;
+      private var _fullStatsQuestProgress:Boolean;
+      private var _fullStatsPersonalReserves:Boolean;
+      private var _isPreBattleHighlightsVisible:Boolean;
+      private var _epicMapOverlayVisible:Boolean;
+      private var _epicRespawnOverlayVisible:Boolean;
+      private var _battleRoyaleRespawnVisibility:Boolean;
+      private var _killCamVisibility:Boolean;
+      public function UIComponentEx()
+      public function refresh() : void
+      public function updateVisible() : void
+      private function updateIndex() : void
+      protected function updateSize() : void
+      protected function updateBorder() : void
+      public function updatePosition() : void
+         var _loc1_:Object = Properties.getLimiter(this,super.x,super.y);
+      private function updateProps() : void
+         var _loc1_:Number = this._x;
+         var _loc2_:Number = this._y;
+      private function py_updateProps(param1:Object) : void
+      public function hideCursor() : void
+      private function onMouseOver(param1:MouseEvent) : void
+      private function onMouseOut(param1:MouseEvent) : void
+      public function getHitArea() : InteractiveObject
+      public function getDragType() : String
+      public function onDragging(param1:Number, param2:Number) : void
+      public function onStartDrag() : void
+      public function onEndDrag() : void
+      public function get drag() : Boolean
+      public function set drag(param1:Boolean) : void
+      public function get limit() : Boolean
+      public function set limit(param1:Boolean) : void
+      public function get tooltip() : String
+      public function set tooltip(param1:String) : void
+      public function get alias() : String
+      public function set alias(param1:String) : void
+      public function get border() : Boolean
+      public function set border(param1:Boolean) : void
+      public function get index() : Number
+      public function set index(param1:Number) : void
+      public function get alignX() : String
+      public function set alignX(param1:String) : void
+      public function get alignY() : String
+      public function set alignY(param1:String) : void
+      public function get autoSize() : Boolean
+      public function set autoSize(param1:Boolean) : void
+      public function setLabelSizes(param1:Number, param2:Number) : void
+      public function get radialMenu() : Boolean
+      public function set radialMenu(param1:Boolean) : void
+      public function get fullStats() : Boolean
+      public function set fullStats(param1:Boolean) : void
+      public function get fullStatsQuestProgress() : Boolean
+      public function set fullStatsQuestProgress(param1:Boolean) : void
+      public function get fullStatsPersonalReserves() : Boolean
+      public function set fullStatsPersonalReserves(param1:Boolean) : void
+      public function get preBattleHighlightsVisible() : Boolean
+      public function set preBattleHighlightsVisible(param1:Boolean) : void
+      public function get killCamVisibility() : Boolean
+      public function set killCamVisibility(param1:Boolean) : void
+
+### scripts/net/gambiter/utils/Align.as
+      public function Align()
+
+### scripts/net/gambiter/utils/Components.as
+   import flash.display.DisplayObject;
+   import net.gambiter.components.ImageEx;
+   import net.gambiter.components.LabelEx;
+   import net.gambiter.components.PanelEx;
+   public class Components
+      public function Components()
+
+### scripts/net/gambiter/utils/Properties.as
+   import com.greensock.TweenLite;
+   import flash.display.DisplayObject;
+   import flash.display.DisplayObjectContainer;
+   import flash.filters.DropShadowFilter;
+   import flash.filters.GlowFilter;
+   import flash.geom.Point;
+   import flash.geom.Rectangle;
+   import net.gambiter.FlashUI;
+   import net.gambiter.core.UIComponentEx;
+   public class Properties
+      public function Properties()
+         var _loc2_:Rectangle = param1.getRect(param1);
+         var _loc3_:Point = param1.localToGlobal(new Point(0,0));
+         var _loc4_:Object = {
+         var _loc5_:Rectangle = getBound(param1);
+         var _loc3_:DropShadowFilter = null;
+         var _loc4_:String = null;
+         var _loc3_:GlowFilter = null;
+         var _loc4_:String = null;
+         var _loc3_:String = null;
+         var _loc9_:String = null;
+         var _loc4_:Object = new Object();
+         var _loc5_:Boolean = param3.hasOwnProperty("from") && Boolean(param3.from);
+         var _loc6_:Boolean = param3.hasOwnProperty("start") && Boolean(param3.start);
+         var _loc7_:Number = param3.hasOwnProperty("delay") ? Number(param3.delay) : 0;
+         var _loc8_:Number = param3.hasOwnProperty("duration") ? Number(param3.duration) : 0;
+         var _loc3_:String = null;
+         var _loc2_:Boolean = true;
+         var _loc4_:int = 0;
+         var _loc5_:* = param1;
+         var _loc4_:String = null;
+         var _loc3_:DisplayObject = param1 as DisplayObject;
+         var _loc4_:DisplayObject = null;
+         var _loc3_:uint = 0;

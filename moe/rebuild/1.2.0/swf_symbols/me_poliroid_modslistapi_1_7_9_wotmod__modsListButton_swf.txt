@@ -1,0 +1,48 @@
+WOTMOD=me.poliroid.modslistapi_1.7.9.wotmod
+SWF=res/gui/flash/modsListButton.swf
+
+### scripts/ModsListButtonImports.as
+   import flash.display.MovieClip;
+      public function ModsListButtonImports()
+
+### scripts/ModsListButtonUI.as
+   import me.poliroid.modsList.ModsListButton;
+      public function ModsListButtonUI()
+
+### scripts/me/poliroid/modsList/ModsListButton.as
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import net.wg.app.iml.base.StageResizeEvent;
+   import net.wg.data.Aliases;
+   import net.wg.data.constants.generated.LAYER_NAMES;
+   import net.wg.gui.components.containers.MainViewContainer;
+   import net.wg.gui.components.containers.inject.GFInjectComponent;
+   import net.wg.gui.login.impl.LoginPage;
+   import net.wg.infrastructure.base.AbstractView;
+   import net.wg.infrastructure.events.LifeCycleEvent;
+   import net.wg.infrastructure.events.LoaderEvent;
+   import net.wg.infrastructure.interfaces.IManagedContent;
+   import net.wg.infrastructure.interfaces.ISimpleManagedContainer;
+   import net.wg.infrastructure.interfaces.IView;
+   import net.wg.infrastructure.managers.impl.ContainerManagerBase;
+   public class ModsListButton extends AbstractView
+      public var _buttonInject:GFInjectComponent = null;
+      public function ModsListButton()
+         var _loc2_:int = 0;
+         var _loc3_:int = 0;
+         var _loc4_:IManagedContent = null;
+         var _loc5_:IView = null;
+         var _loc1_:MainViewContainer = this._getContainer(LAYER_NAMES.VIEWS) as MainViewContainer;
+      private function _getContainer(param1:String) : ISimpleManagedContainer
+      private function onStageResize(param1:StageResizeEvent) : void
+      private function onViewLoaded(param1:LoaderEvent) : void
+         var _loc2_:IView = param1.view as IView;
+      private function processView(param1:IView) : void
+         var _loc2_:String = param1.as_config.alias;
+      private function createInject(param1:IView) : void
+         var _loc2_:* = param1 as LoginPage;
+      private function destroyInject() : void
+      private function updateInject() : void
+         var _loc1_:int = 0;
+         var _loc2_:int = 0;
+      private function _handleLoginPageDispose(param1:LifeCycleEvent) : void

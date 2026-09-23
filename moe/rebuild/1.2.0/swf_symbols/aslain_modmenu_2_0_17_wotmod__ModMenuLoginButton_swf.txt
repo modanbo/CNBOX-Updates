@@ -1,0 +1,49 @@
+WOTMOD=aslain.modmenu_2.0.17.wotmod
+SWF=res/gui/flash/ModMenuLoginButton.swf
+
+### scripts/com/aslain/modmenu/ModMenuLoginButton.as
+   import flash.display.DisplayObject;
+   import flash.display.MovieClip;
+   import flash.events.Event;
+   import net.wg.app.iml.base.StageResizeEvent;
+   import net.wg.data.Aliases;
+   import net.wg.data.constants.generated.LAYER_NAMES;
+   import net.wg.gui.components.containers.MainViewContainer;
+   import net.wg.gui.components.containers.inject.GFInjectComponent;
+   import net.wg.gui.login.impl.LoginPage;
+   import net.wg.infrastructure.base.AbstractView;
+   import net.wg.infrastructure.events.LifeCycleEvent;
+   import net.wg.infrastructure.events.LoaderEvent;
+   import net.wg.infrastructure.interfaces.IManagedContent;
+   import net.wg.infrastructure.interfaces.ISimpleManagedContainer;
+   import net.wg.infrastructure.interfaces.IView;
+   import net.wg.infrastructure.managers.impl.ContainerManagerBase;
+   public class ModMenuLoginButton extends AbstractView
+      public var _buttonInject:GFInjectComponent = null;
+      private var _page:LoginPage = null;
+      private var _offsetX:int = 0;
+      private var _offsetY:int = 0;
+      private var _regionWidth:int = 200;
+      private var _regionHeight:int = 150;
+      public function ModMenuLoginButton()
+      public function as_setPlacement(param1:int, param2:int, param3:int, param4:int) : void
+         var _loc2_:int = 0;
+         var _loc3_:int = 0;
+         var _loc4_:IManagedContent = null;
+         var _loc5_:IView = null;
+         var _loc1_:MainViewContainer = this._getContainer(LAYER_NAMES.VIEWS) as MainViewContainer;
+      private function _getContainer(param1:String) : ISimpleManagedContainer
+      private function onStageResize(param1:StageResizeEvent) : void
+      private function onViewLoaded(param1:LoaderEvent) : void
+      private function processView(param1:IView) : void
+      private function createInject(param1:IView) : void
+         var _loc2_:LoginPage = param1 as LoginPage;
+      private function handlePageChildAdded(param1:Event) : void
+      private function raiseInject() : void
+         var _loc1_:int = this._page.numChildren - 1;
+      private function destroyInject() : void
+      private function updateInject() : void
+         var _loc1_:int = int(this._regionWidth / App.appScale);
+         var _loc2_:int = int(this._regionHeight / App.appScale);
+         var _loc3_:int = int(this._offsetX / App.appScale);
+      private function handleLoginPageDispose(param1:LifeCycleEvent) : void

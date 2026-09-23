@@ -1,0 +1,15 @@
+origin=EVV
+outerPath=mods/2.4.0.1/champi.settingsgui_1.81.wotmod
+sha256=2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805
+
+[pyc]
+res/scripts/client/champisettingsgui.pyc
+
+[swf]
+
+
+[gameface]
+
+
+[configs]
+meta.xml

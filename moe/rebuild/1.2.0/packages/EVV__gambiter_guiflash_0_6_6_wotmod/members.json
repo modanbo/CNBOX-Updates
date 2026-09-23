@@ -1,0 +1,77 @@
+[
+  {
+    "path": "LICENSE",
+    "size": 1104,
+    "crc": 328054501
+  },
+  {
+    "path": "README.md",
+    "size": 1238,
+    "crc": 2260142765
+  },
+  {
+    "path": "meta.xml",
+    "size": 289,
+    "crc": 3631096423
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/GUIFlash.swf",
+    "size": 18338,
+    "crc": 14966733
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/gambiter/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/gambiter/__init__.pyc",
+    "size": 525,
+    "crc": 116481266
+  },
+  {
+    "path": "res/scripts/client/gui/mods/gambiter/flash.pyc",
+    "size": 31943,
+    "crc": 4227047163
+  },
+  {
+    "path": "res/scripts/client/gui/mods/gambiter/utils.pyc",
+    "size": 7591,
+    "crc": 3614089767
+  }
+]

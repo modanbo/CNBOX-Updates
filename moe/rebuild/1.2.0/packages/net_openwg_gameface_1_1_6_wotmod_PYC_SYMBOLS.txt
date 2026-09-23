@@ -1,0 +1,29 @@
+WOTMOD=/home/runner/work/_temp/moe120/evv/mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod
+SHA256=26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1
+
+### PYC res/scripts/client/openwg_gameface.pyc
+            res_map_file_path (str): Path where the resource map should be saved.
+        Sets up the validation event, locates config files from file system and game VFS,
+        model (ViewModel): The target ViewModel to which the injector model will be added.
+Adds the inject model as a property to another ViewModel.
+Eventt	
+Initializes ViewModel properties.R
+OPENWG_GAMEFACEt
+SafeEventt
+Validates and saves the resource map to res_mods folder.
+ViewModel that provides resources for the JS-side injector.c
+ViewModel(
+_addViewModelPropertyR
+frameworks.wulf.view.arrayR
+python\openwg_gameface.pyR
+python\openwg_gameface.pyR	
+python\openwg_gameface.pyR'
+python\openwg_gameface.pyR(
+python\openwg_gameface.pyR+
+python\openwg_gameface.pyR,
+python\openwg_gameface.pyR/
+python\openwg_gameface.pyR;
+python\openwg_gameface.pyR@
+python\openwg_gameface.pyRF
+python\openwg_gameface.pys	
+python\openwg_gameface.pyt

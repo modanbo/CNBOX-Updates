@@ -1,0 +1,62 @@
+[
+  {
+    "path": "meta.xml",
+    "size": 297,
+    "crc": 2162607378
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/champiswotmods.png",
+    "size": 43804,
+    "crc": 2001950832
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settingsgui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/champi/settingsgui/modlistapi_icon.png",
+    "size": 5876,
+    "crc": 3117175662
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/champisettingsgui.pyc",
+    "size": 164004,
+    "crc": 3080851010
+  }
+]

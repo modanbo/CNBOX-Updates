@@ -1,0 +1,417 @@
+[
+  {
+    "path": "NOTICE",
+    "size": 1712,
+    "crc": 3409769826
+  },
+  {
+    "path": "README.txt",
+    "size": 696,
+    "crc": 2895546591
+  },
+  {
+    "path": "meta.xml",
+    "size": 337,
+    "crc": 1090036441
+  },
+  {
+    "path": "res/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/flash/ModMenuLoginButton.swf",
+    "size": 2112,
+    "crc": 3496557410
+  },
+  {
+    "path": "res/gui/gameface/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/ModMenu.css",
+    "size": 63999,
+    "crc": 4182684543
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/ModMenu.html",
+    "size": 4522,
+    "crc": 2310210029
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/ModMenu.js",
+    "size": 251643,
+    "crc": 268397293
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/fonts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt",
+    "size": 406,
+    "crc": 3878214919
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf",
+    "size": 29052,
+    "crc": 3105490139
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/img/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenu/img/play.png",
+    "size": 1466,
+    "crc": 3827201267
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenuButton/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css",
+    "size": 826,
+    "crc": 890661178
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html",
+    "size": 404,
+    "crc": 2660116525
+  },
+  {
+    "path": "res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js",
+    "size": 8937,
+    "crc": 1097667845
+  },
+  {
+    "path": "res/gui/maps/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/aslainMenu/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/gui/maps/icons/aslainMenu/icon.png",
+    "size": 2909,
+    "crc": 284605540
+  },
+  {
+    "path": "res/gui/maps/icons/aslainMenu/icon_128.png",
+    "size": 7838,
+    "crc": 128896806
+  },
+  {
+    "path": "res/gui/maps/icons/aslainMenu/icon_64.png",
+    "size": 3793,
+    "crc": 4163951077
+  },
+  {
+    "path": "res/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/aslain.modmenu/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/be.yml",
+    "size": 5289,
+    "crc": 2322503378
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/bg.yml",
+    "size": 5414,
+    "crc": 4171907732
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/cs.yml",
+    "size": 3836,
+    "crc": 841285075
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/da.yml",
+    "size": 3719,
+    "crc": 664952581
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/de.yml",
+    "size": 3954,
+    "crc": 2708098617
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/el.yml",
+    "size": 5540,
+    "crc": 826803204
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/en.yml",
+    "size": 3592,
+    "crc": 2935012350
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/es.yml",
+    "size": 3890,
+    "crc": 4249336604
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/fi.yml",
+    "size": 3858,
+    "crc": 3400051839
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/fr.yml",
+    "size": 3979,
+    "crc": 1555801570
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/hr.yml",
+    "size": 3739,
+    "crc": 190997952
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/hu.yml",
+    "size": 4021,
+    "crc": 72882484
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/it.yml",
+    "size": 3862,
+    "crc": 554816468
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/lt.yml",
+    "size": 3874,
+    "crc": 3145159478
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/lv.yml",
+    "size": 3872,
+    "crc": 1449400761
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/nl.yml",
+    "size": 3878,
+    "crc": 1716252702
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/no.yml",
+    "size": 3745,
+    "crc": 1323708276
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/pl.yml",
+    "size": 3843,
+    "crc": 1433038876
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/pt.yml",
+    "size": 3799,
+    "crc": 2054840444
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/ro.yml",
+    "size": 3899,
+    "crc": 2137743024
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/ru.yml",
+    "size": 5362,
+    "crc": 2706834091
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/sr.yml",
+    "size": 4266,
+    "crc": 3431726469
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/sv.yml",
+    "size": 3876,
+    "crc": 694468038
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/tr.yml",
+    "size": 3838,
+    "crc": 97609442
+  },
+  {
+    "path": "res/mods/aslain.modmenu/text/uk.yml",
+    "size": 5342,
+    "crc": 3955853391
+  },
+  {
+    "path": "res/mods/configs/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/res_map/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/mods/configs/res_map/ModMenu.json",
+    "size": 251,
+    "crc": 989018827
+  },
+  {
+    "path": "res/mods/configs/res_map/ModMenuButton.json",
+    "size": 275,
+    "crc": 954238374
+  },
+  {
+    "path": "res/scripts/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/__init__.pyc",
+    "size": 12298,
+    "crc": 1500006426
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/_constants.pyc",
+    "size": 12623,
+    "crc": 4007402063
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/_diag.pyc",
+    "size": 9631,
+    "crc": 3265234752
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/api.pyc",
+    "size": 37316,
+    "crc": 4061758673
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/button.pyc",
+    "size": 19185,
+    "crc": 3565574727
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/context_menu.pyc",
+    "size": 13342,
+    "crc": 1071161222
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/entries.pyc",
+    "size": 13263,
+    "crc": 1793879058
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/frontend.pyc",
+    "size": 9517,
+    "crc": 2157552902
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/hotkeys.pyc",
+    "size": 13352,
+    "crc": 299581436
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/l10n.pyc",
+    "size": 10139,
+    "crc": 1745481743
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/login.pyc",
+    "size": 13885,
+    "crc": 1719345314
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/modslist_shim.pyc",
+    "size": 11730,
+    "crc": 2984666169
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/skeleton.pyc",
+    "size": 9104,
+    "crc": 2217120482
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/templates.pyc",
+    "size": 15851,
+    "crc": 3270392841
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/utils.pyc",
+    "size": 17129,
+    "crc": 3769138277
+  },
+  {
+    "path": "res/scripts/client/gui/aslainMenu/view.pyc",
+    "size": 61185,
+    "crc": 2008913468
+  },
+  {
+    "path": "res/scripts/client/gui/mods/",
+    "size": 0,
+    "crc": 0
+  },
+  {
+    "path": "res/scripts/client/gui/mods/mod_modmenu.pyc",
+    "size": 12028,
+    "crc": 3856672120
+  }
+]

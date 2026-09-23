@@ -1,0 +1,15 @@
+[
+  {
+    "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+    "owners": [
+      {
+        "origin": "PROTANKI",
+        "path": "mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod"
+      },
+      {
+        "origin": "EVV",
+        "path": "mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod"
+      }
+    ]
+  }
+]

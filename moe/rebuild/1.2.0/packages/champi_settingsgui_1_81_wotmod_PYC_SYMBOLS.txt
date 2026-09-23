@@ -1,0 +1,4 @@
+WOTMOD=/home/runner/work/_temp/moe120/evv/mods/2.4.0.1/champi.settingsgui_1.81.wotmod
+SHA256=2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805
+
+### PYC res/scripts/client/champisettingsgui.pyc

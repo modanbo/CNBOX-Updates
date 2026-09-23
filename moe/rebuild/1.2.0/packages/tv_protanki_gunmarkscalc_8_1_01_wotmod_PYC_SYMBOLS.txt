@@ -1,0 +1,5 @@
+WOTMOD=/home/runner/work/_temp/moe120/protanki/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod
+SHA256=e83eeab978e7599fb0924e01933df1c863977ee33984e2701270b23cda27a408
+
+### PYC res/scripts/client/gui/mods/mod_pro_gunmarks.pyc
+mod_pro_gunmarkss
