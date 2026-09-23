@@ -1008,13 +1008,13 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.0.11",
-      "status": "RUNTIME_RECOVERY_CANDIDATE",
+      "version": "1.1.0",
+      "status": "OFFICIAL_UI_RECOVERY_CANDIDATE",
       "wotVersion": "2.4.0.1",
       "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.0.11/CNBOX_MoE_1.0.11_WOT_2.4.0.1.zip",
-      "payloadSha256": "dd536d673a4e01ac153b9aeb858b54c27497df8c969ed12c5df3d6618e07a9f9",
-      "notes": "Runtime recovery candidate after 1.0.10 failed in both English and Chinese. Rebased on the 1.0.9 visible structure. Original ProTanki en.yml remains byte-identical; zh_sg is added only as a locale signal. Battle labels fail safe to English. Garage hides upstream EVV only after the official 210x134 adapter is fully created. Calculation/data/events/host/drag/persistence remain frozen.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.0/CNBOX_MoE_1.1.0_WOT_2.4.0.1.zip",
+      "payloadSha256": "5b98aac5340547ff4bfe2c1f6d2fa16545fc7873d9e9df21158214c71cce8b50",
+      "notes": "Official UI recovery candidate after Runtime showed only the upstream EVV fallback strip. Garage takeover removes all :scope selectors for Coherent/GameFace compatibility and uses direct-child traversal. The official 210x134 adapter must set adapter-ready plus data-najx-moe-ui=official-210x134 before upstream EVV is hidden. Original ProTanki en.yml remains byte-identical; calculation/data/events/host/drag/persistence remain frozen.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -1054,13 +1054,13 @@
         },
         {
           "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
-          "sha256": "da2541573509080c56b067c061117e66d2387f0baf1211fed5451696ef1cfc2f",
+          "sha256": "50dff15a98b1613c5847477500a822f091ee11f385d5e6e45445524c47860809",
           "required": true,
           "shared": false
         },
         {
           "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
-          "sha256": "1c8195d0673d21187b70d76e8151a02af5c9c59dce57aba960f576e4e51312f5",
+          "sha256": "2fec0d57ca5e8cdabf4bf580f77c39f1974530c075533908bf6da6ad1127c0f0",
           "required": true,
           "shared": false
         }

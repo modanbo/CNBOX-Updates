@@ -1,4 +1,4 @@
-/* NAJXBox MoE 1.0.11 — fail-safe bilingual official-CN garage presentation tail.
+/* NAJXBox MoE 1.1.0 — official-CN garage UI takeover recovery.
  * This file is concatenated AFTER the byte-identical upstream EVV2.js.
  * It only reads EVV's existing currentState and paints a child overlay.
  * It does not alter calculation, model acquisition, events, Ctrl-drag, anchors or savePosition.
@@ -144,23 +144,33 @@
     requestAnimationFrame(render);
   }
 
+  function directChildByClass(root, className) {
+    if (!root || !root.children) return null;
+    for (let i = 0; i < root.children.length; i++) {
+      const child = root.children[i];
+      if (child && child.classList && child.classList.contains(className)) return child;
+    }
+    return null;
+  }
+
   function bind(root) {
     if (boundRoot === root && panel && panel.isConnected) return;
     if (observer) observer.disconnect();
 
     boundRoot = root;
-    panel = root.querySelector(':scope > .najx-moe-official') || createPanel(root);
+    panel = directChildByClass(root, 'najx-moe-official') || createPanel(root);
     if (!panel || !panel.isConnected) return;
 
     // Only after the replacement panel exists do we hide the upstream EVV
     // presentation. If anything above fails, upstream stays visible.
     root.classList.add('najx-moe-cn-official');
     root.classList.add('najx-moe-adapter-ready');
+    root.setAttribute('data-najx-moe-ui', 'official-210x134');
     applyPresentationLocale(root, panel);
 
     observer = new MutationObserver(scheduleRender);
-    const header = root.querySelector(':scope > .evv2-header');
-    const progress = root.querySelector(':scope > .evv2-progress');
+    const header = directChildByClass(root, 'evv2-header');
+    const progress = directChildByClass(root, 'evv2-progress');
     if (header) observer.observe(header, {subtree:true, childList:true, characterData:true, attributes:true});
     if (progress) observer.observe(progress, {subtree:true, childList:true, characterData:true, attributes:true});
     scheduleRender();
