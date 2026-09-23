@@ -441,3 +441,25 @@ New mandatory gate for the next version:
 3. no NA MoE settings UI exposed;
 4. actual official CN SWF/view contract must be the visible owner, not a re-skinned ProTanki panel;
 5. only NA data outputs may cross the bridge.
+
+
+### 1.1.2 / 1.1.3 battle damage display regression — CONFIRMED
+
+Runtime symptom:
+- battle damage display remained at `0`.
+
+Confirmed presentation bug:
+- ProTanki battle string observed in Runtime had a slash form such as `0/9634`;
+- 1.1.2 introduced `_cleanDamage()` that takes `substring(0, slash)`;
+- therefore `0/9634` is deterministically reduced to `0`.
+
+This is a NAJXBox presentation regression, not evidence that the ProTanki calculation stopped producing data.
+
+Consequences:
+- 1.1.2 is no longer considered a safe rollback baseline;
+- 1.1.3 inherits the same bad `_cleanDamage` behavior and is also invalid;
+- do not infer battle-damage semantics by splitting formatted ProTanki strings;
+- next architecture must consume a proven numeric/current-damage field or preserve the upstream value until its exact semantics are verified.
+
+Containment:
+- Manager channel should not point to 1.1.2 or 1.1.3 as a recommended candidate.
