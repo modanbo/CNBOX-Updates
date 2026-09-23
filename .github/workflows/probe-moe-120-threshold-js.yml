@@ -1,0 +1,62 @@
+name: Inspect MoE threshold JS route
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/probe-moe-120-threshold-js.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 0
+
+      - name: Inspect JS
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120js"
+          mkdir -p "$root"
+          curl -fL --retry 3 --connect-timeout 20 -A 'Mozilla/5.0' 'https://tomato.gg/assets/moe._server-D6m2IPeL.js' -o "$root/moe.js"
+          python3 - "$root/moe.js" "$GITHUB_WORKSPACE/moe/rebuild/1.2.0/THRESHOLD_JS_ROUTE.txt" <<'PY'
+          import sys,re
+          src=open(sys.argv[1],encoding='utf-8',errors='replace').read()
+          out=['bytes=%d'%len(src)]
+          needles=['tank_id','/api/','requirements','moe','server','fetch(','axios','query']
+          for needle in needles:
+              out.append('\n## '+needle)
+              pos=0; n=0
+              while True:
+                  i=src.find(needle,pos)
+                  if i<0: break
+                  n+=1
+                  out.append(src[max(0,i-1400):i+2600])
+                  pos=i+len(needle)
+                  if n>=12: break
+          out.append('\n## urls')
+          for u in sorted(set(re.findall(r'https?://[^"\'\s)]+',src))):
+              out.append(u)
+          out.append('\n## quoted endpoint-like strings')
+          for s in re.findall(r'["\']([^"\']{3,160})["\']',src):
+              if '/api/' in s or 'moe' in s.lower() or 'require' in s.lower():
+                  out.append(s)
+          open(sys.argv[2],'w',encoding='utf-8').write('\n'.join(out))
+          PY
+
+      - name: Commit
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/rebuild/1.2.0/THRESHOLD_JS_ROUTE.txt
+          git commit -m 'Inspect MoE threshold page route'
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
