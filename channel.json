@@ -1008,13 +1008,13 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.1.2",
-      "status": "BATTLE_OWNER_RUNTIME_CANDIDATE",
+      "version": "1.1.1",
+      "status": "DRAG_HITAREA_RUNTIME_CANDIDATE",
       "wotVersion": "2.4.0.1",
       "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.2/CNBOX_MoE_1.1.2_WOT_2.4.0.1.zip",
-      "payloadSha256": "21d2a89711efd591fe7091237538871c17a83cb2c5540a6cbc2762e3792eb3cb",
-      "notes": "Battle owner recovery after Runtime proved ProTanki was rendering a non-official skin variant. ProGunMarks keeps its original drag/events/offset persistence and changes only presentation routing so old/new/new-simple all select panel_new, the official 147x93 adapter. Garage 1.1.1 is frozen. battleMovingDamage presentation strips the ProTanki target suffix after / so 本场标伤 shows the current battle value only.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.1/CNBOX_MoE_1.1.1_WOT_2.4.0.1.zip",
+      "payloadSha256": "7a4bd2d16d5aeb1499fc1f7598a94735dfd4ee32a6de9547c95f0f762d0f0822",
+      "notes": "Drag hit-area recovery after 1.1.0 restored the official 210x134 garage UI but Ctrl-drag no longer started. The official overlay is now the pointer hit surface while all overlay children remain pointer-events:none, allowing EVV's mature document-level Ctrl-drag handler to receive an event target contained by #evv2-root. No drag/savePosition/model code is modified.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -1054,13 +1054,13 @@
         },
         {
           "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
-          "sha256": "90bd8776b5d743d21d806a41633155dd594b4adf03857f951d3227e8b0edbbde",
+          "sha256": "d2ae3f6c11bc3fd2a4b20569bc4ccd9e066900f50ba767e0a27f35ace12a421a",
           "required": true,
           "shared": false
         },
         {
           "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
-          "sha256": "03a441c9d5822c1244e75813d64f308637ab5f9e1e0cb475ab547b8d76e98baa",
+          "sha256": "07f22f779ed61c4e6c3ccffe45aa600b33603b1be86ee473b60d52a373d92c58",
           "required": true,
           "shared": false
         }
