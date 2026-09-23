@@ -463,3 +463,24 @@ Consequences:
 
 Containment:
 - Manager channel should not point to 1.1.2 or 1.1.3 as a recommended candidate.
+
+
+### Native WoT damage counter regression — HIGH SEVERITY
+
+User confirmed that WoT's own native in-battle damage counter remained at 0 while the MoE component was installed.
+
+This is distinct from the confirmed NAJXBox presentation bug that truncated a ProTanki formatted string such as `0/9634` to `0`.
+
+Implication:
+- the MoE component stack may be interfering with native battle-feedback/event processing;
+- no 1.1.x candidate is considered safe until full uninstall isolation proves the native counter behavior.
+
+Containment:
+- public `channel.moePacks` cleared;
+- no MoE candidate may be installed from Manager until the incident is isolated;
+- GitHub NA-BOX Issue #4 tracks the incident.
+
+Mandatory future Runtime gate:
+- deal damage in battle;
+- WoT native damage counter must increase normally;
+- failure is an immediate release blocker regardless of MoE UI correctness.
