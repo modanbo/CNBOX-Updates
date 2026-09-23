@@ -23,10 +23,20 @@ jobs:
         shell: bash
         run: |
           set -euxo pipefail
-          ! grep -REn 'f["''']|async def|await |yield from|nonlocal|typing\.' moe/rebuild/1.2.0/source
           python3 - <<'PY'
-          import ast,glob
+          import ast, glob, re
+          forbidden = [
+              re.compile(r'(^|[^A-Za-z0-9_])f[\"\\\']'),
+              re.compile(r'\\basync\\s+def\\b'),
+              re.compile(r'\\bawait\\s+'),
+              re.compile(r'\\byield\\s+from\\b'),
+              re.compile(r'\\bnonlocal\\b'),
+              re.compile(r'\\btyping\\.'),
+          ]
           for p in glob.glob('moe/rebuild/1.2.0/source/*.py'):
-              ast.parse(open(p,encoding='utf-8').read(),filename=p)
-              print('PARSE',p)
+              src=open(p,encoding='utf-8').read()
+              ast.parse(src,filename=p)
+              for pat in forbidden:
+                  assert not pat.search(src), (p, pat.pattern)
+              print('PARSE_PY2_SAFE',p)
           PY
