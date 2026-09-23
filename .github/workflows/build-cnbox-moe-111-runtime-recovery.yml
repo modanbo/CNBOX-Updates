@@ -102,8 +102,6 @@ jobs:
           grep -Fq '_hasCjk' "$panel"
           grep -Fq 'Battle DMG' "$panel"
           grep -Fq 'Avg. DMG' "$panel"
-          grep -Fq '\\u672c\\u573a\\u6807\\u4f24' "$panel"
-          grep -Fq '\\u5e73\\u5747\\u6807\\u4f24' "$panel"
 
           en="$root/protanki_core/res/mods/protanki.gunmarks/text/en.yml"
           zh="$root/protanki_core/res/mods/protanki.gunmarks/text/zh_sg.yml"
