@@ -1008,13 +1008,13 @@
   "moePacks": [
     {
       "id": "CNBOX_MOE",
-      "version": "1.1.2",
-      "status": "BATTLE_OWNER_RUNTIME_CANDIDATE",
+      "version": "1.1.3",
+      "status": "CN_HOST_NA_DATA_BRIDGE_STATIC_CANDIDATE",
       "wotVersion": "2.4.0.1",
       "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.2/CNBOX_MoE_1.1.2_WOT_2.4.0.1.zip",
-      "payloadSha256": "21d2a89711efd591fe7091237538871c17a83cb2c5540a6cbc2762e3792eb3cb",
-      "notes": "Battle owner recovery after Runtime proved ProTanki was rendering a non-official skin variant. ProGunMarks keeps its original drag/events/offset persistence and changes only presentation routing so old/new/new-simple all select panel_new, the official 147x93 adapter. Garage 1.1.1 is frozen. battleMovingDamage presentation strips the ProTanki target suffix after / so 本场标伤 shows the current battle value only.",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.3/CNBOX_MoE_1.1.3_WOT_2.4.0.1.zip",
+      "payloadSha256": "78ddef42ee006067c5b4f817360977d73d7cff1f473564dae4f45650ab2205b7",
+      "notes": "Static architecture candidate for CN Contract Host + NA Data Bridge. Garage is frozen at the Runtime-proven 1.1.1 EVV-currentState -> official 210x134 contract. Battle consumes the five finished ProTanki Flash fields directly and makes the visible official 147x93 panel the mouse/drag owner while preserving updatePosition(offsetBattle). No CN network logic and no custom Ctrl/key handler are introduced. Not exposed to Manager until Runtime gate.",
       "installedFiles": [
         {
           "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
@@ -1054,13 +1054,13 @@
         },
         {
           "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
-          "sha256": "90bd8776b5d743d21d806a41633155dd594b4adf03857f951d3227e8b0edbbde",
+          "sha256": "71b18e7454f8ce68045a7c61a8e85b779ee3521577382a2fd16ed0190928261b",
           "required": true,
           "shared": false
         },
         {
           "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
-          "sha256": "03a441c9d5822c1244e75813d64f308637ab5f9e1e0cb475ab547b8d76e98baa",
+          "sha256": "1ddbd62265da4a2d0d66720878f9fa24e591fdab381f429956ef4f7d65a831d4",
           "required": true,
           "shared": false
         }

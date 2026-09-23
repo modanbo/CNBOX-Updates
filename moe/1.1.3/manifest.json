@@ -1,0 +1,60 @@
+{
+  "id": "CNBOX_MOE",
+  "version": "1.1.3",
+  "status": "CN_HOST_NA_DATA_BRIDGE_STATIC_CANDIDATE",
+  "wotVersion": "2.4.0.1",
+  "sourceCore": "ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage",
+  "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.3/CNBOX_MoE_1.1.3_WOT_2.4.0.1.zip",
+  "payloadSha256": "78ddef42ee006067c5b4f817360977d73d7cff1f473564dae4f45650ab2205b7",
+  "notes": "Static architecture candidate for CN Contract Host + NA Data Bridge. Garage is frozen at the Runtime-proven 1.1.1 EVV-currentState -> official 210x134 contract. Battle consumes the five finished ProTanki Flash fields directly and makes the visible official 147x93 panel the mouse/drag owner while preserving updatePosition(offsetBattle). No CN network logic and no custom Ctrl/key handler are introduced. Not exposed to Manager until Runtime gate.",
+  "installedFiles": [
+    {
+      "path": "mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod",
+      "sha256": "e09b415e28e9129c78d9697eeed42e81c10459ad6982a885f1e59322eb0c2dca",
+      "required": true,
+      "shared": true
+    },
+    {
+      "path": "mods/{WOT_VERSION}/me.poliroid.modslistapi_1.7.9.wotmod",
+      "sha256": "d62237cd755412189f1d62855219c9035d0d0fea315a0d4505971639c86d8283",
+      "required": true,
+      "shared": true
+    },
+    {
+      "path": "mods/{WOT_VERSION}/net.openwg/net.openwg.gameface_1.1.6.wotmod",
+      "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+      "required": true,
+      "shared": true
+    },
+    {
+      "path": "mods/{WOT_VERSION}/aslain.modmenu_2.0.17.wotmod",
+      "sha256": "ad5711a41458afa38055182792773aced86b91add91e11644d6b5c273beea94b",
+      "required": true,
+      "shared": true
+    },
+    {
+      "path": "mods/{WOT_VERSION}/champi.settingsgui_1.81.wotmod",
+      "sha256": "2cb5e7e34a7fa56cfee74a540c4e0a1729118b59c97f7c10fb72fbe5498b5805",
+      "required": true,
+      "shared": true
+    },
+    {
+      "path": "mods/{WOT_VERSION}/gambiter.guiflash_0.6.6.wotmod",
+      "sha256": "a0b6dc2e75663008a4ced9e0c00449be84b3c3d5d932f8bbcaa2b334ae3d1cb5",
+      "required": true,
+      "shared": true
+    },
+    {
+      "path": "mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod",
+      "sha256": "71b18e7454f8ce68045a7c61a8e85b779ee3521577382a2fd16ed0190928261b",
+      "required": true,
+      "shared": false
+    },
+    {
+      "path": "mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod",
+      "sha256": "1ddbd62265da4a2d0d66720878f9fa24e591fdab381f429956ef4f7d65a831d4",
+      "required": true,
+      "shared": false
+    }
+  ]
+}

@@ -56,19 +56,16 @@ package poliroid.views.battle.gunmarks
          {
             this.panel_new_simple.visible = false;
          }
-         this.dragArea.addEventListener(MouseEvent.MOUSE_DOWN,this.handleMouseDown);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_UP,this.handleMouseUp);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_MOVE,this.handleMouseMove);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_OVER,this.handleMouseOver);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_OUT,this.handleMouseOut);
+         // CN contract panel owns interaction; dragArea is a coordinate mirror only.
+         this.dragArea.mouseChildren = false;
+         this.dragArea.mouseEnabled = false;
          this.minimizer.addEventListener(ButtonEvent.CLICK,this.handleMinimizerClick);
       }
       
       public function as_setSettings(param1:Object) : void
       {
-         // NAJXBox 1.1.2 presentation routing:
-         // use the official 147x93 panel for all upstream skin variants.
-         // Drag/events/offset persistence below remain original ProTanki code.
+         // NAJXBox 1.1.3 CN Contract Host:
+         // all NA skin variants feed one official 147x93 presentation owner.
          if(param1.skinVariant == "old" || param1.skinVariant == "new" || param1.skinVariant == "new-simple")
          {
             this.panel = this.panel_new;
@@ -77,10 +74,11 @@ package poliroid.views.battle.gunmarks
          {
             this.panel.setSettings(param1);
             this.panel.visible = !param1.battleMinimized;
+            this.bindOfficialInteractionSurface();
          }
          this.minimizer.setSettings(param1);
-         this.dragArea.mouseChildren = !param1.battleMinimized;
-         this.dragArea.mouseEnabled = !param1.battleMinimized;
+         this.dragArea.mouseChildren = false;
+         this.dragArea.mouseEnabled = false;
          if(this.panel)
          {
             this.dragArea.width = this.panel.panelWidth;
@@ -154,35 +152,56 @@ package poliroid.views.battle.gunmarks
          this._syncPositions();
       }
       
-      private function handleMouseDown() : void
+      private function bindOfficialInteractionSurface() : void
       {
-         if(this._dragging)
+         var surface:MovieClip = this.panel as MovieClip;
+         if(!surface || this._interactionBound)
+         {
+            return;
+         }
+         this._interactionBound = true;
+         surface.mouseChildren = false;
+         surface.mouseEnabled = true;
+         surface.addEventListener(MouseEvent.ROLL_OVER,this.handleMouseOver);
+         surface.addEventListener(MouseEvent.MOUSE_DOWN,this.handleMouseDown);
+         surface.addEventListener(MouseEvent.MOUSE_UP,this.handleMouseUp);
+         surface.addEventListener(MouseEvent.MOUSE_MOVE,this.handleMouseMove);
+         surface.addEventListener(MouseEvent.MOUSE_OUT,this.handleMouseOut);
+         surface.addEventListener(MouseEvent.ROLL_OUT,this.handleMouseOut);
+      }
+      
+      private function handleMouseDown(param1:MouseEvent = null) : void
+      {
+         var surface:MovieClip = this.panel as MovieClip;
+         if(this._dragging || !surface)
          {
             return;
          }
          this._dragging = true;
          App.cursor.forceSetCursor(Cursors.MOVE);
-         this.dragArea.startDrag();
+         surface.startDrag();
       }
       
-      private function handleMouseMove() : void
+      private function handleMouseMove(param1:MouseEvent = null) : void
       {
          if(!this._dragging)
          {
             return;
          }
-         this._syncPositions();
+         this._syncFromOfficialSurface();
       }
       
-      private function handleMouseUp() : void
+      private function handleMouseUp(param1:MouseEvent = null) : void
       {
-         var _loc1_:Point = null;
-         if(this._dragging)
+         var anchor:Point = null;
+         var surface:MovieClip = this.panel as MovieClip;
+         if(this._dragging && surface)
          {
-            _loc1_ = this.getAncor();
+            anchor = this.getAncor();
             this._dragging = false;
-            this.dragArea.stopDrag();
-            this._offset = [int(this.dragArea.x - _loc1_.x),int(this.dragArea.y - _loc1_.y)];
+            surface.stopDrag();
+            this._syncFromOfficialSurface();
+            this._offset = [int(surface.x - anchor.x),int(surface.y - anchor.y)];
             this.updateFrame();
             this.updatePosition(this._offset);
             App.cursor.forceSetCursor(Cursors.DRAG_OPEN);
@@ -193,14 +212,37 @@ package poliroid.views.battle.gunmarks
          }
       }
       
-      private function handleMouseOver() : void
+      private function handleMouseOver(param1:MouseEvent = null) : void
       {
          App.cursor.forceSetCursor(Cursors.DRAG_OPEN);
       }
       
-      private function handleMouseOut() : void
+      private function handleMouseOut(param1:MouseEvent = null) : void
       {
-         App.cursor.forceSetCursor(Cursors.ARROW);
+         if(!this._dragging)
+         {
+            App.cursor.forceSetCursor(Cursors.ARROW);
+         }
+      }
+
+      private function _syncFromOfficialSurface() : void
+      {
+         var surface:MovieClip = this.panel as MovieClip;
+         if(!surface)
+         {
+            return;
+         }
+         var px:int = int(Math.max(0,Math.min(App.appWidth - surface.width,surface.x)));
+         var py:int = int(Math.max(0,Math.min(App.appHeight - surface.height,surface.y)));
+         surface.x = px;
+         surface.y = py;
+         this.dragArea.x = px;
+         this.dragArea.y = py;
+         if(this.minimizer)
+         {
+            this.minimizer.x = px + surface.width + 10;
+            this.minimizer.y = py + 5;
+         }
       }
       
       private function handleMinimizerClick() : void
