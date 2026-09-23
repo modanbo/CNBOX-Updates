@@ -73,6 +73,30 @@ jobs:
             grep -En 'moePercent|moeAVG|moeMarks|moe1|moe2|moe3|moe4|MoEGarageGameFaceView|model|state|update|vehicle|garage|expected' "$dest/EVV_mod_evv.py" || true
           } > "$dest/DATA_OWNER_INDEX.txt"
 
+
+      - name: Disassemble data-owner bytecode
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-na-data"
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/data_bridge"
+
+          pydisasm \
+            "$root/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc" \
+            > "$dest/PROTANKI_mod_pro_gunmarks.dis.txt" || true
+
+          pydisasm \
+            "$root/evv_core/res/scripts/client/gui/mods/mod_evv.pyc" \
+            > "$dest/EVV_mod_evv.dis.txt" || true
+
+          {
+            echo '=== ProTanki bridge candidates ==='
+            grep -En 'predictedRating|deltaRating|battleMovingDamage|predictedMovingDamage|deltaDamage|setData|set_data|flash|view|component|update|rating|damage|moving' "$dest/PROTANKI_mod_pro_gunmarks.dis.txt" || true
+            echo
+            echo '=== EVV bridge candidates ==='
+            grep -En 'moePercent|moeAVG|moeMarks|moe1|moe2|moe3|moe4|MoEGarageGameFaceView|model|state|update|vehicle|expected|garage' "$dest/EVV_mod_evv.dis.txt" || true
+          } > "$dest/BYTECODE_BRIDGE_INDEX.txt"
+
       - name: Commit targeted diagnostics
         shell: bash
         run: |
