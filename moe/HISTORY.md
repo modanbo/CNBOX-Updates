@@ -228,3 +228,13 @@ Status:
 - static review complete;
 - live WoT runtime review still required;
 - do not switch the public channel to 1.0.9 before runtime closure.
+
+
+#### 1.0.9 channel exposure correction
+
+For real-game Runtime testing through the existing Manager UI, `channel.moePacks` now points to **1.0.9** on `main`.
+
+This is **candidate exposure, not formal Runtime promotion**:
+- status remains `OFFICIAL_CN_UI_REVIEW_CANDIDATE`;
+- Manager/Creator can display and install 1.0.9;
+- Runtime validation is still required before changing the candidate to a final/locked status.
