@@ -342,3 +342,27 @@ Update order is mandatory:
 7. append the result, hashes, failures and rollback rationale to both GitHub and Drive.
 
 Never delete failed-version evidence. Failed candidates remain part of the inheritance record so the same mistake is not repeated.
+
+
+## Version numbering rule
+
+Effective after the historical 1.0.9 line:
+- patch digits run from 0 through 9;
+- after `1.0.9`, the next normal release line is `1.1.0`;
+- after `1.1.9`, the next normal release line is `1.2.0`, and so on.
+
+Historical `1.0.10` and `1.0.11` are retained exactly under those names because they already have published hashes, Runtime evidence, manifests and archive references. They are historical exception labels only and must not define future numbering.
+
+### 1.1.0 — OFFICIAL_UI_RECOVERY_CANDIDATE
+
+Runtime evidence from 1.0.11:
+- the garage component became visible again;
+- however the visible UI was the upstream EVV fallback strip, not the locked official CN 210×134 card;
+- therefore 1.0.11 is `VISIBLE_BUT_OFFICIAL_UI_TAKEOVER_FAIL`, not a pass.
+
+1.1.0 repair scope:
+- garage UI takeover only;
+- remove all `:scope` selectors from the isolated GameFace adapter;
+- use direct child traversal for `najx-moe-official`, `evv2-header`, and `evv2-progress`;
+- require `najx-moe-adapter-ready` plus `data-najx-moe-ui="official-210x134"` before upstream EVV presentation can be hidden;
+- keep ProTanki/EVV calculation, model, event, drag, anchor and persistence ownership frozen.
