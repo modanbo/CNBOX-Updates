@@ -1,0 +1,23 @@
+Pinned EVV WOTMOD:
+0bca710cb4d112659f8286b0a006b7375e39eccaadada79a477e0589e8d50b2e  /home/runner/work/_temp/moe-trilocale/evv/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod
+
+Locale files:
+cs.yml
+de.yml
+ja.yml
+ko.yml
+pl.yml
+ru.yml
+th.yml
+uk.yml
+vi.yml
+zh_cn.yml
+zh_sg.yml
+zh_tw.yml
+
+English file exists?
+NO
+
+GameFace files:
+EVV2.css
+EVV2.js

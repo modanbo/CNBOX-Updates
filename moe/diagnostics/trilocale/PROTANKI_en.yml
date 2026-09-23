@@ -1,0 +1,24 @@
+battle/unavailable: Play more battles
+battle/nextMarkLabel: Damage for {}%
+battle/damageCurrentLabel: Tot. damage
+battle/minimizerShow: {HEADER}Marks of excellence{/HEADER}{BODY}Press to display mod panel{/BODY}
+battle/minimizerHide: {HEADER}Marks of excellence{/HEADER}{BODY}Press to hide mod panel{/BODY}
+settings/title: Marks on Gun dynamic calculation
+settings/style/title: Visual style of the panel
+settings/style/tooltip: {HEADER}Configuring the visual style of the panel{/HEADER}{BODY}Regardless of the choice of design, the panel <br>can be moved around the screen.<br>You can also hide/show the panel by pressing the <br>corresponding button on the right side of the panel.<br><br><br>Old design<br><img src="img://gui/maps/mods/gunmarks/old.png" width="348" height="111"/><br><br>New design<br><img src="img://gui/maps/mods/gunmarks/new.png" width="348" height="190"/><br><br>Minimalist design<br><img src="img://gui/maps/mods/gunmarks/new-simple.png" width="348" height="91"/>{/BODY}
+settings/style/varian1: Old design
+settings/style/varian2: New design
+settings/style/varian3: Minimalist design
+settings/anchor/title: Panel starting point
+settings/anchor/tooltip: {HEADER}Configuring panel position{/HEADER}{BODY}Select the location on the screen <br>to which the panel will be attached.<br><br><img src="img://gui/maps/mods/gunmarks/screen.png" width="250" height="136"/><br>{/BODY}
+settings/anchor/varian1: Screen center
+settings/anchor/varian2: Up - Left
+settings/anchor/varian3: Up - Right
+settings/anchor/varian4: Bottom - Left
+settings/anchor/varian5: Bottom - Right
+settings/progress/title: Progress bar logic
+settings/progress/tooltip: {HEADER}Configuring progress bar logic{/HEADER}{BODY}If the visual style includes a progress bar, <br>you can choose the logic to fill this bar:<br> • total damage for battle - the progression of the total damage needed to keep the current mark.<br> • final mark value - progress bar is filled relative to the result value of the mark.{/BODY}
+settings/progress/varian1: Total damage for battle
+settings/progress/varian2: Final mark value
+settings/mark/label: Display maximal achived mark
+settings/mark/tooltip: {HEADER}НDisplay maximal achived mark{/HEADER}{BODY}Display the maximum achieved mark on the panel <br>as stars (a filled star for each mark taken).{/BODY}
