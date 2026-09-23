@@ -1,6 +1,6 @@
 # pydisasm version 6.1.8
 # Python bytecode 2.7 (62211)
-# Disassembled from Python 3.12.3 (main, Jul 15 2026, 23:46:41) [GCC 13.3.0]
+# Disassembled from Python 3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]
 # Timestamp in code: 1788211489 (2026-08-31 21:24:49)
 # Method Name:       <pjorion_protected>
 # Filename:          mod_pro_gunmarks
