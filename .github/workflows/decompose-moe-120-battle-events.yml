@@ -1,0 +1,134 @@
+name: Decompose MoE 1.2.0 battle event owners
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/decompose-moe-120-battle-events.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 0
+
+      - name: Fetch pinned upstream packages
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120evt"
+          mkdir -p "$root/protanki" "$root/evv"
+          curl -fL --retry 3 --connect-timeout 20 'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/protanki"
+          curl -fL --retry 3 --connect-timeout 20 'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip' -o "$root/evv.zip"
+          echo '4fcb507d6ab133b959c99fa18af5c917e98b824f7a2b0e86210db5a3df87555c  '"$root"'/evv.zip' | sha256sum -c -
+          unzip -q "$root/evv.zip" -d "$root/evv"
+
+      - name: Peel ProTanki protected module to metadata
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120evt"
+          dest="$GITHUB_WORKSPACE/moe/rebuild/1.2.0"
+          mkdir -p "$root/protanki_core"
+          unzip -q "$root/protanki/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod" -d "$root/protanki_core"
+          cat > "$root/probe.py" <<'PY'
+          import __builtin__, imp, marshal, os, sys, zlib, types
+          source=sys.argv[1]; output=sys.argv[2]
+          real_decompress=zlib.decompress
+          captures=[]
+          def cap(data,*args):
+              v=real_decompress(data,*args)
+              captures.append(v)
+              return v
+          zlib.decompress=cap
+          try:
+              imp.load_compiled('probe_mod_pro_gunmarks',source)
+          except Exception:
+              pass
+          finally:
+              zlib.decompress=real_decompress
+
+          def interesting(s):
+              q=s.lower()
+              keys=['battle','damage','feedback','event','assist','avatar','player','input','cursor','settings','modslist','flash','view','gunmark','rating','moving','position','drag']
+              return any(k in q for k in keys)
+
+          out=[]
+          def walk(co,depth=0,seen=None):
+              if seen is None: seen=set()
+              if id(co) in seen:return
+              seen.add(id(co))
+              out.append('  '*depth+'CODE '+str(co.co_name))
+              names=[str(x) for x in co.co_names if interesting(str(x))]
+              if names: out.append('  '*depth+'NAMES '+repr(names))
+              ss=[]
+              for x in co.co_consts:
+                  if isinstance(x,basestring) and interesting(x):
+                      ss.append(x)
+              if ss: out.append('  '*depth+'STR '+repr(ss[:80]))
+              for x in co.co_consts:
+                  if isinstance(x,types.CodeType): walk(x,depth+1,seen)
+
+          out.append('captures=%d'%len(captures))
+          for i,data in enumerate(captures):
+              out.append('capture[%d].size=%d'%(i,len(data)))
+              try:
+                  co=marshal.loads(data)
+              except Exception as e:
+                  out.append('capture[%d].marshal_error=%r'%(i,e))
+                  continue
+              if isinstance(co,types.CodeType): walk(co)
+          open(output,'wb').write(('\n'.join(out)+'\n').encode('utf-8'))
+          PY
+          docker run --rm -v "$root:/work" python:2.7 python /work/probe.py /work/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc /work/PROTANKI_EVENT_OWNER.txt
+          cp "$root/PROTANKI_EVENT_OWNER.txt" "$dest/PROTANKI_EVENT_OWNER.txt"
+
+      - name: EVV and dependency battle hook scan
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120evt"
+          dest="$GITHUB_WORKSPACE/moe/rebuild/1.2.0"
+          {
+            echo '# EVV package and dependency battle/cursor hook strings'
+            find "$root/evv" -type f -name '*.wotmod' -print | sort | while read -r w; do
+              echo; echo "## $(basename "$w")"
+              tmp="$RUNNER_TEMP/evt_$(basename "$w" | tr '.' '_')"
+              rm -rf "$tmp"; mkdir -p "$tmp"; unzip -q "$w" -d "$tmp"
+              find "$tmp" -type f -name '*.pyc' -print | sort | while read -r p; do
+                hits=$(strings -a -n 4 "$p" | grep -Eai 'PlayerFeedbackEvent|BattleFeedback|BATTLE_EVENT_TYPE|DAMAGE|RADIO_ASSIST|TRACK_ASSIST|STUN_ASSIST|SHOW_CURSOR|HIDE_CURSOR|handleKeyEvent|InputHandler|battle.*event|onBattleEvents|feedback_events|PlayerAvatar|startGUI|avatar' | sort -u || true)
+                if [ -n "$hits" ]; then
+                  echo "### ${p#$tmp/}"
+                  echo "$hits"
+                fi
+              done
+            done
+          } > "$dest/EVV_DEPENDENCY_BATTLE_HOOKS.txt"
+
+          {
+            echo '# Meta dependency declarations'
+            find "$root/protanki" "$root/evv" -type f -name '*.wotmod' -print | sort | while read -r w; do
+              echo; echo "## $(basename "$w")"
+              unzip -p "$w" meta.xml 2>/dev/null || true
+            done
+          } > "$dest/META_DEPENDENCIES.txt"
+
+      - name: Commit event owner reports
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/rebuild/1.2.0
+          git commit -m 'Map MoE 1.2.0 battle event and cursor owners'
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
