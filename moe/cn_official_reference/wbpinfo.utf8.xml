@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+   <Package>
+  <ID>105AD6C75B9855C6FD70C247BFA01312</ID>
+  <Name>打环百分比插件-国服版</Name>
+  <Version>2.4.0.1</Version>
+  <Author>国服官方</Author>
+  <Url><![CDATA[-]]></Url>
+  <Summary><![CDATA[打环插件，打环数据国服版。插件来自国服官方。上面三颗星星的点亮状态对应了您已获得的环数，百分比数值则是您当前平均标伤在国服大数据中的排名，可通过右侧显示的上升或下降趋势来观察今日战斗后的浮动，同时也对应着平均标伤的变化！另外，最下方还标注了当前可获得奖励的过线标准，此数值则来源于更准确的国服大数据统计，三环过线标准将于每日进行核算更新。]]></Summary>
+  <FileList>
+	</FileList>
+<EscapePath>
+        <File Name="mods\2.4.0.1\wotcamp\mod_mark_on_gun.wotmod"/>
+        <File Name="mods\2.4.0.1\wotcamp\wotassist.api.wotmod"/>
+</EscapePath>
+
+</Package>
