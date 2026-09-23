@@ -160,6 +160,70 @@ jobs:
             } > "$dest/PROTANKI_INNER_INDEX.txt"
           fi
 
+
+      - name: Capture ProTanki marshal.loads payload
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-na-data"
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/data_bridge"
+          cat > "$root/capture_marshal.py" <<'PY'
+          import __builtin__, imp, marshal, os, sys
+
+          source=sys.argv[1]
+          out=sys.argv[2]
+          real_loads=marshal.loads
+          real_reload=__builtin__.reload
+          captures=[]
+
+          def capture_loads(data, *args):
+              try:
+                  captures.append(data)
+                  open(out + '.marshal.%02d.bin' % len(captures),'wb').write(data)
+              except Exception:
+                  pass
+              return real_loads(data, *args)
+
+          def safe_reload(mod):
+              if getattr(mod,'__name__','') in ('marshal','zlib'):
+                  return mod
+              return real_reload(mod)
+
+          marshal.loads=capture_loads
+          __builtin__.reload=safe_reload
+          try:
+              imp.load_compiled('probe_mod_pro_gunmarks_marshal', source)
+          except Exception as e:
+              open(out+'.exception.txt','wb').write(repr(e))
+          finally:
+              marshal.loads=real_loads
+              __builtin__.reload=real_reload
+
+          print('captures',len(captures))
+          PY
+
+          docker run --rm \
+            -v "$root:/work" \
+            python:2.7 \
+            python /work/capture_marshal.py \
+              /work/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc \
+              /work/PROTANKI_capture
+
+          cp "$root"/PROTANKI_capture.marshal.*.bin "$dest/" 2>/dev/null || true
+
+          python3 - "$root" "$dest" <<'PY'
+          import glob,marshal,os,sys,types
+          root,dest=sys.argv[1:3]
+          for path in glob.glob(root+'/PROTANKI_capture.marshal.*.bin'):
+              data=open(path,'rb').read()
+              try:
+                  co=marshal.loads(data)
+              except Exception:
+                  continue
+              # Python3 cannot unmarshal Python2 code objects; file may fail here.
+              open(os.path.join(dest,os.path.basename(path)+'.size.txt'),'w').write(str(len(data)))
+          PY
+
       - name: Commit targeted diagnostics
         shell: bash
         run: |
