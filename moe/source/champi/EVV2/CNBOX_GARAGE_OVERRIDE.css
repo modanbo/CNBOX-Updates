@@ -1,224 +1,135 @@
-/* CNBOX garage MoE skin — UI-only 1.0.8
- *
- * Visual target: archived CN garage reference (REF_CN_MOE_GARAGE_UI_20260921.jpg).
- * Measured target box is about 220 x 141 px at the reference capture scale.
- *
- * IMPORTANT:
- * - CHAMPi EVV2 calculation/model/drag/savePosition code is not changed here.
- * - This file changes presentation only.
+/* NAJXBox MoE 1.0.9 — official CN LOBBY presentation adapter
+ * UI authority: wotassist.markongun.swf (2.4.0.1)
+ * UI only. CHAMPi EVV model, calculation, events, Ctrl-drag and savePosition remain upstream.
+ * Official logical geometry: 210 x 134.
  */
 
-#evv2-root {
+#evv2-root.najx-moe-cn-official {
   box-sizing: border-box !important;
-  width: 220rem !important;
-  min-height: 140rem !important;
-  padding: 10rem 14rem 10rem 14rem !important;
-  background: rgba(8, 11, 9, .62) !important;
-  border: 1rem solid rgba(222, 220, 208, .24) !important;
+  width: 210rem !important;
+  height: 134rem !important;
+  min-width: 210rem !important;
+  min-height: 134rem !important;
+  max-width: 210rem !important;
+  max-height: 134rem !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
   border-radius: 0 !important;
-  box-shadow: inset 0 0 1rem rgba(0,0,0,.72), 0 1rem 2rem rgba(0,0,0,.35) !important;
-  color: #f2f0e8 !important;
-  font-family: PFDINMax, "PF DIN Max Compressed", Warhelios, sans-serif !important;
-  --evv2-delta-raised-color: #2fdaa1;
-  --evv2-delta-fallen-color: #cb4e52;
-  --evv2-delta-color: rgba(242,240,232,.98);
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  color: #fff !important;
   pointer-events: auto !important;
 }
 
-#evv2-root:hover {
-  background: rgba(8, 11, 9, .62) !important;
-  border-color: rgba(222, 220, 208, .24) !important;
-  box-shadow: inset 0 0 1rem rgba(0,0,0,.72), 0 1rem 2rem rgba(0,0,0,.35) !important;
+/* Keep upstream EVV DOM alive as the mature data/render owner, but hide its presentation. */
+#evv2-root.najx-moe-cn-official > .evv2-header,
+#evv2-root.najx-moe-cn-official > .evv2-progress {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
 }
 
-/* --- upper block: ring + marks + percent + average --- */
-#evv2-root .evv2-main {
-  position: relative !important;
-  display: block !important;
-  width: 100% !important;
-  min-height: 73rem !important;
-}
-
-/* ring shown at the left of the reference card */
-#evv2-root .evv2-main::before {
-  content: "";
+#evv2-root .najx-moe-official {
   position: absolute;
-  left: 5rem;
-  top: 25rem;
-  width: 31rem;
-  height: 31rem;
+  left: 0;
+  top: 0;
   box-sizing: border-box;
-  border: 7rem solid rgba(246,243,232,.98);
-  border-right-color: rgba(65,67,61,.92);
-  border-bottom-color: rgba(65,67,61,.92);
-  border-radius: 50%;
-  transform: rotate(-18deg);
+  width: 210rem;
+  height: 134rem;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANIAAACGCAYAAACohtSjAAABtklEQVR4nO3WwQkCQRBFwV4xIlMyLiMVWS8agQ+GkapLz/FfHswxM88BfnLMzDkzj9VDYGP36+fxWjoDNndZPQD+gZAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAhcP/dYugI29w3ptnQFbM7XDgJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQLHzJyrR8Du3oVcBjkQD+1tAAAAAElFTkSuQmCC");
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: 210rem 134rem;
+  font-family: PFDINMax, "PF DIN Max Compressed", Warhelios, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  color: #fff;
+  text-shadow: 0 1rem 1rem rgba(0,0,0,.9);
   pointer-events: none;
+  user-select: none;
 }
 
-/* keep EVV's own mark-count icon/data; only reposition it */
-#evv2-root .evv2-left {
-  position: absolute !important;
-  left: 57rem !important;
-  top: 24rem !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  width: auto !important;
-  min-width: 0 !important;
+#evv2-root:hover .najx-moe-official {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANIAAACGCAYAAACohtSjAAABs0lEQVR4nO3WsQ0CQRAEwX14l2jIPwSiIYDHIQNaOh2qctYdp6U9ZuYa4Cfn976WroC9PW+rF8A/EBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQUBIEBASBIQEASFBQEgQEBIEhAQBIUFASBAQEgSEBAEhQeD83vvSFbC5Y2aumXmvHgIbe3jtICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQICAkCAgJAkKCgJAgICQICAkCQoKAkCAgJAgICQJCgoCQIHDMzLV6BOzuA8GEBg6zmrzJAAAAAElFTkSuQmCC");
 }
 
-#evv2-root .evv2-moeicon {
-  position: absolute !important;
-  left: 1rem !important;
-  top: -22rem !important;
-  display: block !important;
-  width: 54rem !important;
-  height: 17rem !important;
-  margin: 0 !important;
-  object-fit: contain !important;
-  opacity: .96 !important;
-  pointer-events: none !important;
+.najx-moe-official .najx-ring {
+  position: absolute;
+  left: 20rem;
+  top: 24rem;
+  width: 40rem;
+  height: 40rem;
+}
+.najx-moe-official .najx-ring svg { width: 40rem; height: 40rem; overflow: visible; }
+.najx-moe-official .najx-ring-track { stroke: rgba(92,89,80,.86); fill: none; stroke-width: 8; }
+.najx-moe-official .najx-ring-value {
+  stroke: #FFEECC;
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: butt;
+  filter: drop-shadow(0 0 2rem #6B5239);
+  transform: rotate(-90deg);
+  transform-origin: 20rem 20rem;
 }
 
-#evv2-root .evv2-moepercent,
-#evv2-root .evv2-percent {
-  font-size: 16rem !important;
-  line-height: 20rem !important;
-  font-weight: 700 !important;
-  color: rgba(246,243,232,.99) !important;
-  white-space: nowrap !important;
-  text-shadow: 0 1rem 1rem rgba(0,0,0,.92), 0 0 2rem rgba(0,0,0,.42) !important;
+.najx-moe-official .najx-star { position:absolute; top:11rem; width:22rem; height:21rem; object-fit:contain; }
+.najx-moe-official .najx-star-1 { left:72rem; }
+.najx-moe-official .najx-star-2 { left:89rem; }
+.najx-moe-official .najx-star-3 { left:106rem; }
+
+.najx-moe-official .najx-rating-row {
+  position:absolute; left:73rem; top:37rem;
+  display:flex; align-items:flex-start; white-space:nowrap;
+  height:22rem;
+}
+.najx-moe-official .najx-rating {
+  color:#FFFCF6; font-size:18rem; line-height:21rem; white-space:nowrap;
+}
+.najx-moe-official .najx-rating-arrow {
+  width:6rem; height:11rem; object-fit:contain; margin-left:7rem; margin-top:2rem;
+}
+.najx-moe-official .najx-rating-delta {
+  font-size:14rem; line-height:17rem; margin-left:3rem; margin-top:2rem; white-space:nowrap;
+}
+.najx-moe-official .najx-rating-row.is-up .najx-rating-delta { color:#3EFF99; }
+.najx-moe-official .najx-rating-row.is-down .najx-rating-delta { color:#FF553E; }
+.najx-moe-official .najx-rating-row.is-flat .najx-rating-delta { color:#FFFCF6; }
+
+.najx-moe-official .najx-avg-row {
+  position:absolute; left:73rem; top:60rem;
+  display:flex; align-items:flex-start; white-space:nowrap; height:20rem;
+}
+.najx-moe-official .najx-avg-label {
+  margin-top:1rem; color:#FFFFFF; opacity:.60; font-size:12rem; line-height:17rem; white-space:nowrap;
+}
+.najx-moe-official .najx-avg-value {
+  margin-left:5rem; color:#FFEECC; font-size:14rem; line-height:18rem; white-space:nowrap;
 }
 
-#evv2-root .evv2-delta {
-  position: absolute !important;
-  left: 113rem !important;
-  top: 26rem !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  width: 72rem !important;
-  white-space: nowrap !important;
+.najx-moe-official .najx-threshold-label,
+.najx-moe-official .najx-threshold-value {
+  position:absolute; top:auto; font-size:13rem; line-height:16rem; white-space:nowrap;
 }
-
-#evv2-root .evv2-delta-arrow,
-#evv2-root .evv2-delta-value {
-  font-size: 13rem !important;
-  line-height: 18rem !important;
-  font-weight: 700 !important;
-  text-shadow: 0 1rem 1rem rgba(0,0,0,.92), 0 0 2rem rgba(0,0,0,.42) !important;
-}
-
-#evv2-root .evv2-delta-value {
-  margin-left: 3rem !important;
-}
-
-#evv2-root.evv2-delta-raised .evv2-delta-arrow,
-#evv2-root.evv2-delta-raised .evv2-delta-value {
-  color: #2fdaa1 !important;
-}
-
-#evv2-root.evv2-delta-fallen .evv2-delta-arrow,
-#evv2-root.evv2-delta-fallen .evv2-delta-value {
-  color: #cb4e52 !important;
-}
-
-#evv2-root .evv2-right {
-  position: absolute !important;
-  left: 57rem !important;
-  top: 48rem !important;
-  display: flex !important;
-  align-items: baseline !important;
-  justify-content: flex-start !important;
-  width: 132rem !important;
-  min-width: 0 !important;
-}
-
-#evv2-root .evv2-right::before {
-  content: "平均标伤";
-  margin-right: 7rem;
-  color: rgba(222,220,210,.98);
-  font-size: 12rem;
-  line-height: 17rem;
-  font-weight: 600;
-  white-space: nowrap;
-  text-shadow: 0 1rem 1rem rgba(0,0,0,.92);
-}
-
-#evv2-root .evv2-avg {
-  font-size: 12rem !important;
-  line-height: 17rem !important;
-  font-weight: 700 !important;
-  color: rgba(246,243,232,.99) !important;
-  white-space: nowrap !important;
-  text-shadow: 0 1rem 1rem rgba(0,0,0,.92) !important;
-}
-
-#evv2-root .evv2-damage-icon {
-  display: none !important;
-}
-
-/* Reference card does not show the long progress strip. */
-#evv2-root .evv2-progress {
-  display: none !important;
-}
-
-/* --- lower block: 65 / 85 / 95 / 100 damage lines --- */
-#evv2-root .evv2-threshold-legend {
-  box-sizing: border-box !important;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  grid-template-rows: 19rem 19rem !important;
-  column-gap: 12rem !important;
-  row-gap: 0 !important;
-  width: calc(100% + 28rem) !important;
-  margin: 0 -14rem !important;
-  padding: 8rem 17rem 4rem 17rem !important;
-  border-top: 1rem solid rgba(220,218,206,.16) !important;
-  pointer-events: none !important;
-}
-
-#evv2-root .evv2-threshold-item {
-  display: flex !important;
-  align-items: baseline !important;
-  justify-content: flex-start !important;
-  min-width: 0 !important;
-  white-space: nowrap !important;
-  color: rgba(224,222,212,.98) !important;
-}
-
-#evv2-root .evv2-threshold-icon,
-#evv2-root .evv2-threshold-percent {
-  display: none !important;
-}
-
-#evv2-root .evv2-threshold-item::before {
-  display: inline-block;
-  width: 31rem;
-  margin-right: 8rem;
-  color: rgba(222,220,210,.98);
-  font-size: 12rem;
-  line-height: 17rem;
-  font-weight: 500;
-  text-align: left;
-  text-shadow: 0 1rem 1rem rgba(0,0,0,.92);
-}
-
-#evv2-root .evv2-threshold-item[data-percent="65"]::before { content: "65%"; }
-#evv2-root .evv2-threshold-item[data-percent="85"]::before { content: "85%"; }
-#evv2-root .evv2-threshold-item[data-percent="95"]::before { content: "95%"; }
-#evv2-root .evv2-threshold-item[data-percent="100"]::before { content: "100%"; }
-
-#evv2-root .evv2-threshold-label {
-  margin: 0 !important;
-  color: rgba(246,243,232,.98) !important;
-  font-size: 12rem !important;
-  line-height: 17rem !important;
-  font-weight: 600 !important;
-  text-shadow: 0 1rem 1rem rgba(0,0,0,.92) !important;
-}
-
-#evv2-root.evv2-color-mode .evv2-threshold-item {
-  --evv2-threshold-color: rgba(246,243,232,.98) !important;
-}
+.najx-moe-official .najx-threshold-label { color:#FFFFFF; opacity:.60; }
+.najx-moe-official .najx-threshold-value { color:#FFFFFF; opacity:1; }
+.najx-moe-official .najx-t65-label { left:19rem; top:95rem; }
+.najx-moe-official .najx-t65-value { left:55rem; top:95rem; }
+.najx-moe-official .najx-t85-label { left:125rem; top:95rem; }
+.najx-moe-official .najx-t85-value { left:160rem; top:95rem; }
+.najx-moe-official .najx-t95-label { left:19rem; top:114rem; }
+.najx-moe-official .najx-t95-value { left:54rem; top:114rem; }
+.najx-moe-official .najx-t100-label { left:119rem; top:114rem; }
+.najx-moe-official .najx-t100-value { left:160rem; top:114rem; }
