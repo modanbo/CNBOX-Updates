@@ -192,3 +192,39 @@ Locked future architecture:
 
 Reference:
 `moe/reference/CN_OFFICIAL_SWF_UI_AUTHORITY_2.4.0.1_20260923.md`
+
+
+### 1.0.9 — OFFICIAL_CN_UI_REVIEW_CANDIDATE
+
+Official UI authority:
+- user-supplied CN official 2.4.0.1 SWF;
+- BATTLE 147×93;
+- LOBBY normal/hover 210×134;
+- official arrows 6×11, stars 22×21 and relative component layout.
+
+Architecture:
+- ProTanki 8.1.01 backend, ProGunMarks host, battle events, drag and persisted offset are unchanged;
+- only `GunMarksPanelNew` presentation is adapted to the official CN BATTLE structure;
+- CHAMPi EVV 2.05.000 backend/model/Ctrl-drag/anchor/savePosition are unchanged;
+- upstream `EVV2.js` is retained byte-for-byte as the built file prefix, with only an isolated presentation tail appended;
+- the 1.0.7 custom runtime drag/position patch remains removed.
+
+Static closure:
+- workflow run `35889690717`: SUCCESS;
+- `STATIC_MOE_109_UI_ONLY_REVIEW_PASS`;
+- artifact digest `sha256:221ba386f7f5760eedc4456b4132d01e433e528c52a3e90649ff9f0a3aaeee7f`.
+
+Payload:
+`0cdf01752860e172ae52bcd75ad31993bf13a5698662910f76b8f699f2aa2744`
+
+ProTanki UI WOTMOD:
+`8728f3d3a15a17e98873bf4e51ae32ec96fb01053ffd119f5f276b332b24e2f4`
+
+CHAMPi EVV garage WOTMOD:
+`fc22480047e9f64e14fe5f0a38e283bfe4f7382250246b36b07ec0829968b4d6`
+
+Status:
+- branch: `work/moe-component-1.0.9-cn-official-ui`;
+- static review complete;
+- live WoT runtime review still required;
+- do not switch the public channel to 1.0.9 before runtime closure.
