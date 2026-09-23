@@ -416,3 +416,28 @@ Runtime gate:
 3. verify official 147×93 three-row panel instead of new-simple UI;
 4. with Ctrl held and cursor visible, drag the panel and release;
 5. verify position persistence next battle/restart.
+
+
+### 1.1.3 Runtime result — FAILED / ARCHITECTURE CLAIM NOT REALIZED
+
+User Runtime evidence on 2026-09-23:
+- battle UI remained visually equivalent to the previous ProTanki-derived presentation;
+- expected true CN-host behavior was not observed;
+- NA plugin settings/UI ownership was still exposed to the user.
+
+Conclusion:
+- 1.1.3 did NOT actually become “CN UI host + NA data only”;
+- it still packaged the ProTanki/EVV plugin stacks deeply enough that their presentation/settings ownership remained visible;
+- therefore 1.1.3 is `RUNTIME_FAIL_ARCHITECTURE_NOT_REALIZED` and must not be promoted.
+
+Immediate containment:
+- main channel rolled back from 1.1.3 to 1.1.2;
+- do not continue patching the 1.1.3 host;
+- next design must separate NA data-provider files from NA UI/settings registration before any Runtime package is produced.
+
+New mandatory gate for the next version:
+1. no ProTanki visible battle UI owner;
+2. no EVV visible battle UI owner;
+3. no NA MoE settings UI exposed;
+4. actual official CN SWF/view contract must be the visible owner, not a re-skinned ProTanki panel;
+5. only NA data outputs may cross the bridge.
