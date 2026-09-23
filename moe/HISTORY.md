@@ -366,3 +366,12 @@ Runtime evidence from 1.0.11:
 - use direct child traversal for `najx-moe-official`, `evv2-header`, and `evv2-progress`;
 - require `najx-moe-adapter-ready` plus `data-najx-moe-ui="official-210x134"` before upstream EVV presentation can be hidden;
 - keep ProTanki/EVV calculation, model, event, drag, anchor and persistence ownership frozen.
+
+
+1.1.0 build closure:
+- GitHub Actions Run `35902946119`: SUCCESS.
+- Payload SHA256: `5b98aac5340547ff4bfe2c1f6d2fa16545fc7873d9e9df21158214c71cce8b50`.
+- ProTanki WOTMOD: `50dff15a98b1613c5847477500a822f091ee11f385d5e6e45445524c47860809`.
+- EVV WOTMOD: `2fec0d57ca5e8cdabf4bf580f77c39f1974530c075533908bf6da6ad1127c0f0`.
+- Review artifact digest: `7bd1ade395bb73f351eca56fe2f2ba06c9c6c1810ac384f85f01de7fe3524c5c`.
+- Manager channel now exposes `1.1.0 / OFFICIAL_UI_RECOVERY_CANDIDATE`.
