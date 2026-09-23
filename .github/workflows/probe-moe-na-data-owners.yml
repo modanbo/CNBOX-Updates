@@ -1,0 +1,84 @@
+name: Probe MoE NA data owners for CN UI bridge
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.1.3-cn-host-na-data-bridge
+    paths:
+      - '.github/workflows/probe-moe-na-data-owners.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.1.3-cn-host-na-data-bridge
+          fetch-depth: 0
+
+      - name: Fetch pinned NA data providers
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-na-data"
+          mkdir -p "$root/protanki" "$root/evv" "$root/out"
+
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' \
+            -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/protanki"
+
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip' \
+            -o "$root/evv.zip"
+          echo '4fcb507d6ab133b959c99fa18af5c917e98b824f7a2b0e86210db5a3df87555c  '"$root"'/evv.zip' | sha256sum -c -
+          unzip -q "$root/evv.zip" -d "$root/evv"
+
+      - name: Install Python 2.7 decompiler
+        shell: bash
+        run: |
+          python3 -m pip install --disable-pip-version-check --no-cache-dir uncompyle6
+
+      - name: Decompile only data-owner modules
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-na-data"
+          mkdir -p "$root/protanki_core" "$root/evv_core"
+
+          unzip -q "$root/protanki/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod" -d "$root/protanki_core"
+          unzip -q "$root/evv/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod" -d "$root/evv_core"
+
+          dest="$GITHUB_WORKSPACE/moe/diagnostics/data_bridge"
+          mkdir -p "$dest"
+
+          uncompyle6 \
+            "$root/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc" \
+            > "$dest/PROTANKI_mod_pro_gunmarks.py" || true
+
+          uncompyle6 \
+            "$root/evv_core/res/scripts/client/gui/mods/mod_evv.pyc" \
+            > "$dest/EVV_mod_evv.py" || true
+
+          {
+            echo '=== ProTanki data/callback symbols ==='
+            grep -En 'predictedRating|deltaRating|battleMovingDamage|predictedMovingDamage|deltaDamage|setData|set_data|update|flash|component|view|data' "$dest/PROTANKI_mod_pro_gunmarks.py" || true
+            echo
+            echo '=== EVV garage model/data symbols ==='
+            grep -En 'moePercent|moeAVG|moeMarks|moe1|moe2|moe3|moe4|MoEGarageGameFaceView|model|state|update|vehicle|garage|expected' "$dest/EVV_mod_evv.py" || true
+          } > "$dest/DATA_OWNER_INDEX.txt"
+
+      - name: Commit targeted diagnostics
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/diagnostics/data_bridge
+          git commit -m 'Archive NA MoE data-owner sources for CN bridge'
+          git push origin HEAD:work/moe-component-1.1.3-cn-host-na-data-bridge
