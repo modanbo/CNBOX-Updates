@@ -1,4 +1,4 @@
-name: Publish verified CNBOX binary
+name: Publish verified NAJXBox binary
 
 on:
   push:
@@ -35,13 +35,13 @@ jobs:
             throw "Source host is not allow-listed"
           }
 
-          $dest = ([string]$req.destination).Replace("\\","/")
+          $dest = ([string]$req.destination).Replace("\","/")
           if ($dest.StartsWith("/") -or $dest.Contains("..") -or
               $dest -notmatch "^(manager|payloads|manifests|profiles|language)/[A-Za-z0-9._/-]+$") {
             throw "Unsafe destination: $dest"
           }
 
-          $tmp = Join-Path $env:RUNNER_TEMP "cnbox-source.bin"
+          $tmp = Join-Path $env:RUNNER_TEMP "najxbox-source.bin"
           Invoke-WebRequest -Uri $req.sourceUrl -OutFile $tmp -UseBasicParsing
 
           $sourceHash = (Get-FileHash $tmp -Algorithm SHA256).Hash.ToLowerInvariant()
@@ -51,9 +51,10 @@ jobs:
           }
 
           $output = $tmp
+          $expanded = $null
           if (([string]$req.archive).ToLowerInvariant() -eq "zip") {
             if ([string]::IsNullOrWhiteSpace($req.extract)) { throw "Missing extract member" }
-            $extractName = ([string]$req.extract).Replace("\\","/")
+            $extractName = ([string]$req.extract).Replace("\","/")
             if ($extractName.StartsWith("/") -or $extractName.Contains("..")) { throw "Unsafe extract member" }
 
             $expanded = Join-Path $env:RUNNER_TEMP "expanded"
@@ -69,12 +70,63 @@ jobs:
             throw "Output SHA256 mismatch"
           }
 
+          # Hard security gate for Public Manager EXEs.
+          # Creator remains an engineering flavor and is intentionally excluded.
+          $isPublicManager =
+            $dest -match '^manager/(?:CNBOX_Manager|NAJXBox_Manager(?:_v[0-9]+\.[0-9]+\.[0-9]+)?)\.exe$'
+
+          if ($isPublicManager) {
+            if ($null -eq $expanded) {
+              throw "Public Manager publication requires a security-gated ZIP source."
+            }
+            if ([string]::IsNullOrWhiteSpace($req.securityExtract)) {
+              throw "Public Manager publication requires securityExtract."
+            }
+
+            $securityName = ([string]$req.securityExtract).Replace("\","/")
+            if ($securityName.StartsWith("/") -or $securityName.Contains("..")) {
+              throw "Unsafe securityExtract member"
+            }
+            $securityPath = Join-Path $expanded $securityName
+            if (!(Test-Path -LiteralPath $securityPath -PathType Leaf)) {
+              throw "Security gate manifest not found: $securityName"
+            }
+
+            $security = Get-Content -LiteralPath $securityPath -Raw -Encoding UTF8 | ConvertFrom-Json
+            if ($security.schemaVersion -ne 1) { throw "Unsupported Public security manifest schema" }
+            if ($security.product -ne "NAJXBox Manager") { throw "Security manifest product mismatch" }
+            if ($security.finalSha256.ToLowerInvariant() -ne $outputHash) {
+              throw "Security manifest SHA256 does not match Public EXE"
+            }
+            if ($security.signature.status -ne "PASS") { throw "Public signature security gate is not PASS" }
+            if ($security.defender.status -ne "PASS") { throw "Microsoft Defender security gate is not PASS" }
+            if ($security.virustotal.status -ne "PASS") { throw "VirusTotal security gate is not PASS" }
+            if ([int]$security.virustotal.malicious -ne 0) { throw "VirusTotal malicious detections are non-zero" }
+            if ([int]$security.virustotal.suspicious -ne 0) { throw "VirusTotal suspicious detections are non-zero" }
+
+            $sig = Get-AuthenticodeSignature -LiteralPath $output
+            if ($sig.Status -ne [System.Management.Automation.SignatureStatus]::Valid) {
+              throw "Public EXE Authenticode signature is not Valid: $($sig.Status)"
+            }
+            if ($null -eq $sig.SignerCertificate) { throw "Public EXE signer certificate is missing" }
+
+            $thumb = $sig.SignerCertificate.Thumbprint.ToUpperInvariant()
+            $manifestThumb = ([string]$security.signature.thumbprint).ToUpperInvariant()
+            if ($thumb -ne $manifestThumb) { throw "Signer thumbprint does not match security manifest" }
+
+            Write-Host "PUBLIC SECURITY GATE PASS"
+            Write-Host "  SHA256: $outputHash"
+            Write-Host "  Signer: $($sig.SignerCertificate.Subject)"
+            Write-Host "  Defender: PASS"
+            Write-Host "  VirusTotal malicious=0 suspicious=0"
+          }
+
           $destPath = Join-Path $env:GITHUB_WORKSPACE $dest
           New-Item -ItemType Directory -Force -Path (Split-Path $destPath -Parent) | Out-Null
           Copy-Item -LiteralPath $output -Destination $destPath -Force
 
-          git config user.name "cnbox-release-bot"
-          git config user.email "cnbox-release-bot@users.noreply.github.com"
+          git config user.name "najxbox-release-bot"
+          git config user.email "najxbox-release-bot@users.noreply.github.com"
           git add -- "$dest"
           if (git diff --cached --quiet) {
             Write-Host "No binary change to publish."
