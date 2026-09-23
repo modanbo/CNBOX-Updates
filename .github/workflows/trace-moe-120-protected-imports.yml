@@ -1,0 +1,104 @@
+name: Trace MoE 1.2.0 protected Python imports
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/trace-moe-120-protected-imports.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 0
+
+      - name: Fetch pinned cores
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120trace"
+          mkdir -p "$root/protanki" "$root/evv"
+          curl -fL --retry 3 --connect-timeout 20 'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' -o "$root/protanki.zip"
+          unzip -q "$root/protanki.zip" -d "$root/protanki"
+          curl -fL --retry 3 --connect-timeout 20 'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip' -o "$root/evv.zip"
+          unzip -q "$root/evv.zip" -d "$root/evv"
+          mkdir -p "$root/protanki_core" "$root/evv_core"
+          unzip -q "$root/protanki/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod" -d "$root/protanki_core"
+          unzip -q "$root/evv/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod" -d "$root/evv_core"
+
+      - name: Trace import requests before first hard failure
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120trace"
+          dest="$GITHUB_WORKSPACE/moe/rebuild/1.2.0"
+
+          cat > "$root/trace_imports.py" <<'PY'
+          import __builtin__, imp, os, sys, traceback
+
+          source=sys.argv[1]
+          output=sys.argv[2]
+          real_import=__builtin__.__import__
+          seen=[]
+
+          def traced(name, globals=None, locals=None, fromlist=None, level=-1):
+              entry=(name, tuple(fromlist or ()), level)
+              if entry not in seen:
+                  seen.append(entry)
+              return real_import(name, globals, locals, fromlist, level)
+
+          __builtin__.__import__=traced
+          exc=None
+          try:
+              imp.load_compiled('probe_target',source)
+          except Exception as e:
+              exc=traceback.format_exc()
+          finally:
+              __builtin__.__import__=real_import
+
+          with open(output,'w') as f:
+              for name,fromlist,level in seen:
+                  f.write('%s | from=%r | level=%r\n'%(name,fromlist,level))
+              f.write('\n=== EXCEPTION ===\n')
+              f.write(exc or 'none')
+          PY
+
+          docker run --rm -v "$root:/work" python:2.7 python /work/trace_imports.py /work/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc /work/protanki_imports.txt
+          docker run --rm -v "$root:/work" python:2.7 python /work/trace_imports.py /work/evv_core/res/scripts/client/gui/mods/mod_evv.pyc /work/evv_imports.txt
+          cp "$root/protanki_imports.txt" "$dest/PROTANKI_IMPORT_TRACE.txt"
+          cp "$root/evv_imports.txt" "$dest/EVV_IMPORT_TRACE.txt"
+
+      - name: Trace module names from raw byte payloads
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120trace"
+          dest="$GITHUB_WORKSPACE/moe/rebuild/1.2.0"
+          {
+            echo '# Raw dependency tokens'
+            for f in "$root/protanki_core/res/scripts/client/gui/mods/mod_pro_gunmarks.pyc" "$root/evv_core/res/scripts/client/gui/mods/mod_evv.pyc"; do
+              echo
+              echo "## $f"
+              strings -a -n 3 "$f" |
+                grep -Eai 'modsSettingsApi|modsListApi|aslainMenu|champisettingsgui|gambiter|openwg|PlayerFeedback|BattleFeedback|feedback_events|BATTLE_EVENT_TYPE|PlayerAvatar|InputHandler|gunmarks|expectedVehicle|hangar|lobby|battle' |
+                sort -u || true
+            done
+          } > "$dest/PROTECTED_DEPENDENCY_TOKENS.txt"
+
+      - name: Commit trace
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/rebuild/1.2.0
+          git commit -m 'Trace MoE 1.2.0 protected core imports'
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
