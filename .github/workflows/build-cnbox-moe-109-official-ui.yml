@@ -9,7 +9,7 @@ on:
       - 'moe/source/champi/EVV2/CNBOX_GARAGE_OVERRIDE.css'
       - 'moe/source/champi/EVV2/CNBOX_GARAGE_PRESENTATION_TAIL.js'
       - 'moe/source/champi/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as'
-      - '.github/workflows/build-cnbox-moe-109-ui.yml'
+      - '.github/workflows/build-cnbox-moe-109-official-ui.yml'
   workflow_dispatch:
 
 permissions:
