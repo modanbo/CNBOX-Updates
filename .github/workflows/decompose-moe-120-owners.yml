@@ -1,0 +1,131 @@
+name: Decompose MoE 1.2.0 dependency owners
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/decompose-moe-120-owners.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  decompose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 0
+
+      - name: Fetch pinned upstream packages and FFDec
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120"
+          mkdir -p "$root/protanki" "$root/evv" "$root/ffdec"
+          curl -fL --retry 3 --connect-timeout 20 'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip' -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/protanki"
+          curl -fL --retry 3 --connect-timeout 20 'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip' -o "$root/evv.zip"
+          echo '4fcb507d6ab133b959c99fa18af5c917e98b824f7a2b0e86210db5a3df87555c  '"$root"'/evv.zip' | sha256sum -c -
+          unzip -q "$root/evv.zip" -d "$root/evv"
+          curl -fL --retry 3 --connect-timeout 20 'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip' -o "$root/ffdec.zip"
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+
+      - name: Build owner inventory
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120"
+          dest="$GITHUB_WORKSPACE/moe/rebuild/1.2.0"
+          rm -rf "$dest"
+          mkdir -p "$dest/packages" "$dest/swf_symbols"
+          python3 - "$root" "$dest" <<'PY'
+          import os,sys,zipfile,hashlib,json,collections
+          root,dest=sys.argv[1:3]
+          def sha(p):
+              h=hashlib.sha256()
+              with open(p,'rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
+              return h.hexdigest()
+          roots=[('PROTANKI',os.path.join(root,'protanki')),('EVV',os.path.join(root,'evv'))]
+          outer=[]; wotmods=[]; overlap=collections.defaultdict(list); report=[]
+          for origin,base in roots:
+              for dp,_,fs in os.walk(base):
+                  for n in fs:
+                      p=os.path.join(dp,n); rel=os.path.relpath(p,base).replace(os.sep,'/')
+                      outer.append({'origin':origin,'path':rel,'size':os.path.getsize(p),'sha256':sha(p)})
+                      if n.lower().endswith('.wotmod'): wotmods.append((origin,p,rel))
+          json.dump(outer,open(os.path.join(dest,'OUTER_PACKAGE_INVENTORY.json'),'w',encoding='utf-8'),ensure_ascii=False,indent=2)
+          for origin,p,rel in wotmods:
+              h=sha(p); overlap[h].append((origin,rel)); name=os.path.basename(p)
+              outdir=os.path.join(dest,'packages',origin+'__'+name.replace('.','_')); os.makedirs(outdir,exist_ok=True)
+              with zipfile.ZipFile(p) as z:
+                  members=sorted(z.namelist())
+                  json.dump([{'path':m,'size':z.getinfo(m).file_size,'crc':z.getinfo(m).CRC} for m in members],open(os.path.join(outdir,'members.json'),'w',encoding='utf-8'),ensure_ascii=False,indent=2)
+                  pycs=[m for m in members if m.lower().endswith('.pyc')]
+                  swfs=[m for m in members if m.lower().endswith('.swf')]
+                  gf=[m for m in members if '/gameface/' in m.lower() or m.lower().endswith(('.js','.css'))]
+                  cfg=[m for m in members if '/configs/' in m.lower() or '/text/' in m.lower() or m.lower().endswith(('.json','.yml','.yaml','.xml'))]
+                  report.append({'origin':origin,'outerPath':rel,'file':name,'sha256':h,'size':os.path.getsize(p),'pyc':pycs,'swf':swfs,'gameface':gf,'configs':cfg})
+              with open(os.path.join(outdir,'summary.txt'),'w',encoding='utf-8') as f:
+                  f.write('origin='+origin+'\nouterPath='+rel+'\nsha256='+h+'\n')
+                  for k in ('pyc','swf','gameface','configs'):
+                      f.write('\n['+k+']\n'+'\n'.join(report[-1][k])+'\n')
+          json.dump(report,open(os.path.join(dest,'WOTMOD_OWNER_INVENTORY.json'),'w',encoding='utf-8'),ensure_ascii=False,indent=2)
+          json.dump([{'sha256':h,'owners':[{'origin':a,'path':b} for a,b in items]} for h,items in overlap.items() if len(items)>1],open(os.path.join(dest,'SHARED_BINARY_OVERLAP.json'),'w',encoding='utf-8'),ensure_ascii=False,indent=2)
+          PY
+
+          find "$root/protanki" "$root/evv" -type f -name '*.wotmod' -print0 |
+          while IFS= read -r -d '' w; do
+            tmp="$RUNNER_TEMP/wotmod_extract_$(echo -n "$w" | sha256sum | cut -c1-12)"
+            rm -rf "$tmp"; mkdir -p "$tmp"; unzip -q "$w" -d "$tmp"
+            label=$(basename "$w" | tr '. ' '__')
+            {
+              echo "WOTMOD=$w"
+              echo "SHA256=$(sha256sum "$w" | awk '{print $1}')"
+              find "$tmp" -type f -name '*.pyc' -print | sort | while read -r p; do
+                echo; echo "### PYC ${p#$tmp/}"
+                strings -a -n 4 "$p" | grep -Eai 'settings|modslist|register|battle|hangar|lobby|damage|feedback|event|input|mouse|cursor|view|gameface|flash|position|drag|save|update|PlayerAvatar|BattleFeedback|component|garage|vehicle|rating|mark|assist' | sort -u | head -n 400 || true
+              done
+            } > "$dest/packages/${label}_PYC_SYMBOLS.txt"
+            find "$tmp" -type f -name '*.swf' -print | sort | while read -r swf; do
+              swflabel=$(basename "$swf" | tr '. ' '__')
+              asdir="$RUNNER_TEMP/as_${label}_${swflabel}"
+              rm -rf "$asdir"
+              "$root/ffdec/ffdec.sh" -export script "$asdir" "$swf" >/dev/null 2>&1 || true
+              if [ -d "$asdir" ]; then
+                {
+                  echo "WOTMOD=$(basename "$w")"
+                  echo "SWF=${swf#$tmp/}"
+                  find "$asdir" -type f -name '*.as' -print | sort | while read -r a; do
+                    rel="${a#$asdir/}"
+                    echo; echo "### $rel"
+                    grep -E '^[[:space:]]*(public |private |protected |internal )?(class|interface|function|var)|^[[:space:]]*import ' "$a" | head -n 500 || true
+                  done
+                } > "$dest/swf_symbols/${label}__${swflabel}.txt"
+              fi
+            done
+          done
+
+          python3 - "$dest/WOTMOD_OWNER_INVENTORY.json" "$dest/RELATIONSHIP_MAP.md" <<'PY'
+          import json,sys
+          rows=json.load(open(sys.argv[1],encoding='utf-8'))
+          o=['# MoE 1.2.0 full rebuild - dependency/owner inventory','', 'Generated from pinned upstream packages. Inventory only; ownership verdict follows after review.','', '| Origin | WOTMOD | PYC | SWF | GameFace | Config/Text |','|---|---|---:|---:|---:|---:|']
+          for r in rows:o.append('| %s | %s | %d | %d | %d | %d |'%(r['origin'],r['file'],len(r['pyc']),len(r['swf']),len(r['gameface']),len(r['configs'])))
+          open(sys.argv[2],'w',encoding='utf-8').write('\n'.join(o)+'\n')
+          PY
+
+      - name: Commit owner inventory
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/rebuild/1.2.0
+          git commit -m 'Archive MoE 1.2.0 full dependency owner inventory'
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
