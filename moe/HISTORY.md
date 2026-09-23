@@ -281,3 +281,25 @@ Runtime gate:
 - original English NA must show the component and English labels;
 - both zh_sg UI modes must show the component and Chinese labels;
 - verify garage + battle, positive/negative arrows, no duplicate battle panel, drag persistence, and restart persistence.
+
+
+### 1.0.10 Runtime result — FAILED / DO NOT PROMOTE
+
+User Runtime result on 2026-09-23:
+- original English NA client: MoE component not visible;
+- Chinese-localized client: MoE component also not visible.
+
+Therefore 1.0.10 is classified:
+`RUNTIME_FAIL_ALL_LANGUAGES`
+
+Do not promote 1.0.10 and do not reuse its locale approach as a known-good baseline.
+
+Regression-suspect delta versus 1.0.9:
+- 1.0.10 modified the original ProTanki `en.yml`; this violated the mature-core freeze principle and can affect locale initialization across modes.
+- 1.0.10 garage presentation introduced a `for...of navigator.languages` path. Coherent/GameFace compatibility was not Runtime-proven. Because the CSS hid the original EVV presentation, any adapter exception could produce a completely blank garage panel.
+
+Immediate containment:
+- main `channel.moePacks` rolled back to 1.0.9;
+- 1.0.11 recovery work is rebased on the 1.0.9 visible structure;
+- original `en.yml` is byte-frozen again;
+- garage upstream UI can only be hidden after an explicit adapter-ready gate.
