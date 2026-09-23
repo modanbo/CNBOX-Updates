@@ -1,0 +1,477 @@
+name: Build NAJXBox MoE 1.1.2 battle owner recovery candidate
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.1.2-battle-owner
+    paths:
+      - 'moe/source/poliroid/views/battle/gunmarks/GunMarksPanelNew.as'
+      - 'moe/source/champi/EVV2/CNBOX_GARAGE_OVERRIDE.css'
+      - 'moe/source/champi/EVV2/CNBOX_GARAGE_PRESENTATION_TAIL.js'
+      - 'moe/source/champi/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as'
+      - '.github/workflows/build-cnbox-moe-112-battle-owner.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.1.2-battle-owner
+          fetch-depth: 0
+
+      - name: Fetch pinned upstream packages and FFDec
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-112"
+          mkdir -p "$root/protanki_outer" "$root/evv_outer" "$root/ffdec"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Gun_Marks_Calculator_a834e732.zip'             -o "$root/protanki.zip"
+          echo '3df826d272877fca504b48d968b68e4e82e7118ba7da17c27ae61c5fc24201ee  '"$root"'/protanki.zip' | sha256sum -c -
+          unzip -q "$root/protanki.zip" -d "$root/protanki_outer"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://repo.aslain.com/wot_modmanager/Files/MarksOnGun/MarksOnGun_Expected_Vehicle_Values_2edd8787.zip'             -o "$root/evv.zip"
+          echo '4fcb507d6ab133b959c99fa18af5c917e98b824f7a2b0e86210db5a3df87555c  '"$root"'/evv.zip' | sha256sum -c -
+          unzip -q "$root/evv.zip" -d "$root/evv_outer"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip'             -o "$root/ffdec.zip"
+          echo '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  '"$root"'/ffdec.zip' | sha256sum -c -
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+
+      - name: Build ProTanki battle UI-only core
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-112"
+          upstream="$root/protanki_outer/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+          mkdir -p "$root/protanki_core" "$root/protanki_before" "$root/protanki_after"
+          unzip -q "$upstream" -d "$root/protanki_core"
+
+          "$root/ffdec/ffdec.sh" -export script "$root/protanki_before"             "$root/protanki_core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          "$root/ffdec/ffdec.sh" -onerror abort -importScript             "$root/protanki_core/res/gui/flash/protanki_gunmarks_battle.swf"             "$root/protanki_cnbox.swf"             "$GITHUB_WORKSPACE/moe/source"
+          cp "$root/protanki_cnbox.swf"              "$root/protanki_core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          # Locale addition only. The original en.yml must remain byte-identical.
+          zh="$root/protanki_core/res/mods/protanki.gunmarks/text/zh_sg.yml"
+          cp "$root/protanki_core/res/mods/protanki.gunmarks/text/en.yml" "$zh"
+          sed -i 's#^battle/unavailable:.*#battle/unavailable: 需要更多场战斗#' "$zh"
+          sed -i 's#^battle/damageCurrentLabel:.*#battle/damageCurrentLabel: 本场标伤#' "$zh"
+          sed -i 's#^battle/nextMarkLabel:.*#battle/nextMarkLabel: 平均标伤#' "$zh"
+
+          mkdir -p "$root/protanki_core/res/mods/cnbox.moe"
+          cat > "$root/protanki_core/res/mods/cnbox.moe/NOTICE.txt" <<'EOF'
+          NAJXBox MoE 1.1.2 UI-only battle skin
+
+          Core: ProTanki Gun Marks Calculator 8.1.01.
+          Calculation/backend, ProGunMarks host, event flow, drag, offset persistence,
+          network/data logic and settings logic are unchanged.
+
+          NAJXBox modifies only stock GunMarksPanelNew presentation:
+          - official 147x93 panel geometry/background/arrows
+          - fail-safe bilingual labels
+          - English fallback never blocks panel creation
+          - zh_sg locale signal selects Chinese labels
+          - calculation/host/drag/persistence remain upstream
+
+          Locked field mapping:
+          predictedRating + deltaRating
+          battleMovingDamage
+          predictedMovingDamage + deltaDamage
+          EOF
+          sed -i 's/^          //' "$root/protanki_core/res/mods/cnbox.moe/NOTICE.txt"
+
+          "$root/ffdec/ffdec.sh" -export script "$root/protanki_after"             "$root/protanki_core/res/gui/flash/protanki_gunmarks_battle.swf"
+
+          before_host="$root/protanki_before/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
+          after_host="$root/protanki_after/scripts/poliroid/views/battle/gunmarks/ProGunMarks.as"
+          grep -Fq 'this.panel = this.panel_new;' "$after_host"
+          grep -Fq 'param1.skinVariant == "old"' "$after_host"
+          grep -Fq 'param1.skinVariant == "new"' "$after_host"
+          grep -Fq 'param1.skinVariant == "new-simple"' "$after_host"
+          ! grep -Fq 'this.panel = this.panel_old;' "$after_host"
+          ! grep -Fq 'this.panel = this.panel_new_simple;' "$after_host"
+
+          python3 - "$before_host" "$after_host" <<'PY'
+          import re,sys
+          before=open(sys.argv[1],encoding='utf-8').read().replace('\r\n','\n')
+          after=open(sys.argv[2],encoding='utf-8').read().replace('\r\n','\n')
+          def strip_route(s):
+              start=s.index('public function as_setSettings')
+              end=s.index('if(this.panel)', start)
+              return s[:start] + 'public function as_setSettings ROUTE\n' + s[end:]
+          assert strip_route(before)==strip_route(after), 'ProGunMarks changed outside skin routing'
+          print('PROGUNMARKS_ONLY_SKIN_ROUTE_CHANGED')
+          PY
+
+          panel="$root/protanki_after/scripts/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
+          grep -Fq 'private static const PANEL_W:Number = 147;' "$panel"
+          grep -Fq 'private static const PANEL_H:Number = 93;' "$panel"
+          grep -Fq 'param1.battleMovingDamage' "$panel"
+          grep -Fq 'param1.predictedMovingDamage' "$panel"
+          grep -Fq 'param1.deltaDamage' "$panel"
+          grep -Fq 's.indexOf("/")' "$panel"
+          grep -Fq 's.substring(0,slash)' "$panel"
+          grep -Fq 'PANEL_W:Number = 147' "$panel"
+          grep -Fq 'PANEL_H:Number = 93' "$panel"
+          grep -Fq '_hasCjk' "$panel"
+          grep -Fq 'Battle DMG' "$panel"
+          grep -Fq 'Avg. DMG' "$panel"
+
+          en="$root/protanki_core/res/mods/protanki.gunmarks/text/en.yml"
+          zh="$root/protanki_core/res/mods/protanki.gunmarks/text/zh_sg.yml"
+          grep -Fq 'battle/damageCurrentLabel: Tot. damage' "$en"
+          grep -Fq 'battle/nextMarkLabel: Damage for {}%' "$en"
+          grep -Fxq 'battle/damageCurrentLabel: 本场标伤' "$zh"
+          grep -Fxq 'battle/nextMarkLabel: 平均标伤' "$zh"
+
+      - name: Prove ProTanki non-UI members unchanged and repack
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-112"
+          upstream="$root/protanki_outer/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+          out="$root/tv.protanki.gunmarkscalc_8.1.01.wotmod"
+
+          python3 - "$upstream" "$root/protanki_core" "$out" <<'PY'
+          import hashlib, os, sys, zipfile
+          upstream,src,out=sys.argv[1:4]
+          with zipfile.ZipFile(upstream) as z:
+              orig={i.filename:hashlib.sha256(z.read(i.filename)).hexdigest()
+                    for i in z.infolist() if not i.is_dir()}
+          rows=[]
+          for dp,_,fs in os.walk(src):
+              for n in fs:
+                  p=os.path.join(dp,n)
+                  rows.append((os.path.relpath(p,src).replace(os.sep,'/'),p))
+          rows.sort()
+          new={a for a,_ in rows}
+          allowed_changed={'res/gui/flash/protanki_gunmarks_battle.swf'}
+          allowed_added={
+              'res/mods/protanki.gunmarks/text/zh_sg.yml',
+              'res/mods/cnbox.moe/NOTICE.txt',
+          }
+          assert new-set(orig)==allowed_added, new-set(orig)
+          assert set(orig)-new==set(), set(orig)-new
+          for arc,p in rows:
+              if arc in allowed_changed or arc in allowed_added:
+                  continue
+              h=hashlib.sha256(open(p,'rb').read()).hexdigest()
+              assert h==orig[arc], arc
+          protected='res/scripts/client/gui/mods/mod_pro_gunmarks.pyc'
+          assert hashlib.sha256(open(os.path.join(src,protected),'rb').read()).hexdigest()==orig[protected]
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_STORED) as z:
+              for arc,p in rows:
+                  zi=zipfile.ZipInfo(arc,(1980,1,1,0,0,0)); zi.compress_type=zipfile.ZIP_STORED; zi.external_attr=0o644<<16
+                  z.writestr(zi,open(p,'rb').read())
+          print('STATIC_PROTANKI_112_BATTLE_OWNER_OK')
+          PY
+
+      - name: Build CHAMPi garage UI-only core
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-112"
+          upstream="$root/evv_outer/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod"
+          mkdir -p "$root/evv_core" "$root/evv_before" "$root/evv_after"
+          unzip -q "$upstream" -d "$root/evv_core"
+
+          # EVV battle display is presentation-only disabled to avoid a second battle panel.
+          "$root/ffdec/ffdec.sh" -export script "$root/evv_before"             "$root/evv_core/res/gui/flash/evv_battle.swf"
+          "$root/ffdec/ffdec.sh" -onerror abort -importScript             "$root/evv_core/res/gui/flash/evv_battle.swf"             "$root/evv_battle_cnbox.swf"             "$GITHUB_WORKSPACE/moe/source/champi"
+          cp "$root/evv_battle_cnbox.swf" "$root/evv_core/res/gui/flash/evv_battle.swf"
+
+          # Garage presentation only:
+          # - upstream EVV2.js remains a byte-identical prefix;
+          # - the isolated NAJXBox presentation tail is appended after it;
+          # - calculation/model/events/Ctrl-drag/anchor/savePosition functions are not edited.
+          cat "$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_OVERRIDE.css"             >> "$root/evv_core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css"
+          printf '\n' >> "$root/evv_core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js"
+          cat "$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_PRESENTATION_TAIL.js"             >> "$root/evv_core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js"
+
+          mkdir -p "$root/evv_core/res/mods/cnbox.moe"
+          cat > "$root/evv_core/res/mods/cnbox.moe/NOTICE_GARAGE.txt" <<'EOF'
+          NAJXBox MoE 1.1.2 UI-only garage skin
+
+          Core/model: CHAMPi Expected Vehicle Values 2.05.000.
+          EVV Python backend is unchanged.
+          The complete upstream EVV2.js is preserved byte-for-byte as the file prefix.
+          Original garage Ctrl+drag/savePosition/anchor migration is unchanged.
+
+          NAJXBox changes only presentation:
+          - EVV battle visible panel is disabled to avoid duplicate battle UI
+          - an isolated presentation tail paints the official CN 210x134 LOBBY structure
+          - upstream EVV is hidden only after adapter-ready is proven
+          - locale detection is fail-safe; failure defaults to English
+          - current %, delta, average damage, marks and 65/85/95/100 use EVV's existing currentState
+          EOF
+          sed -i 's/^          //' "$root/evv_core/res/mods/cnbox.moe/NOTICE_GARAGE.txt"
+
+          "$root/ffdec/ffdec.sh" -export script "$root/evv_after"             "$root/evv_core/res/gui/flash/evv_battle.swf"
+
+          # Callback surface stays; only visible panel creation is removed.
+          view="$root/evv_after/scripts/de/champi/wot/evv/views/battle/ExpectedVehicleValueBattle.as"
+          grep -Fq 'public function as_setText(param1:String)' "$view"
+          grep -Fq 'public function as_setText_WNX(param1:String)' "$view"
+          grep -Fq 'public function as_setPanelsVisible(param1:Boolean)' "$view"
+          if grep -Fq 'new LabelWithBackground' "$view"; then
+            echo 'EVV battle visible panel survived UI-only neutralization' >&2
+            exit 1
+          fi
+
+          css="$root/evv_core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css"
+          js="$root/evv_core/res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js"
+          grep -Fq 'width: 210rem !important;' "$css"
+          grep -Fq 'height: 134rem !important;' "$css"
+          grep -Fq 'left: 20rem;' "$css"
+          grep -Fq 'top: 24rem;' "$css"
+          grep -Fq 'left:72rem;' "$css"
+          grep -Fq 'left:89rem;' "$css"
+          grep -Fq 'left:106rem;' "$css"
+          grep -Fq 'najx-t100-value' "$css"
+          grep -Fq 'currentState.moePercent' "$js"
+          grep -Fq 'currentState.moePercentDelta' "$js"
+          grep -Fq 'currentState.moeAVG' "$js"
+          grep -Fq 'currentState.moeMarks' "$js"
+          grep -Fq 'currentState.moe4' "$js"
+          grep -Fq 'najx-moe-adapter-ready' "$js"
+          grep -Fq 'resolvePresentationLocale' "$js"
+          grep -Fq 'directChildByClass' "$js"
+          grep -Fq 'official-210x134' "$js"
+          ! grep -Fq ':scope' "$js"
+          grep -Fq 'Avg. DMG' "$js"
+          grep -Fq '平均标伤' "$js"
+          ! grep -Fq 'for (const lang of navigator.languages)' "$js"
+          grep -Fq '#evv2-root.najx-moe-cn-official.najx-moe-adapter-ready' "$css"
+          grep -Fq 'pointer-events: auto;' "$css"
+          grep -Fq '#evv2-root .najx-moe-official *' "$css"
+          grep -Fq 'pointer-events: none;' "$css"
+
+      - name: Prove EVV functions unchanged and repack
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-112"
+          upstream="$root/evv_outer/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod"
+          out="$root/champi.expectedvehiclevalues2_2.05.000.wotmod"
+
+          python3 - "$upstream" "$root/evv_core" "$out" "$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_PRESENTATION_TAIL.js" <<'PY'
+          import hashlib, os, sys, zipfile
+          upstream,src,out,tail_path=sys.argv[1:5]
+          with zipfile.ZipFile(upstream) as z:
+              orig={i.filename:hashlib.sha256(z.read(i.filename)).hexdigest()
+                    for i in z.infolist() if not i.is_dir()}
+          rows=[]
+          for dp,_,fs in os.walk(src):
+              for n in fs:
+                  p=os.path.join(dp,n)
+                  rows.append((os.path.relpath(p,src).replace(os.sep,'/'),p))
+          rows.sort()
+          new={a for a,_ in rows}
+          allowed_changed={
+              'res/gui/flash/evv_battle.swf',
+              'res/gui/gameface/mods/CHAMPi/EVV2/EVV2.css',
+              'res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js',
+          }
+          allowed_added={'res/mods/cnbox.moe/NOTICE_GARAGE.txt'}
+          assert new-set(orig)==allowed_added, new-set(orig)
+          assert set(orig)-new==set(), set(orig)-new
+          for arc,p in rows:
+              if arc in allowed_changed or arc in allowed_added:
+                  continue
+              h=hashlib.sha256(open(p,'rb').read()).hexdigest()
+              assert h==orig[arc], arc
+
+          protected='res/scripts/client/gui/mods/mod_evv.pyc'
+          gameface='res/gui/gameface/mods/CHAMPi/EVV2/EVV2.js'
+          assert hashlib.sha256(open(os.path.join(src,protected),'rb').read()).hexdigest()==orig[protected]
+
+          with zipfile.ZipFile(upstream) as z:
+              upstream_js=z.read(gameface)
+          built_js=open(os.path.join(src,gameface),'rb').read()
+          tail=open(tail_path,'rb').read()
+          assert built_js == upstream_js + b'\n' + tail, 'EVV2.js mature prefix/tail isolation failed'
+          assert hashlib.sha256(upstream_js).hexdigest()==orig[gameface]
+
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_STORED) as z:
+              for arc,p in rows:
+                  zi=zipfile.ZipInfo(arc,(1980,1,1,0,0,0)); zi.compress_type=zipfile.ZIP_STORED; zi.external_attr=0o644<<16
+                  z.writestr(zi,open(p,'rb').read())
+          print('STATIC_EVV_112_BATTLE_OWNER_OK')
+          PY
+
+      - name: Compose combined 1.1.2 Manager payload
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/cnbox-moe-112"
+          payload="$root/payload"
+          out="$GITHUB_WORKSPACE/moe/1.1.2"
+          rm -rf "$payload" "$out"
+          mkdir -p "$payload/mods/2.4.0.1/net.openwg" "$out"
+
+          cp "$root/protanki_outer/mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod" "$payload/mods/2.4.0.1/"
+          cp "$root/protanki_outer/mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod" "$payload/mods/2.4.0.1/"
+          cp "$root/protanki_outer/mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod" "$payload/mods/2.4.0.1/net.openwg/"
+          cp "$root/evv_outer/mods/2.4.0.1/aslain.modmenu_2.0.17.wotmod" "$payload/mods/2.4.0.1/"
+          cp "$root/evv_outer/mods/2.4.0.1/champi.settingsgui_1.81.wotmod" "$payload/mods/2.4.0.1/"
+          cp "$root/evv_outer/mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod" "$payload/mods/2.4.0.1/"
+          cp "$root/tv.protanki.gunmarkscalc_8.1.01.wotmod" "$payload/mods/2.4.0.1/"
+          cp "$root/champi.expectedvehiclevalues2_2.05.000.wotmod" "$payload/mods/2.4.0.1/"
+
+          python3 - "$payload" "$out" <<'PY'
+          import hashlib,json,os,sys,zipfile
+          payload,outdir=sys.argv[1:3]
+          archive=os.path.join(outdir,'CNBOX_MoE_1.1.2_WOT_2.4.0.1.zip')
+          rows=[]
+          for dp,_,fs in os.walk(payload):
+              for n in fs:
+                  p=os.path.join(dp,n)
+                  rows.append((os.path.relpath(p,payload).replace(os.sep,'/'),p))
+          rows.sort()
+          with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for arc,p in rows:
+                  zi=zipfile.ZipInfo(arc,(1980,1,1,0,0,0)); zi.compress_type=zipfile.ZIP_DEFLATED; zi.external_attr=0o644<<16
+                  z.writestr(zi,open(p,'rb').read())
+
+          def sha(p):
+              h=hashlib.sha256()
+              with open(p,'rb') as f:
+                  for b in iter(lambda:f.read(1024*1024),b''):
+                      h.update(b)
+              return h.hexdigest()
+
+          specs=[
+            ('mods/{WOT_VERSION}/izeberg.modssettingsapi_1.7.0.wotmod', payload+'/mods/2.4.0.1/izeberg.modssettingsapi_1.7.0.wotmod', True),
+            ('mods/{WOT_VERSION}/me.poliroid.modslistapi_1.7.9.wotmod', payload+'/mods/2.4.0.1/me.poliroid.modslistapi_1.7.9.wotmod', True),
+            ('mods/{WOT_VERSION}/net.openwg/net.openwg.gameface_1.1.6.wotmod', payload+'/mods/2.4.0.1/net.openwg/net.openwg.gameface_1.1.6.wotmod', True),
+            ('mods/{WOT_VERSION}/aslain.modmenu_2.0.17.wotmod', payload+'/mods/2.4.0.1/aslain.modmenu_2.0.17.wotmod', True),
+            ('mods/{WOT_VERSION}/champi.settingsgui_1.81.wotmod', payload+'/mods/2.4.0.1/champi.settingsgui_1.81.wotmod', True),
+            ('mods/{WOT_VERSION}/gambiter.guiflash_0.6.6.wotmod', payload+'/mods/2.4.0.1/gambiter.guiflash_0.6.6.wotmod', True),
+            ('mods/{WOT_VERSION}/tv.protanki.gunmarkscalc_8.1.01.wotmod', payload+'/mods/2.4.0.1/tv.protanki.gunmarkscalc_8.1.01.wotmod', False),
+            ('mods/{WOT_VERSION}/champi.expectedvehiclevalues2_2.05.000.wotmod', payload+'/mods/2.4.0.1/champi.expectedvehiclevalues2_2.05.000.wotmod', False),
+          ]
+
+          manifest={
+            'id':'CNBOX_MOE',
+            'version':'1.1.2',
+            'status':'BATTLE_OWNER_RUNTIME_CANDIDATE',
+            'wotVersion':'2.4.0.1',
+            'sourceCore':'ProTanki 8.1.01 battle + CHAMPi EVV 2.05.000 garage',
+            'payloadUrl':'https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.1.2/CNBOX_MoE_1.1.2_WOT_2.4.0.1.zip',
+            'payloadSha256':sha(archive),
+            'notes':'Battle owner recovery after Runtime proved ProTanki was rendering a non-official skin variant. ProGunMarks keeps its original drag/events/offset persistence and changes only presentation routing so old/new/new-simple all select panel_new, the official 147x93 adapter. Garage 1.1.1 is frozen. battleMovingDamage presentation strips the ProTanki target suffix after / so 本场标伤 shows the current battle value only.',
+            'installedFiles':[
+              {'path':rel,'sha256':sha(p),'required':True,'shared':shared}
+              for rel,p,shared in specs
+            ]
+          }
+          with open(os.path.join(outdir,'manifest.json'),'w',encoding='utf-8') as f:
+              json.dump(manifest,f,ensure_ascii=False,indent=2); f.write('\n')
+          with open(os.path.join(outdir,'SHA256SUMS.txt'),'w',encoding='utf-8') as f:
+              f.write(manifest['payloadSha256']+'  '+os.path.basename(archive)+'\n')
+              for spec,(_,p,_) in zip(manifest['installedFiles'],specs):
+                  f.write(spec['sha256']+'  '+spec['path']+'\n')
+          print(json.dumps(manifest,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Two-pass UI-only static review
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          # Pass 1: geometry/field/visual target locks.
+          battle="$GITHUB_WORKSPACE/moe/source/poliroid/views/battle/gunmarks/GunMarksPanelNew.as"
+          garage="$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_OVERRIDE.css"
+          adapter="$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_PRESENTATION_TAIL.js"
+          grep -Fq 'PANEL_W:Number = 147' "$battle"
+          grep -Fq 'PANEL_H:Number = 93' "$battle"
+          grep -Fq 'battleMovingDamage' "$battle"
+          grep -Fq 'predictedMovingDamage' "$battle"
+          grep -Fq 'deltaDamage' "$battle"
+          grep -Fq '_hasCjk' "$battle"
+          grep -Fq 'Battle DMG' "$battle"
+          grep -Fq 'Avg. DMG' "$battle"
+          grep -Fq 's.indexOf("/")' "$battle"
+          host="$GITHUB_WORKSPACE/moe/source/poliroid/views/battle/gunmarks/ProGunMarks.as"
+          grep -Fq 'this.panel = this.panel_new;' "$host"
+          grep -Fq 'handleMouseDown' "$host"
+          grep -Fq 'this.dragArea.startDrag();' "$host"
+          grep -Fq 'this.updatePosition(this._offset);' "$host"
+          grep -Fq 'BG_RLE' "$battle"
+          grep -Fq 'UP_RLE' "$battle"
+          grep -Fq 'DOWN_RLE' "$battle"
+          grep -Fq 'width: 210rem !important;' "$garage"
+          grep -Fq 'height: 134rem !important;' "$garage"
+          grep -Fq 'left:72rem;' "$garage"
+          grep -Fq 'left:160rem; top:114rem;' "$garage"
+          grep -Fq '#evv2-root.najx-moe-cn-official.najx-moe-adapter-ready' "$garage"
+          grep -Fq '平均标伤' "$adapter"
+          grep -Fq 'Avg. DMG' "$adapter"
+          grep -Fq 'najx-moe-adapter-ready' "$adapter"
+          grep -Fq 'directChildByClass' "$adapter"
+          grep -Fq 'official-210x134' "$adapter"
+          ! grep -Fq ':scope' "$adapter"
+          ! grep -Fq 'for (const lang of navigator.languages)' "$adapter"
+          grep -Fq 'currentState.moePercentDelta' "$adapter"
+          grep -Fq 'currentState.moeMarks' "$adapter"
+          grep -Fq 'currentState.moe1' "$adapter"
+          grep -Fq 'currentState.moe4' "$adapter"
+          ! grep -Fq '220rem' "$garage"
+          ! grep -Fq '140rem' "$garage"
+
+          # Pass 2: function freeze / adapter isolation.
+          test ! -f "$GITHUB_WORKSPACE/moe/source/champi/EVV2/CNBOX_GARAGE_RUNTIME_PATCH.js"
+          ! grep -Fq 'ModelObserver(' "$adapter"
+          ! grep -Fq 'invokePositionCommand' "$adapter"
+          ! grep -Fq 'startDrag(' "$adapter"
+          ! grep -Fq 'stopDrag(' "$adapter"
+          ! grep -Fq 'mousedown' "$adapter"
+          ! grep -Fq 'mousemove' "$adapter"
+          ! grep -Fq 'mouseup' "$adapter"
+          ! grep -Fq 'ctrlKey' "$host"
+
+          python3 - <<'PY'
+          import hashlib,json,zipfile
+          m=json.load(open('moe/1.1.2/manifest.json',encoding='utf-8'))
+          p='moe/1.1.2/CNBOX_MoE_1.1.2_WOT_2.4.0.1.zip'
+          assert hashlib.sha256(open(p,'rb').read()).hexdigest()==m['payloadSha256']
+          with zipfile.ZipFile(p) as z:
+              for s in m['installedFiles']:
+                  rel=s['path'].replace('{WOT_VERSION}','2.4.0.1')
+                  assert rel in z.namelist(), rel
+                  assert hashlib.sha256(z.read(rel)).hexdigest()==s['sha256'], rel
+          print('STATIC_MOE_112_BATTLE_OWNER_PASS')
+          PY
+
+      - name: Upload 1.1.2 battle owner artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX_MoE_1.1.2_BATTLE_OWNER_REVIEW
+          path: |
+            moe/1.1.2/CNBOX_MoE_1.1.2_WOT_2.4.0.1.zip
+            moe/1.1.2/manifest.json
+            moe/1.1.2/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Commit deterministic 1.1.2 candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/1.1.2
+          if git diff --cached --quiet; then
+            echo 'No output changes.'
+            exit 0
+          fi
+          git commit -m 'Build NAJXBox MoE 1.1.2 battle owner recovery candidate'
+          git pull --rebase origin work/moe-component-1.1.2-battle-owner
+          git push origin HEAD:work/moe-component-1.1.2-battle-owner
