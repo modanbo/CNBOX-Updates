@@ -1,4 +1,4 @@
-/* NAJXBox MoE 1.0.9 — isolated official-CN garage presentation tail.
+/* NAJXBox MoE 1.0.10 — tri-locale isolated official-CN garage presentation tail.
  * This file is concatenated AFTER the byte-identical upstream EVV2.js.
  * It only reads EVV's existing currentState and paints a child overlay.
  * It does not alter calculation, model acquisition, events, Ctrl-drag, anchors or savePosition.
@@ -23,6 +23,33 @@
   const rounded = (value) => String(Math.round(finite(value, 0)));
   const threshold = (value) => finite(value, 0) > 0 ? rounded(value) : '--';
 
+  function resolvePresentationLocale() {
+    const values = [];
+    const htmlLang = document.documentElement && document.documentElement.lang;
+    const bodyLang = document.body && document.body.lang;
+    if (htmlLang) values.push(htmlLang);
+    if (bodyLang) values.push(bodyLang);
+    if (typeof navigator !== 'undefined') {
+      if (navigator.language) values.push(navigator.language);
+      if (navigator.languages && navigator.languages.length) {
+        for (const lang of navigator.languages) values.push(lang);
+      }
+    }
+    for (const value of values) {
+      const lang = String(value || '').trim().toLowerCase();
+      if (/^zh(?:[-_]|$)/.test(lang)) return 'zh';
+    }
+    return 'en';
+  }
+
+  function applyPresentationLocale(root, el) {
+    const locale = resolvePresentationLocale();
+    root.setAttribute('data-najx-moe-locale', locale);
+    el.setAttribute('data-najx-moe-locale', locale);
+    const avgLabel = el.querySelector('.najx-avg-label');
+    if (avgLabel) avgLabel.textContent = locale === 'zh' ? '平均标伤' : 'Avg. DMG';
+  }
+
   function createPanel(root) {
     const el = document.createElement('div');
     el.className = 'najx-moe-official';
@@ -43,7 +70,7 @@
         <span class="najx-rating-delta">0.00%</span>
       </div>
       <div class="najx-avg-row">
-        <span class="najx-avg-label">平均标伤</span>
+        <span class="najx-avg-label"></span>
         <span class="najx-avg-value">--</span>
       </div>
       <span class="najx-threshold-label najx-t65-label">65%</span>
@@ -56,12 +83,15 @@
       <span class="najx-threshold-value najx-t100-value">--</span>
     `;
     root.appendChild(el);
+    applyPresentationLocale(root, el);
     return el;
   }
 
   function render() {
     scheduled = false;
     if (!boundRoot || !panel || !boundRoot.isConnected) return;
+
+    applyPresentationLocale(boundRoot, panel);
 
     const pct = clamp(finite(currentState.moePercent, -1), -1, 100);
     const delta = finite(currentState.moePercentDelta, 0);
@@ -118,6 +148,7 @@
     boundRoot = root;
     root.classList.add('najx-moe-cn-official');
     panel = root.querySelector(':scope > .najx-moe-official') || createPanel(root);
+    applyPresentationLocale(root, panel);
 
     observer = new MutationObserver(scheduleRender);
     const header = root.querySelector(':scope > .evv2-header');
