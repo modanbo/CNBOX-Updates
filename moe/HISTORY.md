@@ -303,3 +303,42 @@ Immediate containment:
 - 1.0.11 recovery work is rebased on the 1.0.9 visible structure;
 - original `en.yml` is byte-frozen again;
 - garage upstream UI can only be hidden after an explicit adapter-ready gate.
+
+
+## Permanent inheritance rule — DO NOT REDISSECT
+
+This MoE component is history-first. Future updates must reuse the archived decomposition and ownership map instead of decomposing the same pinned cores again.
+
+Authoritative archived layers:
+- Battle core: ProTanki Gun Marks Calculator 8.1.01.
+- Garage core: CHAMPi Expected Vehicle Values 2.05.000.
+- Official CN UI authority: `moe/reference/CN_OFFICIAL_SWF_UI_AUTHORITY_2.4.0.1_20260923.md`.
+- Battle presentation source: `moe/source/poliroid/views/battle/gunmarks/GunMarksPanelNew.as`.
+- Garage presentation sources: `moe/source/champi/EVV2/`.
+- Runtime/decomposition diagnostics: `moe/diagnostics/`.
+- Version-by-version manifests and hashes: `moe/<version>/manifest.json`.
+- Full chronology, failed approaches, and rollback reasons: this file plus Google Drive MoE history docs.
+
+Do NOT repeat a full decomposition when all of the following remain unchanged:
+1. ProTanki version is still 8.1.01 and the pinned package SHA256 is unchanged.
+2. CHAMPi EVV version is still 2.05.000 and the pinned package SHA256 is unchanged.
+3. WoT/Aslain package structure and owner paths remain compatible with the archived map.
+4. The official CN UI authority SWF/reference has not changed.
+
+A fresh decomposition is allowed only when evidence proves an owner boundary changed, including:
+- upstream core version change;
+- pinned package hash change;
+- WoT/Aslain structural change affecting the owner paths;
+- official CN UI reference changed;
+- Runtime evidence contradicts the archived owner map and cannot be explained by the known integration layer.
+
+Update order is mandatory:
+1. read Drive master/history and this file;
+2. compare versions/hashes/owner paths;
+3. reuse archived decomposition if unchanged;
+4. make the smallest presentation/integration delta;
+5. static diff + two review passes;
+6. Runtime;
+7. append the result, hashes, failures and rollback rationale to both GitHub and Drive.
+
+Never delete failed-version evidence. Failed candidates remain part of the inheritance record so the same mistake is not repeated.
