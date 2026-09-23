@@ -238,3 +238,46 @@ This is **candidate exposure, not formal Runtime promotion**:
 - status remains `OFFICIAL_CN_UI_REVIEW_CANDIDATE`;
 - Manager/Creator can display and install 1.0.9;
 - Runtime validation is still required before changing the candidate to a final/locked status.
+
+
+### 1.0.10 — TRILOCALE_RUNTIME_CANDIDATE
+
+Runtime trigger:
+- user confirmed that the MoE component did not display while running the original English NA client;
+- Manager supports three language states: original NA English, zh_sg UI + English vehicle names, and zh_sg UI + Chinese vehicle names;
+- language restore itself does not remove MoE WOTMOD files, so this is treated as a plugin locale/presentation compatibility issue.
+
+Upstream locale-owner proof:
+- pinned ProTanki 8.1.01 original `GunMarksPanelNew` uses the backend-provided locale-resolved fields `damageCurrentLabel` and `nextMarkLabel`;
+- 1.0.9 had bypassed those fields by hard-coding Chinese labels;
+- pinned CHAMPi EVV 2.05.000 has no `en.yml`; this is retained as upstream behavior rather than inventing a new backend locale contract.
+
+1.0.10 correction:
+- restore ProTanki's original locale-resolved static-label owner inside the locked official-CN 147×93 presentation;
+- English resource labels: `Battle DMG` / `Avg. DMG`;
+- zh_sg resource labels: `本场标伤` / `平均标伤`;
+- garage isolated presentation tail selects Chinese for a zh GameFace locale and English otherwise;
+- vehicle-name language remains unrelated to MoE visibility;
+- official CN geometry/assets stay unchanged;
+- calculation, data acquisition, events, ProGunMarks host, EVV backend/model, Ctrl-drag, anchors and persisted-position paths remain frozen.
+
+Static closure:
+- tri-locale upstream probe run `35898055552`: SUCCESS;
+- clean build run `35899219868`: SUCCESS;
+- `STATIC_MOE_110_TRILOCALE_REVIEW_PASS`;
+- review artifact digest `sha256:048de561df9a71ceaa39dbed5b6f6ba924c5adab0f9a30d3833aa94888f44d8a`.
+
+Payload:
+`f9f36389eb2177438efdbf75e5846bb010ec5f2f20411ad6e32097b532508f2f`
+
+ProTanki WOTMOD:
+`6fe0cf9eed57cd9adfcd55edf4884ae79d8abee41ae71daa775e7c4506d6b56a`
+
+CHAMPi EVV WOTMOD:
+`0da6b4511e22a6be977bbce881245d1bc21c927d4763d232288c38db61961710`
+
+Runtime gate:
+- test all three Manager language states;
+- original English NA must show the component and English labels;
+- both zh_sg UI modes must show the component and Chinese labels;
+- verify garage + battle, positive/negative arrows, no duplicate battle panel, drag persistence, and restart persistence.
