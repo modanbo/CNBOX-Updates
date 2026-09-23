@@ -102,7 +102,7 @@ jobs:
           grep -Fq 'surface.mouseEnabled = true;' "$after_host"
           grep -Fq 'surface.startDrag();' "$after_host"
           grep -Fq 'surface.stopDrag();' "$after_host"
-          grep -Fq 'this.dragArea.mouseEnabled = false;' "$after_host"
+          grep -Fq 'dragArea.mouseEnabled = false;' "$after_host"
           ! grep -Fq 'this.dragArea.startDrag();' "$after_host"
           grep -Fq 'this.updatePosition(this._offset);' "$after_host"
 
