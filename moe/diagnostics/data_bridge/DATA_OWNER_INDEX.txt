@@ -1,3 +1,0 @@
-=== ProTanki data/callback symbols ===
-
-=== EVV garage model/data symbols ===
