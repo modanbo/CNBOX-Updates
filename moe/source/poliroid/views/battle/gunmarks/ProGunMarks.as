@@ -56,11 +56,9 @@ package poliroid.views.battle.gunmarks
          {
             this.panel_new_simple.visible = false;
          }
-         this.dragArea.addEventListener(MouseEvent.MOUSE_DOWN,this.handleMouseDown);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_UP,this.handleMouseUp);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_MOVE,this.handleMouseMove);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_OVER,this.handleMouseOver);
-         this.dragArea.addEventListener(MouseEvent.MOUSE_OUT,this.handleMouseOut);
+         // CN contract panel owns interaction; dragArea is a coordinate mirror only.
+         this.dragArea.mouseChildren = false;
+         this.dragArea.mouseEnabled = false;
          this.minimizer.addEventListener(ButtonEvent.CLICK,this.handleMinimizerClick);
       }
       
@@ -76,10 +74,11 @@ package poliroid.views.battle.gunmarks
          {
             this.panel.setSettings(param1);
             this.panel.visible = !param1.battleMinimized;
+            this.bindOfficialInteractionSurface();
          }
          this.minimizer.setSettings(param1);
-         this.dragArea.mouseChildren = !param1.battleMinimized;
-         this.dragArea.mouseEnabled = !param1.battleMinimized;
+         this.dragArea.mouseChildren = false;
+         this.dragArea.mouseEnabled = false;
          if(this.panel)
          {
             this.dragArea.width = this.panel.panelWidth;
