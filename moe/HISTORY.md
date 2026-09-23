@@ -168,3 +168,27 @@ Workflow run:
 The EVV visible battle panel remains presentation-neutralized solely to prevent a second battle UI; ProTanki is the single visible battle owner. This does not alter EVV calculation/model data.
 
 1.0.8 is the new presentation architecture baseline. Future fixes must not reintroduce runtime-function wrapping without a separate, evidence-based review.
+
+
+## 2026-09-23 — OFFICIAL_CN_SWF_UI_AUTHORITY
+
+User-supplied official CN package `打环百分比插件-国服版` 2.4.0.1 was decomposed directly.
+
+Authority hashes:
+- WBP: `3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16`
+- `mod_mark_on_gun.wotmod`: `d681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4`
+- `wotassist.markongun.swf`: `06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851`
+
+Baseline correction:
+- 1.0.8 remains historical evidence and is **SUPERSEDED FOR UI GEOMETRY / VISUAL AUTHORITY**.
+- Do not propagate 1.0.8 guessed `154x98` / `220x140` geometry.
+- Official embedded visual sizes are BATTLE `147x93` and LOBBY `210x134`.
+- Official SWF has separate `MarkOnGunPanel` (LOBBY) and `MarkOnGunUI` (BATTLE) structures, normal/hover state ownership, relative sibling layout, official arrows/stars/circle/background assets, and exact text/component coordinates.
+
+Locked future architecture:
+- keep mature NA/Global calculation, events, data acquisition, drag and persisted-position code unchanged;
+- implement **UI Adapter only**;
+- map mature data into the official CN SWF LOBBY/BATTLE presentation instead of inventing new geometry.
+
+Reference:
+`moe/reference/CN_OFFICIAL_SWF_UI_AUTHORITY_2.4.0.1_20260923.md`
