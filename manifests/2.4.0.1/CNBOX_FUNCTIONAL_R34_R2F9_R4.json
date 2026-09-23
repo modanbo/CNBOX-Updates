@@ -1,0 +1,3230 @@
+{
+  "schemaVersion": 2,
+  "functionalId": "WOT2401-R34-R2F9",
+  "release": "2401-R34-R2F9-UNIFIED-R4",
+  "wotVersion": "2.4.0.1",
+  "description": "Exact NAJXBox R34/R2F9 standalone functional/dependency tree promoted from the Aslain #06 R4 Runtime-passed owner set. Packaging metadata and CNBOX_UNIFIED_OWNER.json excluded.",
+  "sourceDependencyCaptureSha256": "5ee7b8a0a90f6ed4c536f12d333f2753024dc6207402e7e9d5f56ca759c5c78c",
+  "sourceCreatorPayloadSha256": "65852ab8876c415a96e02f4b46b5680fd3350f7592f290ed9adcb7b488cdcf0c",
+  "publicPayloadSha256": "0c2e990ef2a019664585de7ed98db52cdcb9227650a297ca98c3e703e3b2816a",
+  "fileCount": 534,
+  "categoryCounts": {
+    "aslain_xvm_profile": 98,
+    "cnbox_owner": 11,
+    "openwg_common": 1,
+    "openwg_fix": 2,
+    "xvm_audio": 2,
+    "xvm_client_runtime": 1,
+    "xvm_core_wotmod": 1,
+    "xvm_crashfix": 1,
+    "xvm_py_macro": 25,
+    "xvm_root_config": 1,
+    "xvm_shared_runtime": 391
+  },
+  "files": [
+    {
+      "path": "mods/2.4.0.1/com.modxvm.xfw/com.modxvm.xfw.crashfix_12.0.0.wotmod",
+      "category": "xvm_crashfix",
+      "sizeBytes": 554583,
+      "sha256": "5ba7247830c411e7fa4d0711881afb5563235d4aedc3cee1c45bb56b89ce8278"
+    },
+    {
+      "path": "mods/2.4.0.1/com.modxvm.xvm_13.1.0.0090.wotmod",
+      "category": "xvm_core_wotmod",
+      "sizeBytes": 11361220,
+      "sha256": "1ee543ca4b355e191e1a90f650355c564282c2ad7b6edee56c26fbc73399ce36"
+    },
+    {
+      "path": "mods/2.4.0.1/net.openwg/net.openwg.common_2.8.2.0000.wotmod",
+      "category": "openwg_common",
+      "sizeBytes": 7643182,
+      "sha256": "149ebc0f6a3422156248271960ae94532376b30140c9efe11da7061bb2547916"
+    },
+    {
+      "path": "mods/2.4.0.1/net.openwg/net.openwg.fix.battleresultscache_1.8.1.wotmod",
+      "category": "openwg_fix",
+      "sizeBytes": 6341,
+      "sha256": "bece7b0c6118f32b32a11b80190edd6aefa5f1bab8af6c1f01efc688e7642b0c"
+    },
+    {
+      "path": "mods/2.4.0.1/net.openwg/net.openwg.fix.battleresultsreplays_1.0.5.wotmod",
+      "category": "openwg_fix",
+      "sizeBytes": 13040,
+      "sha256": "9d6c66f0b0365b269c7ee787831f49c21862582b4a9856fd5ecf26f7391199c8"
+    },
+    {
+      "path": "res_mods/2.4.0.1/audioww/xvm.bnk",
+      "category": "xvm_audio",
+      "sizeBytes": 437384,
+      "sha256": "779493ce5dd32dacca589b9dc43b45163d43eb842aa0c579a9eb8259f8894535"
+    },
+    {
+      "path": "res_mods/2.4.0.1/audioww/xvm_wg.bnk",
+      "category": "xvm_audio",
+      "sizeBytes": 437384,
+      "sha256": "779493ce5dd32dacca589b9dc43b45163d43eb842aa0c579a9eb8259f8894535"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.dds",
+      "category": "cnbox_owner",
+      "sizeBytes": 2675,
+      "sha256": "73d03c6d6cf18c91485779b0dcb1ddbf0549a39d7d3d7ff436b3a6671dd83377"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelLeft.xml",
+      "category": "cnbox_owner",
+      "sizeBytes": 220162,
+      "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.dds",
+      "category": "cnbox_owner",
+      "sizeBytes": 2571,
+      "sha256": "0cd93ff07352f0bbaf3d5a6b2dcb470f734d8c1206a902a89a8b4f6049e0b77b"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/atlases/cnboxPlayersPanelRight.xml",
+      "category": "cnbox_owner",
+      "sizeBytes": 220162,
+      "sha256": "1e907ae917f9cd1e394acbfb6ceb8ddf155d549050ff5271ca2e563584dea603"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/flash/battleVehicleMarkersApp.swf",
+      "category": "cnbox_owner",
+      "sizeBytes": 151678,
+      "sha256": "9bf2e758b51a8f990ebb41c43ec01a699e3c115df2b8b829ecdca6dd4291778f"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/HT.png",
+      "category": "cnbox_owner",
+      "sizeBytes": 661,
+      "sha256": "1c3403b2dea847f05961616436cbe27e97f36eb6266c83c82d47fcb80995449b"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/LT.png",
+      "category": "cnbox_owner",
+      "sizeBytes": 713,
+      "sha256": "9e898192899d87c490ad397424a12cbdc805117ca62488a6c465e4b07ed14ca8"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/MT.png",
+      "category": "cnbox_owner",
+      "sizeBytes": 701,
+      "sha256": "ffb3d6301d8d0a5840f07465d7d95a7ed14455a4a6909734731f4c1ef76c63a2"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/SPG.png",
+      "category": "cnbox_owner",
+      "sizeBytes": 740,
+      "sha256": "0bd356c8191bfdc306e9dafdbfe507d46e684d6ab667af155d9ae7bf26c37d9b"
+    },
+    {
+      "path": "res_mods/2.4.0.1/gui/maps/icons/vehicle/contour/cnbox_overhead_jx/TD.png",
+      "category": "cnbox_owner",
+      "sizeBytes": 647,
+      "sha256": "0a031f31cc7fce21a408bc30deff7f0e032c20dcee1b15e3dceecef4c3b11ea6"
+    },
+    {
+      "path": "res_mods/2.4.0.1/scripts/client/gui/mods/__init__.pyc",
+      "category": "xvm_client_runtime",
+      "sizeBytes": 10061,
+      "sha256": "90bceafda5755f51c5d1288d255debe6c84f7c04a08e593eeb37febc52ca1ca5"
+    },
+    {
+      "path": "res_mods/2.4.0.1/scripts/client/gui/mods/mod_cnbox_eff_bridge.pyc",
+      "category": "cnbox_owner",
+      "sizeBytes": 4847,
+      "sha256": "3972334669e7a831b99fc378a867d6b387d27900bb9c5249b5540a2f5080cff2"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/@xvm.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 7143,
+      "sha256": "7b7208351bebecd73b24ba3ebd45d608741b75b3a224533acd84bd51ff9aedb7"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/alpha.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 10069,
+      "sha256": "a7a69022c087dabb0f35d991318fe534a47bc1a4e664056e01be94c893d4206f"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battle.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 5111,
+      "sha256": "e1358abb6b236a64258fb65ba0f8e8de1e6bc1af6f5ea7e2d287727a4d68fdb0"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battleLabels.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1475,
+      "sha256": "7cc3f1147ae1c9c7a8792498147c726f3fcf51a183b5d05000b50330ea5ff93a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battleLabelsTemplates.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 11375,
+      "sha256": "a039493bb36d5e01238b115e789ecbbb1686ec03c8b003434e631b7ee8329548"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battleLoading.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 7517,
+      "sha256": "709a9c6c8b6b48adf7ce6dc29e994c06007ede3f4c34be92ed70fd14d082bf9f"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battleLoadingTips.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 7397,
+      "sha256": "559565cd2e880930f577d6e78e6188dab6d5098f7e9082e473a6ab41fe14ca43"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/battleResults.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2351,
+      "sha256": "0f9f9a4e01b46d4bd96a7f0510aa88841a5bb05ad57ad35558c6cabbf5862c07"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/camera.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 6590,
+      "sha256": "b7418aae05de176375a2530e6a8bca43d8c9f6211ed75e67a7ce27cf70bd5bfe"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/captureBar.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 5148,
+      "sha256": "934dc1bd6680c1bb5b8e94d20099261c070ff11e956ef7ce218e8e8619414ab9"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/carousel.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 5306,
+      "sha256": "0c9215a45d7fb928d074fdf74bedeeb0a4f85fb2895188c3d789e0588d7a8179"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/carouselNormal.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 5114,
+      "sha256": "be4f06c598720b85d843c6f66eee16ac80e561e0107e2e1a27517a23ccffca4f"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/carouselSmall.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 6162,
+      "sha256": "24a06b3fc26c347fc3d8fddc8535d3dbb1cc4a7aba85356acffad09c267a99fd"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/colors.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 21780,
+      "sha256": "9660a64903cdbbffc6cd69958c5cdf43d8214a5f616532ca9033ef389fc00c24"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/damageLog.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 27946,
+      "sha256": "0b46132b112f63ecc06357f32ab98739a33fb0e86ec4832ecaf83a2a5ec24d96"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/elements.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 33,
+      "sha256": "579cf7552068a8caf3b528ea8118e8311496683d22d51edc7feb72228ad12544"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/hangar.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 25701,
+      "sha256": "d295a79e0572dd4f6ed931d7ac091b5e10318ae7da89439aa41a08fc3d558828"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/hitLog.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 21573,
+      "sha256": "2b46f64c863b3fc61ac610a5f93be063c027d5e599f77dd2bc3b71f07043442e"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/hotkeys.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1619,
+      "sha256": "5a2d699a776d1c77e5b8211bb8d7b3be9a4075677f2b5881c09c0d6203f789be"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/#00CCCC.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1700,
+      "sha256": "14f7d67ac5e9fd540b36e4a1a5379aaf6f9191e53a3671585d3251e247842fec"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/#998855.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1700,
+      "sha256": "14f7d67ac5e9fd540b36e4a1a5379aaf6f9191e53a3671585d3251e247842fec"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/#CCCCCC.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1700,
+      "sha256": "14f7d67ac5e9fd540b36e4a1a5379aaf6f9191e53a3671585d3251e247842fec"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/#FF6655.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1584,
+      "sha256": "86137d6e42e35b6d5b27d651740de7bebe3d0e66e19085540190e8abb2725476"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/#FFAA55.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1565,
+      "sha256": "c7ec4a04b4551b03519a325415250e019538e15eff56348efb547bd0f0a52999"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/HT.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2485,
+      "sha256": "ca634f6f4ef264fe5d5cd7c6465c5ddcdf1b4e3e256ec346b02ef62c1fc9afc9"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/LT.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1621,
+      "sha256": "c87ba8c3c7eb7bf844cc58fe7ef9918a873345c602b35eb0a3182e3b32b6b987"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/MT.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2127,
+      "sha256": "1481887eb50b0c94270a04f8b8a994c8a3b5eed1b405f729648292c2eac4dc3a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/SPG.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1619,
+      "sha256": "a6cfec3b9abdbb320604c25d35a0ae74a49717e41b390f18db0753114f15d953"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/TD.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1695,
+      "sha256": "43dd2712e3d79eb2e86b6ba07065aae33b8bb145d9491d0188a6c2e9082303b0"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/ally_skull.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 3127,
+      "sha256": "9279122bd90bcd38dde136a0a15f05ce01d15d78eb5e71bfcd4a0b06d2e9c218"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/allyleftwing.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1346,
+      "sha256": "9d17cc5ff10a54f14f293062304e5473a637506691b1871e0cdf5d6d799f7a58"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/allyrightwing.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1365,
+      "sha256": "c9decc9645b58c5b7769bc51175a1f0e4b4493eb785967420380d1c144f52d38"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/ammorack_green.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 10714,
+      "sha256": "c2bf605f787e6c0d514878986b1b08ea671eee64435984bfebca252c25446fdf"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/ammorack_red.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 10433,
+      "sha256": "be05881f9d277160bcb0c735d30ad4c5a0c9f3aa44f03f498e480d478e22e58a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/attack.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1565,
+      "sha256": "c7ec4a04b4551b03519a325415250e019538e15eff56348efb547bd0f0a52999"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/cnbox_lighten.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 641,
+      "sha256": "481ff5f770c474e4114c8bf29aa8d51b453972321831a323a68cfa9372f72429"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/default.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 950,
+      "sha256": "f4361ac8a84472247c98f947b4121c378da3ab2f1df7c89cdb2aea103016f0fd"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/empty.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 950,
+      "sha256": "f4361ac8a84472247c98f947b4121c378da3ab2f1df7c89cdb2aea103016f0fd"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/enemy_skull.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2991,
+      "sha256": "3e493e747c571ae2a89090c758bf416fcf79ab50e01dd0d2401926989b32a6d4"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/enemyleftwing.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1229,
+      "sha256": "554d0b208cc2e04441ace24002b48641954b0f84fdc89324191f36298e28ee5f"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/enemyrightwing.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1249,
+      "sha256": "6aa4b4fafcca73a05b80a12ff3f0ff271167b3b481bb90be53e71340d238758e"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/fire.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1584,
+      "sha256": "86137d6e42e35b6d5b27d651740de7bebe3d0e66e19085540190e8abb2725476"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/friendsmarker.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 423,
+      "sha256": "8c472a6ed6d3d6064650d019e36defcb55786bd19bdac97c125b094efccfde33"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/hidden.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2153,
+      "sha256": "74a9fc599bb810448e677e633432ef587a3ce4822b928106a35e6c763075f49c"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/hitlogline.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 155,
+      "sha256": "8b31877453ae029eb82e2b632ba744150a73c7733d4c168d8b32d5cfe15c3bb5"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/lost.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2176,
+      "sha256": "290e62edecfb007b5a85162ee71763a27575c783b29f5ace564dbf016b906092"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog0.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 198,
+      "sha256": "62c2db043148ff3e6399c05a95172bc94711119b074b12313f62c5fe1925ee27"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog1.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1649,
+      "sha256": "31793acc68cbb188284215114996178298257d7442c35e16b0b678ca34059db1"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog2.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1693,
+      "sha256": "b6f247855d81c2e888c0aeddaf4eec8d67fd8e8c9e2e4436530115fd1f5c2152"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog3.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1706,
+      "sha256": "7379c7a87f67e946383b55cb481f9a03202ea012d5c01b88031401324503d027"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_a00.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 936,
+      "sha256": "f738be77363ce3dcf465d1fd9a1c204a7eb34f32b50a943905053e3326da16fc"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_a01.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1053,
+      "sha256": "5dc26057a2900acb678704a372241895f54e1727e252e52502bb9e48e6492e99"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_a02.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1128,
+      "sha256": "74a7fe11b0eb3c1ef8fa3f7df8ac3a19431a38af2323fac517ecac0bc23f69d7"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_a03.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1186,
+      "sha256": "52e3be803afe4d6227ebeb164f87923bb61480fcef5db1736dd2c5051409cf3a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_e00.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 936,
+      "sha256": "ea1f620e71361fbd01ab97b692dc1248cd4abd5b166b16fc240c4d56048a9c55"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_e01.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1065,
+      "sha256": "7727e8f3961005d03165649adcc44eb0cce8b2ad9933ea847e0410a36d67f80f"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_e02.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1138,
+      "sha256": "42b68afdd2add183ac1e62315da3bbcc7f34086d24c069cb2b744227b4723ccb"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mog_e03.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1192,
+      "sha256": "dc7e1302278a2d182654aecf81d1c9de85fd5a4cceecc7373f6acf41a8940619"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/mogempty.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 68,
+      "sha256": "2aa4fa20701cdd6d8d56046069001186b5267e3ee7d0ef618ad2f4a683723e11"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/nuke.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 8003,
+      "sha256": "b9c346584dc6ab5dce097db1123f72aa0155985e22029cf34ec2094195781e93"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/onmap.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2181,
+      "sha256": "454438ec06bee397f3034840689c34ef5f6813fa4cfe00ca37d8f39597fa1c29"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/premium.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 699,
+      "sha256": "29c096d10db7a27e2f8ec7cd6e140ef4eea0ea24daef808f26449fd4af13bc92"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/ramming.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1700,
+      "sha256": "14f7d67ac5e9fd540b36e4a1a5379aaf6f9191e53a3671585d3251e247842fec"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/skullnbones_green.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 8412,
+      "sha256": "6885b8185be80c502ecbc42299b9c3862d37ecbba995b3384daaf430de82d9d5"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/skullnbones_red.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 8200,
+      "sha256": "d223287bac3d7fbacb9ed561686924372bcab81c972d173c3ee4140aef97db7a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/soulTankAlly.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2084,
+      "sha256": "b54895c2a6478db5702b3a76ce57844ce9166bf5f15f4aa04370d34a01760cf6"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/soulTankEnemy.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2101,
+      "sha256": "76ed4aee88e42aa99b5ee6a6212d2fab4f39fa8dc68d10da0f41408519cfaf86"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/star.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 699,
+      "sha256": "29c096d10db7a27e2f8ec7cd6e140ef4eea0ea24daef808f26449fd4af13bc92"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/tick.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 628,
+      "sha256": "6026871fbd7cec0f67fb9480acb20fc7e6e9f68c740efaf5a0f75be9c8e6808c"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/icons/untick.png",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 702,
+      "sha256": "a6cc7a663230eebea37ea2eae718b8364ee44474251a75f80c1ba9791addbc0b"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/iconset.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1317,
+      "sha256": "ef0e5ad0c19966f80cf7f8c414d40f6b1cceea2df1b52fd768c49e68f13ec770"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/login.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 12050,
+      "sha256": "4d03b4e4c3fcff210f577afad17a296a2541e51fc50159f1b6e5b3b427246630"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/markers.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2038,
+      "sha256": "9b258ed2881aab63b1a65d12e812633236b8e191f6b06f8a65b2fccfa3a0d632"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/markersAliveExtended.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 18633,
+      "sha256": "b755aaffb93c85afdba5c180d77c0519ca363eba64fa72e13e7e1c10c54ee455"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/markersAliveNormal.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 23629,
+      "sha256": "5a533b541146ff6b61ed6289a51bc16f34edb10828ae1d802b91a5cf85efa1b4"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/markersDeadExtended.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 17798,
+      "sha256": "44bbe1cb05a933324c443482de96e1591514a582e632707d84712985f73892cf"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/markersDeadNormal.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 13670,
+      "sha256": "9c82a3bf22d476fea7858c8d2e9825840196086ac90e1ea055a0ee10b1657ae8"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimap.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 4583,
+      "sha256": "5cc951e58f2192626473619cd689424623a9257dbc631e92ea9221761b05562f"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapAlt.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 362,
+      "sha256": "93b679e2d07ffc2213f5b901219714bc83fd818ad84b3adf8611c78a1b853e91"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapCircles.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 5405,
+      "sha256": "81a0ddcbb4637af4199edd3b22f4c42e99fb922b58b4d56c309aa5c7a55c5fa3"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapLabels.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1039,
+      "sha256": "f3273b985b11fe1c75d95dbce40695dd1663f4dd0852b057ed5db1dc556eb314"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapLabelsAlt.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1398,
+      "sha256": "7113704aeb1e257ba982bc150b4c79c9d8c9de8fade048b70be22ca975c114b7"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapLabelsData.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2678,
+      "sha256": "57e17918e60323bef9d147e151ef08a0858027bd97681bf31a1c9d230174707a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapLabelsTemplates.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 7120,
+      "sha256": "d5d7794f7a04709918cf8875637911eb6c07af2494e80b835b73980377252f77"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapLabelsTemplatesAlt.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 7062,
+      "sha256": "e0fdbc804565a06ec1e22f89726acf419f9590f2d0df373888446c858d4b6019"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapLines.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 9317,
+      "sha256": "4d174eafc0f75faf58d360181821d18ac30271c9bb506a981fcb721831c301d1"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/minimapMapSize.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 831,
+      "sha256": "c574edf039f33abc157079b2b94b8f7a3de8aaa92b677adb43a9a6d73fa856f4"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/playersPanel.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 19841,
+      "sha256": "c6dcbaced2026c140d45c0f502d53060d42db28e20e661c25ba437d887a27edc"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/sounds.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 6064,
+      "sha256": "7684e3c471243b981629372ec4f58656f2311c7e4974736ea273dae2f4c93e3c"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/statisticForm.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 8906,
+      "sha256": "41bc00fab37356277bbd1afb37dcfefde02d67397b0ab27451ea290420c12a27"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/texts.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 5507,
+      "sha256": "5ce359686c8b282d50f84825ea3866a6dc9806bc010fd97173e39a4b8d079e35"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/tooltips.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 14100,
+      "sha256": "d2a8e272b91cae63a8b995cafce479275661359c57502627c7271380519bc0dd"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/tweaks.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 1277,
+      "sha256": "fc5b1b438c68724b63896c19297b00acecf287763582454644d9dca316f22a80"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/userInfo.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 2735,
+      "sha256": "057930d3eca718b3e54a6277e52904c3f5e5e737502c6460ecda90587920f921"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/vehicleNames.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 80650,
+      "sha256": "3ecf519e6dba5813e1136382751eb832b92ef6d960d8d38f01590e6946e90417"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/widgets.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 917,
+      "sha256": "fa93de5e70a8361c0bf90496fe0d2f9930866c6323cc1eb3ec17bd95f932361a"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/widgetsTemplates.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 4354,
+      "sha256": "95df4ba627cb826d47c9882eb40a080b61375d1602d46066239f50647ada3246"
+    },
+    {
+      "path": "res_mods/configs/xvm/Aslain/xmqp.xc",
+      "category": "aslain_xvm_profile",
+      "sizeBytes": 982,
+      "sha256": "ebfa03773475ad8a05a3c54395a43e858c9a917cdc94aa146b53019d62dc13e4"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_auto_mode.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 1575,
+      "sha256": "f45bec70173e36227bcaa30d33aaeb4224af68d669606f714ff0da8d308a9c2f"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_native_panel_sort.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 2093,
+      "sha256": "d4929a80187a21a595adac4d20c535be05b5b128fa5fce8ab1cd41dd3969dc47"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_tier_font.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 371,
+      "sha256": "9de10bb2df79d09505c3aa6acf2207f51d41dd8c0c376393050c21346de12061"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/cnbox_vehicle_name_color.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 18817,
+      "sha256": "372a1db7a116040d15a6615a379f585a65538142a734c003fd58bac4c8603d17"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/damage_log.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 1568,
+      "sha256": "6578de0445005e63c23c44247812a1d8129be7b8a3c58cda24e81717549eb585"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/hangar_stat.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 1732,
+      "sha256": "b87819f1403c789361efb29efd621ecf1b6561079f6074d0eb3390f0c82febab"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/hit_log.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 520,
+      "sha256": "1535423f9aa3a817a7cbaa8a2d758a55b0e6be4e15928cd3e21e9fd2e7aeabe1"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/math.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 2469,
+      "sha256": "7ca607aaa2046680a0a2eff7f91575c9913040886034a8f332fcdf864c975fbc"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/score_panel.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 1000,
+      "sha256": "5a8fa2b8595639ad489c686120c5c0b40503c49eb8a1515bd60a16e2ea908a43"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/sixthsenseduration.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 327,
+      "sha256": "239c1e45f60d46211674c139e38e8c6b6e60b9ab8d74259cbe028e01a4e9c09a"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/str.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 1214,
+      "sha256": "8e02ab2f964a36027b206421003caa89fb66ecce1bafdb855884fd48624b0a33"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/tooltips_shell.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 3359,
+      "sha256": "af7d19b19bf0caacbf7865f6a7abfbfe5eb4c0c16c16f026384b2a360cbe1f72"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/totalEfficiency.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 6884,
+      "sha256": "f9f56d0b08f6986eeb53bcb83198c677615f965858244c36ee7467612190717f"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/vinfo.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 960,
+      "sha256": "1e4b27cc7e09b10f9fae87f0b3e80ec5157082b5189af2730d33d974fdef7e4c"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 6196,
+      "sha256": "e120ae93a72114b7d2ecb096a04f052181894a7c24f2f0d675f04141b2643d90"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/__init__.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 4,
+      "sha256": "d74ff0ee8da3b9806b18c877dbf29bbde50b5bd8e4dad7a3a725000feb82e8f1"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/calculator.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 6074,
+      "sha256": "7fe59e844920008e1497bcf42f9c2fa8db5769b56e0acd0da49018b1135889cc"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/damageLog.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 53098,
+      "sha256": "af6e8c0eb18a60a3410c23b7e10f6a46230c89841c3662e38e665a7bcaf06faf"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/hitLog.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 42065,
+      "sha256": "f354c747068efd7c8a42509cf97e83256a734f307c333d16aa4c1fa171766648"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/parser_addon.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 6392,
+      "sha256": "d36f951e46141a88df3065a825ac755c52717a97b9b50912c0e9dcd30e81aed6"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/total_Efficiency.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 16455,
+      "sha256": "1495ac03bcb38e3d0f63478d1b30b0d34bea31ee9957daf68a07e7c4a588454f"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/total_hp.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 6925,
+      "sha256": "cbe4d66cf8847e0dda7161e48691706cbe3dc4cc318aee04ac9fcdeebe3e90e6"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/utils.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 6982,
+      "sha256": "b74e34e818271e850e94b5ae81c0835a4a8d1f210d05f8b53cd594b9e184962f"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm/xvm2sup.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 306,
+      "sha256": "ca3539893b504323a33757ad81acf6fca57512fd77dc62b80468721347077b79"
+    },
+    {
+      "path": "res_mods/configs/xvm/py_macro/xvm_debug.py",
+      "category": "xvm_py_macro",
+      "sizeBytes": 1542,
+      "sha256": "962f33595e75c9ef0c5b95e4081ee029314685a42bbb100246ac398643c72ce7"
+    },
+    {
+      "path": "res_mods/configs/xvm/xvm.xc",
+      "category": "xvm_root_config",
+      "sizeBytes": 267,
+      "sha256": "d578a96ede73ad94a59b7309755be1abae402e3580895c30ebb7e1f4c3d296b3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ar.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 6156,
+      "sha256": "58c532cf2d859b74d230afdf86564c5e02555cefce4818af5041d6c7eff309c9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/be.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 13728,
+      "sha256": "58c75d6e9970c0a5caa82cd33c4f93b97d4ad452aa1ffe46c91d4cb0514a22e9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/bg.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 13802,
+      "sha256": "e6d7c43e3676bea9953e64e394d81f27bbf0195cdebb0f0c93fef60e0bdb8ef8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/cs.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10824,
+      "sha256": "d3ea9b5c111ffba4ad98c2c2ae751e2c8aff76bdc5fcf3f13b6a31f507ae993a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/da.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11572,
+      "sha256": "b3ea37e18d937bae474e58803c20657455c539339774a1e0f8f980d0dcd18844"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/de.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11873,
+      "sha256": "7b38f9a09e50207a82eb7658420c409cba95490aa12b142ef48a7b53a8872b95"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/el.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 14293,
+      "sha256": "5b5ef3932111e4322d6ce5e9b514a6540de71402b7c3a8a5338864b08a872289"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/en.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11658,
+      "sha256": "2b9ca1b87f69d67a6ce8606a6b9a43c54cc621de55999b4c6d865a1827e95f15"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/es.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11144,
+      "sha256": "a687335315eb0350eeac335606de6b833e0f40f4f4ab47235da5ecd2f036c949"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/es_AR.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10542,
+      "sha256": "c0ed4c8151e3801f652cddf748caa70ff34c3bb8f5378f5212a2cb92e86a42d8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/es_MX.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5985,
+      "sha256": "69524077f30a63255cf39cf8121a06974d3b148d8917a72deaaa8758da9a86bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/et.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10116,
+      "sha256": "a9dc7643a9c80ba4b7dbb1a85d23ec5e51c37b5230714a5225d8cb83b22ed325"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/fi.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10806,
+      "sha256": "61959ccb5839edaea08bdc3b24d85595ded2fa5b56e517b5c01d4c69c779b36d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/fil.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5985,
+      "sha256": "69524077f30a63255cf39cf8121a06974d3b148d8917a72deaaa8758da9a86bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/fr.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11941,
+      "sha256": "1befc77ba29ed0254e1735e219f77c7b2adc576974514087496adf2ae38f81fe"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/hr.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10450,
+      "sha256": "84709835d901304ed433529d25b84455ef94c29c32214217a515e3cd448cd45b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/hu.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11266,
+      "sha256": "cf0f6f79f7ffe11508fc7bc9558b3ef263e3c95bed78c327ef41785b5b6d65b6"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/id.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 8201,
+      "sha256": "b6f1241fc1b2cdbd274c21d98f16adf850c3c3c6435549dada567c6a79febc84"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/it.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10192,
+      "sha256": "a9344be8f936d8a29f8eddadf8bf8a8822ca5ea807818eaad3c2bbf31a1d1c9e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ja.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11369,
+      "sha256": "cbfb4d6f27b950468f5d3b9f80ff3ad40802613a2b2f3b21520c7c61b9bc09f7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ka.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11605,
+      "sha256": "117dacf424192534eb21892cb0a5cc0d7a172492da0b25f56ba61bb55662961b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/kk.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5985,
+      "sha256": "69524077f30a63255cf39cf8121a06974d3b148d8917a72deaaa8758da9a86bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ko.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11430,
+      "sha256": "1895abd333b60d7635ac3b897f028f3daca128248e9775f50d0732a53a40e4e9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/lt.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10965,
+      "sha256": "b54e67d92ddcecd7f2256c24668637362ea1edabe21d32af4053f0e08c254067"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/lv.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 9819,
+      "sha256": "2d9ae800f11b77e7cd3062a5ab2ed0fc37c506992fa376943f56758ffe0bc82d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/mn.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5985,
+      "sha256": "69524077f30a63255cf39cf8121a06974d3b148d8917a72deaaa8758da9a86bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ms.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 6687,
+      "sha256": "552a7710da6df491f6e2decce655609d620cac7d566f5f334493b6f60794733f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/nl.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10900,
+      "sha256": "3f475a0cbd658b7ca4a506a341e0926b0b4fa1b9ebb2f6ed66b2bf082e49e698"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/no.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 8111,
+      "sha256": "ecc29c8994bb8fdd9526926d7b277bf18ec24f3253027c7e23b90fb8a1249951"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/pl.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 12335,
+      "sha256": "37064ebaa90130bb91fcbbb316ddd0319814b0854d4cd969b538e3728b10da3a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/pt.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10969,
+      "sha256": "2ec28715db649214ee845a9ee01befec344aedcdc489d6959ca11bccc6dc319f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/pt_BR.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 6856,
+      "sha256": "3224fab9a18e8f6d72425ef2bf86cf0bb5421ee643fba8ed02d00e1f43c8b133"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ro.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10277,
+      "sha256": "197c12496d6932dcf8300f7269600fb940ba691741a6aa0702f94d39b0a76a42"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/ru.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 15427,
+      "sha256": "c8812b38c44c560e7eca89df795e4e26fb882065db7193a6a3ee35bce024836a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/sk.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 7881,
+      "sha256": "36a2c392481b1c0e2757fd4eae9fc1d68d9541291eb3018804ec895196622cdf"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/sr.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11679,
+      "sha256": "b351f9c0cc26f919038c1cf77b3ed1cac398be564e29720b5e30b045b789fbab"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/sv.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 9206,
+      "sha256": "9dfefe544afb4528b4cd781d8ecedc226ad34d1f9d541c755753346d394320fd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/th.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5985,
+      "sha256": "69524077f30a63255cf39cf8121a06974d3b148d8917a72deaaa8758da9a86bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/tr.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10963,
+      "sha256": "f6e4203d0c0e3cc5f5cb5a4e8dc24821bbc5fff690e0d599b5168789a401c04c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/uk.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 14219,
+      "sha256": "636d1a2aad3af81963543389eba0e220b6cb76e3c301be0912c5e902c4f13669"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/vi.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10102,
+      "sha256": "663a6b71631c6b95ca89ba4be0ee2fe45d607fe36b027772db0b93a80f7ad38d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/xvm-client.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5993,
+      "sha256": "4d52306dc5d16606e7c35de260fbbb1710116887f544bb57ac66f16298ea3720"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/zh_CN.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10278,
+      "sha256": "cf6777ab4c5642bb6371ec901833943446939b57650e5a90afe7c76f9b471406"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/zh_SG.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 5985,
+      "sha256": "69524077f30a63255cf39cf8121a06974d3b148d8917a72deaaa8758da9a86bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/l10n/zh_TW.xc",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 9495,
+      "sha256": "412e941c9012a31fec5691050f3bf0239325eb8784c1d039de449f361b3ac1e8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/MinimapAim.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 330,
+      "sha256": "f68dbdfd02e61bb85108ed6a56bb8eef1ac0c953909d692fe9402e2be09d2029"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/clan/.placeholder",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/0x01.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/0x01_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/Assassik.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/Assassik_EU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/M_r_A.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/M_r_A_EU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/M_r_A_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/Mixailos.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/Mixailos_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/XlebniDizele4ku.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/XlebniDizele4ku_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/Yoyo117.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/Yoyo117_EU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/sirmax2.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/CT/nick/sirmax2_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/EU/clan/.placeholder",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/EU/nick/Assassik.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/EU/nick/M_r_A.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/EU/nick/Yoyo117.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/EU/nick/sirmax2.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/NA/clan/.placeholder",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/NA/nick/WooSai.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/NA/nick/sirmax.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/clan/.placeholder",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/0x01.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 328,
+      "sha256": "308bb1b702dde4922f8dd7e9d8d4a3ef81a3367fadb3331545b7827e994fd9dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/0x01_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 328,
+      "sha256": "308bb1b702dde4922f8dd7e9d8d4a3ef81a3367fadb3331545b7827e994fd9dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/M_r_A.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/M_r_A_EU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/M_r_A_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/Mixailos.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/Mixailos_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/XlebniDizele4ku.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/XlebniDizele4ku_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/iBat.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 342,
+      "sha256": "a4b30a891d74ed99e88996fb2fa0cb7b21e5d12f4946447ddfb20f87cf54e97e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/sirmax2.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 328,
+      "sha256": "308bb1b702dde4922f8dd7e9d8d4a3ef81a3367fadb3331545b7827e994fd9dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/clanicons/RU/nick/sirmax2_RU.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 328,
+      "sha256": "308bb1b702dde4922f8dd7e9d8d4a3ef81a3367fadb3331545b7827e994fd9dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/Efficiency/assist.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 844,
+      "sha256": "75f5e884ee3581002f928f547becf8cde7f257ef94d847362ce5302e4f0cd32f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/Efficiency/damage.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 688,
+      "sha256": "144fa319862201873f72ad73e92dca269ac4303be3f9e52a099f63c70253f85d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/Efficiency/discover.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 672,
+      "sha256": "35eaaf39ae932b5bf3538cd9322b892b4a4d680543f560860c5a55e54f6b63d1"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/Efficiency/reflect.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 492,
+      "sha256": "18839064812a76133e2cee200ea76686cf3ec957ba75c327f1575f08d0d75fbd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/Efficiency/stun.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 751,
+      "sha256": "72bf22e54f7bfde23969a3284451db2e59d31f3e6ee8191348cb1eaf748234e2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/china.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1308,
+      "sha256": "cd3efab98f3820a30a2b200595a16ab97e55a332b64f40c0280499899b6bc4f8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/czech.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1430,
+      "sha256": "cbb7137e640c589380dc98a590ee1440e50942dd261025ae1dfecac9a0e31df4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/france.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1329,
+      "sha256": "96a62452082d6a83e58986c97cef57f20bb0d973f63a00637bf70d6e42ce39d1"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/germany.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1536,
+      "sha256": "22f5c3b460d3916a1a9df08b9fb97ec7f394fff76b71eb32586daf683498b7ba"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/info.txt",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 30,
+      "sha256": "6d39776e1748a7651f25876f3e8db116baa395bb80b69effcc84c666b4307ec3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/italy.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1160,
+      "sha256": "3e8aeaa2996aba6cbd90db513a111d03b85854858a591b9d9fe765a025818166"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/japan.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1392,
+      "sha256": "746dc2ac8bf4ccbcd9c303a040c3cec4a29c37d55efd925731f16c0e5b88d29d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/poland.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 994,
+      "sha256": "05384eeb1c8cebf2b80299356f3ae12e1ccda25d7f3789af09a942ddf2c78f26"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/sweden.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1284,
+      "sha256": "625c0bebc62d53c063026c009392af910ba7a932400be7edd13d545e37850e65"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/uk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1544,
+      "sha256": "799d1b6a36ce846172ee8735ee6d200fc8816763b4101324050f4d36b906f847"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/usa.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1511,
+      "sha256": "9412b0d79df2dd7dad4cc3d031598f2e5f89e34206706436e8af428311dc0ec2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/nations/ussr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1326,
+      "sha256": "35a72477a1d44fe0b41f7e9ca98fd4df61c3f184602d2d1381b8061f1eb2677b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/brotherhood.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 739,
+      "sha256": "58f1fe98c505a6fa1bf4648b40695feecbc070e92beeae19bf70c5dd0ae6e3fe"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/camouflage.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 657,
+      "sha256": "d2eaf0b237a821d52042f22ad00954f657ab7021855410c82545f8f5d7b38fd4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/commander_eagleEye.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 750,
+      "sha256": "a66deab88cd478d702e5297e081f10a8721af69923853e12ba4bc5f39e98859c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/commander_expert.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 742,
+      "sha256": "3a7e0be10add1b38defd20bdb321501842ad8fdb9ddbefadf965c942ba2698b4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/commander_sixthSense.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 736,
+      "sha256": "ec7a362bc0c24978aab3e766ba4cfd3f92355db568ac1ed8d6b4f5d9ee0e235f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/commander_tutor.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 798,
+      "sha256": "c22c5b47c5557fd0223fcaf575beb9ee0add4e69bd9c20adbd440585a5c88ebb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/commander_universalist.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 591,
+      "sha256": "6244e353f72b046dcc390a76d0fb3a7a4c8584a32ac96f5815834c50de5ea4b4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/driver_badRoadsKing.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 690,
+      "sha256": "0f271778ee74c055fbc4c1e59b01b34c9f74bedeba6febd5fc3337dcd1e6f9d0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/driver_rammingMaster.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 781,
+      "sha256": "ea64e5c09972289df56a294139f3641e81a4a96dab80b3b59d9e2e49ca6e8af3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/driver_smoothDriving.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 735,
+      "sha256": "e9fd412c47ae8aeceb3b7c427c967f33806e014d6c971787dc744cff58c9502c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/driver_tidyPerson.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 753,
+      "sha256": "7132068dfa862860efedb9a475c932efbfb0000487ceeef0c7ae7a0523414a85"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/driver_virtuoso.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 623,
+      "sha256": "6808a59615d519ef2b41e39f9ccabe1f885174a132e552341984b429041ff50c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/fireFighting.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 647,
+      "sha256": "5051b742edac786f925e68ccf754bc2fb00105ab98d4faec55ff7e39825548ca"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/gunner_gunsmith.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 690,
+      "sha256": "94ec7e043ea4e1e49e6997b7a8ec807287caef86feb866523d84555a645a670f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/gunner_rancorous.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 761,
+      "sha256": "58c539e801c2c7392846632c17d10fa5d2b7b94237c4eeb0dad6aafbd55075dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/gunner_smoothTurret.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 790,
+      "sha256": "223f13bd04dc7412b1d642843c6d0f837c734c7634db9a4c53948c7f5a5da5dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/gunner_sniper.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 854,
+      "sha256": "5bcda05b998b7a52a36108d76345ffdbbf5a8416cb85f36620ef41413d9bc3c8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/gunner_woodHunter.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 800,
+      "sha256": "7ed9f244e018276f873f0f7eba6d5465cd059f7f1d5821a87e7387649fb9bbc0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/info.txt",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 35,
+      "sha256": "35ac3a29944e8c98d13aa33b584dc56aaf2fdcc611bf5c48f051dbbc141491e3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/loader_desperado.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 774,
+      "sha256": "7921758c9ef59e11c99a5b430644dbfe63d6c594a08f40d2c46276c96c1a66a7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/loader_intuition.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 773,
+      "sha256": "c0e1813221e5e92e4b6038ac71578c8a046a4c2ef9fb7b8331ca40a201b38c5b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/loader_pedant.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 741,
+      "sha256": "d3cd3e65bc2f756bc8499cde1291fbce1ecbae096e7396f3b254f99fc89ffaac"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/new_skill.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 592,
+      "sha256": "36ff4e465c36569d89cb0be553c9c27f6af9039e4ce45af1fb827f92272cacd7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/offspring_brotherhood.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 760,
+      "sha256": "f73cd1034cb3a9f4e3e6dea02d1cd75266f72faac132c74bf64a1c7eeb2ad571"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/radioman_finder.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 731,
+      "sha256": "0dfb7c0d0d1a5ac4e12d1905c199f823eddc2d690ba32716ccede9fdccefded9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/radioman_inventor.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 748,
+      "sha256": "60e135915fd3dfdc914b9e9838347856182ca0eddcd07b118dabc1d353370e28"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/radioman_lastEffort.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 683,
+      "sha256": "88fdc690406a994754a71e55a13ab4943c8822cec8939c5b4abb1daaf7487bf6"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/radioman_retransmitter.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 707,
+      "sha256": "92cf16d94ec5d2dcc38d90d87244adf86bc33af6aa8fa671bdd9611ce4a39240"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/repair.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 609,
+      "sha256": "8caa559bc7cb498ad0e40ed2ac86040176551471114aa297819d1578c01d4342"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/barracks/skills/sabaton_brotherhood.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 756,
+      "sha256": "6a5a67b977a02f8804334300aa45a30c48237645147f267507403a0896863cec"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/blowedup.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 292,
+      "sha256": "c741acf2e8b0eae87d7c9288e33cf432715612069a25f02607d98c10e3587985"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/battles.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 484,
+      "sha256": "bdab035638575abfc271f1fa548af3ae226533469bfbdd52757195b9f9af168d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/damage.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1168,
+      "sha256": "d9c2c7f41cd57a3ed36fecad16985e281fe1fb76382629b9920de094e186a9e0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/crystals.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 640,
+      "sha256": "c0977c013efeaaf3aa85c38d9680256b50b477d2af82006a4aff212c760ad21f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/elite.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 903,
+      "sha256": "f422a8901ae7119603025cb006655f250fb319d99ed0f5025a33fa528b9d7434"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/fullcrew.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 818,
+      "sha256": "0008620080f92e1ac0b797a3d87818cc418df09bced7c1ebb843789a9aecfda5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/nomaster.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 999,
+      "sha256": "bca031f2806d06173042db31eb81bf9429d1e13f95fa602931bb01b7ca62bb27"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/nonelite.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 960,
+      "sha256": "c43dd3f2e857fc01b83d0e72efe5a8fbd03186def0e9a809809d96a9daf5386a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/normal.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 590,
+      "sha256": "a0ec62dc8fcdbcbda6a37ac14bb698e65fb8d177668f87d58718667fa36a3add"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/premium.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 928,
+      "sha256": "772e76ddd5f619cf9bcb4ef36f5b3aa9291b79ddd84fc0169d0cad14a86f08f9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/rented.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 482,
+      "sha256": "ea2280924e6de19f4ccad55e60a903a1d467e7a8a1c0a3137d7ae615a32a70b7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/reserve.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 722,
+      "sha256": "fd11242484a7d544f4a3a4fafbcf90a2278eed75a4f0ef726c7df24b3e950b2e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/special.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 893,
+      "sha256": "86645ea1bb5c420faf6d95c283cf4550a459b11b98a0221a9ad3e4c8de3600e0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/filter/trainingcrew.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 976,
+      "sha256": "caccecf3ba1cf7a1eac084dead0d13c0d4fb932a60989e84c8b82375063eed1d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/carousel/wins.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 634,
+      "sha256": "c8764d971d3fb9414bc673cc638058554d6fa90abc71fb443112e6cc4f1d0933"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/clock/clockBg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 663,
+      "sha256": "cf973b0db5ada4622bfc28af494c50ce92448318ba59325225009bd74ad1845a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/damageLog/dmg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1416,
+      "sha256": "1b988d5f450804ff735e94543ce5720fb12293ae5c8488dbfddb14b11e026499"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/damageLog/no_dmg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 466,
+      "sha256": "7768b9e3b6ae41df4bf249aba210e0421047cdf4c1d86c823606c337205de95f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/dead.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 432,
+      "sha256": "c7e63f3fd709d12b135e0eb48f807ca1c696f313f6562dc509bb5e57ac5f68ab"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/0.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 439,
+      "sha256": "912da4e53d7e2a1f58df10bcf5c5315962f12d5147a96da9c6988060ea3aa2bf"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ad.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 281,
+      "sha256": "e2e66addd56051b24acaf197b2d4761c8e68f8c6b19344737a904b42752eba2d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ae.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 126,
+      "sha256": "0dd1ff068bc92f99ff499377f1d20794b38cb137e6ae6dbef8fb3f8e51489f9d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/af.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 273,
+      "sha256": "86b9569cb82838d975bd9a061318d4a7d92b4bf996613e9c4202e7d2bb7128fe"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ag.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 315,
+      "sha256": "4a8291558456f77f49818cdde487498aa277ca30e43bb2defbe55035c5ae85e7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/al.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 306,
+      "sha256": "88dfac00802acf45a10e5f90b6485ef3688b4d75f3667765915d706838d9143c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/am.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 127,
+      "sha256": "631a43f28ee4bbe7165458b08c29cf5a3afd679cba6790e0f38a3e57bc32be37"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ao.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 261,
+      "sha256": "a57c468cff0e4a324abc6e3b88459c9d26cd26fd7d621e21bc9d1d8b915cb9d5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ar.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 225,
+      "sha256": "c61f186874d90bf462949691e4ac3956be24f01ed9e2f99d9e3d3384b26bd80b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/at.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 115,
+      "sha256": "cb78b1749fe15e66b08d59d53517c9b18bc8366569c04fc947f1e8d5019284da"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/au.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 246,
+      "sha256": "d734197df71df483515c67acf0b837537d8754a29d097648749efb2281b025f8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/az.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 285,
+      "sha256": "b09260a49255cc58ef957da098e4da49c8682573a814fc1c0d8e0c2d092f9d23"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ba.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 371,
+      "sha256": "73ffe2d3a115d6beab51f0a39dbdb24ec53e92dd5af30ac76f54728dd69fa9a6"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bb.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 174,
+      "sha256": "146285834761c07430ec43d078c4d2f8edaa01b12ce97cf52093b1d08bb9ee4d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bd.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 226,
+      "sha256": "6f01daccc6a2284367f7edf43aaffc49548263f05298f3ac1727bc5f8beb6bde"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/be.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 118,
+      "sha256": "12945dc740588729dea92981b34d672cc1befa6dc3938c418a751fdb93711373"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bf.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 184,
+      "sha256": "83c236031ba8cb08d194ef49f264df597312d1b7f7061f6b9a1aaf27643ff546"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 132,
+      "sha256": "a80d90b08779fbe466215304a006bc4bda55ac58a1505cbac927b26ec4d9ef18"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bh.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 148,
+      "sha256": "a188dbd7f875254a184d9f384f7996b64dfd1e181546f5d20539af9e7cd7b4e4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bi.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 466,
+      "sha256": "737992717c6ce0f31aca6f60f079cf1859787136f1dc911f86e38fda892dbff4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bj.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 122,
+      "sha256": "471916e84bea18ed1f8031616ab385f295e86d6b0c028fa83a6266de3d890693"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 538,
+      "sha256": "ed0c54545bed5df84cf9ff9824626bda1511d64fa11c6f37904b829c2ce1ed72"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bo.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 255,
+      "sha256": "0777919c50315dca88adb3594d0d3896e3dd8ed1f0a4e6732df32a4b8fb046c4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/br.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 446,
+      "sha256": "2c04d876e769450b95ccded121ff9c47ea069510e98a40184f52aaea6386505b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bs.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 183,
+      "sha256": "bd1f249c3103887da5ccf6693aea056c817d3790c47fa418185bafedf254f6dc"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bt.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 478,
+      "sha256": "7dcf01f3badd74fb699c4e2b6b57d1ba6fc22597b2475cb7ee450238a462ac70"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 125,
+      "sha256": "89b207b46a877acc506bfc52fdb355ba8d80f1c6547f194985275a2ac432df28"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/by.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 169,
+      "sha256": "ec20f5e15cb815895a9af0af890d9959387c661fe6443c89407ee8724af82987"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/bz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 355,
+      "sha256": "0b4971956347305f2080f9ef9f5f2cb905151690d34560ac530e44f888c0295a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ca.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 198,
+      "sha256": "0b7b57d9057703e6e2d45a29d030f706f1b46baebbb02ac66fb9e8022cc741e4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cd.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 446,
+      "sha256": "38b2d9339d5e5ffe3761fe1479e7b88a261278fd49884af35f65c2d51997c160"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cf.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 180,
+      "sha256": "249704df41eaa7b576296751cc67ce3451499467973971b5dce6f6ad8d44722e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 165,
+      "sha256": "35d2e66b1717a41ebf9be73cd86c0283fdd9e946e71f7a57624d114111e31de5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ch.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 129,
+      "sha256": "cbf3b9df5cb62646aea3a5ff2ba18c5910a3610b43ad0ed5e668c95d5542d559"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ci.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 116,
+      "sha256": "403d25e83cd7dc0a5d2ba4b8c92153f42268552491a9af3744cb865326997b6f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ck.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 346,
+      "sha256": "71e195d6fccc258cd2ecbcde5198073be7dc53acfd913575092eae56805bd434"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cl.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 169,
+      "sha256": "eb2b1fb38f61970717ce787a8d36e44ce49cac185ddcd3c247de2cdf399ae43c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 178,
+      "sha256": "f21a9ebda21658a50800fabb66e261744c2a40db2b6eede33d421e99d5aad1c1"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 327,
+      "sha256": "9635a0e9eac2ec4042fac017315c2ef95b27eb57b6b6c7ea779142abc364be21"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/co.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 127,
+      "sha256": "0ef38036092b0411f351dfcc52be3c97a653f5cc9d1064c05c0a059e12e3fb26"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 124,
+      "sha256": "678283ca295d744fcd8bc2885a76429e312bb77bd8571be4e9ae72289341ab55"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cu.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 227,
+      "sha256": "8f0292f03b8c3759c937363714bab03ef1715cf4cebe94fbdd46a15209c09e9a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cv.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 149,
+      "sha256": "3e1d73c92e69eb4129611726a077726c8743fcc7a4e4fc715e4e27c9e90d7d63"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cy.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 389,
+      "sha256": "1581e8d68d98bb4befb34e3f773e34f4d91bc785675a8117cc51074bf734996c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/cz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 235,
+      "sha256": "71ad84229e834c9d42d59efcae2a7483d07bbdbe6fe4f8a008729a97c007a18b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/de.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 123,
+      "sha256": "e1a690b3ee0edc8e3c406a2bd484360eb55deaeba4087e3f48c542139afa98b3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/default.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 74,
+      "sha256": "b307c2839e0883ac123392a715a2dff1befd77c80237e24deadd68f03cccbb6a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/dj.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 243,
+      "sha256": "cc16a281c8cc519d859b06b4dca5f0ecef90867f5d4ba6c6969027c43bd2512c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/dk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 122,
+      "sha256": "80ca3befb7606c9de777b31a0325a5e57cfa0b7122b4531b85892e9359217136"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/dm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 350,
+      "sha256": "4fb623332d99e555f43554a513691f9b44d44b07fe2f2b466490ebca7f9a40d5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/do.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 159,
+      "sha256": "24469371113bf38a82b2e09bfbd117f3383a8c72e2480ac3e7ffbbc3da4b2c33"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/dz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 321,
+      "sha256": "fa66558cdb60ca041f7d36ad8cbf1b61c145988e6fbcc0730eb254cc34a603fa"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ec.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 284,
+      "sha256": "ffb0388426a208697405028fe92091072c27b040a479abccc0753e67cb4b6d21"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ee.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 121,
+      "sha256": "27eab24fd2272f20b81e1b53b12518e688a252173323b50b9c89981d9be80fcb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/eg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 219,
+      "sha256": "9b58d4f84b38932cacfc09066b1d47038764729c7d3cb53f2559d6fce19dad7c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/er.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 437,
+      "sha256": "5346ef9ee1f7f43b9f704aa808da6a1193ea1e2b4ba8a90411635323aa4c527c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/es.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 237,
+      "sha256": "4928b4119f1b06bf8dc1a2c8af738b4cd1b7e3154c27faaa53e7e9311433982a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/et.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 444,
+      "sha256": "3d8372a8bd73db7e005decffd1c13d5f61b41ade44f3cb2525f69e68fd216817"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/fi.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 121,
+      "sha256": "d91c23ce871ea77c5a30a720d44cf3f68b0fdbd164f1bed0bfd60e4a79e79617"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/fj.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 406,
+      "sha256": "5bce44b46ee6d60532bc3648440d833445da31d474de8fdd493986272f6d3fcf"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/fk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 360,
+      "sha256": "515159929de3ed987c430a15432cf4c74652e5c481661f38cba17aa6f1dcbca3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/fm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 218,
+      "sha256": "278338cd63c575fcfb98934025d7f0978f8a59c4f5ba9ed4dc97c08f73a7856d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/fr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 115,
+      "sha256": "f7ca5798e73731838ca3cfb3a79ab6f112f0319b19ae2946654764b2bac24d69"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ga.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 126,
+      "sha256": "5e50f440c52ecb6ee624c3f107babe10258aa456a75e7f3bf10c81cbe5b3b492"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gb.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 364,
+      "sha256": "27fa96aed33edd9da9507a3bc6d1a0800b7f989cc75f5e48a71d361642609953"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gd.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 325,
+      "sha256": "950175ae1d91c983dcec4bf6fe7c79124ff3c7bb37fbb5a105aacbd25bb8807e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ge.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 150,
+      "sha256": "269e2ad40864e00e10f796d8e9500fbf22983044c93b1ede456a7fa95d151d4b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gh.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 182,
+      "sha256": "158a34770680dc179ee352af2921d267348370c556df2807ea1468e64e0192bd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 134,
+      "sha256": "3445fae64970708a0ad671612888e46832e3c44fb6ea1d01cdacda1530949df8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 119,
+      "sha256": "1b8a05c3b30af33afdbb9892a0642f05d143d13897c686786020b28592223dea"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gq.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 323,
+      "sha256": "bee9fec4263cc9c55434ee25a26e6dc2eaf79aeb651929e089fa0a81581b8e7d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 159,
+      "sha256": "1825222b02802a8cccd7c8a15473da3eb6bccbe23f58b27d0c62ee29a718e998"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gt.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 214,
+      "sha256": "6191309cc3e13456fc847caf2982e3d37a9c171185b4cc61bf38c4f06b871d76"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 168,
+      "sha256": "b921679b6d5381b8f65991ebd3c962006dcf6b3c9a4de236b7483c2f6b5e5142"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/gy.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 405,
+      "sha256": "2d671f202054565496ea3c751af877db5cdcbfdc89b5a45369b05e6a3c37b8ab"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/hn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 170,
+      "sha256": "5a47c8181942d7abdab5b11a11a5b6b19f00e5496bee1d56c025bf84c681dec9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/hr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 399,
+      "sha256": "0ee62aee8ba644466031f3c388918826dfb3e29a1b2203a1b40605db45414730"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ht.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 224,
+      "sha256": "a83301232969ab3e57e79d80c3311d34dd86f89690a9a279ca6cb24f6bc22b4f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/hu.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 124,
+      "sha256": "41bb9a287a65bcffab0bd2728a46186fa5ef744be79e2e7e8dad0dd96377aac2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/id.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 116,
+      "sha256": "534d0b1f279e3e298d7234848167e477c26217f4dd256685cdb2940c38b8ba79"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ie.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 113,
+      "sha256": "d57b437f851e924c5e124a92ae334c9a863d6842b6539052d23311730bf665dd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/il.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 192,
+      "sha256": "0a348e870e306358234034ec20b33639e19a1e57011b5d084c387cd6b8e014a5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/in.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 224,
+      "sha256": "007661d51a10657a9b132b5e85f68d74abe780b30850fcc8ab0839ea41afc02b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/iq.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 293,
+      "sha256": "f462469d65b8dfbad45cde72d5cca0c86fdb31c4e2ea028409ec4e49e2e0a184"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ir.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 378,
+      "sha256": "0eefa48d487b62cafd78664b308eff687fb5c8a1d6c96b2a690189b5e2d7b5cd"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/is.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 139,
+      "sha256": "c42023067b26503b8ce7f0c113daced58b39ec716284ef5ca55dfd2c1748eabb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/it.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 115,
+      "sha256": "3c344b16a486fef423441313be7d5cc963849b7a6a9a283925342a6172d8d1fa"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/jm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 405,
+      "sha256": "06edff941a84e6394dcc5d7287e7d6c2d637759ec3d4aa5b48538da803bc6a24"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/jo.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 252,
+      "sha256": "ffd814db0106ecd899f9efa2a5fda5e1a78c094611560e3fd7d1967393eb330c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/jp.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 172,
+      "sha256": "d5f55c3d87bb5f55b92294dcd14e0766cc090d265cfcfac9acfee699c7aa745f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ke.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 345,
+      "sha256": "dfb83b07226b2f6665797b96f43d4257db16feeebc0bbce0a1ee2efe2b1ed475"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 392,
+      "sha256": "87bf2ceb2906d18df4a618fb02120572d690a0082998135e3e7fd6cc7512591f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kh.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 249,
+      "sha256": "377451cd7a9d30e9e9c3ca068fbdb8e2a919a2ba8047fa3902144ca2d9edb0a8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ki.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 535,
+      "sha256": "450325afb80573f1aa2bc406054af3a28b3b43a72840b06e98a701a670d7e19a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/km.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 287,
+      "sha256": "dca5a5c219f4109a5392f4e3611c85a3a41e38810434fb15fa5850d17ba7f055"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 421,
+      "sha256": "22ae73aa58e68f9891840f40748b9976d48d69694991b3b4ad5edb89cf638fa4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kp.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 213,
+      "sha256": "f69a61c0a67368d7c21be8ca06d20deb09e80fad72bf10d347dad3afbe540a4e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 431,
+      "sha256": "a1b0598eff54170fe946ab6c7ac95e652981968979dd66e2c6248114df13276a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 200,
+      "sha256": "f55a2f8581d762aa852f5506678eee11216aed3ffcfd522f6328e2bc7a8c4ad7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/kz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 417,
+      "sha256": "1e96ce0dd13382b35a44bdec6731337fb9a42b69535573713e559025d15cc492"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/la.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 191,
+      "sha256": "3217432c0ab650cfaba36af2dc24fe8c985e4826bc0b674a1ba88e5d8238d468"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lb.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 229,
+      "sha256": "e5c0b6bc67642503afb86f7eb84fc6fe42bfc4deab671d99a74515fc1145b606"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lc.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 210,
+      "sha256": "f74d699d84f1741ba2519258a6f0e7e7365a3b264168233b1edd1fe1d36579d1"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/li.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 232,
+      "sha256": "ba4f15cc512616209049e206d539f06ee9c972d257dd9bc688185f11a35098f7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 341,
+      "sha256": "ff15f3b91273ce4d5c5e1134873aba8fa2acefc29dae06855d72a7a9ed16e30b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 161,
+      "sha256": "bea272530bd7d023c80d51da784acc826d9d30f886c1b8dad16e83c43c5c9d70"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ls.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 221,
+      "sha256": "b39e71dd9c8ff82f0fc9e2e6a6c50bcb2b8c810c84e1f723d4ba17af35d555de"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lt.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 135,
+      "sha256": "126284f7fbebc54681951681f89f3e0a241f37cbef8c617c4260f3702e795c01"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lu.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 124,
+      "sha256": "1c0f9bd9c696c198bc8a4bdb1dc266608c1234edab8374e275fefe81c1a4d3e2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/lv.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 115,
+      "sha256": "9690ddc678a2155f138d1fc153da96312d611e8e5cc9f5d1d9b20fd4841624a2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ly.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 230,
+      "sha256": "82c9fd74aa2104dea9eda020fa13388ec6702c671ad9eb3bc945ecbe9ae527cc"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ma.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 312,
+      "sha256": "b2b230fdab506a65a1ebf931c35d49ffa8f5e1405fe1bec39d527475dadd364b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mc.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 116,
+      "sha256": "534d0b1f279e3e298d7234848167e477c26217f4dd256685cdb2940c38b8ba79"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/md.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 204,
+      "sha256": "fbad0f85e5956fac7df0bbfe7881113c4779e42abe88a0ea72c4c2e2b98b6aa0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/me.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 334,
+      "sha256": "c8edfeb4558083302b58609a1af64743257b74880b3739c2fad6db510e54e2c2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 120,
+      "sha256": "db0ed6d791156cdfc87897e2d924d2b8e3bedf4d65cb11b30e732800b2ea0dff"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mh.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 398,
+      "sha256": "7c6c365d4b0069afe81e1c411def6566c658732ec9d4cf4fe99217d17de31ee6"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 392,
+      "sha256": "43cb25bc7f7faa1b78e8c95c84f76eba83d932b249369d08ed32a4a80f879643"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ml.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 119,
+      "sha256": "e4d91e72ef148c5188c1bee565487201ed21ecebe5f76dc5983b29703176705a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 213,
+      "sha256": "3258b622b332eea15b0176333c8dba75115705ba335c599390af220e377de6ee"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 241,
+      "sha256": "fbc79b915c9e30c5c10ebd928978958e8f4faa21a3e5f4a7d0e19432cc4298aa"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 262,
+      "sha256": "1675422baf4760ab389419c1ebbc95b270d2f4948eb678f9ea6b55211669c747"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mt.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 132,
+      "sha256": "0efd5cc2df1cd5b14e47707712948e0d13289cdc0aa54153fddce2278f27efae"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mu.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 135,
+      "sha256": "679a3255085e4e7e7f2531012c33153949dc727cbed2f0b0c4a0547fba5c8a40"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mv.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 216,
+      "sha256": "665fa56a8bed2f5e0023bccaa2cf1d1923f3e00fa6891d42171ff1a5553950d0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 212,
+      "sha256": "61dba5f2702cefe9ab74e5c0390fcbb3276ca9e5aeaafb384596871b36d5330e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mx.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 222,
+      "sha256": "4ab0f49cfff26cb05e58748e6deec1651149a517c9cecc7e79da3d48c1e248b5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/my.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 254,
+      "sha256": "d1b25f2040214c92181069b71f24bce443e751a1a5255e64da6298e3886eaabe"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/mz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 330,
+      "sha256": "e6ebaffc00dcee6e92188b96ad9ea790be6b133b5faa530378e0e5172ee5414a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/na.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 471,
+      "sha256": "e93d91650a37ba6500acc86c5cfd9f73c8b83dea0544193375ad500d90cfad09"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ne.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 172,
+      "sha256": "b7c6b7726d30158b62b4da6f100f5993f6a82753f95178c3a5716568f061260f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ng.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 112,
+      "sha256": "bc034d43c1cf1ed5fd8247b962a95c122e9299048bb07262471da2a797d847f4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ni.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 231,
+      "sha256": "e7d5f8db1d76c6c79c80bd98b3c051d7ffa04556052f5ce33ae5cb048624b7e4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/nl.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 124,
+      "sha256": "6e38aef5813bf3af582b5a82a73591cb16da5dc14749ccd3eb05a396d02892a2"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/no.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 140,
+      "sha256": "58fc0ad66dac73075bcb6a78fa7471538dea2b7039ad94d73ed1643fb7db40e7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/np.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 393,
+      "sha256": "356f02438c8addc05bfd540c516c433a6de849b6a601c6ac17a622db04be3b0e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/nr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 185,
+      "sha256": "12d976bc3ac1b3b9c2d69742c0b7026a175eccfb41b9c5186c2d0de5604b54ca"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/nu.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 270,
+      "sha256": "e6e82aa44f95ed85fcd518943ac7d1a0de7d46340d21b4157dc272b1163c652a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/nz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 223,
+      "sha256": "55c43ddf7309ebc2c6105659eade1b49a643cec37dd0c1b84eb9632cd8ce8527"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/om.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 215,
+      "sha256": "b36534b89ae7b6c1db9e74ceffc44bd834ea63b37fa2236dfe7b992f51778eb7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pa.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 193,
+      "sha256": "66e732e32da090052d9a3955460f1c10225ac35c179607ca8c9775638896f013"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pe.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 113,
+      "sha256": "8d179adb090d2fd3a4c02d01eb592aad3d8ee4684a30dee30cae7890b894e18d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 458,
+      "sha256": "0693e21eef9060f6864e84bcd0ddaffaaf8cd73703287fa6626c2591031e891c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ph.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 356,
+      "sha256": "38c5977108b1538d61ee6a5a57fb61841ceef37f2b8ff34b5cec9764de7e80b1"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 321,
+      "sha256": "13ef8af477e6e539f9ba2a4b545827d1146e2bedf9420e63706bc7bc29ff3040"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pl.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 120,
+      "sha256": "fc51d0200fc019f0edc760a47e1c008bfd448a7e25c7023504ff6a14164efa82"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ps.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 171,
+      "sha256": "6da8ebb89990b03f5e92c42ef01fc467a372c22d967730c78b51177acd6ce656"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pt.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 318,
+      "sha256": "82ddefd3e982df66547512cff3fc3f413cbe9e961f40caf12a923d4769d44f23"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/pw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 225,
+      "sha256": "40b643fef2af3caef076252dcfb6ec8ae0e66a835ee3db0d4ae343b0ef9b7d08"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/py.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 216,
+      "sha256": "7c53b6c0be2f682b2c0db6f481791df2f78d200b1c42d8fd5933f5bac48ef7d7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/qa.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 205,
+      "sha256": "6bbb484746f348e3eaa674dfa33b68d73ac3d29b9b8101d6e8ef2d1aa9a4916b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ro.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 118,
+      "sha256": "24fdc07bf1c0ee33c38543fd6afa5ac54e49f0302a86d8177e02567c756f9de9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/rs.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 275,
+      "sha256": "fa4d612907d195ed3178a3c71eb7e11120ecdfe23805212ce1bb7f098e4a7e50"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ru.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 129,
+      "sha256": "6ba629baf073f508df4149da7a0c1889d58f6eb9510872e67b310608f83cb989"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/rw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 204,
+      "sha256": "71ff08f80021bcd4e454646db2187187efec97c1e4ea7d472b0dd4169e617dbb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sa.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 445,
+      "sha256": "dbb52a7280e7b999f996a8f15604e0e9f858c1804715153785c09bc26f7f7dcf"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sb.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 321,
+      "sha256": "90949579173eafd283e25505f7ced96d06cad79535723d6b06217e27ce35bcfb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sc.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 329,
+      "sha256": "a7d4913354abe74f17c2fc93020bf96dfb9cfb3e74e5e5885d185c27afa3e1c7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sd.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 171,
+      "sha256": "80cfc8755fa27b6cb529df1472bd699eaec17785efa875b847d09249ecabc2c4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/se.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 125,
+      "sha256": "260ee30968d4fe6ae7a1c378e229da75bac528cb0c2eda0d88b0050a889d6561"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 273,
+      "sha256": "343d87eb48101827c85dfa17c7cf854048d0217031d34bef78ed35ac5417bf60"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/si.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 197,
+      "sha256": "1b53cf0010e02ef70b277ed3098e193180a6b609dcf547ecea4fb9ac7327c26b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sk.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 244,
+      "sha256": "6e7ebcdc5a90d0cb85f7c02f17fc5c290c5c6004f436d1c082f605b4f3842a9c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sl.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 124,
+      "sha256": "687102f6ede59f58f1a62aa721e25840ec34a85f0fb14b643c939a570ed2667f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 311,
+      "sha256": "c772218e0e0cc11a0e27ef3c7a9b37cf9db52ec331bdb5e35c2036ae3dad5f4f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 175,
+      "sha256": "adb7a34e981b102e39eb8df90c18af53050b50240d9079b2ffccd67831fbf15b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/so.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 207,
+      "sha256": "cb672bff223dd511d3d4c4c18f28decece075150f049db18c10a411b43c54e13"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 181,
+      "sha256": "c33f6baab8b09673eb9499aa0c8a40c8ce90ef7d8e65d21bf1894e880c9d2087"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ss.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 298,
+      "sha256": "5578ec1cfacd69d0ba73028d0f2985b520ee21d22d8670af68d14e2df8b1782b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/st.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 256,
+      "sha256": "67497e2fe03bb9b16e89f7abfc6337d74f92cb5a1176ae2c537bec000363a748"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sv.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 224,
+      "sha256": "4e704ba58adf501cb5d38d9bd951823e9f62b563f85ac3d7bda2d889a083651b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sy.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 181,
+      "sha256": "0e277a543649b3b3ddbfceabc470c95e151045e59cbd5072469fae225bf1b5a9"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/sz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 384,
+      "sha256": "7869b052ab6f50d896ef292a8cb722628c6501493a3b246e4a047d4933ec9678"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/td.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 119,
+      "sha256": "fc40ff92ac7421d5cae878fbc88a6011aa216e79e27437d1393bbdf86f27c892"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tg.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 193,
+      "sha256": "bf9163b31979356a0f573bfd506d10a19e1c2d6cb9a17595513b54f86b8deb0b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/th.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 125,
+      "sha256": "279818cabf060752591359b91922003333e9e0521dc99421a21c69a51c14c5a0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tj.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 228,
+      "sha256": "d2a038171313f566922f0dc5a8da249c889d82247102576e773080b3f86ad7e4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tl.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 292,
+      "sha256": "600211c8054036988ec7839bf500574696d2e2e8f14f76af02a9e4b53409c554"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 426,
+      "sha256": "04a720e4b7fd35fe08d4ea8bfe7070820a04a79886127bd3b2705385b65465b4"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 283,
+      "sha256": "6e4f0aeb1d19126b2a42301cefb8581f196ffb5c2d39aecd645b36e9b6fc4f3b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/to.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 134,
+      "sha256": "4aed0ef311ef07c38531ebf068d41b067342c233fe348691d9c3a1a2033ceb06"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tr.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 325,
+      "sha256": "31493279dac5ba268369e2f2dfa390c39b410630c5950442a86207fe1f6327e8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tt.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 371,
+      "sha256": "e8950ef643997bccda013bfc4e2eb199274b67ba89419b014d8988d6620e0c62"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tv.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 411,
+      "sha256": "c39720eae25d33111644f37a9bf367027c3e478cb504ab8d17ab8903bd6d0fcf"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 222,
+      "sha256": "0e3b20232e73edb3654559bbe39e660b1a4b93a72cebb9891d6bbd0a5e5c1ca7"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/tz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 432,
+      "sha256": "2088037077c0d8579861b98fe3d7472c0683df2ab8c7778bdd265d162b350748"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ua.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 118,
+      "sha256": "f49cde4f11f690585cc5493740ecc95e247739e69ed9e6564fb7b61edfde1e02"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ug.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 210,
+      "sha256": "02fd66d31987b8ec124697b413d496ea46b7bd048ca81f21d92e8bb48cb51211"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/unknown.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 189,
+      "sha256": "16846dc44f6c5102969ca445a63864d809f7b13c449c26b17616302071f14645"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/us.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 141,
+      "sha256": "0725d802ece28c1aca93b9afa76a5d9c607103cf51ecdd5edaeb8f5afe135344"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/uy.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 235,
+      "sha256": "3aa697717c3daa63e099b4f2671b0c09712da970d49e7898abcb4af0515e65bb"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/uz.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 181,
+      "sha256": "1003019340fbdeb916454ffaf5e2d0673a0851c5d1f537734b624fdcae2d9380"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/va.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 230,
+      "sha256": "f005a901714f2d711698e5f9e60cc029d6ae9adc69c139612465cefb6e815ab5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/vc.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 230,
+      "sha256": "b28aac627d7c58b15477f1ee0954bc8acbd8f0808234937ea9d283c1252a2980"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ve.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 320,
+      "sha256": "65a748658b0df983d2fb334c4078abf463087f58cda1462bb925535394409d8b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/vn.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 208,
+      "sha256": "4376b7e60dcc101745d1ea5dbb2cb7968795213e8ca8b717e6052d8a82fc4f18"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/vu.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 319,
+      "sha256": "0d5734b17ca8d35a1bb25773e9c68ec0c5fa026d9a3513e26a796b3450ed191a"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ws.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 251,
+      "sha256": "de02ec5675e6cf76e5168876cb7860af9889b941540abc8617d8a74801ee7f4b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/ye.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 124,
+      "sha256": "3692aea8baa10e3c9e8585359bfa2f7777fbf2dcdbbe10382c8a36eeb0d6b7e3"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/za.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 363,
+      "sha256": "65c20bdc594b2b899e160caf881a7ff49dde14110b0866651c04974b3df22c13"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/zm.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 206,
+      "sha256": "0b7bc2346c31d9984b082502dec6a70a7787a691881d505a3912fcee716789de"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/flags/zw.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 316,
+      "sha256": "0dbe25633a5f5ca694d66e8829935997e5888ae63bed8e659e3da5e882781f46"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/help/#A0CFFF.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10781,
+      "sha256": "c1dbf13e445c231cb59ccdd183d43e8957dfc06f6bd61a077cde0e3b05e99d6c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/help/#A2FF9A.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11289,
+      "sha256": "39c1dc83e62ab441b8f6744d3c5829c8170e8cff0d04e2073cbdef26f8c98fad"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/help/#EFAEFF.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 9811,
+      "sha256": "e8f0d5f73407e3d198e60620c0540953955e19ab63d6fe284befb8529dcb08e5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/help/#FFACAC.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 12924,
+      "sha256": "1b2f7bbb9e1f3232c22cf3963433c1132a0dfc26f48dd0df3aeced7f3e0e56c6"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/help/#FFF198.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11955,
+      "sha256": "668bd7e3d2411552c6121c6e3f445bca01c29a3815205737281e06a3f7985ba5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/kill/#A0CFFF.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11462,
+      "sha256": "822448f62c555d184e598a4da355fe267ab6cdf804e56ab3c5126faaf1692e82"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/kill/#A2FF9A.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 11848,
+      "sha256": "c851b73cb2ddcdc8f5d9d557dbf10ea6cb6c0dc006f6bcde2ad7ce62cda64540"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/kill/#EFAEFF.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 10268,
+      "sha256": "98a3f6ccc7f91bf6387f7bfde6a6a9503baa837252c9296a28353ef0b283746b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/kill/#FFACAC.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 13235,
+      "sha256": "0c16d4bb35d074885f929c8a684bb729c83349a0cdddaec82d811acb932d496f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/kill/#FFF198.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 12323,
+      "sha256": "b8a329d37311d660ed9c42229ea40b6cfaae7f2ad16adb272740fe70bb08f15d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/tooltips/roles/commander.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 499,
+      "sha256": "ec8246716bf5ff12a57b9e4299dee35986c65a02fef61f64f41a2d1b38c1e12c"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/tooltips/roles/driver.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 457,
+      "sha256": "536bf680a8c535a4f78932de00e09fb496b8b2fec35b082394e8b329fdae83df"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/tooltips/roles/gunner.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 462,
+      "sha256": "4f9c4151c1b6033b650bad1cc13da7acd7c50fd4ab6c996b445ea29014033685"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/tooltips/roles/info.txt",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 34,
+      "sha256": "650a2237d7c84f24a395f9da7c808df9af51fc0ade20e8856b59db51124e4b36"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/tooltips/roles/loader.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 407,
+      "sha256": "a343280c74fd819a6e211338437eec9376b0f8143db195249864db7bba9b9b9b"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/tooltips/roles/radioman.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 492,
+      "sha256": "bbf4060833409765c421985323dc5cc04fe096d5219d2b0d7cff14cc55a9b486"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/top_tankers/rank1.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1680,
+      "sha256": "4e7f41199f5e91f1f669a45c180408d33c12ef9307b06dfca6bfa1e693e0d033"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/top_tankers/rank100.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1651,
+      "sha256": "b8739411c913baed8bbb72bae1c102ce53c7321b41913dc2927dec15d8e5e689"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/top_tankers/rank1000.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1647,
+      "sha256": "f573acbd75e2c6b0cdfd0831b536b6c0c433c613455207bbd993bb3a67400056"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/top_tankers/rank2.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1628,
+      "sha256": "daa3b0b1800bab8dc2b78c48a0e0b8ddc99c0b93f3acaa7c93048d1753d8b0c8"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/top_tankers/rank3.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 1697,
+      "sha256": "408470722e51307f5bb2f9c2979ab46665915f6997c30c77619556056381f3f0"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/16x16.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 141,
+      "sha256": "b61d3fb4d5f478f93da37932994eab5f43f939542fc5b0ddd920543d0d6830ba"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/16x16t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 126,
+      "sha256": "99094618c3b420403d84834c79539263e622cf8e6519b89a396ffd097d7db0aa"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/22x22.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 166,
+      "sha256": "2fe175a074922cb9ac4e23d193d61a312205546ba34175ca033626567d9882f6"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/22x22t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 145,
+      "sha256": "1b230db1cffd8111ada1be8810706d6ca244a4459d781eaebd7f0b14e21d771d"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/32x32.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 197,
+      "sha256": "46c760d4d2df1129fdc5f19579ea8ad9c07c0162f12c76e0f66f4f340f408a07"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/32x32t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 173,
+      "sha256": "0d6272c1c61ebbbc0e68a2a319a00537ce5d13a0352ebd973a760d02d62a581f"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/64x64.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 246,
+      "sha256": "ffd1fd688259ff6bc77cd12e73bed4a6b701adc77e08fa1d1f28e3032f69b7c5"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/64x64t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 232,
+      "sha256": "9a02f8772a64b91aff43380a3b578df67172f8820dd55a2d0e62459362112951"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/8x8.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 118,
+      "sha256": "1a9ccbd268c0446b417000cca8062c1be3eead087e52e409d7482ca116803f57"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/8x8t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 110,
+      "sha256": "3c40edb3821182bee89ebc9f2a28bc1af025b3ff71da67f73999f7014f7f5655"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/96x96.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 328,
+      "sha256": "24db30d2fe47af668265044833d3b8a3ab62cd2fb0c57a4fbbee577844f1ee07"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/96x96t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 314,
+      "sha256": "509b620a7a4652fa08b8202b359445b3b7a6a323d84749a56dbddf827c5e453e"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/none.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 70,
+      "sha256": "f066331a1679ee36f8fbec91ab2cf026616bb66e0d458c80dd3a7f837b2f4263"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/patreon-16x16t.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 493,
+      "sha256": "8ce62a067cde1257eb7d4d9abb469c9d9022106fd1490ddfe58a94237856f207"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/xvm-user-none.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 70,
+      "sha256": "f066331a1679ee36f8fbec91ab2cf026616bb66e0d458c80dd3a7f837b2f4263"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/xvm-user-off.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 109,
+      "sha256": "874de7ca9ebe973155845ceb335cbca815b0e73b3ffae53d08d6704e82a8ec64"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/icons/xvm/xvm-user-on.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 110,
+      "sha256": "3c40edb3821182bee89ebc9f2a28bc1af025b3ff71da67f73999f7014f7f5655"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/locker/locked.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 479,
+      "sha256": "a7cf2d9a831785fdd1cf9859d55b3390928c3e0c71e4daaf6c7682e33b321058"
+    },
+    {
+      "path": "res_mods/mods/shared_resources/xvm/res/locker/unlocked.png",
+      "category": "xvm_shared_runtime",
+      "sizeBytes": 484,
+      "sha256": "7a0aad634d19fa5065be77d02ace0d17e3b5c640edeb3733ff0d8e74775d3005"
+    }
+  ]
+}
