@@ -34,3 +34,11 @@ Review pass 1 and review pass 2 are PASS. The existing R4 synthetic install / ve
 The candidate is **not** promoted to FINAL_LOCK yet because R4 itself still contains previously unproven user-visible changes (tier-font baseline isolation, adaptive long-name sizing, rebuilt yellow triangle). One normal real-game test remains required before R4 promotion; Runtime evidence is requested only if that normal game test actually fails.
 
 The formal Creator rollback authority remains `CNBOX 2401-04-R34-R2F9-FINAL_LOCK-R1`. Public Standalone is unchanged and must not be substituted for Creator/Aslain.
+
+## Publication closure
+
+`channel.json` now exposes Creator Manager `2.0.3` with SHA256 `d577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b` and the #06 R4 `TEST_CANDIDATE` metadata above. Public Manager remains `2.0.3` with SHA256 `3abdec35f6294d4ddf4066a84041ce7e362f39e50ebbe575b6a5097c97d4bbeb`.
+
+The final UTF-8 `channel.json` byte SHA256 after the #06 metadata rebase is `bf2a20e02d364d1608b173e3966b591b74ae4ce66668b34b4a7794f8e1d2f8ca` (publication commit `c1cd0da`). The migration guard explicitly compared the restored pre-change authority against the new object and permitted only these semantic paths: `creatorManagerVersion`, `creatorManagerSha256`, `creatorTestPackage.version`, `creatorTestPackage.aslainVersion`, `creatorTestPackage.fileName`, and `creatorTestPackage.notes`. Releases, collection profile, Aslain fingerprints, language packs, and MoE packs were asserted unchanged.
+
+A Windows PowerShell 5.1 UTF-8 read/write attempt briefly produced mojibake while preparing the channel update; it was caught during post-write verification before closure. The channel was restored from the known-good pre-change commit and regenerated with explicit UTF-8 using Python. Future JSON publication scripts must use explicit UTF-8 decoding/encoding and semantic-path guards; PowerShell 5.1 default text encoding must not be trusted for repository JSON containing non-ASCII text.
