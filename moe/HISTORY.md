@@ -484,3 +484,27 @@ Mandatory future Runtime gate:
 - deal damage in battle;
 - WoT native damage counter must increase normally;
 - failure is an immediate release blocker regardless of MoE UI correctness.
+
+
+## 2026-09-23 — 1.2.0 FULL REBUILD STATIC CLOSURE CONTINUATION
+
+Handoff revalidated against Drive history and `moe/rebuild/1.2.0/OWNER_VERDICT.md`.
+
+Corrections made before any Runtime package:
+- `threshold_runtime.py` no longer performs in-game HTTP, threading, API-key use, or cache writes. Runtime thresholds are local-read-only from the NAJXBox package or private config path.
+- pure-core tests now include a local-only threshold gate.
+- native battle-feedback ownership gate requires `personalEfficiencyCtrl`, `getTotalEfficiency`, and `onTotalEfficiencyUpdated`, and rejects known `PlayerAvatar.onBattleEvents` replacement patterns.
+- source gate rejects ProTanki, CHAMPi, GUIFlash/related menu-framework ownership tokens.
+- view gate locks one NAJXBox lobby alias + one NAJXBox battle alias on `najxbox_moe.swf`, with no SHOW_CURSOR/HIDE_CURSOR ownership.
+- test runner regression was found and repaired: direct execution once again discovers and executes every `test_*` function and emits `PASS_ALL`.
+
+Official SWF asset gate:
+- required SHA256 remains `06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851`;
+- Drive/Library currently exposes the authority record but not a directly retrievable original SWF binary;
+- `.github/workflows/probe-moe-120-official-swf-recovery.yml` was added to recursively scan historical payload ZIP/WOTMOD contents;
+- only an exact SHA256 match may be recovered as `moe/rebuild/1.2.0/assets/najxbox_moe.swf`.
+
+Status:
+`STATIC_CLOSURE_IN_PROGRESS / NO_RUNTIME_PACKAGE`
+
+Do not build or expose 1.2.0 to Manager until the exact SWF asset is closed, the core workflow passes, minimum package contents are audited, and Review 1 + Review 2 both pass.
