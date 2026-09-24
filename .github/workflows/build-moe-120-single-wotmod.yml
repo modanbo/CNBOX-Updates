@@ -11,6 +11,7 @@ on:
       - 'moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt'
       - 'moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt'
       - 'moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md'
+      - 'moe/rebuild/1.2.0/container_reference/WOTMOD_CONTAINER_VERDICT.md'
       - '.github/workflows/build-moe-120-single-wotmod.yml'
   workflow_dispatch:
 
@@ -44,7 +45,9 @@ jobs:
           grep -q '^invalid_rows: 0$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
 
           echo '06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851  moe/rebuild/1.2.0/assets/najxbox_moe.swf' | sha256sum -c -
-          echo '3bcf92a42a3385bcbaac6c0a3580af49cb7f7883ff8a8a16fff2160ca5b8ef5f  moe/rebuild/1.2.0/assets/thresholds.json' | sha256sum -c -
+          threshold_sha="$(awk '/^snapshot_sha256: /{print $2}' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md)"
+          test -n "$threshold_sha"
+          echo "$threshold_sha  moe/rebuild/1.2.0/assets/thresholds.json" | sha256sum -c -
 
       - name: Assemble exact 10-file payload
         shell: bash
@@ -199,4 +202,5 @@ jobs:
             exit 0
           fi
           git commit -m 'MoE 1.2.0: build single-WOTMOD static candidate'
+          git pull --rebase origin work/moe-component-1.2.0-full-rebuild
           git push origin HEAD:work/moe-component-1.2.0-full-rebuild
