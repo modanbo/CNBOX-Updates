@@ -7,7 +7,6 @@ ROOT = os.path.dirname(os.path.dirname(__file__))
 sys.path.insert(0, os.path.join(ROOT, "source"))
 
 import formula
-import wgapi
 import threshold_runtime
 
 
@@ -56,38 +55,7 @@ def test_project_has_stable_fields():
     close(out["percentile_delta"], 0.0)
 
 
-def test_wg_query_is_bounded_and_deduped():
-    q = wgapi.build_query("app", list(range(1, 110)) + [1, 2])
-    assert q["application_id"] == "app"
-    assert q["distribution"] == "damage"
-    assert q["percentile"] == "20,40,55,65,75,85,95,100"
-    assert len(q["tank_id"].split(",")) == 100
 
-
-def test_wg_parse_requires_four_mark_anchors():
-    body = {
-        "status": "ok",
-        "data": {
-            "updated_at": 123,
-            "distribution": {
-                "101": {"20": 900, "65": 1800, "85": 2200, "95": 2600, "100": 3000},
-                "102": {"65": 1800, "85": 2200, "95": 2600}
-            }
-        }
-    }
-    table, updated = wgapi.parse_response(json.dumps(body))
-    assert updated == 123
-    assert 101 in table
-    assert 102 not in table
-    assert table[101][65] == 1800
-
-
-def test_cache_roundtrip_and_expiry():
-    src = {101: {65: 1800, 85: 2200, 95: 2600, 100: 3000}}
-    blob = wgapi.make_cache("com", 1000, 900, src)
-    assert wgapi.read_cache(blob, "com", 1100, 200) == src
-    assert wgapi.read_cache(blob, "com", 1300, 200) == {}
-    assert wgapi.read_cache(blob, "eu", 1100, 200) == {}
 
 
 def test_threshold_runtime_is_local_only():
@@ -133,7 +101,7 @@ def test_rejected_runtime_frameworks_are_absent_from_source():
     joined = "\n".join(
         _read_source(name) for name in (
             "config.py", "contract.py", "engine.py", "formula.py",
-            "mod_najxbox_moe.py", "threshold_runtime.py", "view.py", "wgapi.py"
+            "mod_najxbox_moe.py", "threshold_runtime.py", "view.py"
         )
     ).lower()
     forbidden = (
@@ -228,6 +196,10 @@ def test_garage_vehicle_key_owner_is_imported():
     block = source[start:end]
     assert "from CurrentVehicle import g_currentVehicle" in block
     assert 'g_currentVehicle.item.name' in block
+
+
+def test_legacy_wgapi_is_not_runtime_source():
+    assert not os.path.exists(os.path.join(ROOT, "source", "wgapi.py"))
 
 
 if __name__ == "__main__":
