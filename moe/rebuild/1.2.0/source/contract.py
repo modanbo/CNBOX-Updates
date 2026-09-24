@@ -2,7 +2,7 @@
 """Official-CN SWF data contract adapter for NAJXBox MoE 1.2.0."""
 import json
 
-import formula
+from gui.mods.najxbox_moe import formula
 
 DATA_TANK_ID = 0
 DATA_RADIO_ASSIST = 1
