@@ -28,7 +28,7 @@ jobs:
           image='python@sha256:d8fac68ebdc45b8d66d53f1ed6c1532da81109a8f5532a6ca0c951ed31107d70'
           docker pull "$image"
           docker run --rm "$image" python -V
-          test "$(docker run --rm "$image" python - <<'PY'
+          test "$(docker run --rm -i "$image" python - <<'PY'
           import imp
           print(imp.get_magic().encode('hex'))
           PY
