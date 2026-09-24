@@ -1,0 +1,202 @@
+name: Build MoE 1.2.0 single-WOTMOD static candidate
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - 'moe/rebuild/1.2.0/build/python27/**'
+      - 'moe/rebuild/1.2.0/assets/najxbox_moe.swf'
+      - 'moe/rebuild/1.2.0/assets/thresholds.json'
+      - 'moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt'
+      - 'moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt'
+      - 'moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md'
+      - '.github/workflows/build-moe-120-single-wotmod.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Verify all prerequisite gates
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          grep -qx 'result=PASS' moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt
+          grep -qx 'PASS_ALL 17' moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt
+
+          grep -q '^compiler=CPython 2.7.18$' moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt
+          grep -q '^expected_pyc_magic=03f30d0a$' moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt
+          grep -q '^runtime_pyc_count=8$' moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt
+          test "$(grep -c 'magic=03f30d0a' moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt)" -eq 8
+
+          grep -q '^status: PASS$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          grep -q '^valid_rows: 778$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          grep -q '^invalid_rows: 0$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+
+          echo '06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851  moe/rebuild/1.2.0/assets/najxbox_moe.swf' | sha256sum -c -
+          echo '3bcf92a42a3385bcbaac6c0a3580af49cb7f7883ff8a8a16fff2160ca5b8ef5f  moe/rebuild/1.2.0/assets/thresholds.json' | sha256sum -c -
+
+      - name: Assemble exact 10-file payload
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root='moe/rebuild/1.2.0'
+          stage="$root/build/wotmod-stage"
+          out="$root/build/static"
+          rm -rf "$stage" "$out"
+          mkdir -p "$stage/res/gui/flash"
+          mkdir -p "$stage/res/scripts/client/gui/mods/najxbox_moe"
+          mkdir -p "$stage/res/mods/najxbox_moe"
+          mkdir -p "$out"
+
+          cp "$root/assets/najxbox_moe.swf" "$stage/res/gui/flash/najxbox_moe.swf"
+          cp "$root/assets/thresholds.json" "$stage/res/mods/najxbox_moe/thresholds.json"
+
+          cp "$root/build/python27/res/scripts/client/gui/mods/mod_najxbox_moe.pyc"              "$stage/res/scripts/client/gui/mods/mod_najxbox_moe.pyc"
+          cp "$root/build/python27/res/scripts/client/gui/mods/najxbox_moe/"*.pyc              "$stage/res/scripts/client/gui/mods/najxbox_moe/"
+
+          python3 - <<'PY'
+          import glob,hashlib,json,os
+
+          stage='moe/rebuild/1.2.0/build/wotmod-stage'
+          expected=[
+              'res/gui/flash/najxbox_moe.swf',
+              'res/mods/najxbox_moe/thresholds.json',
+              'res/scripts/client/gui/mods/mod_najxbox_moe.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/__init__.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/config.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/contract.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/engine.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/formula.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/threshold_runtime.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/view.pyc',
+          ]
+          actual=[]
+          for root,dirs,files in os.walk(stage):
+              for name in files:
+                  actual.append(os.path.relpath(os.path.join(root,name),stage).replace(os.sep,'/'))
+          actual.sort()
+          assert actual==sorted(expected),(actual,expected)
+
+          forbidden=('protanki','champi','gambiter','modssettingsapi','modslistapi',
+                     'aslain.modmenu','openwg.gameface','mod_pro_gunmarks',
+                     'expectedvehiclevalues','guiflash')
+          findings=[]
+          for rel in actual:
+              data=open(os.path.join(stage,rel),'rb').read()
+              lower=data.lower()
+              for token in forbidden:
+                  if token.encode('ascii') in lower:
+                      findings.append((rel,token))
+          assert not findings, findings
+
+          inventory=[]
+          for rel in actual:
+              data=open(os.path.join(stage,rel),'rb').read()
+              inventory.append({
+                  'path':rel,
+                  'bytes':len(data),
+                  'sha256':hashlib.sha256(data).hexdigest(),
+              })
+          json.dump({
+              'id':'NAJXBOX_MOE',
+              'version':'1.2.0',
+              'status':'STATIC_SINGLE_WOTMOD_CANDIDATE',
+              'runtime_file_count':len(inventory),
+              'files':inventory,
+              'rejected_framework_tokens':list(forbidden),
+              'rejected_framework_findings':findings,
+          },open('moe/rebuild/1.2.0/build/static/PACKAGE_INVENTORY.json','w'),
+             indent=2,sort_keys=True)
+          PY
+
+      - name: Build deterministic WOTMOD
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,zipfile
+
+          stage='moe/rebuild/1.2.0/build/wotmod-stage'
+          out='moe/rebuild/1.2.0/build/static/najxbox.moe_1.2.0_STATIC.wotmod'
+          inv=json.load(open('moe/rebuild/1.2.0/build/static/PACKAGE_INVENTORY.json'))
+          paths=sorted(x['path'] for x in inv['files'])
+
+          with zipfile.ZipFile(out,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for rel in paths:
+                  data=open(os.path.join(stage,rel),'rb').read()
+                  zi=zipfile.ZipInfo(rel,(2020,1,1,0,0,0))
+                  zi.compress_type=zipfile.ZIP_DEFLATED
+                  zi.external_attr=0o100644 << 16
+                  z.writestr(zi,data,compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+
+          data=open(out,'rb').read()
+          digest=hashlib.sha256(data).hexdigest()
+          open('moe/rebuild/1.2.0/build/static/PACKAGE_SHA256.txt','w').write(
+              '%s  %d  najxbox.moe_1.2.0_STATIC.wotmod\n' % (digest,len(data)))
+          print(digest,len(data))
+          PY
+
+      - name: Re-open and audit built WOTMOD
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import hashlib,json,zipfile
+
+          p='moe/rebuild/1.2.0/build/static/najxbox.moe_1.2.0_STATIC.wotmod'
+          inv=json.load(open('moe/rebuild/1.2.0/build/static/PACKAGE_INVENTORY.json'))
+          expected={x['path']:(x['bytes'],x['sha256']) for x in inv['files']}
+          with zipfile.ZipFile(p) as z:
+              names=z.namelist()
+              assert len(names)==10,names
+              assert len(names)==len(set(names)),names
+              assert set(names)==set(expected),(names,expected)
+              assert 'meta.xml' not in names
+              for name in names:
+                  data=z.read(name)
+                  size,digest=expected[name]
+                  assert len(data)==size,(name,len(data),size)
+                  assert hashlib.sha256(data).hexdigest()==digest,name
+                  if name.endswith('.pyc'):
+                      assert data[:4].hex()=='03f30d0a',(name,data[:4].hex())
+          print('WOTMOD_REOPEN_AUDIT_PASS',len(expected))
+          PY
+
+          cat > moe/rebuild/1.2.0/build/static/PACKAGE_GATE_STATUS.txt <<'EOF'
+          NAJXBox MoE 1.2.0 single-WOTMOD static package gate
+          result=PASS
+          runtime_file_count=10
+          official_swf_count=1
+          runtime_pyc_count=8
+          threshold_snapshot_count=1
+          meta_xml_count=0
+          third_party_wotmod_count=0
+          rejected_framework_findings=0
+          manager_exposure=NO
+          runtime_authorization=NO
+          EOF
+
+      - name: Commit static package evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f             moe/rebuild/1.2.0/build/static/PACKAGE_INVENTORY.json             moe/rebuild/1.2.0/build/static/PACKAGE_SHA256.txt             moe/rebuild/1.2.0/build/static/PACKAGE_GATE_STATUS.txt             moe/rebuild/1.2.0/build/static/najxbox.moe_1.2.0_STATIC.wotmod
+          if git diff --cached --quiet; then
+            echo 'No static package delta.'
+            exit 0
+          fi
+          git commit -m 'MoE 1.2.0: build single-WOTMOD static candidate'
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
