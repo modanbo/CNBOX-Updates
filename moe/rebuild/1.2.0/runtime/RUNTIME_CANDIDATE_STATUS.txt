@@ -1,0 +1,11 @@
+NAJXBox MoE 1.2.0 Runtime candidate
+status=READY_FOR_SINGLE_CONCENTRATED_RUNTIME
+public=NO
+manager_exposure=NO
+install_file_count=1
+rollback_file_count=1
+static_closure=PASS
+review_1=PASS
+review_2=PASS
+2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4  67400  NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip
+3fec0c25063331b128c297da38023908a1bfc955eceff5b68010113e33cce89b  68272  mods/2.4.0.1/najxbox.moe_1.2.0.wotmod

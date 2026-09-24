@@ -1,0 +1,29 @@
+{
+  "component": "NAJXBox MoE",
+  "failure_action": "ROLLBACK_IMMEDIATELY_AND_ARCHIVE_LOGS",
+  "hard_runtime_gates": [
+    "Garage official CN contract view appears and uses 210x134 authority geometry",
+    "Battle official CN contract view appears and uses 147x93 authority geometry",
+    "WoT native damage counter increments normally after dealing damage",
+    "MoE battle values update from native personalEfficiencyCtrl",
+    "Ctrl/native cursor behavior remains normal",
+    "Lobby and battle drag positions persist",
+    "No ProTanki/EVV/GUIFlash/ModsSettingsAPI/ModsListAPI/CHAMPi/Aslain/OpenWG UI appears",
+    "No duplicate MoE view appears",
+    "python.log contains no NAJXBox.MoE callback/load exception"
+  ],
+  "install_files": [
+    "mods/2.4.0.1/najxbox.moe_1.2.0.wotmod"
+  ],
+  "manager_exposure": false,
+  "public": false,
+  "rollback_remove_files": [
+    "mods/2.4.0.1/najxbox.moe_1.2.0.wotmod"
+  ],
+  "runtime_zip_bytes": 67400,
+  "runtime_zip_sha256": "2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4",
+  "status": "READY_FOR_SINGLE_CONCENTRATED_RUNTIME",
+  "version": "1.2.0",
+  "wot_version": "2.4.0.1",
+  "wotmod_sha256": "3fec0c25063331b128c297da38023908a1bfc955eceff5b68010113e33cce89b"
+}
