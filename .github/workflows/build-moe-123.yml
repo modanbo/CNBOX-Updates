@@ -1,0 +1,206 @@
+name: Build MoE 1.2.3
+
+on:
+  push:
+    branches:
+      - work/moe-independent-120-review-20260924
+    paths:
+      - 'moe/independent/1.2.3/**'
+      - '.github/workflows/build-moe-123.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch FFDec and build English official-contract SWF
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/moe123"
+          rm -rf "$root"
+          mkdir -p "$root/ffdec" "$root/en_src" "$root/en_export" "$root/stage/res/gui/flash" "$root/stage/res/mods/najxbox_moe" "$root/out"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip'             -o "$root/ffdec.zip"
+          echo '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd  '"$root"'/ffdec.zip' | sha256sum -c -
+          unzip -q "$root/ffdec.zip" -d "$root/ffdec"
+          chmod +x "$root/ffdec/ffdec.sh"
+
+          cp moe/rebuild/1.2.0/assets/najxbox_moe.swf "$root/stage/res/gui/flash/najxbox_moe_zh.swf"
+          test "$(sha256sum "$root/stage/res/gui/flash/najxbox_moe_zh.swf" | awk '{print $1}')" =             "06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851"
+
+          curl -fL --retry 3 --connect-timeout 20             'https://raw.githubusercontent.com/modanbo/CNBOX-Updates/83593e62e0868a1e0281e426e5987e6bf21235ba/moe/cn_official_reference/scripts/Const.as'             -o "$root/en_src/Const.as"
+
+          python3 - "$root/en_src/Const.as" <<'PY'
+          from pathlib import Path
+          import sys
+          p=Path(sys.argv[1])
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('new TextComponent("73","61",70,0,true,"平均标伤"', 'new TextComponent("73","61",70,0,true,"Avg. DMG"')
+          s=s.replace('new TextComponent("14","42",49,13,true,"本场标伤"', 'new TextComponent("14","42",70,13,true,"Battle DMG"')
+          s=s.replace('new TextComponent("15","66",49,13,true,"平均标伤"', 'new TextComponent("15","66",60,13,true,"Avg. DMG"')
+          assert '本场标伤' not in s
+          assert '平均标伤' not in s
+          assert 'Battle DMG' in s and s.count('Avg. DMG') == 2
+          p.write_text(s,encoding='utf-8')
+          PY
+
+          "$root/ffdec/ffdec.sh" -onerror abort -importScript             moe/rebuild/1.2.0/assets/najxbox_moe.swf             "$root/stage/res/gui/flash/najxbox_moe_en.swf"             "$root/en_src"
+
+          "$root/ffdec/ffdec.sh" -export script "$root/en_export" "$root/stage/res/gui/flash/najxbox_moe_en.swf"
+          grep -R -Fq 'Battle DMG' "$root/en_export"
+          grep -R -Fq 'Avg. DMG' "$root/en_export"
+          ! grep -R -Fq '本场标伤' "$root/en_export"
+          ! grep -R -Fq '平均标伤' "$root/en_export"
+
+      - name: Stage and compile Python 2.7 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/moe123"
+          mkdir -p "$root/src/najxbox_moe_independent" "$root/stage/res/scripts/client/gui/mods/najxbox_moe_independent"
+
+          cp moe/independent/1.2.0-r1/source/mod_najxbox_moe.py "$root/src/"
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/__init__.py "$root/src/najxbox_moe_independent/"
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/mathcore.py "$root/src/najxbox_moe_independent/"
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/storage.py "$root/src/najxbox_moe_independent/"
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/bridge.py "$root/src/najxbox_moe_independent/"
+          cp moe/independent/1.2.3/source/datasource.py "$root/src/najxbox_moe_independent/"
+          cp moe/independent/1.2.3/source/ui.py "$root/src/najxbox_moe_independent/"
+
+          docker run --rm -v "$root/src:/src" python:2.7.18 python -m compileall -q /src
+
+          cp "$root/src/mod_najxbox_moe.pyc" "$root/stage/res/scripts/client/gui/mods/mod_najxbox_moe.pyc"
+          cp "$root/src/najxbox_moe_independent/"*.pyc "$root/stage/res/scripts/client/gui/mods/najxbox_moe_independent/"
+
+          python3 - "$root/stage" <<'PY'
+          import glob,sys
+          files=glob.glob(sys.argv[1]+'/**/*.pyc',recursive=True)
+          assert len(files)==7,files
+          for p in files:
+              magic=open(p,'rb').read(4).hex()
+              assert magic=='03f30d0a',(p,magic)
+          print('PYC27 PASS',len(files))
+          PY
+
+      - name: Stage thresholds and meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/moe123"
+          cp moe/rebuild/1.2.0/assets/thresholds.json "$root/stage/res/mods/najxbox_moe/thresholds.json"
+          python3 - "$root/stage/res/mods/najxbox_moe/thresholds.json" <<'PY'
+          import json,sys,hashlib
+          p=sys.argv[1]
+          assert hashlib.sha256(open(p,'rb').read()).hexdigest()=='3bcf92a42a3385bcbaac6c0a3580af49cb7f7883ff8a8a16fff2160ca5b8ef5f'
+          d=json.load(open(p,encoding='utf-8'))
+          rows=d.get('table',d)
+          good=0
+          for row in rows.values():
+              try:
+                  good += int(all(int(row.get(str(k),row.get(k,0)))>0 for k in (65,85,95,100)))
+              except Exception:
+                  pass
+          assert good==778,good
+          print('THRESHOLDS PASS',good)
+          PY
+
+          cat > "$root/stage/meta.xml" <<'XML'
+          <root>
+            <id>najxbox.moe.independent</id>
+            <version>1.2.3</version>
+            <name>NAJXBox MoE Independent Runtime Test</name>
+            <description>Hangar lifecycle, locale SWF, dossier baseline fixes</description>
+          </root>
+          XML
+
+      - name: Static Review 1
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=moe/independent/1.2.3/source
+          grep -Fq "HANGAR_STATUS_CHANGED" "$src/ui.py"
+          grep -Fq "VIEW_ALIAS.LOBBY_HANGAR" "$src/ui.py"
+          grep -Fq "najxbox_moe_zh.swf" "$src/ui.py"
+          grep -Fq "najxbox_moe_en.swf" "$src/ui.py"
+          grep -Fq "getRecordValue(ACHIEVEMENT_BLOCK.TOTAL, 'damageRating')" "$src/datasource.py"
+          grep -Fq "/ 100.0" "$src/datasource.py"
+          grep -Fq "_BASELINES" "$src/datasource.py"
+          ! grep -RniE 'PlayerAvatar\.onBattleEvents|https?://|urllib2|requests\.|threading|tv\.protanki|champi\.|gambiter\.|modssettingsapi|modslistapi|openwg\.gameface' "$src"
+
+      - name: Assemble WOTMOD and Static Review 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/moe123"
+          python3 - "$root/stage" "$root/out" <<'PY'
+          import os,zipfile,hashlib,json,sys
+          stage,outdir=sys.argv[1:3]
+          w=os.path.join(outdir,'najxbox.moe_independent_1.2.3.wotmod')
+          rows=[]
+          for base,_,names in os.walk(stage):
+              for n in names:
+                  p=os.path.join(base,n)
+                  a=os.path.relpath(p,stage).replace(os.sep,'/')
+                  rows.append((a,p))
+          rows.sort()
+          assert len(rows)==11,rows
+          assert sum(1 for a,_ in rows if a.endswith('.swf'))==2
+          assert 'meta.xml' in [a for a,_ in rows]
+          assert not any(a.endswith('.py') for a,_ in rows)
+          with zipfile.ZipFile(w,'w',compression=zipfile.ZIP_STORED) as z:
+              for a,p in rows:
+                  info=zipfile.ZipInfo(a,(2026,9,24,0,0,0))
+                  info.compress_type=zipfile.ZIP_STORED
+                  info.external_attr=0o644<<16
+                  z.writestr(info,open(p,'rb').read())
+          with zipfile.ZipFile(w) as z:
+              assert all(i.compress_type==zipfile.ZIP_STORED for i in z.infolist())
+              names=z.namelist()
+              assert 'res/gui/flash/najxbox_moe_zh.swf' in names
+              assert 'res/gui/flash/najxbox_moe_en.swf' in names
+          result={
+              'wotmod_sha256':hashlib.sha256(open(w,'rb').read()).hexdigest(),
+              'wotmod_size':os.path.getsize(w),
+              'runtime_files':[a for a,_ in rows],
+              'runtime_file_count':len(rows)
+          }
+          open(os.path.join(outdir,'INVENTORY.json'),'w').write(json.dumps(result,indent=2,sort_keys=True))
+          print(json.dumps(result,indent=2))
+          PY
+
+      - name: Build outer test ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/moe123"
+          python3 - "$root/out" <<'PY'
+          import zipfile,hashlib,os,json,sys
+          outdir=sys.argv[1]
+          w=os.path.join(outdir,'najxbox.moe_independent_1.2.3.wotmod')
+          outer=os.path.join(outdir,'NAJXBOX_MoE_INDEPENDENT_1.2.3_WOT_2.4.0.1.zip')
+          arc='mods/2.4.0.1/najxbox.moe_independent_1.2.3.wotmod'
+          with zipfile.ZipFile(outer,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              z.write(w,arc)
+          with zipfile.ZipFile(outer) as z:
+              assert z.namelist()==[arc],z.namelist()
+          result=json.load(open(os.path.join(outdir,'INVENTORY.json')))
+          result.update({
+              'zip_sha256':hashlib.sha256(open(outer,'rb').read()).hexdigest(),
+              'zip_size':os.path.getsize(outer),
+              'install_path':arc,
+              'rollback_remove_exactly':[arc]
+          })
+          open(os.path.join(outdir,'BUILD_RESULT.json'),'w').write(json.dumps(result,indent=2,sort_keys=True))
+          print(json.dumps(result,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NAJXBOX_MoE_INDEPENDENT_1.2.3
+          path: |
+            ${{ runner.temp }}/moe123/out/NAJXBOX_MoE_INDEPENDENT_1.2.3_WOT_2.4.0.1.zip
+            ${{ runner.temp }}/moe123/out/BUILD_RESULT.json
+          if-no-files-found: error
