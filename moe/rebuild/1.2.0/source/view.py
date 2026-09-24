@@ -133,7 +133,7 @@ class _BaseMoeView(View):
             else:
                 state = engine.read_battle_state()
                 if state:
-                    row = threshold_runtime.get(state.get("tank_id"))
+                    row = threshold_runtime.get(state.get("tank_id"), state.get("vehicle_key"))
                     data = contract.battle_array(state, row)
                 else:
                     data = contract.empty_array(True)
