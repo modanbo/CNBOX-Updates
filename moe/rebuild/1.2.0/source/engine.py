@@ -60,6 +60,7 @@ def read_garage_state():
 
         state = {
             "tank_id": int_cd,
+            "vehicle_key": str(g_currentVehicle.item.name or ""),
             "marks": marks,
             "percentile": percentile,
             "moving_avg": moving_avg,
@@ -197,8 +198,20 @@ def read_battle_state():
     if assist > split_total:
         radio += assist - split_total
 
+    vehicle_key = ""
+    try:
+        import BigWorld
+        provider = _session_provider()
+        vehicle_id = int(provider.shared.vehicleState.getControllingVehicleID() or 0)
+        info = BigWorld.player().arena.vehicles.get(vehicle_id)
+        descr = info.get("vehicleType") if info else None
+        vehicle_key = str(descr.type.name or "") if descr is not None else ""
+    except Exception:
+        vehicle_key = ""
+
     return {
         "tank_id": int_cd,
+        "vehicle_key": vehicle_key,
         "damage": damage,
         "assist": assist,
         "radio_assist": radio,
