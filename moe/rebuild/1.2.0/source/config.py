@@ -14,6 +14,13 @@ _DEFAULT = {
 }
 
 
+def _safe_int(value, default):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return int(default)
+
+
 def load():
     result = dict(_DEFAULT)
     try:
@@ -51,21 +58,21 @@ def save(cfg):
 def position_string():
     cfg = load()
     return "%d,%d,%d,%d" % (
-        int(cfg.get("lobby_x") or 0),
-        int(cfg.get("lobby_y") or 0),
-        int(cfg.get("battle_x") or 0),
-        int(cfg.get("battle_y") or 0),
+        _safe_int(cfg.get("lobby_x"), _DEFAULT["lobby_x"]),
+        _safe_int(cfg.get("lobby_y"), _DEFAULT["lobby_y"]),
+        _safe_int(cfg.get("battle_x"), _DEFAULT["battle_x"]),
+        _safe_int(cfg.get("battle_y"), _DEFAULT["battle_y"]),
     )
 
 
 def save_position(is_battle, x, y):
     cfg = load()
     if is_battle:
-        cfg["battle_x"] = int(x)
-        cfg["battle_y"] = int(y)
+        cfg["battle_x"] = _safe_int(x, _DEFAULT["battle_x"])
+        cfg["battle_y"] = _safe_int(y, _DEFAULT["battle_y"])
     else:
-        cfg["lobby_x"] = int(x)
-        cfg["lobby_y"] = int(y)
+        cfg["lobby_x"] = _safe_int(x, _DEFAULT["lobby_x"])
+        cfg["lobby_y"] = _safe_int(y, _DEFAULT["lobby_y"])
     return save(cfg)
 
 
