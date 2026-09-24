@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """Single official-CN-contract Scaleform host for NAJXBox MoE 1.2.0."""
+import logging
+
+_logger = logging.getLogger("NAJXBox.MoE")
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework import ScopeTemplates, ViewSettings, g_entitiesFactories
 from gui.Scaleform.framework.entities.View import View
@@ -36,7 +39,7 @@ class _BaseMoeView(View):
         try:
             self.flashObject.as_loadConfig()
         except Exception:
-            pass
+            _logger.exception("official SWF as_loadConfig failed")
         self._push("populate")
 
     def _dispose(self):
@@ -141,7 +144,7 @@ class _BaseMoeView(View):
             self.flashObject.as_updateData(self._last_data, str(reason), True)
         except Exception:
             # UI failure must never propagate into WoT battle controllers.
-            pass
+            _logger.exception("MoE view push failed: mode=%s reason=%s", self.MODE, reason)
 
 
 class NajxMoeLobbyView(_BaseMoeView):
@@ -175,7 +178,7 @@ def _on_app_initialized(event):
             if app is not None:
                 app.loadView(SFViewLoadParams(BATTLE_ALIAS))
     except Exception:
-        pass
+        _logger.exception("MoE app initialization failed: ns=%s", getattr(event, "ns", None))
 
 
 def setup():
