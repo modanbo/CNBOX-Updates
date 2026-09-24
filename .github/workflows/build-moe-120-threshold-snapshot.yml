@@ -71,19 +71,25 @@ jobs:
           bad=[]
           candidate_rows=0
 
-          # TanStack Start serializes the complete loader dataset into the SSR
-          # hydration script as $R[n]={65:...,85:...,95:...,100:..., ...,
-          # image:".../contour/<nation>-<techname>.png"}. The visible HTML
-          # table renders only page 1; this hydration array is the complete
-          # source used by the client-side table.
-          obj_re=re.compile(
-              r'\$R\[\d+\]=\{65:(\d+),85:(\d+),95:(\d+),100:(\d+),id:(\d+),(.*?image:"[^"]*/contour/([^"]+?)\.png")\}',
-              re.S)
-
-          for match in obj_re.finditer(page):
+          # The complete loader dataset is serialized as many flat objects:
+          # $R[n]={65:...,85:...,95:...,100:..., ... image:".../contour/X.png"}
+          # Split object records first, then read fields independently so field
+          # order additions do not break the snapshot parser.
+          obj_start=re.compile(r'\$R\[\d+\]=\{65:')
+          starts=[m.start() for m in obj_start.finditer(page)]
+          for pos_idx,pos in enumerate(starts):
+              next_pos=starts[pos_idx+1] if pos_idx+1 < len(starts) else min(len(page),pos+6000)
+              chunk=page[pos:next_pos]
+              m65=re.search(r'\{65:(\d+)',chunk)
+              m85=re.search(r',85:(\d+)',chunk)
+              m95=re.search(r',95:(\d+)',chunk)
+              m100=re.search(r',100:(\d+)',chunk)
+              mim=re.search(r'image:"[^"]*/contour/([^"]+?)\.png"',chunk)
+              if not (m65 and m85 and m95 and m100 and mim):
+                  continue
               candidate_rows += 1
-              v65,v85,v95,v100=[int(match.group(i)) for i in range(1,5)]
-              filename=match.group(7)
+              v65,v85,v95,v100=[int(x.group(1)) for x in (m65,m85,m95,m100)]
+              filename=mim.group(1)
               if '-' not in filename:
                   bad.append((filename,'bad-tech-key',[]))
                   continue
@@ -93,10 +99,11 @@ jobs:
               if min(vals)<=0 or not (v65<=v85<=v95<=v100):
                   bad.append((tech,'invalid-order',vals))
                   continue
-              if tech in rows and rows[tech] != {'65':v65,'85':v85,'95':v95,'100':v100}:
+              row={'65':v65,'85':v85,'95':v95,'100':v100}
+              if tech in rows and rows[tech] != row:
                   bad.append((tech,'duplicate-conflict',vals))
                   continue
-              rows[tech]={'65':v65,'85':v85,'95':v95,'100':v100}
+              rows[tech]=row
 
           reasons=[]
           if page.count('initialChangeData') < 1:
