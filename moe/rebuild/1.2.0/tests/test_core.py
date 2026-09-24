@@ -15,6 +15,12 @@ def close(a, b, eps=1e-9):
     assert abs(a - b) <= eps, (a, b)
 
 
+def _read_source(name):
+    path = os.path.join(ROOT, "source", name)
+    with open(path, "rb") as fh:
+        return fh.read().decode("utf-8")
+
+
 def test_combined_damage_uses_max_assist():
     close(formula.combined_damage(1000, 200, 350, 300), 1350.0)
 
@@ -85,9 +91,7 @@ def test_cache_roundtrip_and_expiry():
 
 
 def test_threshold_runtime_is_local_only():
-    path = os.path.join(ROOT, "source", "threshold_runtime.py")
-    with open(path, "rb") as fh:
-        source = fh.read().decode("utf-8")
+    source = _read_source("threshold_runtime.py")
     forbidden = (
         "http.openUrl", "threading.Thread", "API_URL",
         "APPLICATION_ID", "worldoftanks.com/wot/tanks/mastery"
@@ -108,7 +112,56 @@ def test_threshold_clean_table_requires_mark_anchors():
     assert 102 not in table
     assert table[101][95] == 2600
 
-    for name in sorted(globals()):
-        if name.startswith("test_"):
-            globals()[name]()
-            print("PASS", name)
+
+def test_native_damage_feedback_is_observer_only():
+    source = _read_source("engine.py")
+    assert "personalEfficiencyCtrl" in source
+    assert "onTotalEfficiencyUpdated" in source
+    assert "getTotalEfficiency" in source
+    forbidden = (
+        "PlayerAvatar.onBattleEvents =",
+        "PlayerAvatar.onBattleEvents=",
+        "overrideMethod(PlayerAvatar",
+        "onBattleEvents = _",
+        "_orig_onBattleEvents",
+    )
+    for token in forbidden:
+        assert token not in source, token
+
+
+def test_rejected_runtime_frameworks_are_absent_from_source():
+    joined = "\n".join(
+        _read_source(name) for name in (
+            "config.py", "contract.py", "engine.py", "formula.py",
+            "mod_najxbox_moe.py", "threshold_runtime.py", "view.py", "wgapi.py"
+        )
+    ).lower()
+    forbidden = (
+        "gambiter", "modssettingsapi", "modslistapi",
+        "protanki", "champi", "aslain.modmenu", "openwg.gameface"
+    )
+    for token in forbidden:
+        assert token not in joined, token
+
+
+def test_single_official_contract_view_owner():
+    source = _read_source("view.py")
+    assert 'SWF_FILE = "najxbox_moe.swf"' in source
+    assert 'LOBBY_ALIAS = "NAJXBOX_MOE_LOBBY"' in source
+    assert 'BATTLE_ALIAS = "NAJXBOX_MOE_BATTLE"' in source
+    assert source.count("class NajxMoeLobbyView") == 1
+    assert source.count("class NajxMoeBattleView") == 1
+    assert "SHOW_CURSOR" not in source
+    assert "HIDE_CURSOR" not in source
+
+
+if __name__ == "__main__":
+    tests = [
+        (name, obj) for name, obj in sorted(globals().items())
+        if name.startswith("test_") and callable(obj)
+    ]
+    assert tests, "no tests discovered"
+    for name, func in tests:
+        func()
+        print("PASS", name)
+    print("PASS_ALL", len(tests))
