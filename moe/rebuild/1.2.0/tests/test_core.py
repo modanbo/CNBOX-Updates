@@ -208,6 +208,13 @@ def test_threshold_clean_table_accepts_vehicle_keys():
     assert table["usa:A194_AHT_7"][100] == 6702
 
 
+def test_threshold_listener_accepts_vehicle_key_source():
+    source = _read_source("view.py")
+    assert "def _on_threshold_ready(self, threshold_key):" in source
+    assert 'state.get("vehicle_key")' in source
+    assert 'self._push("threshold-ready")' in source
+
+
 if __name__ == "__main__":
     tests = [
         (name, obj) for name, obj in sorted(globals().items())
