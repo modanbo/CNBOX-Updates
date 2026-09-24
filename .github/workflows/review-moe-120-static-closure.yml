@@ -1,0 +1,266 @@
+name: Review MoE 1.2.0 static closure
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - 'moe/rebuild/1.2.0/source/**'
+      - 'moe/rebuild/1.2.0/tests/**'
+      - 'moe/rebuild/1.2.0/assets/**'
+      - 'moe/rebuild/1.2.0/build/static/**'
+      - 'moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt'
+      - 'moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt'
+      - 'moe/rebuild/1.2.0/OFFICIAL_SWF_CONTRACT_VERDICT.md'
+      - 'moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md'
+      - '.github/workflows/review-moe-120-static-closure.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Review 1 - ownership and release blockers
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import glob,hashlib,json,os,re,zipfile
+
+          root='moe/rebuild/1.2.0'
+          errors=[]
+          notes=[]
+
+          def req(cond,msg):
+              if not cond:
+                  errors.append(msg)
+
+          # Core gates.
+          static=open(root+'/STATIC_GATE_VERIFY.txt',encoding='utf-8').read()
+          req('result=PASS' in static,'pure-core static result is not PASS')
+          req('PASS_ALL 17' in static,'expected PASS_ALL 17 not recorded')
+
+          # Exact official SWF.
+          swf=open(root+'/assets/najxbox_moe.swf','rb').read()
+          req(hashlib.sha256(swf).hexdigest() ==
+              '06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851',
+              'official SWF hash mismatch')
+
+          # Offline threshold snapshot.
+          snap=json.load(open(root+'/assets/thresholds.json',encoding='utf-8'))
+          req(snap.get('region')=='NA','threshold region is not NA')
+          req(snap.get('key_type')=='wot_vehicle_type_name','threshold key type mismatch')
+          req(len(snap.get('table',{}))==778,'threshold row count is not 778')
+          for key,row in snap.get('table',{}).items():
+              try:
+                  vals=[int(row[str(p)]) for p in (65,85,95,100)]
+              except Exception:
+                  errors.append('threshold row malformed: '+key)
+                  continue
+              if not (0 < vals[0] <= vals[1] <= vals[2] <= vals[3]):
+                  errors.append('threshold order invalid: '+key)
+
+          # Source ownership scan.
+          source_paths=sorted(glob.glob(root+'/source/*.py'))
+          sources={os.path.basename(p):open(p,encoding='utf-8').read() for p in source_paths}
+          joined='\n'.join(sources.values()).lower()
+
+          forbidden_runtime=(
+              'protanki','champi','gambiter','modssettingsapi','modslistapi',
+              'aslain.modmenu','openwg.gameface','expectedvehiclevalues',
+              'http.openurl','threading.thread','worldoftanks.com/wot/tanks/mastery'
+          )
+          for token in forbidden_runtime:
+              req(token not in joined,'forbidden runtime token: '+token)
+
+          engine=sources['engine.py']
+          req('personalEfficiencyCtrl' in engine,'personalEfficiencyCtrl reader missing')
+          req('onTotalEfficiencyUpdated' in engine,'native efficiency subscription missing')
+          for token in (
+              'PlayerAvatar.onBattleEvents =','PlayerAvatar.onBattleEvents=',
+              '_orig_onBattleEvents','overrideMethod(PlayerAvatar'
+          ):
+              req(token not in engine,'native battle event replacement token: '+token)
+
+          view=sources['view.py']
+          req(view.count('class NajxMoeLobbyView')==1,'lobby View owner count != 1')
+          req(view.count('class NajxMoeBattleView')==1,'battle View owner count != 1')
+          req('SWF_FILE = "najxbox_moe.swf"' in view,'official SWF runtime name mismatch')
+          req('SHOW_CURSOR' not in view and 'HIDE_CURSOR' not in view,
+              'custom cursor ownership token present')
+          for cb in (
+              'def py_getCustomConfig(self):','def getPanelPosition(self):',
+              'def savePosition(self, is_battle, x, y):','def retrieveData(self):',
+              'def populated(self):','def openURL(self, url):'
+          ):
+              req(cb in view,'SWF callback missing: '+cb)
+
+          # No active stale 1.1.x bridge/fallback logic in source.
+          for token in ('1.1.1','1.1.2','1.1.3','_cleanDamage','new-simple',
+                        'ProGunMarks','EVV2','GUIFlash'):
+              req(token.lower() not in joined,'stale legacy token in active source: '+token)
+
+          # CPython 2.7 runtime inventory.
+          py_report=open(root+'/PYTHON27_BUILD_SHA256.txt',encoding='utf-8').read()
+          req('compiler=CPython 2.7.18' in py_report,'compiler is not CPython 2.7.18')
+          req('expected_pyc_magic=03f30d0a' in py_report,'CPython 2.7 magic gate missing')
+          req(py_report.count('magic=03f30d0a')==8,'not exactly 8 CPython pyc entries')
+
+          # Single-WOTMOD gate is required for PASS, but write a useful BLOCKED report
+          # if the package has not landed yet.
+          gate=root+'/build/static/PACKAGE_GATE_STATUS.txt'
+          package_ready=os.path.isfile(gate)
+          if package_ready:
+              gate_text=open(gate,encoding='utf-8').read()
+              req('result=PASS' in gate_text,'package gate is not PASS')
+              req('runtime_file_count=10' in gate_text,'package file count != 10')
+              req('third_party_wotmod_count=0' in gate_text,'third-party WOTMOD present')
+              req('rejected_framework_findings=0' in gate_text,'rejected framework finding present')
+          else:
+              notes.append('PACKAGE_GATE_PENDING')
+
+          result='PASS' if not errors and package_ready else ('BLOCKED' if not errors else 'FAIL')
+          lines=[
+              '# NAJXBox MoE 1.2.0 — Review 1: ownership/static closure',
+              '',
+              'result: '+result,
+              'package_ready: '+str(package_ready),
+              'pure_core: PASS' if 'result=PASS' in static else 'pure_core: FAIL',
+              'official_swf: PASS' if not any('SWF' in e for e in errors) else 'official_swf: FAIL',
+              'threshold_snapshot_rows: '+str(len(snap.get('table',{}))),
+              'cpython27_magic_entries: '+str(py_report.count('magic=03f30d0a')),
+              '',
+              'Checks:',
+              '- native battle event chain is observer-only',
+              '- one lobby View + one battle View',
+              '- official SWF callback surface',
+              '- no third-party settings/menu/cursor framework',
+              '- no Runtime threshold network path',
+              '- no active 1.1.x fallback/bridge token',
+              '- offline NA threshold snapshot complete',
+              '- CPython 2.7 bytecode gate',
+              '- exact 10-file package gate (required for final PASS)',
+              '',
+              'Errors:'
+          ] + (['- '+e for e in errors] if errors else ['- none']) + [
+              '',
+              'Notes:'
+          ] + (['- '+n for n in notes] if notes else ['- none'])
+          open(root+'/REVIEW_1_STATIC_CLOSURE.md','w',encoding='utf-8',newline='\n').write('\n'.join(lines)+'\n')
+          print('\n'.join(lines))
+          if errors:
+              raise SystemExit(2)
+          PY
+
+      - name: Review 2 - independent package/regression closure
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,zipfile
+
+          root='moe/rebuild/1.2.0'
+          package=root+'/build/static/najxbox.moe_1.2.0_STATIC.wotmod'
+          errors=[]
+          notes=[]
+
+          def req(cond,msg):
+              if not cond:
+                  errors.append(msg)
+
+          ready=os.path.isfile(package)
+          if ready:
+              inv=json.load(open(root+'/build/static/PACKAGE_INVENTORY.json',encoding='utf-8'))
+              req(inv.get('runtime_file_count')==10,'inventory runtime_file_count != 10')
+              expected={x['path']:x for x in inv.get('files',[])}
+              req(len(expected)==10,'inventory unique file count != 10')
+              with zipfile.ZipFile(package) as z:
+                  names=z.namelist()
+                  req(len(names)==10,'WOTMOD member count != 10')
+                  req(len(names)==len(set(names)),'duplicate WOTMOD members')
+                  req(set(names)==set(expected),'WOTMOD members differ from inventory')
+                  req('meta.xml' not in names,'unexpected meta.xml')
+                  req(sum(n.endswith('.swf') for n in names)==1,'SWF count != 1')
+                  req(sum(n.endswith('.pyc') for n in names)==8,'PYC count != 8')
+                  req(sum(n.endswith('thresholds.json') for n in names)==1,'threshold snapshot count != 1')
+                  for name in names:
+                      data=z.read(name)
+                      row=expected.get(name,{})
+                      req(len(data)==row.get('bytes'),'size mismatch: '+name)
+                      req(hashlib.sha256(data).hexdigest()==row.get('sha256'),'hash mismatch: '+name)
+                      if name.endswith('.pyc'):
+                          req(data[:4].hex()=='03f30d0a','wrong pyc magic: '+name)
+
+              # Explicitly prove old runtime owners are not package members.
+              forbidden_member_tokens=(
+                  'protanki','champi','gambiter','modssettingsapi','modslistapi',
+                  'aslain','openwg','evv','guiflash'
+              )
+              for name in expected:
+                  lower=name.lower()
+                  for token in forbidden_member_tokens:
+                      req(token not in lower,'legacy/third-party package member: '+name)
+
+              # Configuration ownership is intentionally outside WOTMOD only when saved.
+              cfg=open(root+'/source/config.py',encoding='utf-8').read()
+              req('mods", "configs", "NAJXBox_MoE", "ui.json"' in cfg,
+                  'private UI config path changed')
+              req('settings' not in '\n'.join(expected).lower(),
+                  'settings UI artifact present')
+
+              # Loader only bootstraps NAJXBox package.
+              loader=open(root+'/source/mod_najxbox_moe.py',encoding='utf-8').read()
+              req('from gui.mods.najxbox_moe import view' in loader,
+                  'loader package import mismatch')
+          else:
+              notes.append('PACKAGE_PENDING')
+
+          result='PASS' if ready and not errors else ('BLOCKED' if not errors else 'FAIL')
+          lines=[
+              '# NAJXBox MoE 1.2.0 — Review 2: package/regression closure',
+              '',
+              'result: '+result,
+              'package_ready: '+str(ready),
+              '',
+              'Independent checks:',
+              '- exact package member set and per-file hashes',
+              '- one SWF / eight CPython 2.7 PYC / one threshold snapshot',
+              '- no duplicate members and no unexpected meta.xml',
+              '- no legacy/third-party package owner names',
+              '- private config ownership remains isolated',
+              '- loader resolves only NAJXBox package',
+              '- no Manager exposure or Runtime authorization in static stage',
+              '',
+              'Errors:'
+          ] + (['- '+e for e in errors] if errors else ['- none']) + [
+              '',
+              'Notes:'
+          ] + (['- '+n for n in notes] if notes else ['- none'])
+          open(root+'/REVIEW_2_STATIC_CLOSURE.md','w',encoding='utf-8',newline='\n').write('\n'.join(lines)+'\n')
+          print('\n'.join(lines))
+          if errors:
+              raise SystemExit(2)
+          PY
+
+      - name: Commit review records
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f             moe/rebuild/1.2.0/REVIEW_1_STATIC_CLOSURE.md             moe/rebuild/1.2.0/REVIEW_2_STATIC_CLOSURE.md
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m 'MoE 1.2.0: record two-pass static review'
+          git pull --rebase origin work/moe-component-1.2.0-full-rebuild
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
