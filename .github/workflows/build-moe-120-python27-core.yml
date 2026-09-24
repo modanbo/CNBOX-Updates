@@ -1,0 +1,83 @@
+name: Build MoE 1.2.0 Python 2.7 core
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - 'moe/rebuild/1.2.0/source/**'
+      - 'moe/rebuild/1.2.0/tests/**'
+      - '.github/workflows/build-moe-120-python27-core.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Set up Python 2.7
+        uses: actions/setup-python@v5
+        with:
+          python-version: '2.7'
+
+      - name: Compile deterministic WoT module layout
+        shell: bash
+        run: |
+          set -euxo pipefail
+          rm -rf moe/rebuild/1.2.0/build/python27
+          mkdir -p moe/rebuild/1.2.0/build/python27/res/scripts/client/gui/mods/najxbox_moe
+          python - <<'PY'
+          import os, py_compile, hashlib
+          root='moe/rebuild/1.2.0'
+          src=os.path.join(root,'source')
+          out=os.path.join(root,'build','python27','res','scripts','client','gui','mods')
+          package=os.path.join(out,'najxbox_moe')
+          mapping=[
+              ('mod_najxbox_moe.py', os.path.join(out,'mod_najxbox_moe.pyc'), 'res/scripts/client/gui/mods/mod_najxbox_moe.py'),
+              ('__init__.py', os.path.join(package,'__init__.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/__init__.py'),
+              ('config.py', os.path.join(package,'config.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/config.py'),
+              ('contract.py', os.path.join(package,'contract.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/contract.py'),
+              ('engine.py', os.path.join(package,'engine.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/engine.py'),
+              ('formula.py', os.path.join(package,'formula.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/formula.py'),
+              ('threshold_runtime.py', os.path.join(package,'threshold_runtime.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/threshold_runtime.py'),
+              ('view.py', os.path.join(package,'view.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/view.py'),
+          ]
+          for name,cfile,dfile in mapping:
+              py_compile.compile(os.path.join(src,name), cfile=cfile, dfile=dfile, doraise=True)
+          report=[]
+          for _,cfile,dfile in mapping:
+              data=open(cfile,'rb').read()
+              report.append('%s  %d  %s' % (hashlib.sha256(data).hexdigest(), len(data), dfile+'c'))
+          open(os.path.join(root,'PYTHON27_BUILD_SHA256.txt'),'w').write('\n'.join(report)+'\n')
+          print('\n'.join(report))
+          PY
+
+      - name: Verify runtime source exclusion
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test ! -e moe/rebuild/1.2.0/build/python27/res/scripts/client/gui/mods/najxbox_moe/wgapi.pyc
+          find moe/rebuild/1.2.0/build/python27 -type f -print | sort
+          count=$(find moe/rebuild/1.2.0/build/python27 -type f | wc -l)
+          test "$count" -eq 8
+
+      - name: Commit Python 2.7 build
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f moe/rebuild/1.2.0/build/python27 moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt
+          if git diff --cached --quiet; then
+            echo 'No Python 2.7 build delta.'
+            exit 0
+          fi
+          git commit -m "MoE 1.2.0: build Python 2.7 runtime core"
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
