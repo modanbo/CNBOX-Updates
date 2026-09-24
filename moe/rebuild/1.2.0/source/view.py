@@ -120,7 +120,7 @@ class _BaseMoeView(View):
                 state = engine.read_garage_state()
                 if state:
                     engine.remember_baseline(state)
-                    row = threshold_runtime.get(state.get("tank_id"))
+                    row = threshold_runtime.get(state.get("tank_id"), state.get("vehicle_key"))
                     data = contract.lobby_array(state, row)
                 else:
                     data = contract.empty_array(False)
