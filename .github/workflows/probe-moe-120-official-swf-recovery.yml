@@ -1,0 +1,127 @@
+name: Probe MoE 1.2.0 official SWF recovery
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/probe-moe-120-official-swf-recovery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Recursively scan historical payloads by SHA256
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import hashlib, io, os, zipfile
+
+          TARGET = "06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851"
+          OUT_DIR = "moe/rebuild/1.2.0/assets"
+          REPORT = "moe/rebuild/1.2.0/OFFICIAL_SWF_RECOVERY_PROBE.txt"
+          os.makedirs(OUT_DIR, exist_ok=True)
+
+          roots = []
+          for version in ("1.0.9", "1.0.10", "1.0.11", "1.1.0", "1.1.1", "1.1.2", "1.1.3"):
+              folder = os.path.join("moe", version)
+              if not os.path.isdir(folder):
+                  continue
+              for name in sorted(os.listdir(folder)):
+                  if name.lower().endswith(".zip"):
+                      roots.append(os.path.join(folder, name))
+
+          seen_archives = set()
+          candidates = []
+          hit = None
+
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def scan_zip(data, label, depth=0):
+              global hit
+              if depth > 5:
+                  return
+              digest = sha(data)
+              key = (digest, label.rsplit("!", 1)[-1].lower())
+              if key in seen_archives:
+                  return
+              seen_archives.add(key)
+              try:
+                  zf = zipfile.ZipFile(io.BytesIO(data))
+              except Exception:
+                  return
+              for info in zf.infolist():
+                  if info.is_dir():
+                      continue
+                  try:
+                      payload = zf.read(info)
+                  except Exception:
+                      continue
+                  child = label + "!" + info.filename
+                  digest = sha(payload)
+                  lower = info.filename.lower()
+                  if lower.endswith(".swf") or "mark" in lower or "gun" in lower:
+                      candidates.append((digest, len(payload), child))
+                  if digest == TARGET:
+                      hit = (payload, child)
+                  if lower.endswith((".zip", ".wotmod")):
+                      scan_zip(payload, child, depth + 1)
+
+          for path in roots:
+              with open(path, "rb") as fh:
+                  scan_zip(fh.read(), path)
+
+          lines = [
+              "NAJXBox MoE 1.2.0 official SWF recovery probe",
+              "target_sha256=" + TARGET,
+              "historical_payloads_scanned=" + str(len(roots)),
+              "result=" + ("EXACT_HASH_FOUND" if hit else "EXACT_HASH_NOT_FOUND"),
+          ]
+          if hit:
+              payload, source = hit
+              dst = os.path.join(OUT_DIR, "najxbox_moe.swf")
+              with open(dst, "wb") as fh:
+                  fh.write(payload)
+              lines += [
+                  "recovered_from=" + source,
+                  "recovered_size=" + str(len(payload)),
+                  "recovered_sha256=" + sha(payload),
+                  "output=" + dst,
+              ]
+          lines.append("")
+          lines.append("SWF/MoE-like candidates:")
+          for digest, size, label in sorted(candidates, key=lambda x: x[2]):
+              lines.append("%s  %d  %s" % (digest, size, label))
+
+          with open(REPORT, "w", encoding="utf-8", newline="\n") as fh:
+              fh.write("\n".join(lines) + "\n")
+          print("\n".join(lines[:8]))
+          PY
+
+      - name: Commit probe result
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moe/rebuild/1.2.0/OFFICIAL_SWF_RECOVERY_PROBE.txt
+          if [ -f moe/rebuild/1.2.0/assets/najxbox_moe.swf ]; then
+            git add moe/rebuild/1.2.0/assets/najxbox_moe.swf
+          fi
+          if git diff --cached --quiet; then
+            echo "No probe delta to commit."
+            exit 0
+          fi
+          git commit -m "MoE 1.2.0: record official SWF recovery probe"
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
