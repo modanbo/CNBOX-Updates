@@ -184,6 +184,30 @@ def test_official_swf_callback_surface_is_complete():
         assert token in source, token
 
 
+def test_threshold_vehicle_key_lookup():
+    old_loaded = threshold_runtime._LOADED
+    old_table = dict(threshold_runtime._TABLE)
+    try:
+        threshold_runtime._LOADED = True
+        threshold_runtime._TABLE = {
+            "usa:A194_AHT_7": {65: 4625, 85: 5636, 95: 6504, 100: 6702}
+        }
+        assert threshold_runtime.get(0, "usa:A194_AHT_7")[95] == 6504
+        assert threshold_runtime.get(0, "usa:missing") == {}
+    finally:
+        threshold_runtime._TABLE = old_table
+        threshold_runtime._LOADED = old_loaded
+
+
+def test_threshold_clean_table_accepts_vehicle_keys():
+    blob = {"table": {
+        "usa:A194_AHT_7": {"65": 4625, "85": 5636, "95": 6504, "100": 6702}
+    }}
+    table = threshold_runtime._clean_table(blob)
+    assert table["usa:A194_AHT_7"][65] == 4625
+    assert table["usa:A194_AHT_7"][100] == 6702
+
+
 if __name__ == "__main__":
     tests = [
         (name, obj) for name, obj in sorted(globals().items())
