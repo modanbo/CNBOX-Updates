@@ -101,16 +101,25 @@ class _BaseMoeView(View):
         # Read AFTER WoT's own controller has updated. No event hook/replacement.
         self._push("native-efficiency-updated")
 
-    def _on_threshold_ready(self, tank_id):
+    def _on_threshold_ready(self, threshold_key):
         if not self._alive:
             return
         try:
             state = engine.read_garage_state() if self.MODE == "lobby" else engine.read_battle_state()
-            current = int((state or {}).get("tank_id") or 0)
         except Exception:
-            current = 0
-        if current == int(tank_id or 0):
-            self._push("wg-threshold-ready")
+            state = None
+        if not state:
+            return
+
+        matched = False
+        try:
+            matched = int(state.get("tank_id") or 0) == int(threshold_key or 0)
+        except (TypeError, ValueError):
+            matched = False
+        if not matched:
+            matched = str(state.get("vehicle_key") or "") == str(threshold_key or "")
+        if matched:
+            self._push("threshold-ready")
 
     def _push(self, reason):
         if not self._alive:
