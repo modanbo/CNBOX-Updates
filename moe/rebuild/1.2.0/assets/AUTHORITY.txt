@@ -1,0 +1,6 @@
+source_url=https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp
+wbp_sha256=3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16
+wotmod_sha256=d681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4
+swf_sha256=06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851
+swf_size=36170
+runtime_name=najxbox_moe.swf
