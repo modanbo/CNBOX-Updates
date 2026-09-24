@@ -215,6 +215,12 @@ def test_threshold_listener_accepts_vehicle_key_source():
     assert 'self._push("threshold-ready")' in source
 
 
+def test_battle_threshold_lookup_uses_vehicle_key():
+    source = _read_source("view.py")
+    expected = 'threshold_runtime.get(state.get("tank_id"), state.get("vehicle_key"))'
+    assert source.count(expected) >= 2
+
+
 if __name__ == "__main__":
     tests = [
         (name, obj) for name, obj in sorted(globals().items())
