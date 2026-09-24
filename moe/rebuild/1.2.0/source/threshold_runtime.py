@@ -8,6 +8,11 @@ an out-of-game update workflow.
 import json
 import os
 
+try:
+    unicode
+except NameError:
+    unicode = str
+
 _TABLE = {}
 _LOADED = False
 _LISTENERS = []
