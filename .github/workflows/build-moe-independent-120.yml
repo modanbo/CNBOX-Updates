@@ -65,9 +65,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p /tmp/moe_ind_stage/res/gui/flash /tmp/moe_ind_stage/mods/najxbox_moe
+          mkdir -p /tmp/moe_ind_stage/res/gui/flash /tmp/moe_ind_stage/res/mods/najxbox_moe
           cp moe/rebuild/1.2.0/assets/najxbox_moe.swf /tmp/moe_ind_stage/res/gui/flash/najxbox_moe.swf
-          cp moe/rebuild/1.2.0/assets/thresholds.json /tmp/moe_ind_stage/mods/najxbox_moe/thresholds.json
+          cp moe/rebuild/1.2.0/assets/thresholds.json /tmp/moe_ind_stage/res/mods/najxbox_moe/thresholds.json
           python3 - <<'PY'
           import os,zipfile,hashlib,json
           root='/tmp/moe_ind_stage'
@@ -79,10 +79,10 @@ jobs:
                   a=os.path.relpath(p,root).replace(os.sep,'/')
                   files.append((a,p))
           files.sort()
-          with zipfile.ZipFile(out,'w',compression=zipfile.ZIP_STORED) as z:
+          with zipfile.ZipFile(out,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
               for a,p in files:
                   info=zipfile.ZipInfo(a,(2026,9,24,0,0,0))
-                  info.compress_type=zipfile.ZIP_STORED
+                  info.compress_type=zipfile.ZIP_DEFLATED
                   info.external_attr=0o644<<16
                   z.writestr(info,open(p,'rb').read())
           h=hashlib.sha256(open(out,'rb').read()).hexdigest()
