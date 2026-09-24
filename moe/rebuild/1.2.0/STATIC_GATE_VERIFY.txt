@@ -1,0 +1,18 @@
+NAJXBox MoE 1.2.0 static gate verification
+branch=work/moe-component-1.2.0-full-rebuild
+test_exit_code=0
+result=PASS
+
+PASS test_cache_roundtrip_and_expiry
+PASS test_combined_damage_uses_max_assist
+PASS test_ema_constant_and_projection
+PASS test_native_damage_feedback_is_observer_only
+PASS test_piecewise_linear_percentile
+PASS test_project_has_stable_fields
+PASS test_rejected_runtime_frameworks_are_absent_from_source
+PASS test_single_official_contract_view_owner
+PASS test_threshold_clean_table_requires_mark_anchors
+PASS test_threshold_runtime_is_local_only
+PASS test_wg_parse_requires_four_mark_anchors
+PASS test_wg_query_is_bounded_and_deduped
+PASS_ALL 12
