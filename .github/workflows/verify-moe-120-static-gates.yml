@@ -5,6 +5,8 @@ on:
     branches:
       - work/moe-component-1.2.0-full-rebuild
     paths:
+      - 'moe/rebuild/1.2.0/source/**'
+      - 'moe/rebuild/1.2.0/tests/**'
       - '.github/workflows/verify-moe-120-static-gates.yml'
   workflow_dispatch:
 
