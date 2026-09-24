@@ -221,6 +221,15 @@ def test_battle_threshold_lookup_uses_vehicle_key():
     assert source.count(expected) >= 2
 
 
+def test_garage_vehicle_key_owner_is_imported():
+    source = _read_source("engine.py")
+    start = source.index("def read_garage_state():")
+    end = source.index("\ndef remember_baseline", start)
+    block = source[start:end]
+    assert "from CurrentVehicle import g_currentVehicle" in block
+    assert 'g_currentVehicle.item.name' in block
+
+
 if __name__ == "__main__":
     tests = [
         (name, obj) for name, obj in sorted(globals().items())
