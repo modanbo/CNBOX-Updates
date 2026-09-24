@@ -8,10 +8,7 @@ from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.personality import ServicesLocator
 
-import config
-import contract
-import engine
-import threshold_runtime
+from gui.mods.najxbox_moe import config, contract, engine, threshold_runtime
 
 SWF_FILE = "najxbox_moe.swf"
 LOBBY_ALIAS = "NAJXBOX_MOE_LOBBY"
