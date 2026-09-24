@@ -42,6 +42,7 @@ def read_garage_state():
     if not int_cd:
         return None
     try:
+        from CurrentVehicle import g_currentVehicle
         from helpers import dependency
         from skeletons.gui.shared import IItemsCache
         from dossiers2.ui.achievements import MARK_ON_GUN_RECORD, ACHIEVEMENT_BLOCK
