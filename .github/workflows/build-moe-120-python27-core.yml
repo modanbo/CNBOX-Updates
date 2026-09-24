@@ -22,10 +22,17 @@ jobs:
           ref: work/moe-component-1.2.0-full-rebuild
           fetch-depth: 1
 
-      - name: Set up Python 2.7
-        uses: actions/setup-python@v5
-        with:
-          python-version: '2.7'
+      - name: Bootstrap pinned PyPy2.7
+        shell: bash
+        run: |
+          set -euxo pipefail
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://buildbot.pypy.org/pypy/pypy2.7-v7.3.17-linux64.tar.bz2' \
+            -o "$RUNNER_TEMP/pypy2.tar.bz2"
+          echo '9f3497f87b3372d17e447369e0016a4bec99a6b4d2a59aba774a25bfe4353474  '"$RUNNER_TEMP"'/pypy2.tar.bz2' | sha256sum -c -
+          tar -xjf "$RUNNER_TEMP/pypy2.tar.bz2" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/pypy2.7-v7.3.17-linux64/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/pypy2.7-v7.3.17-linux64/bin/pypy" -V
 
       - name: Compile deterministic WoT module layout
         shell: bash
@@ -33,7 +40,7 @@ jobs:
           set -euxo pipefail
           rm -rf moe/rebuild/1.2.0/build/python27
           mkdir -p moe/rebuild/1.2.0/build/python27/res/scripts/client/gui/mods/najxbox_moe
-          python - <<'PY'
+          pypy - <<'PY'
           import os, py_compile, hashlib
           root='moe/rebuild/1.2.0'
           src=os.path.join(root,'source')
