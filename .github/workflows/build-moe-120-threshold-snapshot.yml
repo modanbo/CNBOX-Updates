@@ -70,41 +70,37 @@ jobs:
           rows={}
           bad=[]
           candidate_rows=0
-          for body in tr_re.findall(page):
-              cells=td_re.findall(body)
-              tech=None
-              name_idx=None
-              for idx,cell in enumerate(cells):
-                  im=img_re.search(cell)
-                  if not im:
-                      continue
-                  filename=im.group(1)
-                  if '-' not in filename:
-                      continue
-                  nation,veh=filename.split('-',1)
-                  tech=nation.lower()+':'+veh
-                  name_idx=idx
-                  break
-              if not tech:
-                  continue
+
+          # TanStack Start serializes the complete loader dataset into the SSR
+          # hydration script as $R[n]={65:...,85:...,95:...,100:..., ...,
+          # image:".../contour/<nation>-<techname>.png"}. The visible HTML
+          # table renders only page 1; this hydration array is the complete
+          # source used by the client-side table.
+          obj_re=re.compile(
+              r'\\$R\\[\\d+\\]=\\{65:(\\d+),85:(\\d+),95:(\\d+),100:(\\d+),id:(\\d+),(.*?image:"[^"]*/contour/([^"]+?)\\.png")\\}',
+              re.S)
+
+          for match in obj_re.finditer(page):
               candidate_rows += 1
-              vals=[]
-              for cell in cells[name_idx+1:]:
-                  n=number(cell)
-                  if n is not None:
-                      vals.append(n)
-                  if len(vals)==4:
-                      break
-              if len(vals)!=4:
-                  bad.append((tech,'missing-values',vals))
+              v65,v85,v95,v100=[int(match.group(i)) for i in range(1,5)]
+              filename=match.group(7)
+              if '-' not in filename:
+                  bad.append((filename,'bad-tech-key',[]))
                   continue
-              v65,v85,v95,v100=vals
+              nation,veh=filename.split('-',1)
+              tech=nation.lower()+':'+veh
+              vals=[v65,v85,v95,v100]
               if min(vals)<=0 or not (v65<=v85<=v95<=v100):
                   bad.append((tech,'invalid-order',vals))
+                  continue
+              if tech in rows and rows[tech] != {'65':v65,'85':v85,'95':v95,'100':v100}:
+                  bad.append((tech,'duplicate-conflict',vals))
                   continue
               rows[tech]={'65':v65,'85':v85,'95':v95,'100':v100}
 
           reasons=[]
+          if page.count('initialChangeData') < 1:
+              reasons.append('initialChangeData_missing')
           if len(rows)<700:
               reasons.append('too_few_rows=%d'%len(rows))
           if len(bad)>10:
@@ -141,6 +137,7 @@ jobs:
               'source_url: '+URL,
               'source_last_update: '+(updated or 'UNPARSED'),
               'source_page_sha256: '+page_sha,
+              'hydration_initialChangeData_count: '+str(page.count('initialChangeData')),
               'candidate_rows: '+str(candidate_rows),
               'valid_rows: '+str(len(rows)),
               'invalid_rows: '+str(len(bad)),
