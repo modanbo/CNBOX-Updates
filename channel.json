@@ -1006,9 +1006,9 @@
     }
   ],
   "moePacks": [],
-  "creatorManagerVersion": "2.0.3",
-  "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/CNBOX_Manager_Creator.exe",
-  "creatorManagerSha256": "d577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b",
+  "creatorManagerVersion": "2.0.6",
+  "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe",
+  "creatorManagerSha256": "2385b91e6ac644dc3cace04cdb3953be3597b9c33a2567d997eb138a14626ce8",
   "productName": "NAJXBox",
   "legacyProductName": "CNBOX",
   "managerCanonicalUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
