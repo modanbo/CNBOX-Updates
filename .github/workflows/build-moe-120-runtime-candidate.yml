@@ -1,0 +1,155 @@
+name: Build MoE 1.2.0 single concentrated Runtime candidate
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - 'moe/rebuild/1.2.0/STATIC_CLOSURE_FINAL.txt'
+      - 'moe/rebuild/1.2.0/REVIEW_1.md'
+      - 'moe/rebuild/1.2.0/REVIEW_2.md'
+      - 'moe/rebuild/1.2.0/build/static-closure/najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod'
+      - '.github/workflows/build-moe-120-runtime-candidate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  candidate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Verify final static closure
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root='moe/rebuild/1.2.0'
+
+          grep -qx 'result=PASS' "$root/STATIC_CLOSURE_FINAL.txt"
+          static_tests="$(awk -F= '/^static_tests=/{print $2}' "$root/STATIC_CLOSURE_FINAL.txt")"
+          test -n "$static_tests"
+          test "$static_tests" -ge 18
+          grep -qx 'review_1=PASS' "$root/STATIC_CLOSURE_FINAL.txt"
+          grep -qx 'review_2=PASS' "$root/STATIC_CLOSURE_FINAL.txt"
+          grep -qx 'manager_exposure=NO' "$root/STATIC_CLOSURE_FINAL.txt"
+          grep -qx 'runtime_authorization=NO' "$root/STATIC_CLOSURE_FINAL.txt"
+
+          test "$(awk '/^result: /{print $2}' "$root/REVIEW_1.md")" = PASS
+          test "$(awk '/^result: /{print $2}' "$root/REVIEW_2.md")" = PASS
+
+          expected="$(awk '/najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod$/{print $1}' "$root/STATIC_CLOSURE_FINAL.txt")"
+          actual="$(sha256sum "$root/build/static-closure/najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod" | cut -d' ' -f1)"
+          test "$expected" = "$actual"
+
+      - name: Build one-file Runtime ZIP
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os,zipfile
+
+          root='moe/rebuild/1.2.0'
+          src=root+'/build/static-closure/najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod'
+          outdir=root+'/runtime'
+          os.makedirs(outdir,exist_ok=True)
+          runtime_name='mods/2.4.0.1/najxbox.moe_1.2.0.wotmod'
+          archive=outdir+'/NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip'
+
+          wotmod=open(src,'rb').read()
+          wotmod_sha=hashlib.sha256(wotmod).hexdigest()
+
+          with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              zi=zipfile.ZipInfo(runtime_name,(2020,1,1,0,0,0))
+              zi.compress_type=zipfile.ZIP_DEFLATED
+              zi.external_attr=0o100644 << 16
+              z.writestr(zi,wotmod,compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+
+          with zipfile.ZipFile(archive) as z:
+              assert z.namelist()==[runtime_name],z.namelist()
+              nested=z.read(runtime_name)
+              assert hashlib.sha256(nested).hexdigest()==wotmod_sha
+              with zipfile.ZipFile(__import__('io').BytesIO(nested)) as wz:
+                  names=wz.namelist()
+                  assert len(names)==10,names
+                  assert 'meta.xml' not in names
+                  assert names.count('res/gui/flash/najxbox_moe.swf')==1
+                  assert names.count('res/mods/najxbox_moe/thresholds.json')==1
+                  assert len([x for x in names if x.endswith('.pyc')])==8
+                  swf=wz.read('res/gui/flash/najxbox_moe.swf')
+                  assert hashlib.sha256(swf).hexdigest()=='06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851'
+
+          zip_data=open(archive,'rb').read()
+          zip_sha=hashlib.sha256(zip_data).hexdigest()
+          manifest={
+              'component':'NAJXBox MoE',
+              'version':'1.2.0',
+              'wot_version':'2.4.0.1',
+              'status':'READY_FOR_SINGLE_CONCENTRATED_RUNTIME',
+              'public':False,
+              'manager_exposure':False,
+              'install_files':[runtime_name],
+              'rollback_remove_files':[runtime_name],
+              'wotmod_sha256':wotmod_sha,
+              'runtime_zip_sha256':zip_sha,
+              'runtime_zip_bytes':len(zip_data),
+              'hard_runtime_gates':[
+                  'Garage official CN contract view appears and uses 210x134 authority geometry',
+                  'Battle official CN contract view appears and uses 147x93 authority geometry',
+                  'WoT native damage counter increments normally after dealing damage',
+                  'MoE battle values update from native personalEfficiencyCtrl',
+                  'Ctrl/native cursor behavior remains normal',
+                  'Lobby and battle drag positions persist',
+                  'No ProTanki/EVV/GUIFlash/ModsSettingsAPI/ModsListAPI/CHAMPi/Aslain/OpenWG UI appears',
+                  'No duplicate MoE view appears',
+                  'python.log contains no NAJXBox.MoE callback/load exception',
+              ],
+              'failure_action':'ROLLBACK_IMMEDIATELY_AND_ARCHIVE_LOGS',
+          }
+          json.dump(manifest,open(outdir+'/RUNTIME_CANDIDATE_MANIFEST.json','w'),indent=2,sort_keys=True)
+          open(outdir+'/RUNTIME_CANDIDATE_SHA256.txt','w').write(
+              '%s  %d  NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip\n'
+              '%s  %d  mods/2.4.0.1/najxbox.moe_1.2.0.wotmod\n'
+              %(zip_sha,len(zip_data),wotmod_sha,len(wotmod)))
+          print('RUNTIME_ZIP_SHA256',zip_sha)
+          print('WOTMOD_SHA256',wotmod_sha)
+          PY
+
+      - name: Write Runtime readiness record
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root='moe/rebuild/1.2.0'
+          {
+            echo 'NAJXBox MoE 1.2.0 Runtime candidate'
+            echo 'status=READY_FOR_SINGLE_CONCENTRATED_RUNTIME'
+            echo 'public=NO'
+            echo 'manager_exposure=NO'
+            echo 'install_file_count=1'
+            echo 'rollback_file_count=1'
+            echo 'static_closure=PASS'
+            echo 'review_1=PASS'
+            echo 'review_2=PASS'
+            cat "$root/runtime/RUNTIME_CANDIDATE_SHA256.txt"
+          } > "$root/runtime/RUNTIME_CANDIDATE_STATUS.txt"
+
+      - name: Commit Runtime candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f             moe/rebuild/1.2.0/runtime/NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip             moe/rebuild/1.2.0/runtime/RUNTIME_CANDIDATE_MANIFEST.json             moe/rebuild/1.2.0/runtime/RUNTIME_CANDIDATE_SHA256.txt             moe/rebuild/1.2.0/runtime/RUNTIME_CANDIDATE_STATUS.txt
+
+          if git diff --cached --quiet; then
+            echo 'Runtime candidate already current.'
+            exit 0
+          fi
+
+          git commit -m 'MoE 1.2.0: prepare single concentrated Runtime candidate'
+          git pull --rebase origin work/moe-component-1.2.0-full-rebuild
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
