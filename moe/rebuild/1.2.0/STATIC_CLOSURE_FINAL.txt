@@ -1,5 +1,6 @@
 NAJXBox MoE 1.2.0 static closure
 result=PASS
+static_tests=18
 official_swf=PASS
 threshold_snapshot=778/778
 runtime_network=NONE
