@@ -21,43 +21,31 @@ jobs:
           ref: work/moe-component-1.2.0-full-rebuild
           fetch-depth: 1
 
-      - name: Build pinned CPython 2.7.18 from source
+      - name: Pull pinned CPython 2.7.18 image
         shell: bash
         run: |
           set -euxo pipefail
-          root="$RUNNER_TEMP/cpython27"
-          src="$RUNNER_TEMP/Python-2.7.18"
-          archive="$RUNNER_TEMP/Python-2.7.18.tar.xz"
-
-          curl -fL --retry 3 --connect-timeout 20             'https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tar.xz'             -o "$archive"
-
-          echo 'b62c0e7937551d0cc02b8fd5cb0f544f9405bafc9a54d3808ed4594812edef43  '"$archive" | sha256sum -c -
-
-          tar -xJf "$archive" -C "$RUNNER_TEMP"
-          cd "$src"
-          ./configure --prefix="$root" --without-ensurepip
-          make -j2 python Parser/pgen
-          ./python -V
-          test "$(./python - <<'PY'
+          image='python@sha256:d8fac68ebdc45b8d66d53f1ed6c1532da81109a8f5532a6ca0c951ed31107d70'
+          docker pull "$image"
+          docker run --rm "$image" python -V
+          test "$(docker run --rm "$image" python - <<'PY'
           import imp
           print(imp.get_magic().encode('hex'))
           PY
           )" = '03f30d0a'
 
-      - name: Compile deterministic CPython 2.7 bytecode
+      - name: Compile current runtime source tree
         shell: bash
         run: |
           set -euxo pipefail
-          py="$RUNNER_TEMP/Python-2.7.18/python"
+          image='python@sha256:d8fac68ebdc45b8d66d53f1ed6c1532da81109a8f5532a6ca0c951ed31107d70'
           rm -rf moe/rebuild/1.2.0/build/python27
           mkdir -p moe/rebuild/1.2.0/build/python27/res/scripts/client/gui/mods/najxbox_moe
 
           find moe/rebuild/1.2.0/source -type f -name '*.py' -exec touch -d @946684800 {} +
 
-          "$py" - <<'PY'
-          import hashlib
-          import os
-          import py_compile
+          docker run --rm             -v "$GITHUB_WORKSPACE:/work"             -w /work             "$image"             python - <<'PY'
+          import os,py_compile
 
           root='moe/rebuild/1.2.0'
           src=os.path.join(root,'source')
@@ -74,49 +62,52 @@ jobs:
               ('view.py', os.path.join(package,'view.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/view.py'),
           ]
           for name,cfile,dfile in mapping:
-              py_compile.compile(os.path.join(src,name), cfile=cfile, dfile=dfile, doraise=True)
-
-          for _,cfile,dfile in mapping:
-              data=open(cfile,'rb').read()
-              print('%s  %d  magic=%s  %s' % (
-                  hashlib.sha256(data).hexdigest(),
-                  len(data),
-                  data[:4].encode('hex'),
-                  dfile+'c'))
+              py_compile.compile(os.path.join(src,name),cfile=cfile,dfile=dfile,doraise=True)
           PY
 
-      - name: Verify CPython 2.7 runtime inventory
+      - name: Verify bytecode and bind it to source tree
         shell: bash
         run: |
           set -euxo pipefail
           python3 - <<'PY'
           import glob,hashlib,os
 
-          files=sorted(glob.glob('moe/rebuild/1.2.0/build/python27/**/*.pyc',recursive=True))
-          assert len(files)==8, files
-          assert not any(p.endswith('/wgapi.pyc') for p in files), files
+          root='moe/rebuild/1.2.0'
+          source_files=sorted(
+              p for p in glob.glob(root+'/source/*.py')
+              if not p.endswith('/wgapi.py'))
+          h=hashlib.sha256()
+          for p in source_files:
+              rel=os.path.relpath(p,root).replace(os.sep,'/')
+              data=open(p,'rb').read()
+              h.update(rel.encode('utf-8')+b'\0'+data+b'\0')
+          source_tree_sha=h.hexdigest()
+
+          files=sorted(glob.glob(root+'/build/python27/**/*.pyc',recursive=True))
+          assert len(files)==8,files
+          assert not any(p.endswith('/wgapi.pyc') for p in files),files
 
           report=[
               'compiler=CPython 2.7.18',
-              'source_url=https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tar.xz',
-              'source_sha256=b62c0e7937551d0cc02b8fd5cb0f544f9405bafc9a54d3808ed4594812edef43',
+              'container=python@sha256:d8fac68ebdc45b8d66d53f1ed6c1532da81109a8f5532a6ca0c951ed31107d70',
               'expected_pyc_magic=03f30d0a',
+              'runtime_source_tree_sha256='+source_tree_sha,
               'runtime_pyc_count=8',
               ''
           ]
           for p in files:
               data=open(p,'rb').read()
               magic=data[:4].hex()
-              assert magic=='03f30d0a', (p,magic)
+              assert magic=='03f30d0a',(p,magic)
               rel=p.split('/build/python27/',1)[1]
               report.append('%s  %d  magic=%s  %s' % (
                   hashlib.sha256(data).hexdigest(),len(data),magic,rel))
 
-          open('moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt','w').write('\n'.join(report)+'\n')
+          open(root+'/PYTHON27_BUILD_SHA256.txt','w').write('\n'.join(report)+'\n')
           print('\n'.join(report))
           PY
 
-      - name: Commit CPython 2.7 build
+      - name: Commit current CPython 2.7 build
         shell: bash
         run: |
           set -euxo pipefail
@@ -127,5 +118,6 @@ jobs:
             echo 'No CPython 2.7 build delta.'
             exit 0
           fi
-          git commit -m 'MoE 1.2.0: build runtime core with CPython 2.7.18'
+          git commit -m 'MoE 1.2.0: rebuild current runtime core with pinned CPython 2.7.18'
+          git pull --rebase origin work/moe-component-1.2.0-full-rebuild
           git push origin HEAD:work/moe-component-1.2.0-full-rebuild
