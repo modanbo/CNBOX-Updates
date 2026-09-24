@@ -1,0 +1,363 @@
+name: Close MoE 1.2.0 static gates
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - 'moe/rebuild/1.2.0/source/**'
+      - 'moe/rebuild/1.2.0/tests/**'
+      - 'moe/rebuild/1.2.0/assets/najxbox_moe.swf'
+      - 'moe/rebuild/1.2.0/assets/thresholds.json'
+      - 'moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md'
+      - 'moe/rebuild/1.2.0/container_reference/WOTMOD_CONTAINER_VERDICT.md'
+      - '.github/workflows/close-moe-120-static.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Run current-source static tests
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 moe/rebuild/1.2.0/tests/test_core.py | tee /tmp/moe120-tests.txt
+          count="$(awk '/^PASS_ALL /{print $2}' /tmp/moe120-tests.txt)"
+          test -n "$count"
+          test "$count" -ge 17
+
+      - name: Verify authority assets and threshold snapshot
+        shell: bash
+        run: |
+          set -euxo pipefail
+          echo '06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851  moe/rebuild/1.2.0/assets/najxbox_moe.swf' | sha256sum -c -
+
+          threshold_sha="$(awk '/^snapshot_sha256: /{print $2}' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md)"
+          test -n "$threshold_sha"
+          echo "$threshold_sha  moe/rebuild/1.2.0/assets/thresholds.json" | sha256sum -c -
+
+          grep -q '^status: PASS$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          grep -q '^candidate_rows: 778$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          grep -q '^valid_rows: 778$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          grep -q '^invalid_rows: 0$' moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          grep -q 'Expected total: \*\*10 files\*\*' moe/rebuild/1.2.0/container_reference/WOTMOD_CONTAINER_VERDICT.md
+          grep -q 'Expected `meta.xml`: \*\*0\*\*' moe/rebuild/1.2.0/container_reference/WOTMOD_CONTAINER_VERDICT.md
+
+      - name: Compile current source with pinned CPython 2.7.18
+        shell: bash
+        run: |
+          set -euxo pipefail
+          image='python@sha256:d8fac68ebdc45b8d66d53f1ed6c1532da81109a8f5532a6ca0c951ed31107d70'
+          docker pull "$image" >/dev/null
+          test "$(docker run --rm -i "$image" python - <<'PY'
+          import imp
+          print(imp.get_magic().encode('hex'))
+          PY
+          )" = '03f30d0a'
+
+          root='moe/rebuild/1.2.0'
+          rm -rf "$root/build/static-closure"
+          mkdir -p "$root/build/static-closure/stage/res/scripts/client/gui/mods/najxbox_moe"
+          mkdir -p "$root/build/static-closure/stage/res/gui/flash"
+          mkdir -p "$root/build/static-closure/stage/res/mods/najxbox_moe"
+          find "$root/source" -type f -name '*.py' -exec touch -d @946684800 {} +
+
+          docker run --rm -i             -v "$GITHUB_WORKSPACE:/work"             -w /work             "$image"             python - <<'PY'
+          import os,py_compile
+          root='moe/rebuild/1.2.0'
+          src=os.path.join(root,'source')
+          stage=os.path.join(root,'build','static-closure','stage')
+          mods=os.path.join(stage,'res','scripts','client','gui','mods')
+          pkg=os.path.join(mods,'najxbox_moe')
+          mapping=[
+              ('mod_najxbox_moe.py', os.path.join(mods,'mod_najxbox_moe.pyc'), 'res/scripts/client/gui/mods/mod_najxbox_moe.py'),
+              ('__init__.py', os.path.join(pkg,'__init__.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/__init__.py'),
+              ('config.py', os.path.join(pkg,'config.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/config.py'),
+              ('contract.py', os.path.join(pkg,'contract.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/contract.py'),
+              ('engine.py', os.path.join(pkg,'engine.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/engine.py'),
+              ('formula.py', os.path.join(pkg,'formula.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/formula.py'),
+              ('threshold_runtime.py', os.path.join(pkg,'threshold_runtime.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/threshold_runtime.py'),
+              ('view.py', os.path.join(pkg,'view.pyc'), 'res/scripts/client/gui/mods/najxbox_moe/view.py'),
+          ]
+          for name,cfile,dfile in mapping:
+              py_compile.compile(os.path.join(src,name),cfile=cfile,dfile=dfile,doraise=True)
+          PY
+
+          cp "$root/assets/najxbox_moe.swf" "$root/build/static-closure/stage/res/gui/flash/najxbox_moe.swf"
+          cp "$root/assets/thresholds.json" "$root/build/static-closure/stage/res/mods/najxbox_moe/thresholds.json"
+
+      - name: Bind source tree to runtime bytecode
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import glob,hashlib,json,os
+
+          root='moe/rebuild/1.2.0'
+          source_files=sorted(glob.glob(root+'/source/*.py'))
+          expected_source_names=[
+              '__init__.py','config.py','contract.py','engine.py','formula.py',
+              'mod_najxbox_moe.py','threshold_runtime.py','view.py'
+          ]
+          assert [os.path.basename(p) for p in source_files]==expected_source_names,[os.path.basename(p) for p in source_files]
+
+          h=hashlib.sha256()
+          for p in source_files:
+              rel=os.path.relpath(p,root).replace(os.sep,'/')
+              data=open(p,'rb').read()
+              h.update(rel.encode('utf-8')+b'\0'+data+b'\0')
+          source_sha=h.hexdigest()
+
+          pycs=sorted(glob.glob(root+'/build/static-closure/stage/res/scripts/client/gui/mods/**/*.pyc',recursive=True))
+          assert len(pycs)==8,pycs
+          pyc_rows=[]
+          for p in pycs:
+              data=open(p,'rb').read()
+              assert data[:4].hex()=='03f30d0a',(p,data[:4].hex())
+              pyc_rows.append({
+                  'path':os.path.relpath(p,root+'/build/static-closure/stage').replace(os.sep,'/'),
+                  'bytes':len(data),
+                  'sha256':hashlib.sha256(data).hexdigest(),
+                  'magic':'03f30d0a',
+              })
+
+          json.dump({
+              'compiler':'CPython 2.7.18',
+              'container':'python@sha256:d8fac68ebdc45b8d66d53f1ed6c1532da81109a8f5532a6ca0c951ed31107d70',
+              'runtime_source_tree_sha256':source_sha,
+              'pyc':pyc_rows,
+          },open(root+'/build/static-closure/PYTHON27_CURRENT_BUILD.json','w'),indent=2,sort_keys=True)
+          print('SOURCE_TREE_SHA256',source_sha)
+          PY
+
+      - name: Build and reopen exact 10-file WOTMOD
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import glob,hashlib,json,os,zipfile
+
+          root='moe/rebuild/1.2.0'
+          stage=root+'/build/static-closure/stage'
+          outdir=root+'/build/static-closure'
+          out=outdir+'/najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod'
+
+          expected=[
+              'res/gui/flash/najxbox_moe.swf',
+              'res/mods/najxbox_moe/thresholds.json',
+              'res/scripts/client/gui/mods/mod_najxbox_moe.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/__init__.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/config.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/contract.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/engine.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/formula.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/threshold_runtime.pyc',
+              'res/scripts/client/gui/mods/najxbox_moe/view.pyc',
+          ]
+          actual=[]
+          for base,dirs,files in os.walk(stage):
+              for name in files:
+                  actual.append(os.path.relpath(os.path.join(base,name),stage).replace(os.sep,'/'))
+          actual.sort()
+          assert actual==sorted(expected),(actual,expected)
+
+          forbidden=(
+              'protanki','champi','gambiter','modssettingsapi','modslistapi',
+              'aslain.modmenu','openwg.gameface','mod_pro_gunmarks',
+              'expectedvehiclevalues','guiflash','application_id',
+              'worldoftanks.com/wot/tanks/mastery'
+          )
+          findings=[]
+          inventory=[]
+          for rel in actual:
+              data=open(os.path.join(stage,rel),'rb').read()
+              lower=data.lower()
+              for token in forbidden:
+                  if token.encode('ascii') in lower:
+                      findings.append((rel,token))
+              inventory.append({
+                  'path':rel,
+                  'bytes':len(data),
+                  'sha256':hashlib.sha256(data).hexdigest(),
+              })
+          assert not findings,findings
+
+          with zipfile.ZipFile(out,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for rel in actual:
+                  data=open(os.path.join(stage,rel),'rb').read()
+                  zi=zipfile.ZipInfo(rel,(2020,1,1,0,0,0))
+                  zi.compress_type=zipfile.ZIP_DEFLATED
+                  zi.external_attr=0o100644 << 16
+                  z.writestr(zi,data,compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+
+          with zipfile.ZipFile(out) as z:
+              names=z.namelist()
+              assert len(names)==10,names
+              assert 'meta.xml' not in names
+              assert set(names)==set(actual),(names,actual)
+              for rel in names:
+                  data=z.read(rel)
+                  src=open(os.path.join(stage,rel),'rb').read()
+                  assert data==src,rel
+                  if rel.endswith('.pyc'):
+                      assert data[:4].hex()=='03f30d0a',(rel,data[:4].hex())
+
+          package_data=open(out,'rb').read()
+          package_sha=hashlib.sha256(package_data).hexdigest()
+          json.dump({
+              'version':'1.2.0',
+              'status':'STATIC_CLOSURE_CANDIDATE',
+              'runtime_file_count':10,
+              'meta_xml_count':0,
+              'third_party_wotmod_count':0,
+              'rejected_framework_findings':findings,
+              'files':inventory,
+              'wotmod_sha256':package_sha,
+              'wotmod_bytes':len(package_data),
+          },open(outdir+'/PACKAGE_INVENTORY.json','w'),indent=2,sort_keys=True)
+          open(outdir+'/PACKAGE_SHA256.txt','w').write('%s  %d  najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod\n'%(package_sha,len(package_data)))
+          print('WOTMOD_SHA256',package_sha)
+          PY
+
+      - name: Review 1 — ownership and contract
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import json,os,re
+
+          root='moe/rebuild/1.2.0'
+          tests=open('/tmp/moe120-tests.txt').read()
+          inv=json.load(open(root+'/build/static-closure/PACKAGE_INVENTORY.json'))
+          view=open(root+'/source/view.py').read()
+          engine=open(root+'/source/engine.py').read()
+          threshold=open(root+'/source/threshold_runtime.py').read()
+
+          checks={
+              'current_static_tests_pass': bool(re.search(r'^PASS_ALL \d+$',tests,re.M)),
+              'package_exact_10_files': inv['runtime_file_count']==10,
+              'package_no_meta_xml': inv['meta_xml_count']==0,
+              'package_no_third_party_wotmod': inv['third_party_wotmod_count']==0,
+              'package_no_rejected_framework_tokens': not inv['rejected_framework_findings'],
+              'one_official_swf_name': view.count('SWF_FILE = "najxbox_moe.swf"')==1,
+              'one_lobby_owner': view.count('class NajxMoeLobbyView')==1,
+              'one_battle_owner': view.count('class NajxMoeBattleView')==1,
+              'native_efficiency_observer': 'personalEfficiencyCtrl' in engine and 'onTotalEfficiencyUpdated' in engine,
+              'no_PlayerAvatar_event_replacement': 'PlayerAvatar.onBattleEvents' not in engine,
+              'threshold_local_only': all(x not in threshold for x in ('http.openUrl','threading.Thread','APPLICATION_ID')),
+              'battle_threshold_vehicle_key': view.count('threshold_runtime.get(state.get("tank_id"), state.get("vehicle_key"))')>=2,
+              'official_callback_contract': all(x in view for x in (
+                  'def getPanelPosition(self):','def savePosition(self, is_battle, x, y):',
+                  'def retrieveData(self):','def populated(self):','self.flashObject.as_loadConfig()',
+                  'self.flashObject.as_updateData(self._last_data, str(reason), True)')),
+          }
+          failed=[k for k,v in checks.items() if not v]
+          lines=['# NAJXBox MoE 1.2.0 — Review 1','',
+                 'result: '+('PASS' if not failed else 'FAIL'),'',
+                 '## Checks']
+          lines += ['- [%s] %s'%('x' if v else ' ',k) for k,v in checks.items()]
+          if failed: lines += ['','FAILED: '+', '.join(failed)]
+          open(root+'/REVIEW_1.md','w').write('\n'.join(lines)+'\n')
+          assert not failed,failed
+          PY
+
+      - name: Review 2 — regression, dead code and reproducibility
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import glob,hashlib,json,os,re
+
+          root='moe/rebuild/1.2.0'
+          inv=json.load(open(root+'/build/static-closure/PACKAGE_INVENTORY.json'))
+          build=json.load(open(root+'/build/static-closure/PYTHON27_CURRENT_BUILD.json'))
+          formula=open(root+'/source/formula.py').read()
+          tests=open(root+'/tests/test_core.py').read()
+          source_names=sorted(os.path.basename(p) for p in glob.glob(root+'/source/*.py'))
+
+          h=hashlib.sha256()
+          for p in sorted(glob.glob(root+'/source/*.py')):
+              rel=os.path.relpath(p,root).replace(os.sep,'/')
+              data=open(p,'rb').read()
+              h.update(rel.encode('utf-8')+b'\0'+data+b'\0')
+          current_source_sha=h.hexdigest()
+
+          checks={
+              'source_tree_exact_8_modules': source_names==[
+                  '__init__.py','config.py','contract.py','engine.py','formula.py',
+                  'mod_najxbox_moe.py','threshold_runtime.py','view.py'],
+              'legacy_wgapi_removed': 'wgapi.py' not in source_names,
+              'python_percentile_owner_removed': all(x not in formula for x in (
+                  'def percentile_for_damage(','def project(','def has_required_thresholds(')),
+              'current_source_bound_to_pyc': build['runtime_source_tree_sha256']==current_source_sha,
+              'all_pyc_cpython27_magic': all(x['magic']=='03f30d0a' for x in build['pyc']) and len(build['pyc'])==8,
+              'package_exact_inventory': len(inv['files'])==10,
+              'package_reopens_without_meta': inv['meta_xml_count']==0,
+              'no_runtime_network_owner': 'worldoftanks.com/wot/tanks/mastery' not in '\n'.join(
+                  open(p).read() for p in glob.glob(root+'/source/*.py')),
+              'no_foreign_settings_or_cursor_owner': all(x not in '\n'.join(
+                  open(p).read().lower() for p in glob.glob(root+'/source/*.py')) for x in (
+                  'modssettingsapi','modslistapi','gambiter','champi','aslain.modmenu','openwg.gameface')),
+              'rollback_history_preserved': os.path.exists(root+'/archive/LEGACY_WGAPI_REFERENCE.py') and
+                  os.path.exists(root+'/archive/LEGACY_PYTHON_PERCENTILE_FORMULA.md'),
+              'static_test_declares_legacy_guards': 'test_legacy_wgapi_is_not_runtime_source' in tests and
+                  'test_formula_runtime_surface_is_minimal' in tests,
+          }
+          failed=[k for k,v in checks.items() if not v]
+          lines=['# NAJXBox MoE 1.2.0 — Review 2','',
+                 'result: '+('PASS' if not failed else 'FAIL'),'',
+                 'source_tree_sha256: '+current_source_sha,
+                 'wotmod_sha256: '+inv['wotmod_sha256'],'',
+                 '## Checks']
+          lines += ['- [%s] %s'%('x' if v else ' ',k) for k,v in checks.items()]
+          if failed: lines += ['','FAILED: '+', '.join(failed)]
+          open(root+'/REVIEW_2.md','w').write('\n'.join(lines)+'\n')
+          assert not failed,failed
+          PY
+
+      - name: Write static closure status
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root='moe/rebuild/1.2.0'
+          test "$(awk '/^result: /{print $2}' "$root/REVIEW_1.md")" = PASS
+          test "$(awk '/^result: /{print $2}' "$root/REVIEW_2.md")" = PASS
+          {
+            echo 'NAJXBox MoE 1.2.0 static closure'
+            echo 'result=PASS'
+            echo 'official_swf=PASS'
+            echo 'threshold_snapshot=778/778'
+            echo 'runtime_network=NONE'
+            echo 'cpython27_pyc=8/8'
+            echo 'wotmod_runtime_files=10'
+            echo 'review_1=PASS'
+            echo 'review_2=PASS'
+            echo 'manager_exposure=NO'
+            echo 'runtime_authorization=NO'
+            cat "$root/build/static-closure/PACKAGE_SHA256.txt"
+          } > "$root/STATIC_CLOSURE_FINAL.txt"
+
+      - name: Commit complete static closure evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f             moe/rebuild/1.2.0/build/static-closure/PYTHON27_CURRENT_BUILD.json             moe/rebuild/1.2.0/build/static-closure/PACKAGE_INVENTORY.json             moe/rebuild/1.2.0/build/static-closure/PACKAGE_SHA256.txt             moe/rebuild/1.2.0/build/static-closure/najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod             moe/rebuild/1.2.0/REVIEW_1.md             moe/rebuild/1.2.0/REVIEW_2.md             moe/rebuild/1.2.0/STATIC_CLOSURE_FINAL.txt
+
+          if git diff --cached --quiet; then
+            echo 'Static closure evidence already current.'
+            exit 0
+          fi
+          git commit -m 'MoE 1.2.0: close static package and two-review gates'
+          git pull --rebase origin work/moe-component-1.2.0-full-rebuild
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
