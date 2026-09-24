@@ -1,7 +1,7 @@
 NAJXBox MoE 1.2.0 static gate verification
 branch=work/moe-component-1.2.0-full-rebuild
-test_exit_code=1
-result=FAIL
+test_exit_code=0
+result=PASS
 
 PASS test_cache_roundtrip_and_expiry
 PASS test_combined_damage_uses_max_assist
@@ -19,10 +19,5 @@ PASS test_threshold_runtime_is_local_only
 PASS test_threshold_vehicle_key_lookup
 PASS test_wg_parse_requires_four_mark_anchors
 PASS test_wg_query_is_bounded_and_deduped
-Traceback (most recent call last):
-  File "/home/runner/work/CNBOX-Updates/CNBOX-Updates/moe/rebuild/1.2.0/tests/test_core.py", line 225, in <module>
-    func()
-  File "/home/runner/work/CNBOX-Updates/CNBOX-Updates/moe/rebuild/1.2.0/tests/test_core.py", line 164, in test_wot_package_import_paths_are_explicit
-    assert "from gui.mods.najxbox_moe import config, contract, engine, threshold_runtime" in view
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-AssertionError
+PASS test_wot_package_import_paths_are_explicit
+PASS_ALL 17
