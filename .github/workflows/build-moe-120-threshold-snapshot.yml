@@ -77,7 +77,7 @@ jobs:
           # table renders only page 1; this hydration array is the complete
           # source used by the client-side table.
           obj_re=re.compile(
-              r'\\$R\\[\\d+\\]=\\{65:(\\d+),85:(\\d+),95:(\\d+),100:(\\d+),id:(\\d+),(.*?image:"[^"]*/contour/([^"]+?)\\.png")\\}',
+              r'\$R\[\d+\]=\{65:(\d+),85:(\d+),95:(\d+),100:(\d+),id:(\d+),(.*?image:"[^"]*/contour/([^"]+?)\.png")\}',
               re.S)
 
           for match in obj_re.finditer(page):
