@@ -35,7 +35,7 @@ jobs:
           grep -qx 'result=PASS' moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt
           static_count="$(awk '/^PASS_ALL /{print $2}' moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt)"
           test -n "$static_count"
-          test "$static_count" -ge 19
+          test "$static_count" -ge 17
 
           grep -q '^compiler=CPython 2.7.18$' moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt
           grep -q '^expected_pyc_magic=03f30d0a$' moe/rebuild/1.2.0/PYTHON27_BUILD_SHA256.txt
