@@ -20,33 +20,38 @@ jobs:
           ref: work/moe-component-1.2.0-full-rebuild
           fetch-depth: 1
 
-      - name: Fetch and validate NA MoE table
+      - name: Fetch NA MoE page
         shell: bash
         run: |
           set -euxo pipefail
-          python3 - <<'PY'
+          curl -fL --retry 3 --connect-timeout 20 -A 'Mozilla/5.0' \
+            'https://tomato.gg/moe/NA' -o "$RUNNER_TEMP/moe-na.html"
+
+      - name: Parse and validate snapshot
+        id: parse
+        shell: bash
+        run: |
+          set +e
+          python3 - "$RUNNER_TEMP/moe-na.html" <<'PY'
           import datetime
           import hashlib
           import html
           import json
+          import os
           import re
-          import urllib.request
+          import sys
 
-          URL='https://tomato.gg/moe/NA'
-          req=urllib.request.Request(URL,headers={
-              'User-Agent':'NAJXBox-MoE-Build/1.2.0 (+offline-threshold-snapshot)'
-          })
-          raw=urllib.request.urlopen(req,timeout=30).read()
+          src_path=sys.argv[1]
+          raw=open(src_path,'rb').read()
           page=raw.decode('utf-8','replace')
           page_sha=hashlib.sha256(raw).hexdigest()
+          URL='https://tomato.gg/moe/NA'
 
           updated=''
           m=re.search(r'Last Update:\s*(?:<!--.*?-->\s*)*([^<]+)',page,re.I|re.S)
           if m:
               updated=html.unescape(m.group(1)).strip()
 
-          rows={}
-          bad=[]
           tr_re=re.compile(r'<tr\b[^>]*>(.*?)</tr>',re.I|re.S)
           td_re=re.compile(r'<td\b[^>]*>(.*?)</td>',re.I|re.S)
           img_re=re.compile(r'/contour/([^"\'<>]+?)\.png',re.I)
@@ -60,28 +65,29 @@ jobs:
           def number(fragment):
               text=cell_text(fragment).replace(',','')
               m=re.search(r'-?\d+(?:\.\d+)?',text)
-              if not m:
-                  return None
-              return int(round(float(m.group(0))))
+              return int(round(float(m.group(0)))) if m else None
 
+          rows={}
+          bad=[]
+          candidate_rows=0
           for body in tr_re.findall(page):
               cells=td_re.findall(body)
-              if len(cells) < 8:
-                  continue
               tech=None
               name_idx=None
               for idx,cell in enumerate(cells):
                   im=img_re.search(cell)
-                  if im:
-                      filename=im.group(1)
-                      if '-' not in filename:
-                          continue
-                      nation,veh=filename.split('-',1)
-                      tech=nation.lower()+':'+veh
-                      name_idx=idx
-                      break
-              if not tech or name_idx is None:
+                  if not im:
+                      continue
+                  filename=im.group(1)
+                  if '-' not in filename:
+                      continue
+                  nation,veh=filename.split('-',1)
+                  tech=nation.lower()+':'+veh
+                  name_idx=idx
+                  break
+              if not tech:
                   continue
+              candidate_rows += 1
               vals=[]
               for cell in cells[name_idx+1:]:
                   n=number(cell)
@@ -89,25 +95,32 @@ jobs:
                       vals.append(n)
                   if len(vals)==4:
                       break
-              if len(vals) != 4:
+              if len(vals)!=4:
                   bad.append((tech,'missing-values',vals))
                   continue
               v65,v85,v95,v100=vals
-              if min(vals) <= 0 or not (v65 <= v85 <= v95 <= v100):
+              if min(vals)<=0 or not (v65<=v85<=v95<=v100):
                   bad.append((tech,'invalid-order',vals))
                   continue
               rows[tech]={'65':v65,'85':v85,'95':v95,'100':v100}
 
-          assert len(rows) >= 700, 'too few parsed rows: %d' % len(rows)
-          assert len(bad) <= 10, 'too many invalid rows: %d' % len(bad)
+          reasons=[]
+          if len(rows)<700:
+              reasons.append('too_few_rows=%d'%len(rows))
+          if len(bad)>10:
+              reasons.append('too_many_bad_rows=%d'%len(bad))
+          if not updated:
+              reasons.append('last_update_unparsed')
 
+          status='PASS' if not reasons else 'FAIL'
+          fetched=datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat()
           snapshot={
               'schema':1,
               'region':'NA',
               'source':'Tomato.gg MoE requirements',
               'source_url':URL,
               'source_last_update':updated,
-              'fetched_at_utc':datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(),
+              'fetched_at_utc':fetched,
               'source_page_sha256':page_sha,
               'key_type':'wot_vehicle_type_name',
               'table':dict(sorted(rows.items()))
@@ -115,62 +128,58 @@ jobs:
           encoded=(json.dumps(snapshot,ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n').encode('utf-8')
           snap_sha=hashlib.sha256(encoded).hexdigest()
 
-          import os
           os.makedirs('moe/rebuild/1.2.0/assets',exist_ok=True)
-          open('moe/rebuild/1.2.0/assets/thresholds.json','wb').write(encoded)
+          if status=='PASS':
+              open('moe/rebuild/1.2.0/assets/thresholds.json','wb').write(encoded)
+          elif os.path.exists('moe/rebuild/1.2.0/assets/thresholds.json'):
+              os.remove('moe/rebuild/1.2.0/assets/thresholds.json')
 
-          sample_keys=['usa:A194_AHT_7','ussr:R157_Object_279R']
           report=[
-              '# MoE 1.2.0 offline threshold snapshot',
+              '# MoE 1.2.0 offline threshold snapshot probe',
               '',
-              'status: PASS',
+              'status: '+status,
               'source_url: '+URL,
               'source_last_update: '+(updated or 'UNPARSED'),
               'source_page_sha256: '+page_sha,
-              'row_count: '+str(len(rows)),
-              'invalid_rows_skipped: '+str(len(bad)),
+              'candidate_rows: '+str(candidate_rows),
+              'valid_rows: '+str(len(rows)),
+              'invalid_rows: '+str(len(bad)),
               'snapshot_sha256: '+snap_sha,
               'key_type: wot_vehicle_type_name',
-              ''
+              'reasons: '+(', '.join(reasons) if reasons else 'none'),
+              '',
+              'usa:A194_AHT_7: '+repr(rows.get('usa:A194_AHT_7','NOT_FOUND')),
+              'ussr:R157_Object_279R: '+repr(rows.get('ussr:R157_Object_279R','NOT_FOUND')),
           ]
-          for key in sample_keys:
-              report.append('%s: %s' % (key,rows.get(key,'NOT_FOUND')))
           if bad:
-              report += ['', 'Skipped invalid rows:']
-              report += [repr(x) for x in bad[:10]]
+              report += ['', 'First invalid rows:']
+              report += [repr(x) for x in bad[:20]]
           open('moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md','w',encoding='utf-8',newline='\n').write('\n'.join(report)+'\n')
           print('\n'.join(report))
+          open('/tmp/moe120-threshold-status','w').write(status)
           PY
+          exit 0
 
-      - name: Verify snapshot contract
-        shell: bash
-        run: |
-          set -euxo pipefail
-          python3 - <<'PY'
-          import json
-          p='moe/rebuild/1.2.0/assets/thresholds.json'
-          d=json.load(open(p,encoding='utf-8'))
-          assert d['schema']==1
-          assert d['region']=='NA'
-          assert d['key_type']=='wot_vehicle_type_name'
-          assert len(d['table'])>=700
-          for key,row in d['table'].items():
-              assert ':' in key, key
-              vals=[int(row[str(p)]) for p in (65,85,95,100)]
-              assert 0 < vals[0] <= vals[1] <= vals[2] <= vals[3], (key,vals)
-          print('SNAPSHOT_CONTRACT_PASS',len(d['table']))
-          PY
-
-      - name: Commit validated snapshot
+      - name: Commit diagnostic or validated snapshot
         shell: bash
         run: |
           set -euxo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -f moe/rebuild/1.2.0/assets/thresholds.json moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          git add -f moe/rebuild/1.2.0/THRESHOLD_SNAPSHOT_PROVENANCE.md
+          if [ -f moe/rebuild/1.2.0/assets/thresholds.json ]; then
+            git add -f moe/rebuild/1.2.0/assets/thresholds.json
+          fi
           if git diff --cached --quiet; then
             echo 'No threshold snapshot delta.'
-            exit 0
+          else
+            git commit -m 'MoE 1.2.0: record offline NA threshold snapshot probe'
+            git push origin HEAD:work/moe-component-1.2.0-full-rebuild
           fi
-          git commit -m 'MoE 1.2.0: build validated offline NA threshold snapshot'
-          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
+
+      - name: Enforce snapshot gate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(cat /tmp/moe120-threshold-status)" = "PASS"
+          test -f moe/rebuild/1.2.0/assets/thresholds.json
