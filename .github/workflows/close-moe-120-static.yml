@@ -33,7 +33,12 @@ jobs:
           python3 moe/rebuild/1.2.0/tests/test_core.py | tee /tmp/moe120-tests.txt
           count="$(awk '/^PASS_ALL /{print $2}' /tmp/moe120-tests.txt)"
           test -n "$count"
-          test "$count" -ge 17
+          test "$count" -ge 18
+          {
+            echo 'NAJXBox MoE 1.2.0 unified static test gate'
+            echo 'result=PASS'
+            cat /tmp/moe120-tests.txt
+          } > moe/rebuild/1.2.0/STATIC_GATE_CURRENT.txt
 
       - name: Verify authority assets and threshold snapshot
         shell: bash
@@ -339,6 +344,7 @@ jobs:
           {
             echo 'NAJXBox MoE 1.2.0 static closure'
             echo 'result=PASS'
+            echo "static_tests=$(awk '/^PASS_ALL /{print $2}' /tmp/moe120-tests.txt)"
             echo 'official_swf=PASS'
             echo 'threshold_snapshot=778/778'
             echo 'runtime_network=NONE'
