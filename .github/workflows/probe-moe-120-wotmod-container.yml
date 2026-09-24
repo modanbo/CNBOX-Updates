@@ -1,0 +1,83 @@
+name: Probe MoE 1.2.0 WOTMOD container contract
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/probe-moe-120-wotmod-container.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Recover official CN WOTMOD and inspect container
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120-container"
+          mkdir -p "$root/wbp" "$root/wotmod" moe/rebuild/1.2.0/container_reference
+
+          curl -fL --retry 3 --connect-timeout 20             'https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp'             -o "$root/official.wbp"
+          echo '3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16  '"$root"'/official.wbp' | sha256sum -c -
+
+          unzip -q "$root/official.wbp" -d "$root/wbp"
+          cp "$root/wbp/Files/mod_mark_on_gun.wotmod" "$root/official.wotmod"
+          echo 'd681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4  '"$root"'/official.wotmod' | sha256sum -c -
+
+          python3 - "$root/official.wotmod" <<'PY'
+          import hashlib, json, sys, zipfile
+          p=sys.argv[1]
+          with zipfile.ZipFile(p) as z:
+              names=z.namelist()
+              rows=[]
+              for info in z.infolist():
+                  rows.append({
+                      'path':info.filename,
+                      'size':info.file_size,
+                      'compress_type':info.compress_type,
+                      'crc':info.CRC,
+                  })
+              meta=z.read('meta.xml')
+              swf=z.read('res/gui/flash/wotassist.markongun.swf')
+
+          assert hashlib.sha256(swf).hexdigest()=='06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851'
+          open('moe/rebuild/1.2.0/container_reference/CN_OFFICIAL_meta.xml','wb').write(meta)
+          json.dump(rows,open('moe/rebuild/1.2.0/container_reference/CN_OFFICIAL_WOTMOD_MEMBERS.json','w'),indent=2)
+          report=[
+              '# MoE 1.2.0 WOTMOD container probe',
+              '',
+              'official_wotmod_sha256=d681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4',
+              'member_count=%d'%len(rows),
+              'meta_xml_present=%s'%('meta.xml' in names),
+              'meta_xml_size=%d'%len(meta),
+              'swf_present=%s'%('res/gui/flash/wotassist.markongun.swf' in names),
+              'swf_sha256='+hashlib.sha256(swf).hexdigest(),
+              '',
+              'meta.xml:',
+              meta.decode('utf-8','replace'),
+          ]
+          open('moe/rebuild/1.2.0/container_reference/WOTMOD_CONTAINER_VERDICT.md','w',encoding='utf-8').write('\n'.join(report)+'\n')
+          print('\n'.join(report))
+          PY
+
+      - name: Commit container evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add moe/rebuild/1.2.0/container_reference
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'MoE 1.2.0: record official WOTMOD container contract'
+          git pull --rebase origin work/moe-component-1.2.0-full-rebuild
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
