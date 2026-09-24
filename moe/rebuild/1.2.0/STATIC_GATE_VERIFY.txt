@@ -4,10 +4,10 @@ test_exit_code=0
 result=PASS
 
 PASS test_battle_threshold_lookup_uses_vehicle_key
-PASS test_cache_roundtrip_and_expiry
 PASS test_combined_damage_uses_max_assist
 PASS test_ema_constant_and_projection
 PASS test_garage_vehicle_key_owner_is_imported
+PASS test_legacy_wgapi_is_not_runtime_source
 PASS test_native_damage_feedback_is_observer_only
 PASS test_official_swf_callback_surface_is_complete
 PASS test_piecewise_linear_percentile
@@ -19,7 +19,5 @@ PASS test_threshold_clean_table_requires_mark_anchors
 PASS test_threshold_listener_accepts_vehicle_key_source
 PASS test_threshold_runtime_is_local_only
 PASS test_threshold_vehicle_key_lookup
-PASS test_wg_parse_requires_four_mark_anchors
-PASS test_wg_query_is_bounded_and_deduped
 PASS test_wot_package_import_paths_are_explicit
-PASS_ALL 19
+PASS_ALL 17
