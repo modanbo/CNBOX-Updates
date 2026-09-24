@@ -1,0 +1,64 @@
+name: Stage MoE 1.2.0 official CN SWF
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/stage-moe-120-official-swf.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Recover exact authority binary
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe120-official"
+          mkdir -p "$root/wbp" "$root/wotmod" moe/rebuild/1.2.0/assets
+
+          curl -fL --retry 3 --connect-timeout 20             'https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp'             -o "$root/official.wbp"
+
+          echo '3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16  '"$root"'/official.wbp' | sha256sum -c -
+
+          unzip -q "$root/official.wbp" -d "$root/wbp"
+          echo 'd681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4  '"$root"'/wbp/Files/mod_mark_on_gun.wotmod' | sha256sum -c -
+
+          unzip -q "$root/wbp/Files/mod_mark_on_gun.wotmod" -d "$root/wotmod"
+          swf="$root/wotmod/res/gui/flash/wotassist.markongun.swf"
+          echo '06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851  '"$swf" | sha256sum -c -
+
+          cp "$swf" moe/rebuild/1.2.0/assets/najxbox_moe.swf
+
+          {
+            echo 'source_url=https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp'
+            echo 'wbp_sha256=3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16'
+            echo 'wotmod_sha256=d681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4'
+            echo 'swf_sha256=06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851'
+            echo "swf_size=$(stat -c %s moe/rebuild/1.2.0/assets/najxbox_moe.swf)"
+            echo 'runtime_name=najxbox_moe.swf'
+          } > moe/rebuild/1.2.0/assets/AUTHORITY.txt
+
+      - name: Commit exact SWF authority
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f moe/rebuild/1.2.0/assets/najxbox_moe.swf moe/rebuild/1.2.0/assets/AUTHORITY.txt
+          if git diff --cached --quiet; then
+            echo 'Authority asset already staged.'
+            exit 0
+          fi
+          git commit -m 'MoE 1.2.0: stage exact official CN SWF authority'
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
