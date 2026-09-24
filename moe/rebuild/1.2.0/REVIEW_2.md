@@ -2,8 +2,8 @@
 
 result: PASS
 
-source_tree_sha256: a7d1e8d5566bcabaca62d1d584b46beea352d1dda15470c0ebbd71a9c2a4d9ff
-wotmod_sha256: 9f82211d274bc00c6492efd13467c5b47d427f1e5b4513cf1384d831d18a11fe
+source_tree_sha256: e70cdd60ee8900fee6a9469e1c8a7e3166a248d54ef178681f642a8eff33d344
+wotmod_sha256: 3fec0c25063331b128c297da38023908a1bfc955eceff5b68010113e33cce89b
 
 ## Checks
 - [x] source_tree_exact_8_modules

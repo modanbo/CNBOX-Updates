@@ -46,9 +46,9 @@
       "sha256": "deb555341b5d522ef1d7d5f33081e8eb29c2077cf320ebb997ca841bd8c08851"
     },
     {
-      "bytes": 7909,
+      "bytes": 8236,
       "path": "res/scripts/client/gui/mods/najxbox_moe/view.pyc",
-      "sha256": "c08b70d530b760b177f1f404e34b81558943cde82e057b2d48ab0d3f07037019"
+      "sha256": "ba7ab40c8dfb9a1d3a5e2418f0b370cfd193fdf4ce457d205a7d1a97604c313a"
     }
   ],
   "meta_xml_count": 0,
@@ -57,6 +57,6 @@
   "status": "STATIC_CLOSURE_CANDIDATE",
   "third_party_wotmod_count": 0,
   "version": "1.2.0",
-  "wotmod_bytes": 68085,
-  "wotmod_sha256": "9f82211d274bc00c6492efd13467c5b47d427f1e5b4513cf1384d831d18a11fe"
+  "wotmod_bytes": 68272,
+  "wotmod_sha256": "3fec0c25063331b128c297da38023908a1bfc955eceff5b68010113e33cce89b"
 }

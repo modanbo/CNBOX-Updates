@@ -45,11 +45,11 @@
       "sha256": "deb555341b5d522ef1d7d5f33081e8eb29c2077cf320ebb997ca841bd8c08851"
     },
     {
-      "bytes": 7909,
+      "bytes": 8236,
       "magic": "03f30d0a",
       "path": "res/scripts/client/gui/mods/najxbox_moe/view.pyc",
-      "sha256": "c08b70d530b760b177f1f404e34b81558943cde82e057b2d48ab0d3f07037019"
+      "sha256": "ba7ab40c8dfb9a1d3a5e2418f0b370cfd193fdf4ce457d205a7d1a97604c313a"
     }
   ],
-  "runtime_source_tree_sha256": "a7d1e8d5566bcabaca62d1d584b46beea352d1dda15470c0ebbd71a9c2a4d9ff"
+  "runtime_source_tree_sha256": "e70cdd60ee8900fee6a9469e1c8a7e3166a248d54ef178681f642a8eff33d344"
 }
