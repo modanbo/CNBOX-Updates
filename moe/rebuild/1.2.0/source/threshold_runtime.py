@@ -30,9 +30,11 @@ def _clean_table(blob):
         return out
     for tank_id, anchors in rows.items():
         try:
-            tid = int(tank_id)
+            key = int(tank_id)
         except (TypeError, ValueError):
-            continue
+            key = str(tank_id or "")
+            if not key:
+                continue
         if not isinstance(anchors, dict):
             continue
         row = {}
@@ -45,7 +47,7 @@ def _clean_table(blob):
             if p in (20, 40, 55, 65, 75, 85, 95, 100) and d > 0:
                 row[p] = d
         if all(p in row for p in (65, 85, 95, 100)):
-            out[tid] = row
+            out[key] = row
     return out
 
 
@@ -99,13 +101,18 @@ def remove_listener(callback):
         pass
 
 
-def get(tank_id):
+def get(tank_id, vehicle_key=None):
     _ensure_loaded()
     try:
         tid = int(tank_id or 0)
     except (TypeError, ValueError):
-        return {}
-    row = _TABLE.get(tid)
+        tid = 0
+    if tid:
+        row = _TABLE.get(tid)
+        if row:
+            return dict(row)
+    key = str(vehicle_key or "")
+    row = _TABLE.get(key) if key else None
     return dict(row) if row else {}
 
 
