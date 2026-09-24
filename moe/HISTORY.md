@@ -508,3 +508,55 @@ Status:
 `STATIC_CLOSURE_IN_PROGRESS / NO_RUNTIME_PACKAGE`
 
 Do not build or expose 1.2.0 to Manager until the exact SWF asset is closed, the core workflow passes, minimum package contents are audited, and Review 1 + Review 2 both pass.
+
+
+## 2026-09-23 — 1.2.0 FULL REBUILD RUNTIME CANDIDATE READY
+
+Status:
+- `STATIC_CLOSURE=PASS`
+- `REVIEW_1=PASS`
+- `REVIEW_2=PASS`
+- `READY_FOR_SINGLE_CONCENTRATED_RUNTIME`
+- public exposure: NO
+- Manager exposure: NO
+
+Final current-source static closure:
+- Runtime source modules: exactly 8
+- static tests: 18
+- official CN SWF SHA256: `06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851`
+- offline NA threshold snapshot: 778/778 valid, 0 invalid
+- threshold snapshot SHA256: `3bcf92a42a3385bcbaac6c0a3580af49cb7f7883ff8a8a16fff2160ca5b8ef5f`
+- CPython 2.7 runtime bytecode: 8/8, magic `03f30d0a`
+- single WOTMOD runtime members: 10
+- third-party WOTMODs: 0
+- runtime network owner: none
+- root meta.xml: none, matching official CN WOTMOD container evidence
+
+Final static WOTMOD:
+- `najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod`
+- bytes: 68272
+- SHA256: `3fec0c25063331b128c297da38023908a1bfc955eceff5b68010113e33cce89b`
+
+Single concentrated Runtime candidate:
+- `NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip`
+- bytes: 67400
+- SHA256: `2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4`
+- contains exactly one install file:
+  `mods/2.4.0.1/najxbox.moe_1.2.0.wotmod`
+- rollback removes exactly the same one file.
+
+Runtime hard gates:
+1. Garage official CN contract view appears.
+2. Battle official CN contract view appears.
+3. WoT native damage counter increments normally after damage.
+4. MoE values update from native `personalEfficiencyCtrl`.
+5. Ctrl/native cursor behavior remains normal.
+6. Lobby/Battle drag position persistence works.
+7. No ProTanki/EVV/GUIFlash/settings/menu foreign UI.
+8. No duplicate MoE view.
+9. `python.log` contains no `NAJXBox.MoE` callback/load exception.
+
+Failure policy:
+- rollback immediately;
+- archive Runtime logs/screenshots;
+- do not stack another candidate on top.
