@@ -1039,7 +1039,7 @@
     "xvmVersion": "ANY",
     "fileName": "NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
     "sha256": "2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4",
-    "downloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/work/moe-component-1.2.0-full-rebuild/moe/rebuild/1.2.0/runtime/NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
+    "downloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/707b085c92255bb9494942499f304f2e083f237d/moe/rebuild/1.2.0/runtime/NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
     "notes": "Creator-only MoE 1.2.0 test channel. Download manually, install through independent MoE test transaction, rollback/uninstall independently. Public ignores this object."
   }
 }
