@@ -155,6 +155,35 @@ def test_single_official_contract_view_owner():
     assert "HIDE_CURSOR" not in source
 
 
+def test_wot_package_import_paths_are_explicit():
+    loader = _read_source("mod_najxbox_moe.py")
+    contract = _read_source("contract.py")
+    view = _read_source("view.py")
+    assert "from gui.mods.najxbox_moe import view" in loader
+    assert "from gui.mods.najxbox_moe import formula" in contract
+    assert "from gui.mods.najxbox_moe import config, contract, engine, threshold_runtime" in view
+    for source in (loader, contract, view):
+        assert "from najxbox_moe import" not in source
+    assert "\nimport config\n" not in view
+    assert "\nimport contract\n" not in view
+
+
+def test_official_swf_callback_surface_is_complete():
+    source = _read_source("view.py")
+    required = (
+        "def py_getCustomConfig(self):",
+        "def getPanelPosition(self):",
+        "def savePosition(self, is_battle, x, y):",
+        "def retrieveData(self):",
+        "def populated(self):",
+        "def openURL(self, url):",
+        "self.flashObject.as_loadConfig()",
+        "self.flashObject.as_updateData(self._last_data, str(reason), True)",
+    )
+    for token in required:
+        assert token in source, token
+
+
 if __name__ == "__main__":
     tests = [
         (name, obj) for name, obj in sorted(globals().items())
