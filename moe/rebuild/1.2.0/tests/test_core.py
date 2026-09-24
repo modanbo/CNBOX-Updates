@@ -31,30 +31,6 @@ def test_ema_constant_and_projection():
     close(formula.projected_moving_average(old, combined), expected)
 
 
-def test_piecewise_linear_percentile():
-    th = {20: 1000, 40: 1500, 55: 1800, 65: 2000, 75: 2200,
-          85: 2500, 95: 3000, 100: 3500}
-    close(formula.percentile_for_damage(0, th), 0.0)
-    close(formula.percentile_for_damage(2000, th), 65.0)
-    close(formula.percentile_for_damage(2350, th), 80.0)
-    close(formula.percentile_for_damage(999999, th), 100.0)
-
-
-def test_project_has_stable_fields():
-    th = {20: 1000, 40: 1500, 55: 1800, 65: 2000, 75: 2200,
-          85: 2500, 95: 3000, 100: 3500}
-    out = formula.project(2200, 75.0, 1800, 100, 400, 250, th)
-    assert sorted(out) == [
-        "average_delta", "combined_damage", "percentile_delta",
-        "projected_average", "projected_percentile"
-    ]
-    close(out["combined_damage"], 2200.0)
-    close(out["projected_average"], 2200.0)
-    close(out["projected_percentile"], 75.0)
-    close(out["percentile_delta"], 0.0)
-
-
-
 
 
 def test_threshold_runtime_is_local_only():
@@ -199,6 +175,27 @@ def test_garage_vehicle_key_owner_is_imported():
 
 def test_legacy_wgapi_is_not_runtime_source():
     assert not os.path.exists(os.path.join(ROOT, "source", "wgapi.py"))
+
+
+def test_formula_runtime_surface_is_minimal():
+    source = _read_source("formula.py")
+    assert "def combined_damage(" in source
+    assert "def projected_moving_average(" in source
+    for token in (
+        "def percentile_for_damage(",
+        "def project(",
+        "def has_required_thresholds(",
+        "PERCENTILE_ANCHORS",
+        "_normalized_points",
+    ):
+        assert token not in source, token
+
+
+def test_position_config_is_fail_safe():
+    source = _read_source("config.py")
+    assert "def _safe_int(value, default):" in source
+    assert '_safe_int(cfg.get("lobby_x"), _DEFAULT["lobby_x"])' in source
+    assert '_safe_int(cfg.get("battle_y"), _DEFAULT["battle_y"])' in source
 
 
 if __name__ == "__main__":
