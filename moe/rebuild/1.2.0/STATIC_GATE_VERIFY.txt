@@ -19,5 +19,6 @@ PASS test_threshold_clean_table_requires_mark_anchors
 PASS test_threshold_listener_accepts_vehicle_key_source
 PASS test_threshold_runtime_is_local_only
 PASS test_threshold_vehicle_key_lookup
+PASS test_view_failures_are_logged_not_propagated
 PASS test_wot_package_import_paths_are_explicit
-PASS_ALL 17
+PASS_ALL 18
