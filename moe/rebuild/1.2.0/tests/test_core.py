@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.join(ROOT, "source"))
 
 import formula
 import wgapi
+import threshold_runtime
 
 
 def close(a, b, eps=1e-9):
@@ -83,7 +84,30 @@ def test_cache_roundtrip_and_expiry():
     assert wgapi.read_cache(blob, "eu", 1100, 200) == {}
 
 
-if __name__ == "__main__":
+def test_threshold_runtime_is_local_only():
+    path = os.path.join(ROOT, "source", "threshold_runtime.py")
+    with open(path, "rb") as fh:
+        source = fh.read().decode("utf-8")
+    forbidden = (
+        "http.openUrl", "threading.Thread", "API_URL",
+        "APPLICATION_ID", "worldoftanks.com/wot/tanks/mastery"
+    )
+    for token in forbidden:
+        assert token not in source, token
+
+
+def test_threshold_clean_table_requires_mark_anchors():
+    blob = {
+        "table": {
+            "101": {"20": 900, "65": 1800, "85": 2200, "95": 2600, "100": 3000},
+            "102": {"65": 1800, "85": 2200, "95": 2600}
+        }
+    }
+    table = threshold_runtime._clean_table(blob)
+    assert 101 in table
+    assert 102 not in table
+    assert table[101][95] == 2600
+
     for name in sorted(globals()):
         if name.startswith("test_"):
             globals()[name]()
