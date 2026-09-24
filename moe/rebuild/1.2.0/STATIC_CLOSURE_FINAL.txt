@@ -1,0 +1,12 @@
+NAJXBox MoE 1.2.0 static closure
+result=PASS
+official_swf=PASS
+threshold_snapshot=778/778
+runtime_network=NONE
+cpython27_pyc=8/8
+wotmod_runtime_files=10
+review_1=PASS
+review_2=PASS
+manager_exposure=NO
+runtime_authorization=NO
+9f82211d274bc00c6492efd13467c5b47d427f1e5b4513cf1384d831d18a11fe  68085  najxbox.moe_1.2.0_STATIC_CLOSURE.wotmod

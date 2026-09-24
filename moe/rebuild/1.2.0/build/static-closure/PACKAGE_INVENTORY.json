@@ -1,0 +1,62 @@
+{
+  "files": [
+    {
+      "bytes": 36170,
+      "path": "res/gui/flash/najxbox_moe.swf",
+      "sha256": "06b5af3c859de1f343a14e66dcc433cb99eee0e237b5131981f453a9eea2f851"
+    },
+    {
+      "bytes": 51507,
+      "path": "res/mods/najxbox_moe/thresholds.json",
+      "sha256": "3bcf92a42a3385bcbaac6c0a3580af49cb7f7883ff8a8a16fff2160ca5b8ef5f"
+    },
+    {
+      "bytes": 421,
+      "path": "res/scripts/client/gui/mods/mod_najxbox_moe.pyc",
+      "sha256": "e8991909e3ade94f3763a24853bc0464191e76fc323efdf1b705125f0911aab7"
+    },
+    {
+      "bytes": 394,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/__init__.pyc",
+      "sha256": "00a26b0e3dcfbc6d5e98b71fa5deb10dfe9fa2b33eed85b514b19b45fe48a5f3"
+    },
+    {
+      "bytes": 3131,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/config.pyc",
+      "sha256": "c620d7b66ffb9d991cc39f7fa046c14dc60cb095a6830c1a1319fe771d8ed606"
+    },
+    {
+      "bytes": 4781,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/contract.pyc",
+      "sha256": "25b2629e2d183bc4f3c63ccd8b87454235c0bdc2a9b5926e05ceb05b88fdc9f8"
+    },
+    {
+      "bytes": 9674,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/engine.pyc",
+      "sha256": "7b7df2058d0e6d347d9c3e902b795c0c1092d49021fc19e0bc2cf2d78e6354ae"
+    },
+    {
+      "bytes": 1261,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/formula.pyc",
+      "sha256": "cdbdde4e55b4a3453ee25ab738bf922ec8da86733ee852a907ef70424f885ff8"
+    },
+    {
+      "bytes": 4357,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/threshold_runtime.pyc",
+      "sha256": "deb555341b5d522ef1d7d5f33081e8eb29c2077cf320ebb997ca841bd8c08851"
+    },
+    {
+      "bytes": 7909,
+      "path": "res/scripts/client/gui/mods/najxbox_moe/view.pyc",
+      "sha256": "c08b70d530b760b177f1f404e34b81558943cde82e057b2d48ab0d3f07037019"
+    }
+  ],
+  "meta_xml_count": 0,
+  "rejected_framework_findings": [],
+  "runtime_file_count": 10,
+  "status": "STATIC_CLOSURE_CANDIDATE",
+  "third_party_wotmod_count": 0,
+  "version": "1.2.0",
+  "wotmod_bytes": 68085,
+  "wotmod_sha256": "9f82211d274bc00c6492efd13467c5b47d427f1e5b4513cf1384d831d18a11fe"
+}
