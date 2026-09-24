@@ -6,9 +6,6 @@ Compatible with Python 2.7 and Python 3.
 """
 
 EWMA_K = 2.0 / 101.0
-PERCENTILE_ANCHORS = (20, 40, 55, 65, 75, 85, 95, 100)
-REQUIRED_ANCHORS = (65, 85, 95, 100)
-
 
 def combined_damage(own_damage, radio_assist, track_assist, stun_assist):
     """WG MoE combined-damage contribution for the current battle.
