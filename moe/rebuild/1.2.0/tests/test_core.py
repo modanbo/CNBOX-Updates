@@ -198,6 +198,14 @@ def test_position_config_is_fail_safe():
     assert '_safe_int(cfg.get("battle_y"), _DEFAULT["battle_y"])' in source
 
 
+def test_view_failures_are_logged_not_propagated():
+    source = _read_source("view.py")
+    assert 'logging.getLogger("NAJXBox.MoE")' in source
+    assert '_logger.exception("official SWF as_loadConfig failed")' in source
+    assert '_logger.exception("MoE view push failed:' in source
+    assert '_logger.exception("MoE app initialization failed:' in source
+
+
 if __name__ == "__main__":
     tests = [
         (name, obj) for name, obj in sorted(globals().items())
