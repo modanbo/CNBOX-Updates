@@ -1,0 +1,68 @@
+name: Verify MoE 1.2.0 static gates
+
+on:
+  push:
+    branches:
+      - work/moe-component-1.2.0-full-rebuild
+    paths:
+      - '.github/workflows/verify-moe-120-static-gates.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-component-1.2.0-full-rebuild
+          fetch-depth: 1
+
+      - name: Run pure-core and ownership gates
+        id: tests
+        shell: bash
+        run: |
+          set +e
+          python3 moe/rebuild/1.2.0/tests/test_core.py > /tmp/moe120-tests.txt 2>&1
+          status=$?
+          cat /tmp/moe120-tests.txt
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Write verification report
+        shell: bash
+        run: |
+          set -euxo pipefail
+          status='${{ steps.tests.outputs.status }}'
+          {
+            echo 'NAJXBox MoE 1.2.0 static gate verification'
+            echo 'branch=work/moe-component-1.2.0-full-rebuild'
+            echo "test_exit_code=$status"
+            if [ "$status" = "0" ]; then
+              echo 'result=PASS'
+            else
+              echo 'result=FAIL'
+            fi
+            echo
+            cat /tmp/moe120-tests.txt
+          } > moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt
+
+      - name: Commit verification report
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add moe/rebuild/1.2.0/STATIC_GATE_VERIFY.txt
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "MoE 1.2.0: record static gate verification"
+          git push origin HEAD:work/moe-component-1.2.0-full-rebuild
+
+      - name: Enforce verification result
+        shell: bash
+        run: |
+          test '${{ steps.tests.outputs.status }}' = '0'
