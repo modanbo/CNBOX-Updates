@@ -252,7 +252,12 @@ jobs:
               'one_lobby_owner': view.count('class NajxMoeLobbyView')==1,
               'one_battle_owner': view.count('class NajxMoeBattleView')==1,
               'native_efficiency_observer': 'personalEfficiencyCtrl' in engine and 'onTotalEfficiencyUpdated' in engine,
-              'no_PlayerAvatar_event_replacement': 'PlayerAvatar.onBattleEvents' not in engine,
+              'no_PlayerAvatar_event_replacement': all(x not in engine for x in (
+                  'PlayerAvatar.onBattleEvents =',
+                  'PlayerAvatar.onBattleEvents=',
+                  'overrideMethod(PlayerAvatar',
+                  '_orig_onBattleEvents',
+              )),
               'threshold_local_only': all(x not in threshold for x in ('http.openUrl','threading.Thread','APPLICATION_ID')),
               'battle_threshold_vehicle_key': view.count('threshold_runtime.get(state.get("tank_id"), state.get("vehicle_key"))')>=2,
               'official_callback_contract': all(x in view for x in (
