@@ -3,6 +3,7 @@ branch=work/moe-component-1.2.0-full-rebuild
 test_exit_code=0
 result=PASS
 
+PASS test_battle_threshold_lookup_uses_vehicle_key
 PASS test_cache_roundtrip_and_expiry
 PASS test_combined_damage_uses_max_assist
 PASS test_ema_constant_and_projection
@@ -20,4 +21,4 @@ PASS test_threshold_vehicle_key_lookup
 PASS test_wg_parse_requires_four_mark_anchors
 PASS test_wg_query_is_bounded_and_deduped
 PASS test_wot_package_import_paths_are_explicit
-PASS_ALL 17
+PASS_ALL 18
