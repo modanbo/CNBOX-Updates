@@ -1,0 +1,122 @@
+name: Build MoE 1.2.2
+
+on:
+  push:
+    branches:
+      - work/moe-independent-120-review-20260924
+    paths:
+      - 'moe/independent/1.2.2/**'
+      - '.github/workflows/build-moe-122.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage Python source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/moe122_src /tmp/moe122_stage /tmp/moe122_out
+          mkdir -p /tmp/moe122_src/najxbox_moe_independent /tmp/moe122_stage/res/scripts/client/gui/mods/najxbox_moe_independent /tmp/moe122_out
+          cp moe/independent/1.2.0-r1/source/mod_najxbox_moe.py /tmp/moe122_src/
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/__init__.py /tmp/moe122_src/najxbox_moe_independent/
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/mathcore.py /tmp/moe122_src/najxbox_moe_independent/
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/storage.py /tmp/moe122_src/najxbox_moe_independent/
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/datasource.py /tmp/moe122_src/najxbox_moe_independent/
+          cp moe/independent/1.2.0-r1/source/najxbox_moe_independent/bridge.py /tmp/moe122_src/najxbox_moe_independent/
+          cp moe/independent/1.2.2/source/ui.py /tmp/moe122_src/najxbox_moe_independent/ui.py
+
+      - name: Compile CPython 2.7 bytecode
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker run --rm -v /tmp/moe122_src:/src python:2.7.18 python -m compileall -q /src
+          cp /tmp/moe122_src/mod_najxbox_moe.pyc /tmp/moe122_stage/res/scripts/client/gui/mods/mod_najxbox_moe.pyc
+          cp /tmp/moe122_src/najxbox_moe_independent/*.pyc /tmp/moe122_stage/res/scripts/client/gui/mods/najxbox_moe_independent/
+          python3 - <<'PY'
+          import glob
+          files=glob.glob('/tmp/moe122_stage/**/*.pyc',recursive=True)
+          assert len(files)==7,files
+          for p in files:
+              assert open(p,'rb').read(4).hex()=='03f30d0a',(p,open(p,'rb').read(4).hex())
+          print('PYC PASS',len(files))
+          PY
+
+      - name: Assemble WOTMOD
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/moe122_stage/res/gui/flash /tmp/moe122_stage/res/mods/najxbox_moe
+          cp moe/rebuild/1.2.0/assets/najxbox_moe.swf /tmp/moe122_stage/res/gui/flash/najxbox_moe.swf
+          cp moe/rebuild/1.2.0/assets/thresholds.json /tmp/moe122_stage/res/mods/najxbox_moe/thresholds.json
+          cat > /tmp/moe122_stage/meta.xml <<'XML'
+          <root>
+            <id>najxbox.moe.independent</id>
+            <version>1.2.2</version>
+            <name>NAJXBox MoE Independent Runtime Test</name>
+            <description>Deferred lobby-load Python 2.7 build</description>
+          </root>
+          XML
+          python3 - <<'PY'
+          import os,zipfile,hashlib,json
+          root='/tmp/moe122_stage'
+          w='/tmp/moe122_out/najxbox.moe_independent_1.2.2.wotmod'
+          files=[]
+          for base,_,names in os.walk(root):
+              for n in names:
+                  p=os.path.join(base,n)
+                  a=os.path.relpath(p,root).replace(os.sep,'/')
+                  files.append((a,p))
+          files.sort()
+          with zipfile.ZipFile(w,'w',compression=zipfile.ZIP_STORED) as z:
+              for a,p in files:
+                  info=zipfile.ZipInfo(a,(2026,9,24,0,0,0))
+                  info.compress_type=zipfile.ZIP_STORED
+                  info.external_attr=0o644<<16
+                  z.writestr(info,open(p,'rb').read())
+          assert len(files)==10,files
+          assert 'meta.xml' in [a for a,_ in files]
+          assert not any(a.endswith('.py') for a,_ in files)
+          print('WOTMOD',hashlib.sha256(open(w,'rb').read()).hexdigest(),os.path.getsize(w))
+          PY
+
+      - name: Static crash regression gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q "_arm_lobby_waiter" moe/independent/1.2.2/source/ui.py
+          grep -q "g_currentVehicle.isPresent" moe/independent/1.2.2/source/ui.py
+          ! grep -q "app.loadView(SFViewLoadParams(LOBBY_ALIAS))" <(sed -n '/def _on_app_initialized/,/def setup/p' moe/independent/1.2.2/source/ui.py)
+          ! grep -RniE 'PlayerAvatar\.onBattleEvents|https?://|urllib2|requests\.|threading|tv\.protanki|champi\.|gambiter\.|modssettingsapi|modslistapi|openwg\.gameface' /tmp/moe122_src
+
+      - name: Build outer ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import zipfile,hashlib,os,json
+          w='/tmp/moe122_out/najxbox.moe_independent_1.2.2.wotmod'
+          outer='/tmp/moe122_out/NAJXBOX_MoE_INDEPENDENT_1.2.2_WOT_2.4.0.1.zip'
+          arc='mods/2.4.0.1/najxbox.moe_independent_1.2.2.wotmod'
+          with zipfile.ZipFile(outer,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              z.write(w,arc)
+          result={
+            'wotmod_sha256':hashlib.sha256(open(w,'rb').read()).hexdigest(),
+            'zip_sha256':hashlib.sha256(open(outer,'rb').read()).hexdigest(),
+            'install_path':arc,
+            'rollback_remove_exactly':[arc]
+          }
+          open('/tmp/moe122_out/BUILD_RESULT.json','w').write(json.dumps(result,indent=2,sort_keys=True))
+          print(json.dumps(result,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NAJXBOX_MoE_INDEPENDENT_1.2.2
+          path: |
+            /tmp/moe122_out/NAJXBOX_MoE_INDEPENDENT_1.2.2_WOT_2.4.0.1.zip
+            /tmp/moe122_out/BUILD_RESULT.json
+          if-no-files-found: error
