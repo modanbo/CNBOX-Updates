@@ -1029,5 +1029,17 @@
     "fileName": "NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
     "sha256": "2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4",
     "notes": "Creator-only NAJXBox MoE 1.2.0 single concentrated Runtime candidate. Static closure PASS, Review 1 PASS, Review 2 PASS. One install file only: mods/2.4.0.1/najxbox.moe_1.2.0.wotmod. Independent of Aslain/XVM. Public and normal release selection must ignore this object."
+  },
+  "creatorMoeTestPackage": {
+    "schemaVersion": 1,
+    "version": "1.2.0",
+    "status": "TEST_CANDIDATE",
+    "wotVersion": "2.4.0.1",
+    "aslainVersion": "ANY",
+    "xvmVersion": "ANY",
+    "fileName": "NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
+    "sha256": "2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4",
+    "downloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/work/moe-component-1.2.0-full-rebuild/moe/rebuild/1.2.0/runtime/NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
+    "notes": "Creator-only MoE 1.2.0 test channel. Download manually, install through independent MoE test transaction, rollback/uninstall independently. Public ignores this object."
   }
 }
