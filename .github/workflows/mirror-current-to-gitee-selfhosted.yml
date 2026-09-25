@@ -6,9 +6,11 @@ on:
     paths:
       - '.github/workflows/mirror-current-to-gitee-selfhosted.yml'
       - 'channel.json'
-      - 'README.md'
-      - 'payloads/**'
-      - 'manifests/**'
+      - 'manager/**'
+      - 'payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip'
+      - 'manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9_R5.json'
+      - 'language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip'
+      - 'moe/1.2.4/**'
   workflow_dispatch:
 
 permissions:
@@ -19,25 +21,118 @@ jobs:
     runs-on: [self-hosted, Windows, X64]
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Push current main to Gitee mirror
+      - name: Publish Public-only surface to Gitee
         shell: powershell
         env:
           GIT_TERMINAL_PROMPT: "0"
           GCM_INTERACTIVE: "Never"
         run: |
           $ErrorActionPreference = 'Stop'
-          git remote remove gitee 2>$null
-          git remote add gitee "https://gitee.com/modanbo/cnbox-updates-cn.git"
-          git fetch gitee main
-          $local = (git rev-parse HEAD).Trim()
-          $remote = (git rev-parse gitee/main).Trim()
-          Write-Host "LOCAL_HEAD=$local"
-          Write-Host "GITEE_HEAD=$remote"
-          git merge-base --is-ancestor $remote $local
-          if ($LASTEXITCODE -ne 0) {
-            throw "Gitee main is not an ancestor of GitHub main; refusing non-fast-forward push."
+
+          $src = $env:GITHUB_WORKSPACE
+          $work = Join-Path $env:RUNNER_TEMP "najxbox-gitee-public"
+          if (Test-Path $work) { Remove-Item $work -Recurse -Force }
+
+          git clone "https://gitee.com/modanbo/cnbox-updates-cn.git" $work
+          if ($LASTEXITCODE -ne 0) { throw "Gitee clone failed." }
+
+          Set-Location $work
+          git config user.name "modanbo"
+          git config user.email "modanbo@users.noreply.gitee.com"
+
+          $sourceChannel = Get-Content (Join-Path $src "channel.json") -Raw -Encoding UTF8 | ConvertFrom-Json
+
+          if ([string]$sourceChannel.managerVersion -ne "2.0.8") {
+            throw "GitHub Public Manager is not 2.0.8."
           }
-          git push gitee HEAD:main
+          if (([string]$sourceChannel.managerSha256).ToLowerInvariant() -ne
+              "f74d9ad6ecba1692ac3963f90a5df7f9bf280d2b972dd7d434741391862ccaba") {
+            throw "Public Manager locked hash mismatch."
+          }
+
+          $r5 = @($sourceChannel.releases | Where-Object {
+            $_.cnboxVersion -eq "2401-R34-R2F9-UNIFIED-R5" -and
+            $_.status -eq "FINAL_LOCK" -and
+            $_.releaseTrack -eq "PUBLIC_STANDALONE" -and
+            $_.installMode -eq "CNBOX_AUTHORITATIVE" -and
+            $_.aslainVersion -eq "ANY"
+          })
+          if ($r5.Count -ne 1) { throw "Public standalone Box R5 lock invalid." }
+
+          $moe = @($sourceChannel.moePacks | Where-Object {
+            $_.id -eq "CNBOX_MOE" -and
+            $_.version -eq "1.2.4" -and
+            $_.status -eq "FINAL_LOCK"
+          })
+          if ($moe.Count -ne 1) { throw "Public MoE 1.2.4 lock invalid." }
+
+          if (Test-Path ".\manager") {
+            Get-ChildItem ".\manager" -Force | Remove-Item -Recurse -Force
+          } else {
+            New-Item ".\manager" -ItemType Directory | Out-Null
+          }
+          Copy-Item (Join-Path $src "manager\NAJXBox_Manager.exe") ".\manager\CNBOX_Manager.exe" -Force
+
+          $managerHash=(Get-FileHash ".\manager\CNBOX_Manager.exe" -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($managerHash -ne ([string]$sourceChannel.managerSha256).ToLowerInvariant()) {
+            throw "Gitee Public Manager hash mismatch after copy."
+          }
+
+          $sourceChannel.releases = @($sourceChannel.releases | Where-Object {
+            $_.releaseTrack -eq "PUBLIC_STANDALONE"
+          })
+          $sourceChannel.moePacks = @($moe)
+          foreach ($prop in @(
+            "creatorManagerVersion",
+            "creatorManagerUrl",
+            "creatorManagerSha256",
+            "creatorMoeTestPackage"
+          )) {
+            if ($sourceChannel.PSObject.Properties.Name -contains $prop) {
+              $sourceChannel.PSObject.Properties.Remove($prop)
+            }
+          }
+
+          $sourceChannel | ConvertTo-Json -Depth 100 | Set-Content ".\channel.json" -Encoding UTF8
+
+          function Copy-PublicFile([string]$rel,[string]$sha) {
+            $srcFile = Join-Path $src $rel
+            if (!(Test-Path $srcFile)) { throw "GitHub source missing: $rel" }
+            $actual=(Get-FileHash $srcFile -Algorithm SHA256).Hash.ToLowerInvariant()
+            if ($actual -ne $sha.ToLowerInvariant()) { throw "GitHub source hash mismatch: $rel" }
+            $dstFile=Join-Path (Get-Location) $rel
+            New-Item (Split-Path $dstFile -Parent) -ItemType Directory -Force | Out-Null
+            Copy-Item $srcFile $dstFile -Force
+          }
+
+          Copy-PublicFile "payloads\2.4.0.1\unified\CNBOX_PAYLOAD_R5.zip" "cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6"
+          Copy-PublicFile "manifests\2.4.0.1\CNBOX_FUNCTIONAL_R34_R2F9_R5.json" "0a10f9a97864b92260cd1eae520aec13097b9f010a71f53b47f177bb342e494a"
+          Copy-PublicFile "language\CNBOX_LANGUAGE_PACK_2.4.0.1.zip" "b94da55079e88bd7f3db561e9f5efea934cabba2c885267f2e2c22323a1ee129"
+          Copy-PublicFile "moe\1.2.4\NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip" "c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be"
+
+          $check = Get-Content ".\channel.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          if (@($check.releases | Where-Object { $_.releaseTrack -ne "PUBLIC_STANDALONE" }).Count -ne 0) {
+            throw "Gitee channel contains non-Public release."
+          }
+          if ($check.PSObject.Properties.Name -contains "creatorManagerUrl") {
+            throw "Gitee channel contains Creator Manager metadata."
+          }
+          if (@(Get-ChildItem ".\manager" -File -Recurse).Count -ne 1) {
+            throw "Gitee manager directory must contain exactly one Public file."
+          }
+
+          git add -A -- manager channel.json payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9_R5.json language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip moe/1.2.4
+
+          if (git diff --cached --quiet) {
+            Write-Host "Gitee Public surface already current."
+            exit 0
+          }
+
+          git commit -m "Publish Public Manager 2.0.8 + Box R5 + MoE 1.2.4"
+          git push origin main
+
+          Write-Host "GITEE_PUBLIC_ONLY_PUBLISH_PASS"
+          Write-Host "Manager=2.0.8"
+          Write-Host "Box=2401-R34-R2F9-UNIFIED-R5"
+          Write-Host "MoE=1.2.4 FINAL_LOCK"
