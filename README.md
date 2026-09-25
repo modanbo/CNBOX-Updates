@@ -64,42 +64,20 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager / Creator:
-- version: **2.0.3**
+- current version: **2.0.7**
 - external product name: **NAJXBox**
-- legacy stable Public path: `manager/CNBOX_Manager.exe` (compatibility alias)
+- authoritative version/hash source: `channel.json`
+- legacy stable Public path: `manager/CNBOX_Manager.exe`
 - canonical Public alias: `manager/NAJXBox_Manager.exe`
-- versioned Public path: `manager/NAJXBox_Manager_v2.0.3.exe`
-- legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe` (compatibility alias)
+- versioned Public path: `manager/NAJXBox_Manager_v2.0.7.exe`
+- legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe`
 - canonical Creator alias: `manager/NAJXBox_Manager_Creator.exe`
-- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.3.exe`
-- Public SHA256: `3abdec35f6294d4ddf4066a84041ce7e362f39e50ebbe575b6a5097c97d4bbeb`
-- Creator SHA256: `d577ff95e0dc0104728ad3a73e98f3c0370b7196e1a56fd8b65d3ee2585f988b`
-- dual-flavor ZIP: `manager/NAJXBox_Manager_v2.0.3.zip`
-- dual-flavor ZIP SHA256: `3e914414c66613bafdf35671b4436f3eeb5534307cc70c4b501f8b037dae4bc6`
-- source/build head: `cb8a3dfee1d1ccee3b7f42acd7b702ede9a5e3fe`
-- verified self-hosted build/self-test/UI/VersionInfo closure: run `35782308953`
-- detailed guide: `manager/NAJXBox_Manager_v2.0.3_README.md`
-- GitHub Release: `v2.0.3` — https://github.com/modanbo/CNBOX-Updates/releases/tag/v2.0.3
+- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.7.exe`
+- live-folder policy: only current binaries, compatibility aliases and the short current Manager README are retained here.
 
-v2.0.3 is the executable-branding closure. The visible UI was already NAJXBox in v2.0.2; v2.0.3 also changes the actual Windows executable identity to NAJXBox:
-- `ProductName = NAJXBox Manager`
-- `FileDescription = NAJXBox Manager`
-- `CompanyName = NAJXBox`
-- `InternalName = NAJXBox_Manager.exe`
-- `OriginalFilename = NAJXBox_Manager.exe`
-- `FileVersion = 2.0.3.0`
+Historical Manager/Creator binaries and engineering notes are not current public authority. Their provenance remains in the private `NA-BOX/03_EVIDENCE/MANAGER` history and Google Drive archive. The old CNBOX filenames remain only as compatibility aliases; they do not represent a second product/version.
 
-Compatibility owners intentionally remain unchanged: old `CNBOX_Manager` AppData/state/backup/manifest identifiers and the old raw update URL remain readable/active. Repository names are also intentionally unchanged.
-
-Unified Box:
-- release: `2401-R34-R2F9-UNIFIED-R2`
-- WoT: `2.4.0.1`
-- Aslain required: **No**
-- install policy: **full overwrite inside CNBOX/XVM ownership scope**
-- public payload: `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R2.zip`
-- SHA256: `b7d703104af74569b57817813709847eca2043fd2eb5f6498e1dc9c2d6839fe1`
-
-The Manager 2.0 promotion does not change the Public Box functional lock. The current Public Box remains the verified standalone FINAL_LOCK above.
+Gitee is a Public-final mirror only: do not publish Creator, private source, engineering notes, historical versions, RCs or test packages there.
 
 ## Current Creator / Aslain compatibility lock
 
