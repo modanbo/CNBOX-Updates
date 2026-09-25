@@ -1,0 +1,39 @@
+name: mirror-current-to-gitee-selfhosted
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mirror-current-to-gitee-selfhosted.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    runs-on: [self-hosted, Windows, X64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push current main to Gitee mirror
+        shell: powershell
+        env:
+          GIT_TERMINAL_PROMPT: "0"
+          GCM_INTERACTIVE: "Never"
+        run: |
+          $ErrorActionPreference = 'Stop'
+          git remote remove gitee 2>$null
+          git remote add gitee "https://gitee.com/modanbo/cnbox-updates-cn.git"
+          git fetch gitee main
+          $local = (git rev-parse HEAD).Trim()
+          $remote = (git rev-parse gitee/main).Trim()
+          Write-Host "LOCAL_HEAD=$local"
+          Write-Host "GITEE_HEAD=$remote"
+          git merge-base --is-ancestor $remote $local
+          if ($LASTEXITCODE -ne 0) {
+            throw "Gitee main is not an ancestor of GitHub main; refusing non-fast-forward push."
+          }
+          git push gitee HEAD:main
