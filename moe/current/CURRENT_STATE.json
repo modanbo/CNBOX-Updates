@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "module": "NAJXBox MoE",
+  "state_date": "2026-09-25",
+  "status": "RUNTIME_PASS / LOBBY_LIFECYCLE_CLOSED",
+  "wot_version": "2.4.0.1",
+  "current_package": {
+    "name": "NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip",
+    "sha256": "c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be",
+    "role": "CURRENT RUNTIME-PASSED PRACTICAL BASELINE"
+  },
+  "base_lineage": {
+    "data_ui_base": "1.2.4",
+    "garage_curve_base": "1.2.4 GARAGE_MATCH",
+    "later_1_2_5_plus": "NEGATIVE EVIDENCE ONLY / DO NOT INHERIT"
+  },
+  "lobby_lifecycle": {
+    "route_owner": "LobbyStateMachine._LobbyStateMachine__updateVisibleRoute",
+    "view_lookup": "ServicesLocator.appLoader + POP_UP_CRITERIA.VIEW_ALIAS",
+    "view_alias": "NAJXBOX_MOE_INDEPENDENT_LOBBY",
+    "leave_hangar": "_apply_hangar_visibility(False)",
+    "return_hangar": "_apply_hangar_visibility(True) -> _on_vehicle()",
+    "refresh_chain": "_on_vehicle() -> _push('vehicle-changed') -> as_updateData(...)"
+  }
+}
