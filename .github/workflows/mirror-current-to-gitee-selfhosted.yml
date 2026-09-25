@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - '.github/workflows/mirror-current-to-gitee-selfhosted.yml'
+      - 'channel.json'
+      - 'README.md'
+      - 'payloads/**'
+      - 'manifests/**'
   workflow_dispatch:
 
 permissions:
