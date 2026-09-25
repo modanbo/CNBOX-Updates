@@ -261,3 +261,7 @@ The v1.2.0 change does not alter the already Runtime-proven v1.1.2 language core
 3. Chinese UI + English vehicle names — PASS.
 4. Restore original NA English again — PASS.
 
+## Version numbering policy
+
+NAJXBox Box, MoE and Manager/Creator use one canonical release format: `MAJOR.MINOR.PATCH` (`0.0.0`). The last component carries at 9, so `2.0.9 -> 2.1.0` and `2.9.9 -> 3.0.0`. New four-part product versions are not used. Historical exception labels remain archive/provenance only; all new public release names, channel/manifest values, package names and user-visible versions use the three-part form.
+
