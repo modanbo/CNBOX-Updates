@@ -17,52 +17,76 @@ jobs:
           import traceback
 
           _TAG = '[NAJXBox.MoE.Visibility]'
+          _LOBBY_ALIAS = 'NAJXBOX_MOE_INDEPENDENT_LOBBY'
 
           try:
               from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
-              from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-              from gui.shared.events import LobbySimpleEvent
+              from gui.Scaleform.framework import WindowLayer
+              from gui.app_loader import g_appLoader
+              from gui.app_loader.settings import APP_NAME_SPACE
           except Exception:
               print _TAG, 'import failed'
               traceback.print_exc()
               LobbyStateMachine = None
 
-          def _to_text(value):
-              try:
-                  if isinstance(value, basestring):
-                      return value
-                  return str(value)
-              except Exception:
-                  return ''
-
-          def _visible_state(machine):
+          def _leaf_state(machine):
               try:
                   states = machine.getNonEmptyEnteredStates()
                   if states:
-                      return states[0]
+                      return states[-1]
               except Exception:
+                  print _TAG, 'get leaf state failed'
                   traceback.print_exc()
               return None
 
-          def _is_hangar_state(state):
-              if state is None:
-                  return False
-              sid = _to_text(getattr(state, 'STATE_ID', '')).lower()
-              return 'hangar' in sid
-
-          def _emit_hangar_visibility(is_visible):
+          def _state_id(state):
               try:
-                  ctx = {'isVisible': bool(is_visible)}
-                  try:
-                      event = LobbySimpleEvent(LobbySimpleEvent.HANGAR_STATUS_CHANGED, ctx=ctx)
-                  except TypeError:
-                      event = LobbySimpleEvent(LobbySimpleEvent.HANGAR_STATUS_CHANGED, ctx)
-                  try:
-                      g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-                  except TypeError:
-                      g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
+                  return str(getattr(state, 'STATE_ID', '')).lower()
               except Exception:
-                  print _TAG, 'event dispatch failed'
+                  return ''
+
+          def _is_hangar(machine):
+              state = _leaf_state(machine)
+              sid = _state_id(state)
+              return bool(sid and 'hangar' in sid)
+
+          def _lobby_view():
+              try:
+                  app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+                  if app is None:
+                      return None
+                  manager = getattr(app, 'containerManager', None)
+                  if manager is None:
+                      return None
+                  try:
+                      return manager.getView(WindowLayer.WINDOW, _LOBBY_ALIAS)
+                  except TypeError:
+                      return manager.getView(_LOBBY_ALIAS)
+              except Exception:
+                  print _TAG, 'find lobby view failed'
+                  traceback.print_exc()
+                  return None
+
+          def _apply(visible):
+              view = _lobby_view()
+              if view is None:
+                  print _TAG, 'lobby view not found'
+                  return
+              flash = getattr(view, 'flashObject', None)
+              if flash is None:
+                  print _TAG, 'flash object not ready'
+                  return
+              try:
+                  if visible:
+                      if hasattr(flash, 'as_showLobbyPanel'):
+                          flash.as_showLobbyPanel()
+                      print _TAG, 'SHOW'
+                  else:
+                      if hasattr(flash, 'as_hideLobbyPanel'):
+                          flash.as_hideLobbyPanel()
+                      print _TAG, 'HIDE'
+              except Exception:
+                  print _TAG, 'apply visibility failed'
                   traceback.print_exc()
 
           if LobbyStateMachine is not None:
@@ -72,15 +96,18 @@ jobs:
                   def _najx_update_visible_route(self):
                       result = _ORIGINAL_UPDATE_VISIBLE_ROUTE(self)
                       try:
-                          state = _visible_state(self)
-                          _emit_hangar_visibility(_is_hangar_state(state))
+                          state = _leaf_state(self)
+                          sid = _state_id(state)
+                          visible = bool(sid and 'hangar' in sid)
+                          print _TAG, 'route=', sid, 'hangar=', visible
+                          _apply(visible)
                       except Exception:
                           print _TAG, 'route update failed'
                           traceback.print_exc()
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, 'original-CN visible-route owner installed'
+                  print _TAG, 'direct original-CN route visibility installed'
               except Exception:
                   print _TAG, 'hook install failed'
                   traceback.print_exc()
