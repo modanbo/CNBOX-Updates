@@ -43,7 +43,7 @@
       ],
       "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip",
       "payloadSha256": "cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6",
-      "notes": "Final R5 public standalone promotion authorized 2026-09-25. Exact package passed Manager install-boundary review with only mods/ and res_mods/ roots, Review 1 and Review 2. Locks Tier Y30, 1007 bilingual client short vehicle names, and the final user-supplied 17x15 neverSeen triangle SHA 701d74f5...; obsolete inert cnbox_tier_font.py is removed.",
+      "notes": "Final R5 public standalone promotion authorized 2026-09-25. Exact package passed Manager install-boundary review with only mods/ and res_mods/ roots, Review 1 and Review 2. R5 delta versus R4: add cnbox_verified_vehicle_name_1007.py, remove obsolete cnbox_tier_font.py, update playersPanel.xc, and restore the final user-supplied 17x15 neverSeen triangle SHA 701d74f5....",
       "baselineFiles": [],
       "installedFiles": [
         {
@@ -129,6 +129,11 @@
         {
           "path": "res_mods/configs/xvm/py_macro/cnbox_vehicle_name_color.py",
           "sha256": "372a1db7a116040d15a6615a379f585a65538142a734c003fd58bac4c8603d17",
+          "required": true
+        },
+        {
+          "path": "res_mods/configs/xvm/py_macro/cnbox_verified_vehicle_name_1007.py",
+          "sha256": "abdd99707bd310d9565d3fefa416020df70299e5345a9f13d494fa3b0fdc780e",
           "required": true
         },
         {
