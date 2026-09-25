@@ -22,8 +22,8 @@ jobs:
           try:
               from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
               from gui.Scaleform.framework import WindowLayer
-              from gui.app_loader import g_appLoader
               from gui.app_loader.settings import APP_NAME_SPACE
+              from gui.shared.personality import ServicesLocator
           except Exception:
               print _TAG, 'import failed'
               traceback.print_exc()
@@ -45,23 +45,22 @@ jobs:
               except Exception:
                   return ''
 
-          def _is_hangar(machine):
-              state = _leaf_state(machine)
-              sid = _state_id(state)
-              return bool(sid and 'hangar' in sid)
-
           def _lobby_view():
               try:
-                  app = g_appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+                  loader = ServicesLocator.appLoader
+                  app = loader.getApp(APP_NAME_SPACE.SF_LOBBY)
                   if app is None:
+                      print _TAG, 'SF_LOBBY app not ready'
                       return None
                   manager = getattr(app, 'containerManager', None)
                   if manager is None:
+                      print _TAG, 'containerManager not ready'
                       return None
                   try:
-                      return manager.getView(WindowLayer.WINDOW, _LOBBY_ALIAS)
+                      view = manager.getView(WindowLayer.WINDOW, _LOBBY_ALIAS)
                   except TypeError:
-                      return manager.getView(_LOBBY_ALIAS)
+                      view = manager.getView(_LOBBY_ALIAS)
+                  return view
               except Exception:
                   print _TAG, 'find lobby view failed'
                   traceback.print_exc()
@@ -78,12 +77,10 @@ jobs:
                   return
               try:
                   if visible:
-                      if hasattr(flash, 'as_showLobbyPanel'):
-                          flash.as_showLobbyPanel()
+                      flash.as_showLobbyPanel()
                       print _TAG, 'SHOW'
                   else:
-                      if hasattr(flash, 'as_hideLobbyPanel'):
-                          flash.as_hideLobbyPanel()
+                      flash.as_hideLobbyPanel()
                       print _TAG, 'HIDE'
               except Exception:
                   print _TAG, 'apply visibility failed'
@@ -107,7 +104,7 @@ jobs:
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, 'direct original-CN route visibility installed'
+                  print _TAG, 'ServicesLocator original-CN route visibility installed'
               except Exception:
                   print _TAG, 'hook install failed'
                   traceback.print_exc()
