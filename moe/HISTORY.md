@@ -484,3 +484,36 @@ Mandatory future Runtime gate:
 - deal damage in battle;
 - WoT native damage counter must increase normally;
 - failure is an immediate release blocker regardless of MoE UI correctness.
+
+
+## 2026-09-25 — 1.2.4 GARAGE_MATCH + ORIGINAL LOBBY RETURN REFRESH — RUNTIME PASS
+
+Current Runtime-passed practical baseline:
+`NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip`
+
+SHA256:
+`c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be`
+
+User Runtime closure:
+- MoE displays normally in Hangar.
+- MoE hides on Tech Tree / Depot / other Lobby pages.
+- Returning to Hangar restores MoE immediately without vehicle reselection.
+
+Final owner chain:
+- route owner: `LobbyStateMachine._LobbyStateMachine__updateVisibleRoute`
+- existing View lookup: `ServicesLocator.appLoader + POP_UP_CRITERIA.VIEW_ALIAS`
+- alias: `NAJXBOX_MOE_INDEPENDENT_LOBBY`
+- leave Hangar => `_apply_hangar_visibility(False)`
+- return Hangar => `_apply_hangar_visibility(True)` + `_on_vehicle()`
+- refresh => `_on_vehicle() -> _push('vehicle-changed') -> as_updateData(...)`
+
+Failed-path evidence:
+- `LobbySimpleEvent.HANGAR_STATUS_CHANGED` is absent in the current client.
+- `g_appLoader` import path is invalid.
+- raw alias passed to `containerManager.getView` is invalid criteria.
+- show-only return path leaves current vehicle data stale until a vehicle change.
+- inner WOTMOD must preserve ZIP Stored / method 0; Deflate rewrite caused package rejection.
+
+Version rule:
+- 1.2.4 is the last stable base before the failed interval.
+- 1.2.5 / 1.2.6 / 1.2.6.1 / 1.2.7 are negative evidence only unless revalidated.
