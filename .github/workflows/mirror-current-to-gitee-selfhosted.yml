@@ -47,7 +47,7 @@ jobs:
             throw "GitHub Public Manager is not 2.0.8."
           }
           if (([string]$sourceChannel.managerSha256).ToLowerInvariant() -ne
-              "f74d9ad6ecba1692ac3963f90a5df7f9bf280d2b972dd7d434741391862ccaba") {
+              "8a40c7ebeee64e8fef27c1c8eb1b4acc7c4ba1e33719b74e3b2a0c4a682b3eef") {
             throw "Public Manager locked hash mismatch."
           }
 
