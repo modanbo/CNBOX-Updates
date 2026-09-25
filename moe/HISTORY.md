@@ -516,4 +516,14 @@ Failed-path evidence:
 
 Version rule:
 - 1.2.4 is the last stable base before the failed interval.
-- 1.2.5 / 1.2.6 / 1.2.6.1 / 1.2.7 are negative evidence only unless revalidated.
+- 1.2.5 / 1.2.6 / legacy 1.2.6.x / 1.2.7 are negative evidence only unless revalidated.
+
+## 2026-09-25 — CURRENT VERSION NUMBERING LOCK
+
+This rule overrides earlier numbering guidance for all future releases:
+- use exactly three numeric components: `MAJOR.MINOR.PATCH` (`0.0.0`);
+- carry at 9: `1.2.8 -> 1.2.9 -> 1.3.0`, and `1.9.9 -> 2.0.0`;
+- never create a new four-part release number or append another numeric field after PATCH reaches 9;
+- historical exception labels and their directories/hashes remain immutable release evidence only and are not valid future numbering templates;
+- GitHub/Gitee release names, `moe/<version>/` directories, manifests/channel values, ZIP names, Drive docs/indexes and Manager-visible MoE versions must all use the same canonical three-part value.
+
