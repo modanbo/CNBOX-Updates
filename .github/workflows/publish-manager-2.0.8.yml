@@ -1,0 +1,171 @@
+name: Publish Manager 2.0.8 + MoE 1.2.4
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".publisher/release-manager-2.0.8.json"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish verified Manager and MoE
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $req = Get-Content ".publisher/release-manager-2.0.8.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ($req.schemaVersion -ne 1) { throw "Unsupported request schema." }
+          if ($req.active -eq $false) { Write-Host "Inactive request."; exit 0 }
+
+          $managerZip = Join-Path $env:RUNNER_TEMP "manager.zip"
+          $managerOut = Join-Path $env:RUNNER_TEMP "manager"
+          Invoke-WebRequest -Uri $req.managerArtifactUrl -OutFile $managerZip -UseBasicParsing
+          $managerZipSha = (Get-FileHash $managerZip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($managerZipSha -ne ([string]$req.managerArtifactSha256).ToLowerInvariant()) {
+            throw "Manager artifact SHA256 mismatch."
+          }
+          Expand-Archive $managerZip $managerOut -Force
+
+          $publicExe = Join-Path $managerOut "Public/NAJXBox_Manager.exe"
+          $creatorExe = Join-Path $managerOut "Creator/NAJXBox_Manager_Creator.exe"
+          if (!(Test-Path $publicExe) -or !(Test-Path $creatorExe)) { throw "Manager artifact structure invalid." }
+
+          $publicSha = (Get-FileHash $publicExe -Algorithm SHA256).Hash.ToLowerInvariant()
+          $creatorSha = (Get-FileHash $creatorExe -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($publicSha -ne ([string]$req.publicSha256).ToLowerInvariant()) { throw "Public Manager SHA mismatch." }
+          if ($creatorSha -ne ([string]$req.creatorSha256).ToLowerInvariant()) { throw "Creator Manager SHA mismatch." }
+
+          $moeZip = Join-Path $env:RUNNER_TEMP "moe.zip"
+          Invoke-WebRequest -Uri $req.moeArtifactUrl -OutFile $moeZip -UseBasicParsing
+          $moeSha = (Get-FileHash $moeZip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($moeSha -ne ([string]$req.moeSha256).ToLowerInvariant()) { throw "MoE package SHA mismatch." }
+
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $za=[IO.Compression.ZipFile]::OpenRead($moeZip)
+          try {
+            $entry=$za.Entries | Where-Object { $_.FullName -eq "mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod" }
+            if ($null -eq $entry) { throw "Locked MoE WOTMOD missing." }
+            $tmpWotmod=Join-Path $env:RUNNER_TEMP "moe.wotmod"
+            [IO.Compression.ZipFileExtensions]::ExtractToFile($entry,$tmpWotmod,$true)
+          } finally { $za.Dispose() }
+          $innerSha=(Get-FileHash $tmpWotmod -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($innerSha -ne ([string]$req.moeWotmodSha256).ToLowerInvariant()) { throw "MoE WOTMOD SHA mismatch." }
+
+          $channel = Get-Content "channel.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          $publicR5 = @($channel.releases | Where-Object {
+            $_.cnboxVersion -eq "2401-R34-R2F9-UNIFIED-R5" -and
+            $_.status -eq "FINAL_LOCK" -and
+            $_.releaseTrack -eq "PUBLIC_STANDALONE" -and
+            $_.installMode -eq "CNBOX_AUTHORITATIVE" -and
+            $_.aslainVersion -eq "ANY"
+          })
+          if ($publicR5.Count -ne 1) { throw "Public standalone Box R5 lock not found exactly once." }
+          if ([string]$publicR5[0].payloadSha256 -ne "cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6") {
+            throw "Public Box R5 SHA changed unexpectedly."
+          }
+
+          New-Item "manager" -ItemType Directory -Force | Out-Null
+          Copy-Item $publicExe "manager/NAJXBox_Manager.exe" -Force
+          Copy-Item $publicExe "manager/CNBOX_Manager.exe" -Force
+          Copy-Item $publicExe "manager/NAJXBox_Manager_v2.0.8.exe" -Force
+          Copy-Item $creatorExe "manager/NAJXBox_Manager_Creator.exe" -Force
+          Copy-Item $creatorExe "manager/CNBOX_Manager_Creator.exe" -Force
+          Copy-Item $creatorExe "manager/NAJXBox_Manager_Creator_v2.0.8.exe" -Force
+
+          $moeDir="moe/1.2.4"
+          New-Item $moeDir -ItemType Directory -Force | Out-Null
+          $moeName="NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip"
+          Copy-Item $moeZip (Join-Path $moeDir $moeName) -Force
+
+          @"
+          $moeSha  $moeName
+          $innerSha  mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod
+          "@.Trim() + [Environment]::NewLine | Set-Content (Join-Path $moeDir "SHA256SUMS.txt") -Encoding ascii
+
+          $manifest = [ordered]@{
+            schemaVersion = 1
+            id = "CNBOX_MOE"
+            version = "1.2.4"
+            status = "FINAL_LOCK"
+            wotVersion = "2.4.0.1"
+            package = $moeName
+            payloadSha256 = $moeSha
+            runtimeStatus = "RUNTIME_PASS / LOBBY_LIFECYCLE_CLOSED"
+            wotmod = [ordered]@{
+              path = "mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod"
+              sha256 = $innerSha
+            }
+            authority = [ordered]@{
+              uiContract = "Official CN plugin"
+              garageData = "WoT NA dossier"
+              battleData = "WoT native personalEfficiencyCtrl"
+            }
+          }
+          $manifest | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $moeDir "manifest.json") -Encoding UTF8
+
+          $channel.managerVersion = "2.0.8"
+          $channel.managerUrl = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe"
+          $channel.managerSha256 = $publicSha
+          $channel.creatorManagerVersion = "2.0.8"
+          $channel.creatorManagerUrl = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe"
+          $channel.creatorManagerSha256 = $creatorSha
+          $channel.moePacks = @(
+            [ordered]@{
+              id = "CNBOX_MOE"
+              version = "1.2.4"
+              status = "FINAL_LOCK"
+              wotVersion = "2.4.0.1"
+              sourceCore = "NAJXBox independent; Official CN UI contract + NA data authorities"
+              payloadUrl = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.2.4/$moeName"
+              payloadSha256 = $moeSha
+              notes = "Runtime-passed 1.2.4 practical baseline. Hangar display, non-Hangar hide, return-to-Hangar immediate refresh closed. Independent from Box/Aslain; Public Manager installs it as a separate component."
+              installedFiles = @(
+                [ordered]@{
+                  path = "mods/{WOT_VERSION}/najxbox.moe_independent_1.2.4.wotmod"
+                  sha256 = $innerSha
+                  required = $true
+                  shared = $false
+                }
+              )
+            }
+          )
+          $channel.creatorMoeTestPackage = $null
+
+          $json=$channel | ConvertTo-Json -Depth 100
+          [IO.File]::WriteAllText((Resolve-Path "channel.json"),$json,(New-Object Text.UTF8Encoding($false)))
+
+          @"
+          # NAJXBox Manager — Public Files
+
+          Current authority: `../channel.json`.
+
+          Current version: **2.0.8**
+
+          Live GitHub files:
+          - `CNBOX_Manager.exe` — legacy stable Public compatibility alias.
+          - `NAJXBox_Manager.exe` — canonical stable Public alias.
+          - `NAJXBox_Manager_v2.0.8.exe` — current versioned Public binary.
+          - `CNBOX_Manager_Creator.exe` — legacy Creator alias for engineering use.
+          - `NAJXBox_Manager_Creator.exe` — canonical Creator alias.
+          - `NAJXBox_Manager_Creator_v2.0.8.exe` — current versioned Creator binary.
+
+          Public Manager SHA256: `$publicSha`
+          Creator Manager SHA256: `$creatorSha`
+
+          Public Box binding: `2401-R34-R2F9-UNIFIED-R5` / `PUBLIC_STANDALONE` / `CNBOX_AUTHORITATIVE` / `aslainVersion=ANY`.
+          Public MoE binding: `1.2.4 FINAL_LOCK`.
+
+          Gitee boundary: only final Public Manager and required Public channel/payload material belong on Gitee. Creator/private engineering material stays on GitHub/Drive.
+          "@ | Set-Content "manager/README.md" -Encoding UTF8
+
+          git config user.name "najxbox-release-bot"
+          git config user.email "najxbox-release-bot@users.noreply.github.com"
+          git add -- channel.json manager moe/1.2.4
+          git commit -m "Publish Manager 2.0.8 and bind Public Box R5 + MoE 1.2.4"
+          git push
