@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "CNBOX_MOE",
+  "version": "1.2.4",
+  "status": "FINAL_LOCK",
+  "wotVersion": "2.4.0.1",
+  "package": "NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip",
+  "payloadSha256": "c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be",
+  "runtimeStatus": "RUNTIME_PASS / LOBBY_LIFECYCLE_CLOSED",
+  "wotmod": {
+    "path": "mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod",
+    "sha256": "31f4ae3b145944e8c16b740f9cc04f9224da5ccf977e31bd5aece2ae98d97130"
+  },
+  "authority": {
+    "uiContract": "Official CN plugin",
+    "garageData": "WoT NA dossier",
+    "battleData": "WoT native personalEfficiencyCtrl"
+  }
+}

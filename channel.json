@@ -3,9 +3,9 @@
   "channel": "stable",
   "latestAslainVersion": "2.4.0.1 #08",
   "aslainUrl": "https://aslain.com/index.php?/topic/13-download-%E2%98%85-world-of-tanks-%E2%98%85-modpack/",
-  "managerVersion": "2.0.7",
+  "managerVersion": "2.0.8",
   "managerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
-  "managerSha256": "423319933da5216f5c84945b538b2b61e8dd627154f27bceb10b7f5aeaaa8ad3",
+  "managerSha256": "f74d9ad6ecba1692ac3963f90a5df7f9bf280d2b972dd7d434741391862ccaba",
   "collectionProfile": {
     "id": "CNBOX_DEPENDENCY_DIAG_V3",
     "description": "NAJXBox 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
@@ -1186,10 +1186,29 @@
       "notes": "Reusable dynamic translation donor base. Origin: ASIA/CN WoT 2.4.0.1. Manager v1.2.0 uses the CURRENT NA .mo set as the skeleton, writes the merged language layer only under versioned res_mods, preserves the NA loc_version version/revision while localized mode uses language=zh_sg, invalidates data.wgpdc so WoT rebuilds VehicleItem/VehicleType localization caches, supports direct Chinese-vehicle-name <-> English-vehicle-name switching without an intermediate restore, and displays the confirmed current localization mode in the Manager UI. Unmatched current-NA text remains English."
     }
   ],
-  "moePacks": [],
-  "creatorManagerVersion": "2.0.7",
+  "moePacks": [
+    {
+      "id": "CNBOX_MOE",
+      "version": "1.2.4",
+      "status": "FINAL_LOCK",
+      "wotVersion": "2.4.0.1",
+      "sourceCore": "NAJXBox independent; Official CN UI contract + NA data authorities",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.2.4/NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip",
+      "payloadSha256": "c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be",
+      "notes": "Runtime-passed 1.2.4 practical baseline. Hangar display, non-Hangar hide, return-to-Hangar immediate refresh closed. Independent from Box/Aslain; Public Manager installs it as a separate component.",
+      "installedFiles": [
+        {
+          "path": "mods/{WOT_VERSION}/najxbox.moe_independent_1.2.4.wotmod",
+          "sha256": "31f4ae3b145944e8c16b740f9cc04f9224da5ccf977e31bd5aece2ae98d97130",
+          "required": true,
+          "shared": false
+        }
+      ]
+    }
+  ],
+  "creatorManagerVersion": "2.0.8",
   "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe",
-  "creatorManagerSha256": "b7879ab10a023985501eb8a3c291ff118dab8061102361dd6636a0b7ca2f2a9a",
+  "creatorManagerSha256": "a60353462e4c9c14f665d2aa76e8764fe216dee0e0a593ca21c71fa81773d977",
   "productName": "NAJXBox",
   "legacyProductName": "CNBOX",
   "managerCanonicalUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
@@ -1200,16 +1219,5 @@
     "phase": "DISPLAY_AND_BINARY_ALIAS",
     "note": "v2.0.2 uses NAJXBox externally while retaining legacy CNBOX state fields, directories, manifest keys and stable updater paths for backward compatibility. Repository/Drive/Gitee rename is a separate migration."
   },
-  "creatorMoeTestPackage": {
-    "schemaVersion": 1,
-    "version": "1.2.0",
-    "status": "TEST_CANDIDATE",
-    "wotVersion": "2.4.0.1",
-    "aslainVersion": "ANY",
-    "xvmVersion": "ANY",
-    "fileName": "NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
-    "sha256": "2a3fdee074c42f72683b8f7440e5f3475bf5a3df04b4c0c9fd3ab9c5c9d85be4",
-    "downloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/707b085c92255bb9494942499f304f2e083f237d/moe/rebuild/1.2.0/runtime/NAJXBOX_MoE_1.2.0_RUNTIME_CANDIDATE_WOT_2.4.0.1.zip",
-    "notes": "Creator-only MoE 1.2.0 test channel. Download manually, install through independent MoE test transaction, rollback/uninstall independently. Public ignores this object."
-  }
+  "creatorMoeTestPackage": null
 }

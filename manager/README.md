@@ -1,19 +1,21 @@
 # NAJXBox Manager — Public Files
 
-This folder is the live public update surface for NAJXBox Manager.
+Current authority: ../channel.json.
 
-Current authority: `../channel.json`.
+Current version: **2.0.8**
 
-Current version at 2026-09-25: **2.0.7**
+Live GitHub files:
+- CNBOX_Manager.exe — legacy stable Public compatibility alias.
+- NAJXBox_Manager.exe — canonical stable Public alias.
+- NAJXBox_Manager_v2.0.8.exe — current versioned Public binary.
+- CNBOX_Manager_Creator.exe — legacy Creator alias for engineering use.
+- NAJXBox_Manager_Creator.exe — canonical Creator alias.
+- NAJXBox_Manager_Creator_v2.0.8.exe — current versioned Creator binary.
 
-Files intentionally kept here:
-- `CNBOX_Manager.exe` — legacy stable compatibility alias.
-- `NAJXBox_Manager.exe` — canonical stable Public alias.
-- `NAJXBox_Manager_v2.0.7.exe` — current versioned Public binary.
-- `CNBOX_Manager_Creator.exe` — legacy stable Creator compatibility alias used by the engineering workflow.
-- `NAJXBox_Manager_Creator.exe` — canonical Creator alias.
-- `NAJXBox_Manager_Creator_v2.0.7.exe` — current versioned Creator binary.
+Public Manager SHA256: $publicSha
+Creator Manager SHA256: $creatorSha
 
-Historical versioned binaries, RC/test packages and detailed engineering notes are intentionally not stored in this live folder. Their authoritative history belongs in private `NA-BOX/03_EVIDENCE/MANAGER` and the Google Drive Manager archive.
+Public Box binding: 2401-R34-R2F9-UNIFIED-R5 / PUBLIC_STANDALONE / CNBOX_AUTHORITATIVE / slainVersion=ANY.
+Public MoE binding: 1.2.4 FINAL_LOCK.
 
-Gitee boundary: publish the final Public Manager only. Do not mirror Creator, private source, engineering notes, history, RCs or test packages.
+Gitee boundary: only final Public Manager and required Public channel/payload material belong on Gitee. Creator/private engineering material stays on GitHub/Drive.
