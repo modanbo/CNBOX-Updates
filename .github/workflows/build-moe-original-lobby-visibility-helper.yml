@@ -22,6 +22,7 @@ jobs:
           try:
               from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
               from gui.Scaleform.framework import WindowLayer
+              from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
               from gui.app_loader.settings import APP_NAME_SPACE
               from gui.shared.personality import ServicesLocator
           except Exception:
@@ -47,8 +48,7 @@ jobs:
 
           def _lobby_view():
               try:
-                  loader = ServicesLocator.appLoader
-                  app = loader.getApp(APP_NAME_SPACE.SF_LOBBY)
+                  app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
                   if app is None:
                       print _TAG, 'SF_LOBBY app not ready'
                       return None
@@ -56,11 +56,8 @@ jobs:
                   if manager is None:
                       print _TAG, 'containerManager not ready'
                       return None
-                  try:
-                      view = manager.getView(WindowLayer.WINDOW, _LOBBY_ALIAS)
-                  except TypeError:
-                      view = manager.getView(_LOBBY_ALIAS)
-                  return view
+                  criteria = {POP_UP_CRITERIA.VIEW_ALIAS: _LOBBY_ALIAS}
+                  return manager.getView(WindowLayer.WINDOW, criteria)
               except Exception:
                   print _TAG, 'find lobby view failed'
                   traceback.print_exc()
@@ -71,17 +68,25 @@ jobs:
               if view is None:
                   print _TAG, 'lobby view not found'
                   return
-              flash = getattr(view, 'flashObject', None)
-              if flash is None:
-                  print _TAG, 'flash object not ready'
-                  return
               try:
+                  # Prefer 1.2.4's own tested UI method. It already owns the
+                  # Flash instance and calls as_showLobbyPanel/as_hideLobbyPanel.
+                  fn = getattr(view, '_apply_hangar_visibility', None)
+                  if fn is not None:
+                      fn(bool(visible))
+                      print _TAG, 'APPLY', bool(visible), 'via view'
+                      return
+
+                  flash = getattr(view, 'flashObject', None)
+                  if flash is None:
+                      print _TAG, 'flash object not ready'
+                      return
                   if visible:
                       flash.as_showLobbyPanel()
-                      print _TAG, 'SHOW'
+                      print _TAG, 'SHOW direct'
                   else:
                       flash.as_hideLobbyPanel()
-                      print _TAG, 'HIDE'
+                      print _TAG, 'HIDE direct'
               except Exception:
                   print _TAG, 'apply visibility failed'
                   traceback.print_exc()
@@ -104,7 +109,7 @@ jobs:
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, 'ServicesLocator original-CN route visibility installed'
+                  print _TAG, 'criteria-view original-CN route visibility installed'
               except Exception:
                   print _TAG, 'hook install failed'
                   traceback.print_exc()
