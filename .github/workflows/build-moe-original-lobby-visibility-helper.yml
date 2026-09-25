@@ -18,6 +18,7 @@ jobs:
 
           _TAG = '[NAJXBox.MoE.Visibility]'
           _LOBBY_ALIAS = 'NAJXBOX_MOE_INDEPENDENT_LOBBY'
+          _LAST_HANGAR_VISIBLE = None
 
           try:
               from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
@@ -63,32 +64,42 @@ jobs:
                   traceback.print_exc()
                   return None
 
-          def _apply(visible):
+          def _apply(visible, returning_to_hangar):
               view = _lobby_view()
               if view is None:
                   print _TAG, 'lobby view not found'
                   return
               try:
-                  # Prefer 1.2.4's own tested UI method. It already owns the
-                  # Flash instance and calls as_showLobbyPanel/as_hideLobbyPanel.
                   fn = getattr(view, '_apply_hangar_visibility', None)
                   if fn is not None:
                       fn(bool(visible))
                       print _TAG, 'APPLY', bool(visible), 'via view'
-                      return
-
-                  flash = getattr(view, 'flashObject', None)
-                  if flash is None:
-                      print _TAG, 'flash object not ready'
-                      return
-                  if visible:
-                      flash.as_showLobbyPanel()
-                      print _TAG, 'SHOW direct'
                   else:
-                      flash.as_hideLobbyPanel()
-                      print _TAG, 'HIDE direct'
+                      flash = getattr(view, 'flashObject', None)
+                      if flash is None:
+                          print _TAG, 'flash object not ready'
+                          return
+                      if visible:
+                          flash.as_showLobbyPanel()
+                          print _TAG, 'SHOW direct'
+                      else:
+                          flash.as_hideLobbyPanel()
+                          print _TAG, 'HIDE direct'
+
+                  # Exact 1.2.4 refresh path: _on_vehicle() -> _push('vehicle-changed')
+                  # Only fire on non-Hangar -> Hangar transition, not initial populate.
+                  if visible and returning_to_hangar:
+                      refresh = getattr(view, '_on_vehicle', None)
+                      if refresh is not None:
+                          refresh()
+                          print _TAG, 'REFRESH vehicle-changed on hangar return'
+                      else:
+                          push = getattr(view, '_push', None)
+                          if push is not None:
+                              push('hangar-return')
+                              print _TAG, 'REFRESH push on hangar return'
               except Exception:
-                  print _TAG, 'apply visibility failed'
+                  print _TAG, 'apply/refresh visibility failed'
                   traceback.print_exc()
 
           if LobbyStateMachine is not None:
@@ -96,20 +107,23 @@ jobs:
                   _ORIGINAL_UPDATE_VISIBLE_ROUTE = LobbyStateMachine._LobbyStateMachine__updateVisibleRoute
 
                   def _najx_update_visible_route(self):
+                      global _LAST_HANGAR_VISIBLE
                       result = _ORIGINAL_UPDATE_VISIBLE_ROUTE(self)
                       try:
                           state = _leaf_state(self)
                           sid = _state_id(state)
                           visible = bool(sid and 'hangar' in sid)
-                          print _TAG, 'route=', sid, 'hangar=', visible
-                          _apply(visible)
+                          returning = (_LAST_HANGAR_VISIBLE is False and visible is True)
+                          print _TAG, 'route=', sid, 'hangar=', visible, 'returning=', returning
+                          _apply(visible, returning)
+                          _LAST_HANGAR_VISIBLE = visible
                       except Exception:
                           print _TAG, 'route update failed'
                           traceback.print_exc()
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, 'criteria-view original-CN route visibility installed'
+                  print _TAG, 'criteria-view+return-refresh installed'
               except Exception:
                   print _TAG, 'hook install failed'
                   traceback.print_exc()
