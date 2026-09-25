@@ -7,24 +7,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: python:2.7-slim
     steps:
-      - name: Compile Python 2.7 helper
-        shell: sh
+      - name: Write helper source
+        shell: bash
         run: |
-          mkdir -p /tmp/moe
-          cat > /tmp/moe/mod_najxbox_moe_lobby_visibility.py <<'PY'
+          mkdir -p out
+          cat > out/mod_najxbox_moe_lobby_visibility.py <<'PY'
           # -*- coding: utf-8 -*-
-          """
-          NAJXBox MoE lobby visibility bridge.
-          Owner model follows the original CN mod_markongun lifecycle:
-          LobbyStateMachine.__updateVisibleRoute decides whether the lobby panel
-          belongs to the currently visible Hangar route.
-
-          This module does not own data, calculation, SWF, Ctrl/cursor, or position.
-          It only emits WoT's existing HANGAR_STATUS_CHANGED event consumed by
-          NAJXBox MoE 1.2.4.
-          """
           import traceback
 
           _TAG = '[NAJXBox.MoE.Visibility]'
@@ -59,8 +48,6 @@ jobs:
               if state is None:
                   return False
               sid = _to_text(getattr(state, 'STATE_ID', '')).lower()
-              # Original CN plugin makes LobbyStateMachine visible-route the owner.
-              # Standard and event-mode Hangar state ids all carry "hangar".
               return 'hangar' in sid
 
           def _emit_hangar_visibility(is_visible):
@@ -98,14 +85,23 @@ jobs:
                   print _TAG, 'hook install failed'
                   traceback.print_exc()
           PY
-          python -m py_compile /tmp/moe/mod_najxbox_moe_lobby_visibility.py
-          python - <<'PY'
-          import hashlib, base64
-          p='/tmp/moe/mod_najxbox_moe_lobby_visibility.pyc'
-          data=open(p,'rb').read()
-          print('PYC_MAGIC=' + data[:4].encode('hex'))
-          print('PYC_SHA256=' + hashlib.sha256(data).hexdigest())
-          print('PYC_BASE64_BEGIN')
-          print(base64.b64encode(data))
-          print('PYC_BASE64_END')
-          PY
+
+      - name: Compile with CPython 2.7
+        shell: bash
+        run: |
+          docker run --rm -v "$PWD/out:/out" python:2.7-slim sh -lc "python -m py_compile /out/mod_najxbox_moe_lobby_visibility.py && python - <<'PY'
+          import hashlib
+          p='/out/mod_najxbox_moe_lobby_visibility.pyc'
+          d=open(p,'rb').read()
+          print('PYC_MAGIC=' + d[:4].encode('hex'))
+          print('PYC_SHA256=' + hashlib.sha256(d).hexdigest())
+          PY"
+          test "$(xxd -p -l 4 out/mod_najxbox_moe_lobby_visibility.pyc)" = "03f30d0a"
+          rm out/mod_najxbox_moe_lobby_visibility.py
+
+      - name: Upload compiled helper
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-original-lobby-visibility-pyc
+          path: out/mod_najxbox_moe_lobby_visibility.pyc
+          if-no-files-found: error
