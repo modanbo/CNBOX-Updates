@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
-  "active": true,
+  "active": false,
   "sourceUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-988c-81f5-a3cc-6b0ad2833a59/raw?se=2026-09-25T17%3A30%3A20Z&sp=r&sv=2026-02-06&sr=b&scid=1ce8ed38-228a-52df-bb45-0f75bc1fd481&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T09%3A39%3A06Z&ske=2026-09-26T09%3A39%3A06Z&sks=b&skv=2026-02-06&sig=P8myIB9YlzvMJVuOrogKMUA9K3XDjNGEm0F6V/tig90%3D",
   "destination": "payloads/2.4.0.1/aslain-06/CNBOX_PAYLOAD_R5.zip",
   "sourceSha256": "cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6",
   "outputSha256": "cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6",
-  "archive": "none"
+  "archive": "none",
+  "note": "R5 public standalone publication complete; no pending binary publish request."
 }
