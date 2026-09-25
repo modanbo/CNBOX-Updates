@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "active": true,
-  "managerArtifactUrl": "https://sdmntprwestus.oaiusercontent.com/files/00000000-37c8-8230-8e1b-617e58da7b10/raw?se=2026-09-25T19%3A14%3A21Z&sp=r&sv=2026-02-06&sr=b&scid=aa7782b2-6f46-561c-9f72-83de37ef0165&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T18%3A19%3A34Z&ske=2026-09-26T18%3A19%3A34Z&sks=b&skv=2026-02-06&sig=1S3fUbmwhha8K07vwNRzIiNUXASR2eb2oKbxFW4x6BU%3D",
+  "managerArtifactUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-0408-81f5-9f7d-e02722c350e0/raw?se=2026-09-25T19%3A16%3A07Z&sp=r&sv=2026-02-06&sr=b&scid=bed6bc50-a4fd-54e5-8ebb-2d98ed53dbcb&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T18%3A08%3A24Z&ske=2026-09-26T18%3A08%3A24Z&sks=b&skv=2026-02-06&sig=4lVP4cxo4NmAHpyMs/xrhJBtJJdCf8OEaR4aYRuqWn8%3D",
   "managerArtifactSha256": "609ba899cdd0143160f223d5472f7f3817c0821e32b82b7a5447e3977d1e32bd",
   "publicSha256": "8a40c7ebeee64e8fef27c1c8eb1b4acc7c4ba1e33719b74e3b2a0c4a682b3eef",
   "creatorSha256": "4656cd5571128e55f6f0d6a12aec817d38594eddc1dbc6a21c02ac6891b5fb63",
-  "moeArtifactUrl": "https://sdmntprcentralus.oaiusercontent.com/files/00000000-3b7c-81f5-b44f-73ac491d6d8c/raw?se=2026-09-25T18%3A38%3A11Z&sp=r&sv=2026-02-06&sr=b&scid=62ce0abc-b49f-5a85-833f-8a0e55cbe871&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T18%3A13%3A00Z&ske=2026-09-26T18%3A13%3A00Z&sks=b&skv=2026-02-06&sig=J0Tg%2BfjXdjk/n80j4Z9%2B47ySMWrbRl6IdgvrG/khCjk%3D",
+  "moeArtifactUrl": "https://sdmntprwestus.oaiusercontent.com/files/00000000-6d98-8230-a3bb-ca0d9636a0e8/raw?se=2026-09-25T19%3A16%3A08Z&sp=r&sv=2026-02-06&sr=b&scid=51a806ac-c58b-52ee-bb0e-621bc18d74b5&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T18%3A03%3A52Z&ske=2026-09-26T18%3A03%3A52Z&sks=b&skv=2026-02-06&sig=76yFCWsrZgXCuuWrws2pkRYQ1cQ7zkUtHTS0KyNYa/g%3D",
   "moeSha256": "c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be",
   "moeWotmodSha256": "31f4ae3b145944e8c16b740f9cc04f9224da5ccf977e31bd5aece2ae98d97130",
   "sourceManagerCommit": "cde12c70f06ce8d5a8a01d4cf45d04a148f99106",
