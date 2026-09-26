@@ -1,34 +1,34 @@
-# NAJXBox Manager — Public Files
+# NAJXBox Manager - Public Files
 
-Current authority: `../channel.json`.
+Current authority: ../channel.json.
 
-Current version: **2.0.8**
+Current version: **2.0.9**
+
+Validated authority:
+- exact build head: 1f4e3ac03324e3eb2309a817fc5451d008ab9649
+- GitHub Actions run: 36271660560 - SUCCESS
+- Chinese UI + Chinese vehicle names Runtime: PASS
+- Chinese UI + English vehicle names Runtime: PASS
+- Restore Original Language Runtime: PASS
 
 Live GitHub files:
-- `CNBOX_Manager.exe` — legacy stable Public compatibility alias.
-- `NAJXBox_Manager.exe` — canonical stable Public alias.
-- `NAJXBox_Manager_v2.0.8.exe` — current versioned Public binary.
-- `CNBOX_Manager_Creator.exe` — legacy Creator alias for engineering use.
-- `NAJXBox_Manager_Creator.exe` — canonical Creator alias.
-- `NAJXBox_Manager_Creator_v2.0.8.exe` — current versioned Creator binary.
+- CNBOX_Manager.exe - legacy stable Public compatibility alias.
+- NAJXBox_Manager.exe - canonical stable Public alias.
+- NAJXBox_Manager_v2.0.9.exe - current versioned Public binary.
+- CNBOX_Manager_Creator.exe - legacy Creator engineering alias.
+- NAJXBox_Manager_Creator.exe - canonical Creator engineering alias.
+- NAJXBox_Manager_Creator_v2.0.9.exe - current versioned Creator binary.
+- v2.0.8 versioned files remain as rollback history.
 
-Public Manager SHA256: `8a40c7ebeee64e8fef27c1c8eb1b4acc7c4ba1e33719b74e3b2a0c4a682b3eef`
-Creator Manager SHA256: `4656cd5571128e55f6f0d6a12aec817d38594eddc1dbc6a21c02ac6891b5fb63`
+Public Manager SHA256: 3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3
+Creator Manager SHA256: 4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f
 
-Public Box binding:
-- `2401-R34-R2F9-UNIFIED-R5`
-- `PUBLIC_STANDALONE`
-- `CNBOX_AUTHORITATIVE`
-- `aslainVersion=ANY`
-- Complete standalone Box; Aslain is not a prerequisite.
+M209-032:
+- both localization buttons share one enhanced language-owned fonts_zh_cn_sg.swf;
+- Restore Original Language removes/restores it through exact language ownership;
+- normal users do not run a PowerShell font patch.
 
-Public MoE binding:
-- `1.2.4 FINAL_LOCK`
-- Payload SHA256: `c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be`
-
-Normal install routing:
-- Public and Creator normal **安装 / 更新 NAJXBox** both use the formal Public standalone R5 product.
-- Creator-only engineering candidates remain separate test transactions.
-- If exact R5 is already installed, Install/Update remains disabled and Repair is the correct action.
-
-Gitee boundary: only final Public Manager and required Public channel/payload material belong on Gitee. Creator/private engineering material stays on GitHub/Drive.
+Distribution boundary:
+- Public self-update channel points only to the Public Manager.
+- Creator remains an engineering binary retained in GitHub/Drive.
+- Gitee is intentionally deferred until Aslain #08 Box + localization + MoE are synchronized together.
