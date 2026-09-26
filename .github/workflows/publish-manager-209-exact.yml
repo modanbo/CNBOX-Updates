@@ -1,0 +1,106 @@
+name: Publish Manager 2.0.9 Exact Validated Bytes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-manager-209-exact.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download exact validated artifact
+        env:
+          ARTIFACT_URL: "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-019c-81f7-af17-1e3abdbeffff/raw?se=2026-09-26T22%3A20%3A26Z&sp=r&sv=2026-02-06&sr=b&scid=45bf8be0-63b2-5401-a935-42cd6364043d&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-26T12%3A30%3A06Z&ske=2026-09-27T12%3A30%3A06Z&sks=b&skv=2026-02-06&sig=038bkRT8ZYtOhC1LyEc5DBt9CYfmwZt1H0Yux18v%2BPQ%3D"
+          PUBLIC_SHA: "3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3"
+          CREATOR_SHA: "4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f"
+        run: |
+          set -euo pipefail
+          curl -fL "$ARTIFACT_URL" -o /tmp/manager209.zip
+          rm -rf /tmp/manager209
+          mkdir -p /tmp/manager209
+          unzip -q /tmp/manager209.zip -d /tmp/manager209
+          test -f /tmp/manager209/Public/NAJXBox_Manager.exe
+          test -f /tmp/manager209/Creator/NAJXBox_Manager_Creator.exe
+          echo "$PUBLIC_SHA  /tmp/manager209/Public/NAJXBox_Manager.exe" | sha256sum -c -
+          echo "$CREATOR_SHA  /tmp/manager209/Creator/NAJXBox_Manager_Creator.exe" | sha256sum -c -
+          cp /tmp/manager209/Public/NAJXBox_Manager.exe manager/CNBOX_Manager.exe
+          cp /tmp/manager209/Public/NAJXBox_Manager.exe manager/NAJXBox_Manager.exe
+          cp /tmp/manager209/Public/NAJXBox_Manager.exe manager/NAJXBox_Manager_v2.0.9.exe
+          cp /tmp/manager209/Creator/NAJXBox_Manager_Creator.exe manager/CNBOX_Manager_Creator.exe
+          cp /tmp/manager209/Creator/NAJXBox_Manager_Creator.exe manager/NAJXBox_Manager_Creator.exe
+          cp /tmp/manager209/Creator/NAJXBox_Manager_Creator.exe manager/NAJXBox_Manager_Creator_v2.0.9.exe
+      - name: Update Manager metadata
+        env:
+          PUBLIC_SHA: "3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3"
+          CREATOR_SHA: "4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f"
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re, os
+          p=Path("channel.json")
+          s=p.read_text(encoding="utf-8-sig")
+          s=re.sub(r'"managerVersion"\s*:\s*"[^"]+"','"managerVersion": "2.0.9"',s,count=1)
+          s=re.sub(r'"managerSha256"\s*:\s*"[0-9a-fA-F]{64}"','"managerSha256": "'+os.environ["PUBLIC_SHA"]+'"',s,count=1)
+          p.write_text(s,encoding="utf-8")
+          readme=f"""# NAJXBox Manager — Public Files
+
+Current authority: `../channel.json`.
+
+Current version: **2.0.9**
+
+Validated authority:
+- exact build head: `1f4e3ac03324e3eb2309a817fc5451d008ab9649`
+- GitHub Actions run: `36271660560` — SUCCESS
+- Chinese UI + Chinese vehicle names Runtime: PASS
+- Chinese UI + English vehicle names Runtime: PASS
+- Restore Original Language Runtime: PASS
+
+Live GitHub files:
+- `CNBOX_Manager.exe` — legacy stable Public compatibility alias.
+- `NAJXBox_Manager.exe` — canonical stable Public alias.
+- `NAJXBox_Manager_v2.0.9.exe` — current versioned Public binary.
+- `CNBOX_Manager_Creator.exe` — legacy Creator engineering alias.
+- `NAJXBox_Manager_Creator.exe` — canonical Creator engineering alias.
+- `NAJXBox_Manager_Creator_v2.0.9.exe` — current versioned Creator binary.
+- v2.0.8 versioned files remain as rollback history.
+
+Public Manager SHA256: `{os.environ["PUBLIC_SHA"]}`
+Creator Manager SHA256: `{os.environ["CREATOR_SHA"]}`
+
+M209-032:
+- both localization buttons share one enhanced language-owned `fonts_zh_cn_sg.swf`;
+- Restore Original Language removes/restores it through exact language ownership;
+- normal users do not run a PowerShell font patch.
+
+Distribution boundary:
+- Public self-update channel points only to the Public Manager.
+- Creator remains an engineering binary retained in GitHub/Drive.
+- Gitee is intentionally deferred until Aslain #08 Box + localization + MoE are synchronized together.
+"""
+          Path("manager/README.md").write_text(readme,encoding="utf-8")
+          PY
+      - name: Verify published bytes and commit
+        env:
+          PUBLIC_SHA: "3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3"
+          CREATOR_SHA: "4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f"
+        run: |
+          set -euo pipefail
+          echo "$PUBLIC_SHA  manager/CNBOX_Manager.exe" | sha256sum -c -
+          echo "$PUBLIC_SHA  manager/NAJXBox_Manager.exe" | sha256sum -c -
+          echo "$PUBLIC_SHA  manager/NAJXBox_Manager_v2.0.9.exe" | sha256sum -c -
+          echo "$CREATOR_SHA  manager/CNBOX_Manager_Creator.exe" | sha256sum -c -
+          echo "$CREATOR_SHA  manager/NAJXBox_Manager_Creator.exe" | sha256sum -c -
+          echo "$CREATOR_SHA  manager/NAJXBox_Manager_Creator_v2.0.9.exe" | sha256sum -c -
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add channel.json manager
+          if ! git diff --cached --quiet; then
+            git commit -m "Manager 2.0.9: publish runtime-passed Public and Creator"
+            git push
+          fi
