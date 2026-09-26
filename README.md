@@ -21,11 +21,18 @@ The private engineering repositories and Google Drive project library remain the
 - exact payload: `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip`
 - SHA256: `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`
 - WoT: `2.4.0.1`; XVM: `13.1.0.0090`
-- Aslain: not required for Public; Creator lineage is #06 and current catalog compatibility is #07
+- Aslain: not required for Public; Creator compatibility lock is Aslain #08
 - package boundary: 534 files, only `mods/` + `res_mods/`
 - final triangle: `res_mods/configs/xvm/Aslain/icons/cnbox_lighten.png`, SHA256 `701d74f57608cdb6fb510c99bfa06a99875823bb6f5c709fbcf5db2f04a3d710`
 - obsolete inert `cnbox_tier_font.py` removed
 - Manager boundary PASS / Review 1 PASS / Review 2 PASS / user-authorized FINAL_LOCK on 2026-09-25
+
+## Aslain #08 Creator compatibility closure — 2026-09-26
+
+- Creator/Aslain compatibility is formally locked at `2401-08-R34-R2F9-FINAL_LOCK-R5`.
+- The Box payload remains the same 534-file R5 byte set already published as Public `2401-R34-R2F9-UNIFIED-R5`.
+- Public payload SHA256 remains `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`; no Public rebuild is required.
+- Current MoE retesting and localization/font English-character work are separate from the Box lock and do not change the Public Box payload.
 
 ## Unified public CNBOX install
 
@@ -95,7 +102,7 @@ Gitee is a Public-final mirror only: do not publish Creator, private source, eng
 
 The private Creator engineering track is separate from the public standalone distribution.
 
-Current Creator Box authority is maintained in private `NA-BOX` + Drive. Current formal Box baseline is `2401-06-R34-R2F9-FINAL_LOCK-R5`; Public users receive the standalone R5 payload above.
+Current Creator Box authority is maintained in private `NA-BOX` + Drive. Current formal Creator/Box compatibility lock is `2401-08-R34-R2F9-FINAL_LOCK-R5`; Public users continue to receive the unchanged standalone R5 payload above.
 
 Historical Creator compatibility example:
 - release: `2401-04-R34-R2F9-FINAL_LOCK-R1`
