@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "CNBOX_MOE",
+  "version": "1.2.8",
+  "status": "FINAL_LOCK",
+  "wotVersion": "2.4.0.1",
+  "package": "NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip",
+  "payloadSha256": "71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e",
+  "runtimeStatus": "RUNTIME_PASS / BATTLEPAGE_COMPATIBILITY_CLOSED / BILINGUAL_PASS",
+  "wotmod": {
+    "path": "mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod",
+    "embeddedVersion": "1.2.8",
+    "sha256": "7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb",
+    "filenameNote": "Legacy internal filename retained to preserve exact Runtime-tested bytes."
+  },
+  "authority": {
+    "uiContract": "Official CN plugin",
+    "garageData": "WoT NA dossier",
+    "battleData": "WoT native personalEfficiencyCtrl"
+  },
+  "promotion": {
+    "sourceCandidate": "NAJXBOX_MOE128_TEST_CANDIDATE_WOT_2.4.0.1.zip",
+    "sourceCandidateSha256": "71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e",
+    "byteIdentity": "FORMAL PACKAGE IS BYTE-FOR-BYTE COPY OF RUNTIME-PASSED CANDIDATE"
+  }
+}

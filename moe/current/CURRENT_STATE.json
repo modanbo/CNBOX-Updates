@@ -1,25 +1,30 @@
 {
   "schema_version": 1,
   "module": "NAJXBox MoE",
-  "state_date": "2026-09-25",
-  "status": "RUNTIME_PASS / LOBBY_LIFECYCLE_CLOSED",
+  "state_date": "2026-09-26",
+  "status": "FINAL_LOCK / RUNTIME_PASS / BATTLEPAGE_COMPATIBILITY_CLOSED / BILINGUAL_PASS",
   "wot_version": "2.4.0.1",
   "current_package": {
-    "name": "NAJXBOX_MoE_INDEPENDENT_1.2.4_GARAGE_MATCH_ORIGINAL_LOBBY_RETURN_REFRESH_WOT_2.4.0.1.zip",
-    "sha256": "c206018ec1c8a66266efcd3be02132c1734c2a3c7bbbe89d6baba5a5732370be",
-    "role": "CURRENT RUNTIME-PASSED PRACTICAL BASELINE"
+    "name": "NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip",
+    "sha256": "71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e",
+    "role": "CURRENT FORMAL RUNTIME-PASSED AUTHORITY"
+  },
+  "installed_wotmod": {
+    "path": "mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod",
+    "sha256": "7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb",
+    "embedded_version": "1.2.8",
+    "filename_note": "Legacy internal filename retained to preserve exact Runtime-tested bytes."
+  },
+  "runtime": {
+    "zh_sg_chinese_vehicle_names": "PASS",
+    "zh_sg_english_vehicle_names": "PASS",
+    "restored_original_english": "PASS",
+    "battlepage_reference_error": "CLOSED / NO RECURRENCE AFTER 1.2.8 INSTALL",
+    "box_tier_regression": "PASS"
   },
   "base_lineage": {
-    "data_ui_base": "1.2.4",
-    "garage_curve_base": "1.2.4 GARAGE_MATCH",
-    "later_1_2_5_plus": "NEGATIVE EVIDENCE ONLY / DO NOT INHERIT"
-  },
-  "lobby_lifecycle": {
-    "route_owner": "LobbyStateMachine._LobbyStateMachine__updateVisibleRoute",
-    "view_lookup": "ServicesLocator.appLoader + POP_UP_CRITERIA.VIEW_ALIAS",
-    "view_alias": "NAJXBOX_MOE_INDEPENDENT_LOBBY",
-    "leave_hangar": "_apply_hangar_visibility(False)",
-    "return_hangar": "_apply_hangar_visibility(True) -> _on_vehicle()",
-    "refresh_chain": "_on_vehicle() -> _push('vehicle-changed') -> as_updateData(...)"
+    "data_lifecycle_base": "1.2.4 proven dossier/personalEfficiencyCtrl path",
+    "repair": "NA BattlePage compatibility guard",
+    "failed_experiments": "1.2.5 / 1.2.6 / older 1.2.7 remain NEGATIVE EVIDENCE"
   }
 }

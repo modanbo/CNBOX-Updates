@@ -32,7 +32,20 @@ The private engineering repositories and Google Drive project library remain the
 - Creator/Aslain compatibility is formally locked at `2401-08-R34-R2F9-FINAL_LOCK-R5`.
 - The Box payload remains the same 534-file R5 byte set already published as Public `2401-R34-R2F9-UNIFIED-R5`.
 - Public payload SHA256 remains `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`; no Public rebuild is required.
-- Current MoE retesting and localization/font English-character work are separate from the Box lock and do not change the Public Box payload.
+- MoE `1.2.8` BattlePage compatibility repair is now FINAL_LOCK / Runtime PASS; localization/font `1.1` enhanced-character Runtime is also closed. Neither changes the already locked R5 Box payload.
+
+## Current MoE release — 1.2.8
+
+- status: **FINAL_LOCK / RUNTIME PASS**
+- exact package: `moe/1.2.8/NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip`
+- package SHA256: `71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e`
+- installed WOTMOD SHA256: `7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb`
+- embedded MoE version: `1.2.8`
+- legacy installed filename `najxbox.moe_independent_1.2.4.wotmod` is retained to preserve exact Runtime-tested bytes.
+- repaired failure: `BattlePage is not defined / Error #1065`
+- Chinese-localized Runtime: PASS
+- restored original English Runtime: PASS
+- Box/Tier regression: PASS
 
 ## Unified public CNBOX install
 
@@ -83,16 +96,19 @@ Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE
 ## Current public artifacts
 
 Manager / Creator:
-- current version: **2.0.7**
+- current version: **2.0.9**
+- Public SHA256: `3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3`
+- Creator SHA256: `4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f`
 - external product name: **NAJXBox**
 - authoritative version/hash source: `channel.json`
 - legacy stable Public path: `manager/CNBOX_Manager.exe`
 - canonical Public alias: `manager/NAJXBox_Manager.exe`
-- versioned Public path: `manager/NAJXBox_Manager_v2.0.7.exe`
+- versioned Public path: `manager/NAJXBox_Manager_v2.0.9.exe`
 - legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe`
 - canonical Creator alias: `manager/NAJXBox_Manager_Creator.exe`
-- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.7.exe`
-- live-folder policy: only current binaries, compatibility aliases and the short current Manager README are retained here.
+- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.9.exe`
+- language/font integration M209-032 Runtime PASS; both localized modes and Restore Original Language PASS.
+- live-folder policy: current aliases/versioned binaries plus retained rollback history and the short current Manager README.
 
 Historical Manager/Creator binaries and engineering notes are not current public authority. Their provenance remains in the private `NA-BOX/03_EVIDENCE/MANAGER` history and Google Drive archive. The old CNBOX filenames remain only as compatibility aliases; they do not represent a second product/version.
 

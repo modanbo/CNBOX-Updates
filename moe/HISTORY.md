@@ -527,3 +527,35 @@ This rule overrides earlier numbering guidance for all future releases:
 - historical exception labels and their directories/hashes remain immutable release evidence only and are not valid future numbering templates;
 - GitHub/Gitee release names, `moe/<version>/` directories, manifests/channel values, ZIP names, Drive docs/indexes and Manager-visible MoE versions must all use the same canonical three-part value.
 
+
+
+## 2026-09-26 — 1.2.8 FINAL_LOCK / BattlePage compatibility closure
+
+Formal package:
+`NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip`
+
+Package SHA256:
+`71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e`
+
+Installed WOTMOD:
+- `mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod`
+- SHA256 `7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb`
+- embedded version `1.2.8`
+- legacy internal filename retained to preserve exact Runtime-tested bytes.
+
+Repair:
+- started from the proven 1.2.4 data/lifecycle baseline;
+- closed the NA Runtime `BattlePage is not defined / Error #1065` failure with the compatibility guard;
+- did not reopen the dossier / `personalEfficiencyCtrl` data-owner chain or drag-position ownership.
+
+Runtime closure:
+- zh_sg + Chinese vehicle names: PASS;
+- zh_sg + English vehicle names: PASS;
+- Restore Original Language / English: PASS;
+- language-specific SWF selection: PASS;
+- `MarkOnGunUI` init/draw/update/dispose observed;
+- no new BattlePage/Error #1065 recurrence after 1.2.8 installation;
+- Box/Tier regression: PASS.
+
+Promotion rule:
+the formal archive is byte-for-byte identical to the exact Runtime-tested candidate. 1.2.5 / 1.2.6 / older 1.2.7 experiments remain HISTORY/negative evidence.
