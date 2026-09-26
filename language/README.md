@@ -1,43 +1,50 @@
-# CNBOX Language Packs
+# NAJXBox Language Packs
 
-This directory is the public, read-only distribution area for CNBOX Manager language payloads.
+Current authority: `../channel.json`.
+
+## Current language authority
+
+- WoT: `2.4.0.1`
+- packVersion: `1.1`
+- current alias: `CNBOX_LANGUAGE_PACK_2.4.0.1.zip`
+- final archive copy: `CNBOX_LANGUAGE_PACK_2.4.0.1_FONT_R1_FINAL.zip`
+- SHA256: `e6fd0b357617bf4267a3b29458f9b810be9717d907d929c5c8c0fcb5b098a3a7`
+- enhanced TahomaZH SHA256: `108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45`
+- official base-font SHA256: `5c7b7f32ffa1cc1d8cef019da5f727b43253018558ceaaaaba5ca993c69435ca`
+- Runtime: Chinese vehicle names PASS / English vehicle names PASS / Restore Original PASS
 
 ## Manager UI modes
 
-- 汉化（中文坦克名称） — ASIA Simplified Chinese UI plus CN `*_vehicles.mo` overlay.
-- 汉化（英文坦克名称） — ASIA Simplified Chinese UI while retaining ASIA/WG vehicle names.
-- 恢复原始语言 — restores the exact NA language files captured by Manager before the first language change.
+- 中文界面 + 中文坦克名 — Chinese UI + CN vehicle-name layer + enhanced TahomaZH.
+- 中文界面 + 英文坦克名 — Chinese UI + English vehicle names + the same enhanced TahomaZH.
+- 恢复原始语言 — removes/restores the exact NAJXBox language-owned overlay paths.
+
+Normal use requires Manager `2.0.9+` and does not require a PowerShell font patch.
 
 ## Payload layout
 
-A released ZIP must contain only:
+A released ZIP contains:
 
 ```text
 asia/res/text/lc_messages/*.mo
 asia/res/gui/flash/fontconfig.xml
+asia/res/gui/flash/fonts_zh_cn_sg.swf
 cn/res/text/lc_messages/*_vehicles.mo
 language_pack_manifest.json
 ```
 
-No executable, realm/server config, `version.xml`, `mods`, or `res_mods` content belongs in a language payload.
+## Enhanced font safety gates
 
-## Versioning / publish gate
+Manager installs the whole enhanced SWF only when:
 
-Language payloads are bound to an exact WoT four-part version (for example `2.4.0.1`).
-The public `channel.json` must not advertise a payload until its ZIP has been generated from matching NA / ASIA / CN clients, uploaded here, and its SHA-256 is fixed in the channel entry.
+1. manifest WoT version exactly matches the selected client;
+2. current official base-font SHA matches `enhancedFontBaseSha256`;
+3. embedded enhanced-font SHA matches `enhancedFontSha256`.
 
-Current Manager source baseline: v1.0.3.
+Older donor dynamic `.mo` localization may remain usable for newer NA skeletons, but the old whole-font SWF is not carried forward across a version/base-font mismatch.
 
+## Publication boundary
 
-## Dynamic-base mode (Manager v1.0.4+)
+GitHub + Google Drive hold the current localization authority.
 
-The published 2.4.0.1 ZIP is a reusable translation donor base, not an exact-version replacement package.
-
-For a newer NA client, Manager:
-1. saves/restores the exact current NA English language snapshot for that client generation;
-2. parses the current NA .mo files as the skeleton;
-3. merges matching ASIA translations by exact msgid/key;
-4. leaves new/unmatched NA keys in English;
-5. optionally overlays only CN vehicle-name base + _short keys.
-
-This means NA may update before ASIA/CN. A newer donor refresh only needs to contribute newly available translations; old donor content remains usable.
+Gitee is intentionally deferred until Aslain #08 Box + localization + MoE are synchronized together and old Gitee files are removed in one exact rebuild.
