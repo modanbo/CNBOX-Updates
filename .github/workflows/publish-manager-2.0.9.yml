@@ -1,0 +1,123 @@
+name: Publish Manager 2.0.9
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".publisher/release-manager-2.0.9.json"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish exact validated Manager 2.0.9
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $req = Get-Content ".publisher/release-manager-2.0.9.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ($req.schemaVersion -ne 1) { throw "Unsupported request schema." }
+          if ($req.active -eq $false) { Write-Host "Inactive request."; exit 0 }
+
+          $zip = Join-Path $env:RUNNER_TEMP "manager209.zip"
+          $out = Join-Path $env:RUNNER_TEMP "manager209"
+          Invoke-WebRequest -Uri $req.artifactUrl -OutFile $zip -UseBasicParsing
+          $zipSha = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($zipSha -ne ([string]$req.artifactSha256).ToLowerInvariant()) {
+            throw "Manager artifact ZIP SHA mismatch."
+          }
+          Expand-Archive $zip $out -Force
+
+          $publicExe = Join-Path $out "Public/NAJXBox_Manager.exe"
+          $creatorExe = Join-Path $out "Creator/NAJXBox_Manager_Creator.exe"
+          if (!(Test-Path $publicExe) -or !(Test-Path $creatorExe)) { throw "Manager artifact structure invalid." }
+
+          $publicSha = (Get-FileHash $publicExe -Algorithm SHA256).Hash.ToLowerInvariant()
+          $creatorSha = (Get-FileHash $creatorExe -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($publicSha -ne ([string]$req.publicSha256).ToLowerInvariant()) { throw "Public Manager SHA mismatch." }
+          if ($creatorSha -ne ([string]$req.creatorSha256).ToLowerInvariant()) { throw "Creator Manager SHA mismatch." }
+
+          New-Item "manager" -ItemType Directory -Force | Out-Null
+          Copy-Item $publicExe "manager/NAJXBox_Manager.exe" -Force
+          Copy-Item $publicExe "manager/CNBOX_Manager.exe" -Force
+          Copy-Item $publicExe "manager/NAJXBox_Manager_v2.0.9.exe" -Force
+          Copy-Item $creatorExe "manager/NAJXBox_Manager_Creator.exe" -Force
+          Copy-Item $creatorExe "manager/CNBOX_Manager_Creator.exe" -Force
+          Copy-Item $creatorExe "manager/NAJXBox_Manager_Creator_v2.0.9.exe" -Force
+
+          $channel = Get-Content "channel.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          $channel.managerVersion = "2.0.9"
+          $channel.managerUrl = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe"
+          $channel.managerSha256 = $publicSha
+
+          if ($channel.PSObject.Properties.Name -contains "creatorManagerVersion") {
+            $channel.creatorManagerVersion = "2.0.9"
+            $channel.creatorManagerUrl = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe"
+            $channel.creatorManagerSha256 = $creatorSha
+          } else {
+            $channel | Add-Member -NotePropertyName creatorManagerVersion -NotePropertyValue "2.0.9"
+            $channel | Add-Member -NotePropertyName creatorManagerUrl -NotePropertyValue "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe"
+            $channel | Add-Member -NotePropertyName creatorManagerSha256 -NotePropertyValue $creatorSha
+          }
+
+          $json = $channel | ConvertTo-Json -Depth 100
+          [IO.File]::WriteAllText((Resolve-Path "channel.json"), $json, (New-Object Text.UTF8Encoding($false)))
+
+          @"
+# NAJXBox Manager — Public Files
+
+Current authority: `../channel.json`.
+
+Current version: **2.0.9**
+
+Validated authority:
+- exact build head: `1f4e3ac03324e3eb2309a817fc5451d008ab9649`
+- GitHub Actions run: `36271660560` — SUCCESS
+- Chinese UI + Chinese vehicle names Runtime: PASS
+- Chinese UI + English vehicle names Runtime: PASS
+- Restore Original Language Runtime: PASS
+
+Live GitHub files:
+- `CNBOX_Manager.exe` — legacy stable Public compatibility alias.
+- `NAJXBox_Manager.exe` — canonical stable Public alias.
+- `NAJXBox_Manager_v2.0.9.exe` — current versioned Public binary.
+- `CNBOX_Manager_Creator.exe` — legacy Creator engineering alias.
+- `NAJXBox_Manager_Creator.exe` — canonical Creator engineering alias.
+- `NAJXBox_Manager_Creator_v2.0.9.exe` — current versioned Creator binary.
+- v2.0.8 versioned files remain as rollback history.
+
+Public Manager SHA256: `$publicSha`
+Creator Manager SHA256: `$creatorSha`
+
+M209-032:
+- both localization buttons share one enhanced language-owned `fonts_zh_cn_sg.swf`;
+- Restore Original Language removes/restores it through exact language ownership;
+- normal users do not run a PowerShell font patch.
+
+Distribution boundary:
+- Public self-update channel points only to the Public Manager.
+- Creator remains an engineering binary retained in GitHub/Drive.
+- Gitee is intentionally deferred until Aslain #08 Box + localization + MoE are synchronized together.
+"@ | Set-Content "manager/README.md" -Encoding UTF8
+
+          foreach ($item in @(
+            @("manager/NAJXBox_Manager.exe",$publicSha),
+            @("manager/CNBOX_Manager.exe",$publicSha),
+            @("manager/NAJXBox_Manager_v2.0.9.exe",$publicSha),
+            @("manager/NAJXBox_Manager_Creator.exe",$creatorSha),
+            @("manager/CNBOX_Manager_Creator.exe",$creatorSha),
+            @("manager/NAJXBox_Manager_Creator_v2.0.9.exe",$creatorSha)
+          )) {
+            $actual = (Get-FileHash $item[0] -Algorithm SHA256).Hash.ToLowerInvariant()
+            if ($actual -ne $item[1]) { throw "Post-copy SHA mismatch: $($item[0])" }
+          }
+
+          git config user.name "najxbox-release-bot"
+          git config user.email "najxbox-release-bot@users.noreply.github.com"
+          git add -- channel.json manager
+          git commit -m "Manager 2.0.9: publish runtime-passed Public and Creator"
+          git push
