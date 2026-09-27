@@ -1,290 +1,70 @@
-# NAJXBox Updates — `CNBOX-Updates` compatibility endpoint
+# NAJXBox Updates — CNBOX-Updates compatibility endpoint
 
-Public **read-only distribution channel** used by current `NAJXBox Manager` and legacy `CNBOX_Manager.exe` clients.
+Role: **CURRENT PUBLIC DISTRIBUTION ONLY**
 
-The repository name **intentionally remains `CNBOX-Updates`**. Repository naming is compatibility/infrastructure and is no longer a rename TODO. The program/product brand is NAJXBox; legacy raw updater paths remain valid permanently unless a future infrastructure change is explicitly requested.
+This repository is the stable update endpoint used by NAJXBox Manager and legacy compatibility clients. The repository name remains `CNBOX-Updates` intentionally so existing update URLs continue to work.
 
-This repository intentionally contains only release-facing material:
+Engineering history, failed candidates, private Creator notes and long retrospectives belong in private `modanbo/NA-BOX` and Google Drive, not in this current Public README.
 
-- `channel.json` — stable machine-readable update manifest.
-- `manager/` — NAJXBox Manager binaries; legacy `CNBOX_Manager*.exe` filenames remain as compatibility aliases.
-- `payloads/` — version-mapped CNBOX update payloads.
-- `language/` — reusable CNBOX Chinese translation donor packages.
-- `manifests/` — hashes and release metadata.
-- `profiles/` — optional minimal diagnostic collection profiles.
+## Current Public authority
 
-The private engineering repositories and Google Drive project library remain the source of truth for development and validation. They are not mirrored here.
+Source of truth: `channel.json`.
 
-## Current Box release — R5
-
-- Public standalone: `2401-R34-R2F9-UNIFIED-R5`
-- exact payload: `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip`
-- SHA256: `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`
-- WoT: `2.4.0.1`; XVM: `13.1.0.0090`
-- Aslain: not required for Public; Creator compatibility lock is Aslain #08
-- package boundary: 534 files, only `mods/` + `res_mods/`
-- final triangle: `res_mods/configs/xvm/Aslain/icons/cnbox_lighten.png`, SHA256 `701d74f57608cdb6fb510c99bfa06a99875823bb6f5c709fbcf5db2f04a3d710`
-- obsolete inert `cnbox_tier_font.py` removed
-- Manager boundary PASS / Review 1 PASS / Review 2 PASS / user-authorized FINAL_LOCK on 2026-09-25
-
-## Aslain #08 Creator compatibility closure — 2026-09-26
-
-- Creator/Aslain compatibility is formally locked at `2401-08-R34-R2F9-FINAL_LOCK-R5`.
-- The Box payload remains the same 534-file R5 byte set already published as Public `2401-R34-R2F9-UNIFIED-R5`.
-- Public payload SHA256 remains `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`; no Public rebuild is required.
-- MoE `1.2.8` BattlePage compatibility repair is now FINAL_LOCK / Runtime PASS; localization/font `1.1` enhanced-character Runtime is also closed. Neither changes the already locked R5 Box payload.
-
-## Current MoE release — 1.2.8
-
-- status: **FINAL_LOCK / RUNTIME PASS**
-- exact package: `moe/1.2.8/NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip`
-- package SHA256: `71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e`
-- installed WOTMOD SHA256: `7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb`
-- embedded MoE version: `1.2.8`
-- legacy installed filename `najxbox.moe_independent_1.2.4.wotmod` is retained to preserve exact Runtime-tested bytes.
-- repaired failure: `BattlePage is not defined / Error #1065`
-- Chinese-localized Runtime: PASS
-- restored original English Runtime: PASS
-- Box/Tier regression: PASS
-
-## Unified public CNBOX install
-
-Current public releases use `installMode: CNBOX_AUTHORITATIVE`.
-
-The Manager matches the unified Box by WoT version. Aslain is not required: the published payload contains the complete CNBOX/Aslain-XVM dependency set needed by the Box.
-
-Before install/update/repair, Manager transaction-safely cleans the complete declared CNBOX/XVM ownership scope and then fully overwrites that scope with the published unified structure. This includes the full CNBOX XVM profile, PlayersPanel/OTM configuration, py_macro layer, XVM shared runtime/l10n resources, XVM/OpenWG runtime WOTMODs, XVM audio/client loader, and CNBOX owner files. Aslain does not need to be installed first. If Aslain is installed, unrelated plugins outside the CNBOX ownership scope are retained.
-
-The result is one complete public CNBOX structure whether the user never installed Aslain, installed Aslain with different XVM/list/OTM choices, or reinstalled CNBOX over an existing Aslain setup.
-
-## Public release security gate
-
-Starting with **NAJXBox Manager Public v2.0.4**, every Public EXE must pass the free formal security gate before this repository will publish it:
-
-`Build -> SelfTest -> SHA256 -> Microsoft Defender PASS -> VirusTotal malicious=0 / suspicious=0 -> security manifest -> publish`
-
-Paid code signing is not required. Authenticode may remain `NotSigned`; this may still produce SmartScreen/unknown-publisher reputation warnings. The publisher hard-rejects a future Public Manager EXE unless its SHA256 matches `NAJXBox_Public_Security.json`, Defender status is PASS, and VirusTotal status is PASS with `malicious=0` and `suspicious=0`.
-
-v2.0.3 remains the immutable historical unsigned release and will not be silently replaced under the same version. Creator is not part of this Public VirusTotal contract. Gitee may mirror only the exact same Public SHA that passed this gate.
-
-## Safety model
-
-- Every published payload and Manager binary is SHA-256 gated.
-- Authoritative cleanup is restricted to explicit managed directories/file patterns from `channel.json`.
-- Existing owned files are copied to a temporary transaction-safety area before replacement; failed installs restore them.
-- Persistent rollback snapshots remain user-controlled through Manager's Manual Backup workflow.
-- Language restore uses the current NA client's local original-language backup and is separate from CNBOX plugin rollback.
-
-Binary publishing is hash-gated. The public publishing workflow only accepts allow-listed temporary HTTPS sources and safe destination prefixes.
-
-
-## Dependency-focused diagnostics
-
-Manager v1.0.7 diagnostics do not dump the entire Aslain installation.
-
-Both normal Diagnostic collection and Runtime collection include the complete CNBOX dependency scope:
-- the full CNBOX Aslain XVM profile;
-- XVM py_macro runtime source;
-- XVM shared runtime/l10n resources (documentation excluded);
-- XVM/OpenWG core/fix WOTMODs;
-- XVM audio/client-loader dependencies;
-- CNBOX owner files.
-
-Unrelated Aslain plugins are excluded. Each ZIP contains `CNBOX_DEPENDENCY_SCOPE.json` with the collected paths, categories, sizes and SHA-256 hashes.
-
-
-## Current public artifacts
-
-Manager / Creator:
-- current version: **2.0.9**
+### Manager
+- version: `2.0.9`
 - Public SHA256: `3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3`
 - Creator SHA256: `4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f`
-- external product name: **NAJXBox**
-- authoritative version/hash source: `channel.json`
-- legacy stable Public path: `manager/CNBOX_Manager.exe`
-- canonical Public alias: `manager/NAJXBox_Manager.exe`
-- versioned Public path: `manager/NAJXBox_Manager_v2.0.9.exe`
-- legacy stable Creator path: `manager/CNBOX_Manager_Creator.exe`
-- canonical Creator alias: `manager/NAJXBox_Manager_Creator.exe`
-- versioned Creator path: `manager/NAJXBox_Manager_Creator_v2.0.9.exe`
-- language/font integration M209-032 Runtime PASS; both localized modes and Restore Original Language PASS.
-- live-folder policy: current aliases/versioned binaries plus retained rollback history and the short current Manager README.
+- stable Public aliases: `manager/CNBOX_Manager.exe`, `manager/NAJXBox_Manager.exe`
+- current versioned Public: `manager/NAJXBox_Manager_v2.0.9.exe`
 
-Historical Manager/Creator binaries and engineering notes are not current public authority. Their provenance remains in the private `NA-BOX/03_EVIDENCE/MANAGER` history and Google Drive archive. The old CNBOX filenames remain only as compatibility aliases; they do not represent a second product/version.
+Creator remains an engineering flavor on GitHub/Drive and is not mirrored to Gitee.
 
-Gitee is a Public-final mirror only: do not publish Creator, private source, engineering notes, historical versions, RCs or test packages there.
-
-## Current Creator / Aslain compatibility lock
-
-The private Creator engineering track is separate from the public standalone distribution.
-
-Current Creator Box authority is maintained in private `NA-BOX` + Drive. Current formal Creator/Box compatibility lock is `2401-08-R34-R2F9-FINAL_LOCK-R5`; Public users continue to receive the unchanged standalone R5 payload above.
-
-Historical Creator compatibility example:
-- release: `2401-04-R34-R2F9-FINAL_LOCK-R1`
+### Box
+- Public: `2401-R34-R2F9-UNIFIED-R5`
+- SHA256: `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`
 - WoT: `2.4.0.1`
-- Aslain: `2.4.0.1 #04`
 - XVM: `13.1.0.0090`
-- Creator payload: `payloads/2.4.0.1/aslain-04/CNBOX_PAYLOAD.zip`
-- payload SHA256: `7870c94e00e59c670068f951b2e09dc0b19fdb93db015e97781098145d375a50`
-- release metadata: `manifests/2.4.0.1/CNBOX_CREATOR_ASLAIN04_R34_R2F9.json`
-- status: `FINAL_LOCK / STATIC_PROMOTED / TWO_REVIEW_PASS / RUNTIME_NOT_REQUIRED_FOR_THIS_DELTA`
+- Creator/Aslain compatibility lock: `2401-08-R34-R2F9-FINAL_LOCK-R5`
+- Aslain #08 compatibility did not change the 534-file R5 Public payload bytes.
 
-This #04 migration is a low-risk controlled XVM 0089 -> 0090 rebase. The CNBOX-critical `battle.swf` and `xvm_battle_classic.swf` remain byte-identical to the prior Runtime-proven #03 lock. The visible CNBOX change is the clearer 17x15 yellow spotted triangle, with its existing geometry preserved. Automatic compatibility preflight, two independent static reviews, synthetic install, and exact rollback passed.
+### Language
+- packVersion: `1.1`
+- canonical package: `language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip`
+- SHA256: `e6fd0b357617bf4267a3b29458f9b810be9717d907d929c5c8c0fcb5b098a3a7`
+- enhanced TahomaZH SHA256: `108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45`
+- Chinese vehicle-name mode PASS / English vehicle-name mode PASS / Restore Original PASS.
 
-Runtime collection is not a mandatory promotion gate for this delta. If a real in-game problem is observed later, the Creator workflow collects targeted Runtime evidence for that problem.
+### MoE / 打环
+- version: `1.2.8`
+- status: FINAL_LOCK / Runtime PASS
+- package SHA256: `71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e`
+- installed WOTMOD SHA256: `7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb`
+- BattlePage / Error #1065 closure PASS.
 
-The public standalone release remains `2401-R34-R2F9-UNIFIED-R2`; publishing this Creator compatibility lock does **not** move Public users to XVM 0090 or change the Public Manager release.
+## Directory roles
 
+- `channel.json` — current machine authority
+- `manager/` — current Manager aliases/versioned binaries
+- `payloads/` — Public Box releases; older released payloads are rollback/history
+- `language/` — current language package
+- `moe/` — MoE release history + current 1.2.8
+- `manifests/` — release/hash metadata
 
-## Manager v1.0.8 behavior fixes
+Older released Box/MoE directories may remain as rollback/history, but they are not current unless `channel.json` selects them.
 
-- Aslain is shown as optional for authoritative standalone CNBOX releases. If Aslain cannot be detected, the UI shows that it is not required instead of treating the missing local Aslain version as an installation problem.
-- Standalone CNBOX selection is resolved by WoT version before legacy Aslain detection logic.
-- Original-language backups use the same base folder selected as “回滚备份位置”, under `CNBOX_LANGUAGE_BACKUPS`.
-- A matching legacy AppData language backup is migrated automatically when needed.
+## Gitee mirror
 
+`modanbo/cnbox-updates-cn` is the exact current **Public-only** fallback mirror.
 
-## Manager v1.0.9 Aslain detection restoration
+Final exact mirror closure:
+- commit: `9f83864`
+- push: `e6a7ac2..9f83864 main -> main`
+- allowlist: 8 files
+- current set: Manager Public 2.0.9 + Box R5 + language 1.1 + MoE 1.2.8
+- no Creator/private/history/RC/test files
 
-Aslain remains informational for the standalone CNBOX, but Check Updates once again tries to identify the
-installed Aslain build instead of displaying "not required".
+## Safety / compatibility
 
-Detection order when local metadata is unavailable:
-1. published exact file-hash fingerprint;
-2. transient local Aslain metadata scan;
-3. if neither can prove a version, display "未读取到本地版本".
+Published payloads and Manager binaries are SHA256-gated. Official WoT `res` is not replaced by the language layer; the enhanced font is a versioned `res_mods` overlay controlled by Manager.
 
-The fingerprint exclusion logic was also corrected: only files owned by the CNBOX version CURRENTLY
-installed on the client can disqualify an Aslain fingerprint. A newer available CNBOX release must not
-invalidate the fingerprint for the user's current Aslain installation.
-
-Standalone CNBOX install/update compatibility remains based on WoT version and does not depend on the
-detected Aslain version.
-
-
-## Manager v1.0.10 button-state review
-
-- Check Updates clears stale Install/Update state before each new detection pass.
-- Install/Update is enabled only for an actionable Box update; if the published Box is already the verified current version, the button stays disabled.
-- Same-version damaged/missing Box files use Reinstall/Repair instead of Install/Update.
-- Rollback is enabled only when at least one backup predates the current Manager-recorded install state.
-- A current or later backup cannot make Rollback clickable merely because its Aslain/CNBOX labels differ.
-- The v1.0.9 Hash-first Aslain version detection and v1.0.8 shared language-backup root remain unchanged.
-
-
-## Manager v1.0.11 creator/public track separation
-
-`2401-04-R34-R2F9-FINAL_LOCK-R1` and
-`2401-R34-R2F9-UNIFIED-R2` are not sequential Box updates. They share functional ID
-`WOT2401-R34-R2F9`.
-
-- The creator/Aslain track follows the detected Aslain build and is used to produce each new Box migration.
-- The public standalone track packages the already-locked creator Box with its complete dependencies so external users do not need Aslain.
-- A creator-track client is never offered the public standalone package as its update source.
-- If Aslain advances before a new creator migration exists, Manager waits for that Aslain migration instead of offering the public package.
-- Fresh/public clients continue to receive the standalone public package.
-- The complete R34/R2F9 functional dependency tree is published as `manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9.json` and is SHA-256 verified before structure comparison.
-
-
-## Manager v1.0.13 public UI and pre-install restore
-
-Public CNBOX Manager is now a separate build flavor for external users.
-
-Public EXE does **not** expose:
-- Runtime collection;
-- Diagnostic collection;
-- collection-save-path controls;
-- Open Collection Folder.
-
-Those development/diagnostic controls remain only in the private Creator build.
-
-Both Public and Creator builds add **恢复安装前状态**:
-- before every CNBOX install/update/repair, Manager creates one persistent PRE_INSTALL snapshot in the selected rollback backup root;
-- only the latest PRE_INSTALL snapshot is retained per client;
-- manual backups are preserved separately and are never pruned by this feature;
-- the restore button is enabled only after a newer CNBOX installed state has been committed;
-- PRE_INSTALL snapshots are not mixed into the historical “回滚旧版本” list;
-- restoring the snapshot also restores the previous Manager InstalledState, including the “no CNBOX installed” state.
-
-
-## Manager v1.1.0 naming
-
-The current Manager feature set is released as v1.1.0. This supersedes the internal v1.0.13 label without changing the tested behavior.
-
-Public and Creator remain separate builds. The public executable continues to omit Runtime/Diagnostic collection UI; the Creator executable retains those development tools. The pre-install restore, manual backup, historical rollback, language, and creator/public track rules are unchanged.
-
-
-## Manager v1.1.2 localization / vehicle-name cache fix
-
-v1.1.2 was the release that closed the vehicle-name localization defect; v1.2.0 keeps that tested language pipeline unchanged and adds explicit current-localization status display.
-
-Real NA Runtime confirmed all four user-facing paths:
-1. Chinese UI + Chinese vehicle names: PASS.
-2. Restore original NA English: PASS.
-3. Chinese UI + English vehicle names: PASS.
-4. Restore original NA English again: PASS.
-
-The root cause was not missing CN vehicle-name data and not an XVM hardcoded-English table. The versioned `res_mods` language overlay already produced Chinese values through Wulf, but WoT persisted already-converted English `vehicles_list` / `vehicles_cache` objects in `data.wgpdc`. v1.1.2 therefore treats the localization-version key and the derived PDC as part of the language transaction.
-
-v1.1.2 rules:
-- official NA `res` stays original during normal localization;
-- translated files are written to the Manager-owned versioned `res_mods/<WoTVersion>/text/lc_messages` overlay;
-- font override is written to the same versioned `res_mods` layer;
-- the NA client's own `loc_version.xml` version/revision are preserved, while localized mode uses `language=zh_sg`;
-- `data.wgpdc` is invalidated only while WoT is fully exited, then WoT rebuilds localized VehicleItem/VehicleType caches on next launch;
-- direct Chinese-vehicle-name ↔ English-vehicle-name switching is supported; there is **no need to restore original English between the two localized modes**;
-- `恢复原始语言` removes CNBOX-owned overlay files, restores pre-existing overlay files, restores original `loc_version.xml`, repairs legacy official-`res` writes if necessary, and invalidates PDC for an English rebuild;
-- if WoT/WGC updates the client while localized, a newer localization revision is preserved and is not overwritten by the previous generation's sidecar;
-- language operations fail closed when the selected WoT client is running, including root/win64/win32 executable layouts.
-
-For the full operational and recovery model, see `manager/CNBOX_Manager_v1.1.2_README.md`.
-
-### Direct switching rule
-
-With World of Tanks fully exited:
-
-`中文界面 + 英文坦克名称` → click **汉化（中文坦克名称）** directly.
-
-`中文界面 + 中文坦克名称` → click **汉化（英文坦克名称）** directly.
-
-No intermediate **恢复原始语言** step is required.
-
-
-
-## Manager v1.2.0 current localization status
-
-v1.2.0 keeps the v1.1.2 localization / `loc_version` / `data.wgpdc` transaction unchanged and adds a visible current-language state to the Manager UI.
-
-The language row now reports one of:
-- `原始 NA 英文`;
-- `中文界面 + 中文坦克名称`;
-- `中文界面 + 英文坦克名称`;
-- a red warning state when the CNBOX owner record and `loc_version.xml` disagree, the localization is not CNBOX-owned, or the state cannot be proven.
-
-The status is derived from the selected NA client, current WoT version, `loc_version.xml`, and the versioned `CNBOX_LANGUAGE_OVERLAY_OWNER.json`. It is **not** inferred from which button was clicked last.
-
-The window title and main heading also display the Manager version, for example `CNBOX Manager v1.2.0` or `CNBOX Manager v1.2.0 [Creator]`.
-
-### Direct localized-mode switching
-
-With World of Tanks fully exited:
-
-`中文界面 + 英文坦克名称` → click **汉化（中文坦克名称）** directly.
-
-`中文界面 + 中文坦克名称` → click **汉化（英文坦克名称）** directly.
-
-No intermediate **恢复原始语言** step is required. The Manager withdraws the previous owned overlay, rebuilds the selected mode, invalidates `data.wgpdc`, and WoT rebuilds the corresponding vehicle-name cache on next launch.
-
-Use **恢复原始语言** only when the goal is to return to the original NA English UI + English vehicle names.
-
-The v1.2.0 change does not alter the already Runtime-proven v1.1.2 language core. The previously completed real-client sequence remains authoritative:
-1. Chinese UI + Chinese vehicle names — PASS.
-2. Restore original NA English — PASS.
-3. Chinese UI + English vehicle names — PASS.
-4. Restore original NA English again — PASS.
-
-## Version numbering policy
-
-NAJXBox Box, MoE and Manager/Creator use one canonical release format: `MAJOR.MINOR.PATCH` (`0.0.0`). The last component carries at 9, so `2.0.9 -> 2.1.0` and `2.9.9 -> 3.0.0`. New four-part product versions are not used. Historical exception labels remain archive/provenance only; all new public release names, channel/manifest values, package names and user-visible versions use the three-part form.
-
+Do not infer current state from an old release directory or historical package name. Always read `channel.json`.
