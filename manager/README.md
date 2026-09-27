@@ -18,7 +18,6 @@ Live GitHub files:
 - CNBOX_Manager_Creator.exe - legacy Creator engineering alias.
 - NAJXBox_Manager_Creator.exe - canonical Creator engineering alias.
 - NAJXBox_Manager_Creator_v2.0.9.exe - current versioned Creator binary.
-- v2.0.8 versioned files remain as rollback history.
 
 Public Manager SHA256: 3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3
 Creator Manager SHA256: 4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f
@@ -31,4 +30,4 @@ M209-032:
 Distribution boundary:
 - Public self-update channel points only to the Public Manager.
 - Creator remains an engineering binary retained in GitHub/Drive.
-- Gitee is intentionally deferred until Aslain #08 Box + localization + MoE are synchronized together.
+- Gitee final exact Public-only mirror is current at commit `9f83864`; Creator is excluded.
