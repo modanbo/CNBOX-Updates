@@ -7,7 +7,6 @@ Current authority: `../channel.json`.
 - WoT: `2.4.0.1`
 - packVersion: `1.1`
 - current alias: `CNBOX_LANGUAGE_PACK_2.4.0.1.zip`
-- final archive copy: `CNBOX_LANGUAGE_PACK_2.4.0.1_FONT_R1_FINAL.zip`
 - SHA256: `e6fd0b357617bf4267a3b29458f9b810be9717d907d929c5c8c0fcb5b098a3a7`
 - enhanced TahomaZH SHA256: `108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45`
 - official base-font SHA256: `5c7b7f32ffa1cc1d8cef019da5f727b43253018558ceaaaaba5ca993c69435ca`
@@ -45,6 +44,4 @@ Older donor dynamic `.mo` localization may remain usable for newer NA skeletons,
 
 ## Publication boundary
 
-GitHub + Google Drive hold the current localization authority.
-
-Gitee is intentionally deferred until Aslain #08 Box + localization + MoE are synchronized together and old Gitee files are removed in one exact rebuild.
+GitHub + Google Drive hold the current localization authority. Gitee exact Public-only mirror is current at commit `9f83864` and carries the canonical package path.
