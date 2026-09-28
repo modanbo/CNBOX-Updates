@@ -2,32 +2,31 @@
 
 Current authority: ../channel.json.
 
-Current version: **2.0.9**
+Current version: **2.1.0**
 
 Validated authority:
-- exact build head: 1f4e3ac03324e3eb2309a817fc5451d008ab9649
-- GitHub Actions run: 36271660560 - SUCCESS
-- Chinese UI + Chinese vehicle names Runtime: PASS
-- Chinese UI + English vehicle names Runtime: PASS
-- Restore Original Language Runtime: PASS
+- exact build head: 7778d7c5ce207236c65fe896b1b738557de7cf28
+- GitHub Actions run: 36436111096 - SUCCESS
+- Public SelfTest: PASS
+- Creator SelfTest: PASS
+- Aslain #07/#08/#09 standalone replacement semantics: PASS
+- startup MoE/language published-version refresh: PASS
+- current Aslain UI disambiguation: PASS
 
 Live GitHub files:
 - CNBOX_Manager.exe - legacy stable Public compatibility alias.
 - NAJXBox_Manager.exe - canonical stable Public alias.
-- NAJXBox_Manager_v2.0.9.exe - current versioned Public binary.
+- NAJXBox_Manager_v2.1.0.exe - current versioned Public binary.
 - CNBOX_Manager_Creator.exe - legacy Creator engineering alias.
-- NAJXBox_Manager_Creator.exe - canonical Creator engineering alias.
-- NAJXBox_Manager_Creator_v2.0.9.exe - current versioned Creator binary.
+- NAJXBox_Manager_Creator.exe - canonical Creator alias.
+- NAJXBox_Manager_Creator_v2.1.0.exe - current versioned Creator binary.
 
-Public Manager SHA256: 3335f513b60b671b95f377bd14bad586bddd4cc55a809492b9d26817e8d98bd3
-Creator Manager SHA256: 4f220a44bc3c80fd00ef89ec8cfee3737e33e08d0935e39aef95bd892ed5552f
+Public Manager SHA256: 8269be29358176d30b2da3601b851897c69e294b7d2c17151c4f3018de0e2f8a
+Creator Manager SHA256: 3fe3640f96b3a66a54a57b606fd9a226268c4fc5d37fd2f2ac3074066bf5faec
 
-M209-032:
-- both localization buttons share one enhanced language-owned fonts_zh_cn_sg.swf;
-- Restore Original Language removes/restores it through exact language ownership;
-- normal users do not run a PowerShell font patch.
+Public MoE binding: **1.2.9 FINAL_LOCK**.
 
 Distribution boundary:
-- Public self-update channel points only to the Public Manager.
-- Creator remains an engineering binary retained in GitHub/Drive.
-- Gitee final exact Public-only mirror is current at commit `9f83864`; Creator is excluded.
+- Public self-update channel points to the Public Manager.
+- Creator remains available on GitHub/Drive for engineering use.
+- Gitee remains Public-only and excludes Creator.
