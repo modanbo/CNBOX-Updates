@@ -22,6 +22,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           import hashlib
+import copy
           import io
           import json
           import re
@@ -70,17 +71,32 @@ jobs:
 
           old_mods = mods_by_id(old_root)
           new_mods = mods_by_id(new_root)
+
+          # InstallOrder/Package Order are global scheduling metadata. A newly inserted
+          # Aslain item can shift hundreds of values without changing package ownership.
+          # Ignore only those ordering attributes; preserve File/Package/Requires/Action
+          # and every other semantic attribute for compatibility auditing.
+          def semantic_bytes(mod):
+              if mod is None:
+                  return None
+              node = copy.deepcopy(mod)
+              for elem in node.iter():
+                  elem.attrib.pop("InstallOrder", None)
+                  elem.attrib.pop("Order", None)
+              return ET.tostring(node, encoding="utf-8")
+
           all_ids = sorted(set(old_mods) | set(new_mods))
           changed_ids = []
           for mid in all_ids:
-              a = old_mods.get(mid)
-              b = new_mods.get(mid)
-              ab = ET.tostring(a, encoding="utf-8") if a is not None else None
-              bb = ET.tostring(b, encoding="utf-8") if b is not None else None
-              if ab != bb:
+              if semantic_bytes(old_mods.get(mid)) != semantic_bytes(new_mods.get(mid)):
                   changed_ids.append(mid)
 
-          critical_re = re.compile(r'(xvm|player_panels|playerspanel|openwg|players_panel|battlevehiclemarkers|vehiclemarkers)', re.I)
+          # Do not match the substring "XVM" inside "NonXVM". Keep this audit scoped
+          # to actual XVM / PlayersPanel / OpenWG / marker ownership surfaces.
+          critical_re = re.compile(
+              r'(^XVM_|^Player_Panels_|playerspanel|openwg|players_panel|battlevehiclemarkers|vehiclemarkers)',
+              re.I
+          )
           critical_ids = [mid for mid in changed_ids if critical_re.search(mid)]
 
           base_url = f"https://repo.aslain.com/wot_modmanager/{game}/Configuration"
@@ -231,5 +247,5 @@ jobs:
             exit 0
           fi
           git commit -m "Audit latest Aslain critical package delta"
-          git push
-# audit-trigger: 2026-09-28 Aslain 2.4.0.1 #09
+          git pull --rebase origin main
+          git push origin HEAD:main
