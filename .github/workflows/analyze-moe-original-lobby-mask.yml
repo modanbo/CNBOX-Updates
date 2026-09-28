@@ -1,0 +1,88 @@
+name: analyze-moe-original-lobby-mask
+
+on:
+  push:
+    branches:
+      - work/moe-1.2.9-lobby-mask-analysis
+    paths:
+      - '.github/workflows/analyze-moe-original-lobby-mask.yml'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-1.2.9-lobby-mask-analysis
+
+      - name: Fetch exact official CN package
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-original-mask"
+          mkdir -p "$root/wbp" "$root/core" "$GITHUB_WORKSPACE/out"
+          curl -fL --retry 3 --connect-timeout 20             'https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp'             -o "$root/original.wbp"
+          echo '3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16  '"$root"'/original.wbp' | sha256sum -c -
+          unzip -q "$root/original.wbp" -d "$root/wbp"
+          echo 'd681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4  '"$root"'/wbp/Files/mod_mark_on_gun.wotmod' | sha256sum -c -
+          unzip -q "$root/wbp/Files/mod_mark_on_gun.wotmod" -d "$root/core"
+          sha256sum "$root/core/res/scripts/client/gui/mods/mod_markongun.pyc" | tee "$GITHUB_WORKSPACE/out/original_host_sha256.txt"
+          strings -a -n 3 "$root/core/res/scripts/client/gui/mods/mod_markongun.pyc" > "$GITHUB_WORKSPACE/out/original_host_strings.txt"
+
+      - name: Disassemble official Python 2.7 host recursively
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/moe-original-mask"
+          cat > "$GITHUB_WORKSPACE/out/disasm27.py" <<'PY'
+          import sys, marshal, types, dis, binascii
+          p=sys.argv[1]
+          raw=open(p,'rb').read()
+          print('PYC_MAGIC=' + binascii.hexlify(raw[:4]))
+          print('PYC_HEADER=' + binascii.hexlify(raw[:8]))
+          co=marshal.loads(raw[8:])
+          seen=set()
+          def walk(code, depth=0):
+              key=id(code)
+              if key in seen:
+                  return
+              seen.add(key)
+              print('\n' + '='*100)
+              print('DEPTH=%d NAME=%s FILE=%s FIRSTLINE=%s ARGC=%s LOCALS=%s' % (
+                  depth, code.co_name, code.co_filename, code.co_firstlineno,
+                  code.co_argcount, code.co_varnames))
+              print('NAMES=%r' % (code.co_names,))
+              print('CONSTS_STRINGS=%r' % (tuple(x for x in code.co_consts if isinstance(x, basestring)),))
+              print('-'*100)
+              dis.dis(code)
+              for x in code.co_consts:
+                  if isinstance(x, types.CodeType):
+                      walk(x, depth+1)
+          walk(co)
+          PY
+          docker run --rm             -v "$root/core:/core:ro"             -v "$GITHUB_WORKSPACE/out:/out"             python:2.7-slim             sh -lc "python /out/disasm27.py /core/res/scripts/client/gui/mods/mod_markongun.pyc"             > "$GITHUB_WORKSPACE/out/original_host_disassembly.txt"
+
+      - name: Extract Lobby visibility evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          {
+            echo '=== STRING EVIDENCE ==='
+            grep -n -Ei 'showLobbyPanel|hideLobbyPanel|setMaskLobbyPanel|maskLobbyPanel|updateVisibleRoute|loadView|lobby_view|hangar|techtree|tech.?tree|loot|box|populate|dispose|visibleRoute' out/original_host_strings.txt || true
+            echo
+            echo '=== DISASSEMBLY EVIDENCE ==='
+            grep -n -Ei -C 25 'showLobbyPanel|hideLobbyPanel|setMaskLobbyPanel|maskLobbyPanel|updateVisibleRoute|loadView|lobby_view|hangar|techtree|tech.?tree|loot|box|populate|dispose|visibleRoute' out/original_host_disassembly.txt || true
+          } > out/original_lobby_mask_evidence.txt
+          cat out/original_lobby_mask_evidence.txt
+
+      - name: Upload analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-original-lobby-mask-analysis
+          path: |
+            out/original_host_sha256.txt
+            out/original_host_strings.txt
+            out/original_host_disassembly.txt
+            out/original_lobby_mask_evidence.txt
+          if-no-files-found: error
