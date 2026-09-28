@@ -1,0 +1,217 @@
+name: Aslain selected plugin package audit
+
+permissions:
+  contents: write
+
+on:
+  push:
+    paths:
+      - ".github/workflows/aslain-selected-package-audit.yml"
+      - "aslain_catalogs/selected_plugins.json"
+      - "aslain_catalogs/*/*/Configuration"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Audit selected plugin package delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import copy
+          import hashlib
+          import io
+          import json
+          import re
+          import urllib.parse
+          import urllib.request
+          import zipfile
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          rootdir = Path("aslain_catalogs")
+          index = json.loads((rootdir / "index.json").read_text(encoding="utf-8"))
+          selection = json.loads((rootdir / "selected_plugins.json").read_text(encoding="utf-8"))
+          catalogs = index.get("catalogs", [])
+          if len(catalogs) < 2:
+              raise SystemExit("Need at least two archived Aslain catalogs")
+          current = catalogs[0]
+          previous = next((x for x in catalogs[1:] if x.get("wotVersion") == current.get("wotVersion")), None)
+          if previous is None:
+              raise SystemExit("No previous catalog for same WoT version")
+
+          game = current["wotVersion"]
+          def build_of(item):
+              m = re.search(r'#\s*(\d+)', item.get("aslainVersion", ""))
+              if not m:
+                  raise SystemExit("Unparseable Aslain version")
+              return int(m.group(1))
+
+          new_build = build_of(current)
+          old_build = build_of(previous)
+          old_root = ET.fromstring((rootdir / game / f"{old_build:02d}" / "Configuration").read_bytes())
+          new_root = ET.fromstring((rootdir / game / f"{new_build:02d}" / "Configuration").read_bytes())
+
+          def mods_by_id(root):
+              return {m.attrib["Id"]: m for m in root.iter("Mod") if m.attrib.get("Id")}
+
+          old_mods = mods_by_id(old_root)
+          new_mods = mods_by_id(new_root)
+          selected_ids = selection.get("selectedModIds", [])
+
+          def semantic_bytes(mod):
+              if mod is None:
+                  return None
+              node = copy.deepcopy(mod)
+              for elem in node.iter():
+                  elem.attrib.pop("InstallOrder", None)
+                  elem.attrib.pop("Order", None)
+              return ET.tostring(node, encoding="utf-8")
+
+          # Only refs installed by this exact selected Mod node:
+          # its own File plus direct child Package elements. Nested sibling radio
+          # options are separate Mod IDs and are audited only when selected.
+          def direct_refs(mod):
+              if mod is None:
+                  return []
+              out = []
+              f = mod.attrib.get("File", "").strip()
+              if f:
+                  out.append(f)
+              for child in list(mod):
+                  if child.tag == "Package":
+                      f = child.attrib.get("File", "").strip()
+                      if f:
+                          out.append(f)
+              return list(dict.fromkeys(out))
+
+          base_url = f"https://repo.aslain.com/wot_modmanager/{game}/Configuration"
+          def fetch_bytes(ref):
+              url = urllib.parse.urljoin(base_url, ref)
+              req = urllib.request.Request(url, headers={
+                  "User-Agent": "NAJXBox-Aslain-Selected-Audit/1.0",
+                  "Cache-Control": "no-cache"
+              })
+              with urllib.request.urlopen(req, timeout=120) as resp:
+                  return url, resp.read()
+
+          def sha(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def flatten_zip(data, prefix="", depth=0):
+              result = {}
+              if depth > 3:
+                  return result
+              try:
+                  zf = zipfile.ZipFile(io.BytesIO(data))
+              except zipfile.BadZipFile:
+                  return result
+              for info in zf.infolist():
+                  if info.is_dir():
+                      continue
+                  child = zf.read(info.filename)
+                  key = prefix + info.filename.replace("\\", "/")
+                  result[key] = {"sha256": sha(child), "bytes": len(child)}
+                  if info.filename.lower().endswith((".wotmod", ".zip")) and len(child) <= 64 * 1024 * 1024:
+                      result.update(flatten_zip(child, key + "!", depth + 1))
+              return result
+
+          cache = {}
+          def archive_record(ref):
+              if ref in cache:
+                  return cache[ref]
+              url, data = fetch_bytes(ref)
+              rec = {
+                  "ref": ref, "url": url, "sha256": sha(data), "bytes": len(data),
+                  "entries": flatten_zip(data)
+              }
+              cache[ref] = rec
+              return rec
+
+          audits = []
+          unchanged_selected = []
+          for mid in selected_ids:
+              old = old_mods.get(mid)
+              new = new_mods.get(mid)
+              old_refs = direct_refs(old)
+              new_refs = direct_refs(new)
+              semantic_changed = semantic_bytes(old) != semantic_bytes(new)
+              refs_changed = old_refs != new_refs
+              if not semantic_changed and not refs_changed:
+                  unchanged_selected.append(mid)
+                  continue
+
+              old_records = [archive_record(r) for r in old_refs]
+              new_records = [archive_record(r) for r in new_refs]
+
+              def by_internal(records):
+                  out = {}
+                  for rec in records:
+                      for path, meta in rec["entries"].items():
+                          out[path] = meta
+                  return out
+              oi, ni = by_internal(old_records), by_internal(new_records)
+              paths = sorted(set(oi) | set(ni))
+              added = [p for p in paths if p not in oi]
+              removed = [p for p in paths if p not in ni]
+              changed = [p for p in paths if p in oi and p in ni and oi[p]["sha256"] != ni[p]["sha256"]]
+              unchanged = [p for p in paths if p in oi and p in ni and oi[p]["sha256"] == ni[p]["sha256"]]
+
+              audits.append({
+                  "modId": mid,
+                  "existsOld": old is not None,
+                  "existsNew": new is not None,
+                  "semanticChangedIgnoringOrder": semantic_changed,
+                  "refsChanged": refs_changed,
+                  "oldRefs": old_refs,
+                  "newRefs": new_refs,
+                  "oldArchives": old_records,
+                  "newArchives": new_records,
+                  "internalComparison": {
+                      "added": added, "removed": removed, "changed": changed,
+                      "unchangedCount": len(unchanged)
+                  }
+              })
+
+          report = {
+              "schemaVersion": 1,
+              "wotVersion": game,
+              "fromAslainVersion": previous["aslainVersion"],
+              "toAslainVersion": current["aslainVersion"],
+              "selectionSource": selection.get("source"),
+              "selectedModCount": len(selected_ids),
+              "changedSelectedModCount": len(audits),
+              "changedSelectedModIds": [x["modId"] for x in audits],
+              "unchangedSelectedModCount": len(unchanged_selected),
+              "selectedAudits": audits
+          }
+          out = rootdir / game / f"{new_build:02d}" / "selected_package_audit.json"
+          out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(json.dumps({
+              "from": report["fromAslainVersion"],
+              "to": report["toAslainVersion"],
+              "selectedModCount": report["selectedModCount"],
+              "changedSelectedModIds": report["changedSelectedModIds"],
+              "output": str(out)
+          }, indent=2))
+          PY
+
+      - name: Commit selected audit evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add aslain_catalogs/*/*/selected_package_audit.json
+          if git diff --cached --quiet; then
+            echo "Selected package audit already current."
+            exit 0
+          fi
+          git commit -m "Audit latest Aslain selected plugin delta"
+          git pull --rebase origin main
+          git push origin HEAD:main
