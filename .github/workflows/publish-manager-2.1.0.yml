@@ -1,0 +1,113 @@
+name: Publish Manager 2.1.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".publisher/release-manager-2.1.0.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Publish verified Manager 2.1.0
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $req = Get-Content ".publisher/release-manager-2.1.0.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          if ($req.schemaVersion -ne 1) { throw "Unsupported request schema." }
+          if ($req.active -eq $false) { Write-Host "Inactive request."; exit 0 }
+
+          $zip = Join-Path $env:RUNNER_TEMP "manager210.zip"
+          $out = Join-Path $env:RUNNER_TEMP "manager210"
+          Invoke-WebRequest -Uri $req.artifactUrl -OutFile $zip -UseBasicParsing
+
+          $zipSha=(Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($zipSha -ne ([string]$req.artifactSha256).ToLowerInvariant()) {
+            throw "Manager artifact ZIP SHA mismatch: $zipSha"
+          }
+
+          Expand-Archive $zip $out -Force
+          $pub=Join-Path $out "Public/NAJXBox_Manager.exe"
+          $cre=Join-Path $out "Creator/NAJXBox_Manager_Creator.exe"
+          if (!(Test-Path $pub) -or !(Test-Path $cre)) { throw "Manager artifact structure invalid." }
+
+          $pubSha=(Get-FileHash $pub -Algorithm SHA256).Hash.ToLowerInvariant()
+          $creSha=(Get-FileHash $cre -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($pubSha -ne ([string]$req.publicSha256).ToLowerInvariant()) { throw "Public SHA mismatch: $pubSha" }
+          if ($creSha -ne ([string]$req.creatorSha256).ToLowerInvariant()) { throw "Creator SHA mismatch: $creSha" }
+
+          New-Item "manager" -ItemType Directory -Force | Out-Null
+          Copy-Item $pub "manager/NAJXBox_Manager.exe" -Force
+          Copy-Item $pub "manager/CNBOX_Manager.exe" -Force
+          Copy-Item $pub "manager/NAJXBox_Manager_v2.1.0.exe" -Force
+          Copy-Item $cre "manager/NAJXBox_Manager_Creator.exe" -Force
+          Copy-Item $cre "manager/CNBOX_Manager_Creator.exe" -Force
+          Copy-Item $cre "manager/NAJXBox_Manager_Creator_v2.1.0.exe" -Force
+
+          $channel=Get-Content "channel.json" -Raw -Encoding UTF8 | ConvertFrom-Json
+          $channel.managerVersion="2.1.0"
+          $channel.managerUrl="https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe"
+          $channel.managerSha256=$pubSha
+          $channel.creatorManagerVersion="2.1.0"
+          $channel.creatorManagerUrl="https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe"
+          $channel.creatorManagerSha256=$creSha
+
+          $moe=@($channel.moePacks | Where-Object { $_.id -eq "CNBOX_MOE" })
+          if ($moe.Count -ne 1 -or [string]$moe[0].version -ne "1.2.9" -or [string]$moe[0].status -ne "FINAL_LOCK") {
+            throw "MoE 1.2.9 FINAL_LOCK binding changed unexpectedly."
+          }
+
+          $json=$channel | ConvertTo-Json -Depth 100
+          [IO.File]::WriteAllText((Resolve-Path "channel.json"),$json,(New-Object Text.UTF8Encoding($false)))
+
+          @"
+          # NAJXBox Manager - Public Files
+
+          Current authority: ../channel.json.
+
+          Current version: **2.1.0**
+
+          Validated authority:
+          - exact build head: 7778d7c5ce207236c65fe896b1b738557de7cf28
+          - GitHub Actions run: 36436111096 - SUCCESS
+          - Public SelfTest: PASS
+          - Creator SelfTest: PASS
+          - Aslain #07/#08/#09 standalone replacement semantics: PASS
+          - startup MoE/language published-version refresh: PASS
+          - current Aslain UI disambiguation: PASS
+
+          Live GitHub files:
+          - CNBOX_Manager.exe - legacy stable Public compatibility alias.
+          - NAJXBox_Manager.exe - canonical stable Public alias.
+          - NAJXBox_Manager_v2.1.0.exe - current versioned Public binary.
+          - CNBOX_Manager_Creator.exe - legacy Creator engineering alias.
+          - NAJXBox_Manager_Creator.exe - canonical Creator alias.
+          - NAJXBox_Manager_Creator_v2.1.0.exe - current versioned Creator binary.
+
+          Public Manager SHA256: $pubSha
+          Creator Manager SHA256: $creSha
+
+          Public MoE binding: **1.2.9 FINAL_LOCK**.
+
+          Distribution boundary:
+          - Public self-update channel points to the Public Manager.
+          - Creator remains available on GitHub/Drive for engineering use.
+          - Gitee remains Public-only and excludes Creator.
+          "@ | Set-Content "manager/README.md" -Encoding UTF8
+
+          git config user.name "najxbox-release-bot"
+          git config user.email "najxbox-release-bot@users.noreply.github.com"
+          git add -- channel.json manager
+          git commit -m "Publish Manager 2.1.0 Public and Creator"
+          git push
+
+          Write-Host "MANAGER_2.1.0_PUBLISH_PASS"
+          Write-Host "PublicSHA256=$pubSha"
+          Write-Host "CreatorSHA256=$creSha"
