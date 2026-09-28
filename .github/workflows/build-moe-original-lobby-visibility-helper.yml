@@ -19,6 +19,13 @@ jobs:
           _TAG = '[NAJXBox.MoE.Visibility]'
           _LOBBY_ALIAS = 'NAJXBOX_MOE_INDEPENDENT_LOBBY'
           _LAST_HANGAR_VISIBLE = None
+          _WINDOW_LISTENER_BOUND = False
+
+          LobbyStateMachine = None
+          WindowLayer = None
+          POP_UP_CRITERIA = None
+          APP_NAME_SPACE = None
+          ServicesLocator = None
 
           try:
               from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
@@ -27,28 +34,24 @@ jobs:
               from gui.app_loader.settings import APP_NAME_SPACE
               from gui.shared.personality import ServicesLocator
           except Exception:
-              print _TAG, 'import failed'
+              print _TAG, 'core import failed'
               traceback.print_exc()
-              LobbyStateMachine = None
 
-          def _leaf_state(machine):
-              try:
-                  states = machine.getNonEmptyEnteredStates()
-                  if states:
-                      return states[-1]
-              except Exception:
-                  print _TAG, 'get leaf state failed'
-                  traceback.print_exc()
-              return None
-
-          def _state_id(state):
-              try:
-                  return str(getattr(state, 'STATE_ID', '')).lower()
-              except Exception:
-                  return ''
+          isInHangarState = None
+          dependency = None
+          IGuiLoader = None
+          try:
+              from gui.lobby_state_machine.states import isInHangarState
+              from helpers import dependency
+              from skeletons.gui.impl import IGuiLoader
+          except Exception:
+              print _TAG, 'native visibility import failed'
+              traceback.print_exc()
 
           def _lobby_view():
               try:
+                  if ServicesLocator is None or APP_NAME_SPACE is None or WindowLayer is None:
+                      return None
                   app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
                   if app is None:
                       print _TAG, 'SF_LOBBY app not ready'
@@ -64,18 +67,58 @@ jobs:
                   traceback.print_exc()
                   return None
 
+          def _window_manager():
+              try:
+                  if dependency is None or IGuiLoader is None:
+                      return None
+                  gui = dependency.instance(IGuiLoader)
+                  if gui is None:
+                      return None
+                  return getattr(gui, 'windowsManager', None)
+              except Exception:
+                  print _TAG, 'windowsManager lookup failed'
+                  traceback.print_exc()
+                  return None
+
+          def _is_pure_hangar():
+              try:
+                  if isInHangarState is None or WindowLayer is None:
+                      return False
+                  if not isInHangarState():
+                      return False
+                  manager = _window_manager()
+                  if manager is None:
+                      return False
+                  layers = (
+                      WindowLayer.FULLSCREEN_WINDOW,
+                      WindowLayer.OVERLAY,
+                      WindowLayer.SUB_VIEW,
+                      WindowLayer.TOP_SUB_VIEW)
+                  windows = manager.findWindows(lambda w: w.layer in layers)
+                  return len(windows) == 1
+              except Exception:
+                  print _TAG, 'pure-hangar check failed'
+                  traceback.print_exc()
+                  return False
+
           def _apply(visible, returning_to_hangar):
               view = _lobby_view()
               if view is None:
                   print _TAG, 'lobby view not found'
                   return
               try:
+                  flash = getattr(view, 'flashObject', None)
+                  if flash is not None:
+                      set_mask = getattr(flash, 'as_setMaskLobbyPanel', None)
+                      if set_mask is not None:
+                          set_mask(not bool(visible))
+                          print _TAG, 'MASK', not bool(visible)
+
                   fn = getattr(view, '_apply_hangar_visibility', None)
                   if fn is not None:
                       fn(bool(visible))
                       print _TAG, 'APPLY', bool(visible), 'via view'
                   else:
-                      flash = getattr(view, 'flashObject', None)
                       if flash is None:
                           print _TAG, 'flash object not ready'
                           return
@@ -86,8 +129,6 @@ jobs:
                           flash.as_hideLobbyPanel()
                           print _TAG, 'HIDE direct'
 
-                  # Exact 1.2.4 refresh path: _on_vehicle() -> _push('vehicle-changed')
-                  # Only fire on non-Hangar -> Hangar transition, not initial populate.
                   if visible and returning_to_hangar:
                       refresh = getattr(view, '_on_vehicle', None)
                       if refresh is not None:
@@ -102,28 +143,56 @@ jobs:
                   print _TAG, 'apply/refresh visibility failed'
                   traceback.print_exc()
 
+          def _recheck(reason):
+              global _LAST_HANGAR_VISIBLE
+              visible = False
+              try:
+                  visible = bool(_is_pure_hangar())
+                  returning = (_LAST_HANGAR_VISIBLE is False and visible is True)
+                  print _TAG, 'recheck=', reason, 'pure_hangar=', visible, 'returning=', returning
+                  _apply(visible, returning)
+                  _LAST_HANGAR_VISIBLE = visible
+              except Exception:
+                  print _TAG, 'recheck failed', reason
+                  traceback.print_exc()
+
+          def _on_window_status_changed(*args, **kwargs):
+              _recheck('window-status')
+
+          def _ensure_window_listener():
+              global _WINDOW_LISTENER_BOUND
+              if _WINDOW_LISTENER_BOUND:
+                  return True
+              try:
+                  manager = _window_manager()
+                  if manager is None:
+                      return False
+                  manager.onWindowStatusChanged += _on_window_status_changed
+                  _WINDOW_LISTENER_BOUND = True
+                  print _TAG, 'window-status listener installed'
+                  return True
+              except Exception:
+                  print _TAG, 'window-status listener install failed'
+                  traceback.print_exc()
+                  return False
+
           if LobbyStateMachine is not None:
               try:
                   _ORIGINAL_UPDATE_VISIBLE_ROUTE = LobbyStateMachine._LobbyStateMachine__updateVisibleRoute
 
                   def _najx_update_visible_route(self):
-                      global _LAST_HANGAR_VISIBLE
                       result = _ORIGINAL_UPDATE_VISIBLE_ROUTE(self)
                       try:
-                          state = _leaf_state(self)
-                          sid = _state_id(state)
-                          visible = bool(sid and 'hangar' in sid)
-                          returning = (_LAST_HANGAR_VISIBLE is False and visible is True)
-                          print _TAG, 'route=', sid, 'hangar=', visible, 'returning=', returning
-                          _apply(visible, returning)
-                          _LAST_HANGAR_VISIBLE = visible
+                          _ensure_window_listener()
+                          _recheck('route')
                       except Exception:
                           print _TAG, 'route update failed'
                           traceback.print_exc()
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, 'criteria-view+return-refresh installed'
+                  print _TAG, 'native-pure-hangar+mask installed'
+                  _ensure_window_listener()
               except Exception:
                   print _TAG, 'hook install failed'
                   traceback.print_exc()
@@ -140,11 +209,13 @@ jobs:
           print('PYC_SHA256=' + hashlib.sha256(d).hexdigest())
           PY"
           test "$(xxd -p -l 4 out/mod_najxbox_moe_lobby_visibility.pyc)" = "03f30d0a"
-          rm out/mod_najxbox_moe_lobby_visibility.py
+          cp out/mod_najxbox_moe_lobby_visibility.py out/mod_najxbox_moe_lobby_visibility.source.py
 
       - name: Upload compiled helper
         uses: actions/upload-artifact@v4
         with:
-          name: moe-original-lobby-visibility-pyc
-          path: out/mod_najxbox_moe_lobby_visibility.pyc
+          name: moe-1.2.9-lobby-mask-helper
+          path: |
+            out/mod_najxbox_moe_lobby_visibility.pyc
+            out/mod_najxbox_moe_lobby_visibility.source.py
           if-no-files-found: error
