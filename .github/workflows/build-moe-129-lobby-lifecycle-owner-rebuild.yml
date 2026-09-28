@@ -1,0 +1,720 @@
+name: build-moe-129-lobby-lifecycle-owner-rebuild
+
+on:
+  push:
+    branches:
+      - work/moe-1.2.9-lobby-mask-candidate-20260927
+    paths:
+      - '.github/workflows/build-moe-129-lobby-lifecycle-owner-rebuild.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-1.2.9-lobby-mask-candidate-20260927
+
+      - name: Verify exact 1.2.8 authority
+        shell: bash
+        run: |
+          set -euxo pipefail
+          pkg='moe/1.2.8/NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip'
+          echo '71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e  '"$pkg" | sha256sum -c -
+          root="$RUNNER_TEMP/moe129owner"
+          rm -rf "$root" out129owner
+          mkdir -p "$root/outer" "$root/original" out129owner
+          unzip -q "$pkg" -d "$root/outer"
+          wotmod=$(find "$root/outer" -type f -name '*.wotmod' -print -quit)
+          test -n "$wotmod"
+          echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
+          cp "$wotmod" "$root/original/current.wotmod"
+
+      - name: Write single-owner Lobby lifecycle helper
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cat > out129owner/mod_najxbox_moe_lobby_visibility.py <<'PY'
+          # -*- coding: utf-8 -*-
+          import traceback
+
+          _TAG = '[NAJXBox.MoE.Visibility]'
+          _LOBBY_ALIAS = 'NAJXBOX_MOE_INDEPENDENT_LOBBY'
+          _BASE_LOBBY_ALIAS = 'lobby'
+          _EXACT_HANGAR_ROUTE = 'subScope/subLayer/hangar/{root}'
+
+          _LAST_APPLIED_VISIBLE = None
+          _LAST_VIEW_ID = None
+          _LOAD_PENDING = False
+          _LOAD_RETRY = 0
+          _RECHECK_PENDING = False
+          _BOUND_WINDOWS = None
+          _BOUND_LOADER = None
+
+          LobbyStateMachine = None
+          WindowLayer = None
+          WindowStatus = None
+          ShowingStatus = None
+          POP_UP_CRITERIA = None
+          SFViewLoadParams = None
+          APP_NAME_SPACE = None
+          ServicesLocator = None
+          dependency = None
+          IGuiLoader = None
+          g_eventBus = None
+          EVENT_BUS_SCOPE = None
+          events = None
+
+          try:
+              from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
+              from frameworks.wulf import WindowLayer, WindowStatus
+              from frameworks.wulf.gui_constants import ShowingStatus
+              from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+              from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+              from gui.app_loader.settings import APP_NAME_SPACE
+              from gui.shared.personality import ServicesLocator
+              from helpers import dependency
+              from skeletons.gui.impl import IGuiLoader
+              from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+          except Exception:
+              print _TAG, 'import failed'
+              traceback.print_exc()
+
+          def _state_id(state):
+              try:
+                  if state is None:
+                      return ''
+                  fn = getattr(state, 'getStateID', None)
+                  if fn is not None:
+                      return str(fn())
+                  return str(getattr(state, 'STATE_ID', ''))
+              except Exception:
+                  return ''
+
+          def _leaf_state(machine):
+              try:
+                  states = machine.getNonEmptyEnteredStates()
+                  return states[-1] if states else None
+              except Exception:
+                  return None
+
+          def _is_exact_hangar(machine):
+              return _state_id(_leaf_state(machine)) == _EXACT_HANGAR_ROUTE
+
+          def _lobby_app():
+              try:
+                  if ServicesLocator is None or APP_NAME_SPACE is None:
+                      return None
+                  return ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+              except Exception:
+                  return None
+
+          def _container_view(layer, alias):
+              try:
+                  app = _lobby_app()
+                  if app is None:
+                      return None
+                  manager = getattr(app, 'containerManager', None)
+                  if manager is None or POP_UP_CRITERIA is None:
+                      return None
+                  return manager.getView(
+                      layer,
+                      {POP_UP_CRITERIA.VIEW_ALIAS: alias})
+              except Exception:
+                  return None
+
+          def _lobby_view():
+              if WindowLayer is None:
+                  return None
+              return _container_view(WindowLayer.WINDOW, _LOBBY_ALIAS)
+
+          def _base_lobby_ready():
+              if WindowLayer is None:
+                  return False
+              return _container_view(WindowLayer.VIEW, _BASE_LOBBY_ALIAS) is not None
+
+          def _window_manager():
+              try:
+                  if dependency is None or IGuiLoader is None:
+                      return None
+                  gui = dependency.instance(IGuiLoader)
+                  if gui is None:
+                      return None
+                  return getattr(gui, 'windowsManager', None)
+              except Exception:
+                  return None
+
+          def _has_foreground_blocker():
+              try:
+                  manager = _window_manager()
+                  if manager is None or WindowLayer is None or WindowStatus is None or ShowingStatus is None:
+                      return False
+
+                  blocker_layers = (
+                      WindowLayer.TOP_SUB_VIEW,
+                      WindowLayer.FULLSCREEN_WINDOW,
+                      WindowLayer.TOP_WINDOW,
+                      WindowLayer.OVERLAY)
+
+                  active_statuses = (
+                      WindowStatus.LOADING,
+                      WindowStatus.LOADED)
+
+                  shown_statuses = (
+                      ShowingStatus.SHOWING,
+                      ShowingStatus.SHOWN)
+
+                  def _blocked(window):
+                      try:
+                          if window.layer not in blocker_layers:
+                              return False
+                          if window.windowStatus not in active_statuses:
+                              return False
+                          if window.windowStatus == WindowStatus.LOADING:
+                              return True
+                          return getattr(window, 'showingStatus', None) in shown_statuses
+                      except Exception:
+                          return False
+
+                  return bool(manager.findWindows(_blocked))
+              except Exception:
+                  print _TAG, 'foreground blocker check failed'
+                  traceback.print_exc()
+                  return False
+
+          def _desired_visible(machine):
+              if machine is None:
+                  return False
+              if not _is_exact_hangar(machine):
+                  return False
+              if _has_foreground_blocker():
+                  return False
+              return True
+
+          def _apply_to_view(view, visible, refresh):
+              global _LAST_APPLIED_VISIBLE, _LAST_VIEW_ID
+              if view is None:
+                  return False
+
+              visible = bool(visible)
+              try:
+                  if hasattr(view, '_hangar_visible'):
+                      view._hangar_visible = visible
+
+                  flash = getattr(view, 'flashObject', None)
+                  if flash is not None:
+                      mask_fn = getattr(flash, 'as_setMaskLobbyPanel', None)
+                      if mask_fn is not None:
+                          mask_fn(not visible)
+                          print _TAG, 'MASK', bool(not visible)
+
+                  apply_fn = getattr(view, '_apply_hangar_visibility', None)
+                  if apply_fn is not None:
+                      # Exact 1.2.8 bytecode: argument is retry attempt, not visibility.
+                      apply_fn(0)
+                  elif flash is not None:
+                      if visible:
+                          flash.as_showLobbyPanel()
+                      else:
+                          flash.as_hideLobbyPanel()
+
+                  if visible and refresh:
+                      refresh_fn = getattr(view, '_on_vehicle', None)
+                      if refresh_fn is not None:
+                          refresh_fn()
+                          print _TAG, 'REFRESH vehicle-changed'
+                      else:
+                          push_fn = getattr(view, '_push', None)
+                          if push_fn is not None:
+                              push_fn('hangar-return')
+
+                  _LAST_APPLIED_VISIBLE = visible
+                  _LAST_VIEW_ID = id(view)
+                  print _TAG, 'APPLIED visible=', visible, 'refresh=', bool(refresh), 'view_id=', _LAST_VIEW_ID
+                  return True
+              except Exception:
+                  print _TAG, 'apply failed'
+                  traceback.print_exc()
+                  return False
+
+          def _schedule_reconcile(reason, delay=0.0):
+              global _RECHECK_PENDING
+              if _RECHECK_PENDING:
+                  return
+              try:
+                  import BigWorld
+                  _RECHECK_PENDING = True
+
+                  def _cb():
+                      global _RECHECK_PENDING
+                      _RECHECK_PENDING = False
+                      _reconcile(None, reason)
+
+                  BigWorld.callback(delay, _cb)
+              except Exception:
+                  _RECHECK_PENDING = False
+
+          def _alias_from_loaded(view, load_params):
+              try:
+                  key = getattr(load_params, 'viewKey', None)
+                  alias = getattr(key, 'alias', None)
+                  if alias:
+                      return str(alias)
+              except Exception:
+                  pass
+              try:
+                  key = getattr(view, 'key', None)
+                  alias = getattr(key, 'alias', None)
+                  if alias:
+                      return str(alias)
+              except Exception:
+                  pass
+              return ''
+
+          def _on_view_loaded(*args):
+              global _LOAD_PENDING, _LOAD_RETRY
+              try:
+                  view = args[0] if len(args) > 0 else None
+                  params = args[1] if len(args) > 1 else None
+                  alias = _alias_from_loaded(view, params)
+                  if alias == _LOBBY_ALIAS:
+                      _LOAD_PENDING = False
+                      _LOAD_RETRY = 0
+                      print _TAG, 'own LobbyView loaded'
+                      _schedule_reconcile('own-view-loaded', 0.0)
+                  elif alias == _BASE_LOBBY_ALIAS:
+                      print _TAG, 'base lobby loaded'
+                      _schedule_reconcile('base-lobby-loaded', 0.0)
+                  else:
+                      # Generic foreground lifecycle trigger. Decision remains
+                      # exact route + structural blocker layers, never page names.
+                      _schedule_reconcile('view-loaded', 0.0)
+              except Exception:
+                  print _TAG, 'view-loaded callback failed'
+                  traceback.print_exc()
+
+          def _bind_loader():
+              global _BOUND_LOADER
+              try:
+                  app = _lobby_app()
+                  loader = getattr(app, 'loaderManager', None) if app is not None else None
+                  if loader is _BOUND_LOADER:
+                      return
+                  if _BOUND_LOADER is not None:
+                      try:
+                          _BOUND_LOADER.onViewLoaded -= _on_view_loaded
+                      except Exception:
+                          pass
+                  _BOUND_LOADER = loader
+                  if loader is not None:
+                      loader.onViewLoaded += _on_view_loaded
+                      print _TAG, 'loader listener bound'
+              except Exception:
+                  print _TAG, 'loader listener bind failed'
+                  traceback.print_exc()
+
+          def _on_window_status(*args, **kwargs):
+              _schedule_reconcile('window-status', 0.0)
+
+          def _on_window_showing(*args, **kwargs):
+              _schedule_reconcile('window-showing', 0.0)
+
+          def _bind_windows():
+              global _BOUND_WINDOWS
+              try:
+                  manager = _window_manager()
+                  if manager is _BOUND_WINDOWS:
+                      return
+                  if _BOUND_WINDOWS is not None:
+                      try:
+                          _BOUND_WINDOWS.onWindowStatusChanged -= _on_window_status
+                      except Exception:
+                          pass
+                      try:
+                          _BOUND_WINDOWS.onWindowShowingStatusChanged -= _on_window_showing
+                      except Exception:
+                          pass
+                  _BOUND_WINDOWS = manager
+                  if manager is not None:
+                      manager.onWindowStatusChanged += _on_window_status
+                      manager.onWindowShowingStatusChanged += _on_window_showing
+                      print _TAG, 'window listeners bound'
+              except Exception:
+                  print _TAG, 'window listener bind failed'
+                  traceback.print_exc()
+
+          def _bind_runtime_events():
+              _bind_loader()
+              _bind_windows()
+
+          def _ensure_lobby_view():
+              global _LOAD_PENDING, _LOAD_RETRY
+              try:
+                  if _lobby_view() is not None:
+                      _LOAD_PENDING = False
+                      _LOAD_RETRY = 0
+                      return True
+
+                  if not _base_lobby_ready():
+                      print _TAG, 'base lobby not ready; defer own view load'
+                      return False
+
+                  app = _lobby_app()
+                  if app is None or SFViewLoadParams is None:
+                      return False
+
+                  if not _LOAD_PENDING:
+                      _LOAD_PENDING = True
+                      _LOAD_RETRY = 0
+                      print _TAG, 'loading own LobbyView'
+                      app.loadView(SFViewLoadParams(_LOBBY_ALIAS))
+
+                  _LOAD_RETRY += 1
+                  if _LOAD_RETRY <= 20:
+                      _schedule_reconcile('own-view-wait-%d' % _LOAD_RETRY, 0.05)
+                  else:
+                      print _TAG, 'own LobbyView load timed out'
+                      _LOAD_PENDING = False
+                      _LOAD_RETRY = 0
+                  return False
+              except Exception:
+                  print _TAG, 'own LobbyView load failed'
+                  traceback.print_exc()
+                  _LOAD_PENDING = False
+                  return False
+
+          def _reconcile(machine, reason):
+              global _LAST_APPLIED_VISIBLE, _LAST_VIEW_ID
+              try:
+                  _bind_runtime_events()
+
+                  if machine is None and LobbyStateMachine is not None:
+                      # Route hook passes the active machine. For asynchronous
+                      # lifecycle events, use the most recently entered route by
+                      # resolving the machine from the hook owner when possible.
+                      # If unavailable, fail closed until the next route callback.
+                      machine = getattr(_reconcile, '_last_machine', None)
+                  elif machine is not None:
+                      _reconcile._last_machine = machine
+
+                  desired = _desired_visible(machine)
+                  view = _lobby_view()
+
+                  print _TAG, 'RECONCILE reason=', reason, 'route=', _state_id(_leaf_state(machine)) if machine is not None else '', 'desired=', desired, 'view=', bool(view)
+
+                  if desired and view is None:
+                      # Do not advance last-applied state until a real View exists.
+                      _ensure_lobby_view()
+                      return
+
+                  if view is None:
+                      _LAST_APPLIED_VISIBLE = False
+                      _LAST_VIEW_ID = None
+                      return
+
+                  current_view_id = id(view)
+                  new_view = (_LAST_VIEW_ID != current_view_id)
+                  refresh = bool(desired and (new_view or _LAST_APPLIED_VISIBLE is not True))
+
+                  # Always reconcile on lifecycle events so persistent SWF mask
+                  # cannot drift after later data updates.
+                  _apply_to_view(view, desired, refresh)
+              except Exception:
+                  print _TAG, 'reconcile failed', reason
+                  traceback.print_exc()
+
+          def _on_app_initialized(event):
+              try:
+                  if APP_NAME_SPACE is not None and event.ns == APP_NAME_SPACE.SF_LOBBY:
+                      print _TAG, 'SF_LOBBY initialized'
+                      _bind_runtime_events()
+                      _schedule_reconcile('app-initialized', 0.0)
+              except Exception:
+                  traceback.print_exc()
+
+          if LobbyStateMachine is not None:
+              try:
+                  _ORIGINAL_UPDATE_VISIBLE_ROUTE = LobbyStateMachine._LobbyStateMachine__updateVisibleRoute
+
+                  def _najx_update_visible_route(self):
+                      result = _ORIGINAL_UPDATE_VISIBLE_ROUTE(self)
+                      try:
+                          _reconcile(self, 'route')
+                      except Exception:
+                          print _TAG, 'route update failed'
+                          traceback.print_exc()
+                      return result
+
+                  LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
+
+                  if g_eventBus is not None and events is not None and EVENT_BUS_SCOPE is not None:
+                      g_eventBus.addListener(
+                          events.AppLifeCycleEvent.INITIALIZED,
+                          _on_app_initialized,
+                          EVENT_BUS_SCOPE.GLOBAL)
+
+                  print _TAG, '1.2.9 single-owner lifecycle rebuild installed'
+                  _bind_runtime_events()
+              except Exception:
+                  print _TAG, 'hook install failed'
+                  traceback.print_exc()
+          PY
+
+      - name: Compile helper with CPython 2.7
+        shell: bash
+        run: |
+          set -euxo pipefail
+          docker run --rm -v "$PWD/out129owner:/out" python:2.7-slim sh -lc "python -m py_compile /out/mod_najxbox_moe_lobby_visibility.py && python - <<'PY'
+          import hashlib
+          p='/out/mod_najxbox_moe_lobby_visibility.pyc'
+          d=open(p,'rb').read()
+          print('PYC_MAGIC=' + d[:4].encode('hex'))
+          print('PYC_SHA256=' + hashlib.sha256(d).hexdigest())
+          PY"
+          test "$(xxd -p -l 4 out129owner/mod_najxbox_moe_lobby_visibility.pyc)" = "03f30d0a"
+
+      - name: Rebuild exact 1.2.8 plus single helper and meta
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import zipfile, hashlib, xml.etree.ElementTree as ET, os, json
+          root=os.environ['RUNNER_TEMP']+'/moe129owner'
+          src=root+'/original/current.wotmod'
+          dst='out129owner/najxbox.moe_independent_1.2.4.wotmod'
+          helper='out129owner/mod_najxbox_moe_lobby_visibility.pyc'
+          helper_name='res/scripts/client/gui/mods/mod_najxbox_moe_lobby_visibility.pyc'
+
+          with zipfile.ZipFile(src,'r') as zin:
+              infos=zin.infolist()
+              original={i.filename:zin.read(i.filename) for i in infos}
+
+          assert len(infos)==12
+          assert all(i.compress_type==zipfile.ZIP_STORED for i in infos)
+
+          meta=original['meta.xml'].decode('utf-8')
+          meta=meta.replace('<version>1.2.8</version>','<version>1.2.9</version>')
+          meta=meta.replace(
+              '<description>1.2.4 baseline + NA BattlePage compatibility guard; no data/drag/lifecycle changes</description>',
+              '<description>1.2.8 exact base + single-owner Lobby lifecycle/view-recreate/mask repair; BattlePage guard retained</description>')
+          ET.fromstring(meta)
+
+          replacement={
+              'meta.xml':meta.encode('utf-8'),
+              helper_name:open(helper,'rb').read()
+          }
+
+          with zipfile.ZipFile(dst,'w') as zout:
+              for info in infos:
+                  data=replacement.get(info.filename,original[info.filename])
+                  zi=zipfile.ZipInfo(info.filename,info.date_time)
+                  zi.comment=info.comment
+                  zi.extra=info.extra
+                  zi.create_system=info.create_system
+                  zi.create_version=info.create_version
+                  zi.extract_version=info.extract_version
+                  zi.flag_bits=info.flag_bits
+                  zi.volume=info.volume
+                  zi.internal_attr=info.internal_attr
+                  zi.external_attr=info.external_attr
+                  zi.compress_type=zipfile.ZIP_STORED
+                  zout.writestr(zi,data)
+
+          with zipfile.ZipFile(dst) as z:
+              cinfos=z.infolist()
+              candidate={i.filename:z.read(i.filename) for i in cinfos}
+
+          assert len(cinfos)==12
+          assert [i.filename for i in cinfos]==[i.filename for i in infos]
+          assert all(i.compress_type==zipfile.ZIP_STORED for i in cinfos)
+
+          diffs=[n for n in original if original[n]!=candidate[n]]
+          assert set(diffs)=={'meta.xml',helper_name},diffs
+          assert candidate[helper_name][:4]==bytes.fromhex('03f30d0a')
+
+          locked=[n for n in original if n not in ('meta.xml',helper_name)]
+          for name in locked:
+              assert original[name]==candidate[name],name
+
+          report={
+              'base_wotmod_sha256':hashlib.sha256(open(src,'rb').read()).hexdigest(),
+              'candidate_wotmod_sha256':hashlib.sha256(open(dst,'rb').read()).hexdigest(),
+              'inner_members':len(cinfos),
+              'changed_members':diffs,
+              'all_inner_stored':True,
+              'helper_magic':candidate[helper_name][:4].hex(),
+              'locked_member_sha256':{n:hashlib.sha256(candidate[n]).hexdigest() for n in locked}
+          }
+          open('out129owner/STATIC_DIFF.json','w').write(json.dumps(report,indent=2,sort_keys=True))
+          print(json.dumps(report,indent=2,sort_keys=True))
+          PY
+
+      - name: Build outer Runtime candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p out129owner/package/mods/2.4.0.1
+          cp out129owner/najxbox.moe_independent_1.2.4.wotmod out129owner/package/mods/2.4.0.1/
+          (cd out129owner/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
+          sha256sum out129owner/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129owner/CANDIDATE_SHA256.txt
+          sha256sum out129owner/najxbox.moe_independent_1.2.4.wotmod > out129owner/CANDIDATE_WOTMOD_SHA256.txt
+
+      - name: Review 1 - owner model and forbidden paths
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import json
+          r=json.load(open('out129owner/STATIC_DIFF.json'))
+          assert r['base_wotmod_sha256']=='7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb'
+          assert r['inner_members']==12
+          assert r['all_inner_stored'] is True
+          assert r['helper_magic']=='03f30d0a'
+          assert set(r['changed_members'])=={'meta.xml','res/scripts/client/gui/mods/mod_najxbox_moe_lobby_visibility.pyc'}
+
+          src=open('out129owner/mod_najxbox_moe_lobby_visibility.py',encoding='utf-8').read()
+
+          # Required structural owners.
+          required=[
+              "_EXACT_HANGAR_ROUTE = 'subScope/subLayer/hangar/{root}'",
+              "SFViewLoadParams(_LOBBY_ALIAS)",
+              "mask_fn(not visible)",
+              "view._hangar_visible = visible",
+              "apply_fn(0)",
+              "WindowLayer.TOP_SUB_VIEW",
+              "WindowLayer.FULLSCREEN_WINDOW",
+              "WindowLayer.TOP_WINDOW",
+              "WindowLayer.OVERLAY",
+              "onWindowStatusChanged",
+              "onWindowShowingStatusChanged",
+              "onViewLoaded",
+              "_ensure_lobby_view",
+              "_base_lobby_ready",
+              "_on_vehicle"
+          ]
+          for token in required:
+              assert token in src,token
+
+          # Failed route patterns must not return.
+          forbidden=[
+              "'hangar' in sid",
+              "len(windows) == 1",
+              "WindowLayer.SUB_VIEW,",
+              "VIEW_ALIAS.LOBBY_HANGAR",
+              "VIEW_ALIAS.LEGACY_LOBBY_HANGAR",
+              "fn(bool(visible))",
+              "techtree",
+              "lootbox",
+              "storage",
+              "campaignSelector",
+              "PlayerAvatar",
+              "onBattleEvents",
+              "g_appLoader",
+              "LobbySimpleEvent"
+          ]
+          for token in forbidden:
+              assert token not in src,token
+
+          open('out129owner/REVIEW_1.md','w').write(
+              '# Review 1 — PASS\n\n'
+              '- Base is exact formal 1.2.8 WOTMOD.\n'
+              '- Only meta.xml and the existing Lobby visibility helper change.\n'
+              '- R1-R4 code is not inherited.\n'
+              '- Exact official Hangar route equality replaces substring matching.\n'
+              '- Missing own LobbyView is recreated through its already-registered SFViewLoadParams alias.\n'
+              '- Visibility state is advanced only after a real View exists.\n'
+              '- Official persistent Flash mask semantics restored.\n'
+              '- Exact 1.2.8 retry-counter API is called with 0.\n'
+              '- Generic foreground blockers use structural high layers only; no SUB_VIEW counting and no page-name blacklist.\n'
+              '- No battle/data/drag/storage/threshold owner changes.\n'
+          )
+          PY
+
+      - name: Review 2 - byte regression and packaging closure
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import zipfile,hashlib,json,xml.etree.ElementTree as ET
+          cand='out129owner/najxbox.moe_independent_1.2.4.wotmod'
+          r=json.load(open('out129owner/STATIC_DIFF.json'))
+          with zipfile.ZipFile(cand) as z:
+              assert len(z.infolist())==12
+              assert all(i.compress_type==0 for i in z.infolist())
+              root=ET.fromstring(z.read('meta.xml'))
+              assert root.findtext('id')=='najxbox.moe.independent'
+              assert root.findtext('version')=='1.2.9'
+
+              # Frozen exact 1.2.8 members.
+              frozen={
+                'res/gui/flash/najxbox_moe_en.swf':'6c49c2c686b3215f3a6455dbbabc747951c54ab0ea33ebff60cc3b7d8b535d0d',
+                'res/gui/flash/najxbox_moe_zh.swf':'d3fdb4b66ef000626220fc2715ea6b6c35c4c3fe42daa1e621df2c8fbf4e102e',
+                'res/mods/najxbox_moe/thresholds.json':'3bcf92a42a3385bcbaac6c0a3580af49cb7f7883ff8a8a16fff2160ca5b8ef5f',
+                'res/scripts/client/gui/mods/mod_najxbox_moe.pyc':'17219da4ce134bcf50d5786f5127c8aeb6304c10fce360b9542c0e28eb6a9a54',
+                'res/scripts/client/gui/mods/najxbox_moe_independent/__init__.pyc':'27f4841136412f90b5c936465cb8048ed8fe17c232eb997371844046245498fc',
+                'res/scripts/client/gui/mods/najxbox_moe_independent/bridge.pyc':'2e2818cfae7116aaceac44b730c4801db656ed5ea406e3560896c2e4dd39f5a3',
+                'res/scripts/client/gui/mods/najxbox_moe_independent/datasource.pyc':'b9d4db3de7e5e3652a22813501288a4648d25c118b27e440264d17a1af25adad',
+                'res/scripts/client/gui/mods/najxbox_moe_independent/mathcore.pyc':'205bc01298198a6f9077287fc1de7b48d3b373cb951529f57cfe56c32dac6f48',
+                'res/scripts/client/gui/mods/najxbox_moe_independent/storage.pyc':'ba5070fb7c3f0071e1adcd54f2721cc0bfae6db87d876413bdb1bc48fe4ea885',
+                'res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc':'5939eebf1a80429818eb52c3d553bd754d05d225252e2182bb2a2eb08cdfc2b1'
+              }
+              for name,sha in frozen.items():
+                  assert hashlib.sha256(z.read(name)).hexdigest()==sha,name
+
+          outer='out129owner/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1_TEST_CANDIDATE.zip'
+          with zipfile.ZipFile(outer) as z:
+              assert z.namelist()==[
+                  'mods/',
+                  'mods/2.4.0.1/',
+                  'mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod']
+
+          open('out129owner/REVIEW_2.md','w').write(
+              '# Review 2 — PASS\n\n'
+              '- 12-member WOTMOD structure retained.\n'
+              '- All inner members remain ZIP Stored / method 0.\n'
+              '- Both SWFs, ui.pyc, datasource, bridge, math, storage, thresholds and main entry are exact 1.2.8 bytes.\n'
+              '- 1.2.8 BattlePage compatibility bytes remain untouched.\n'
+              '- Rollback authority remains WOTMOD SHA256 7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb.\n'
+              '- Candidate remains TEST_CANDIDATE; no Public/Manager/Gitee promotion.\n'
+          )
+          PY
+
+      - name: Write Runtime matrix
+        shell: bash
+        run: |
+          cat > out129owner/RUNTIME_MATRIX.txt <<'TXT'
+          NAJXBox MoE 1.2.9 Lobby Lifecycle Owner Rebuild
+
+          Hard gates:
+          1. Start WoT: no WOTMOD/package-load rejection.
+          2. Initial Hangar: panel visible and live.
+          3. Switch 5-10 vehicles: panel remains visible and data refreshes.
+          4. Open a route-managed non-Hangar page (Tech Tree / Depot / Missions): panel hides.
+          5. Return to Hangar: panel restores immediately with current vehicle data.
+          6. Open a foreground top/fullscreen/overlay window: panel hides; closing it restores panel.
+          7. Switch server: old Lobby may be destroyed; after new Lobby/Hangar loads the MoE LobbyView must be recreated automatically and panel must restore without reselecting a vehicle.
+          8. Repeat server switch once more if convenient.
+          9. Enter battle and return: battle behavior must remain exactly 1.2.8; native damage counter and MoE live updates remain normal.
+          10. Box/Tier/language regression: no changes.
+
+          Runtime log tag:
+          [NAJXBox.MoE.Visibility]
+
+          Do not promote unless all relevant gates pass.
+          TXT
+
+      - name: Upload candidate and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-1.2.9-lobby-lifecycle-owner-rebuild
+          path: |
+            out129owner/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1_TEST_CANDIDATE.zip
+            out129owner/CANDIDATE_SHA256.txt
+            out129owner/CANDIDATE_WOTMOD_SHA256.txt
+            out129owner/STATIC_DIFF.json
+            out129owner/REVIEW_1.md
+            out129owner/REVIEW_2.md
+            out129owner/RUNTIME_MATRIX.txt
+            out129owner/mod_najxbox_moe_lobby_visibility.py
+          if-no-files-found: error
