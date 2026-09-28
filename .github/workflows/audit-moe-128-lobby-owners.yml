@@ -1,0 +1,112 @@
+name: audit-moe-128-lobby-owners
+
+on:
+  push:
+    branches:
+      - work/moe-1.2.9-lobby-mask-candidate-20260927
+    paths:
+      - '.github/workflows/audit-moe-128-lobby-owners.yml'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-1.2.9-lobby-mask-candidate-20260927
+
+      - name: Verify and extract exact 1.2.8
+        shell: bash
+        run: |
+          set -euxo pipefail
+          pkg='moe/1.2.8/NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip'
+          echo '71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e  '"$pkg" | sha256sum -c -
+          rm -rf audit128
+          mkdir -p audit128/outer audit128/wotmod audit128/out
+          unzip -q "$pkg" -d audit128/outer
+          wotmod=$(find audit128/outer -type f -name '*.wotmod' -print -quit)
+          echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
+          unzip -q "$wotmod" -d audit128/wotmod
+
+      - name: Disassemble exact Python 2.7 lobby owners
+        shell: bash
+        run: |
+          set -euxo pipefail
+          docker run --rm -v "$PWD/audit128:/audit" python:2.7-slim sh -lc "python - <<'PY'
+          import imp, dis, marshal, types, os
+          files=[
+            '/audit/wotmod/res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc',
+            '/audit/wotmod/res/scripts/client/gui/mods/mod_najxbox_moe_lobby_visibility.pyc',
+            '/audit/wotmod/res/scripts/client/gui/mods/mod_najxbox_moe.pyc',
+          ]
+          out=open('/audit/out/EXACT_128_PY27_DISASSEMBLY.txt','w')
+          def walk(co, prefix=''):
+              out.write('\n===== CODE %s%s =====\n' % (prefix, co.co_name))
+              out.write('argcount=%r names=%r varnames=%r\n' % (co.co_argcount, co.co_names, co.co_varnames))
+              out.write('consts=%r\n' % (co.co_consts,))
+              import sys
+              old=sys.stdout
+              sys.stdout=out
+              try:
+                  dis.dis(co)
+              finally:
+                  sys.stdout=old
+              for c in co.co_consts:
+                  if isinstance(c, types.CodeType):
+                      walk(c, prefix + co.co_name + '.')
+          for p in files:
+              out.write('\n\n################ FILE %s ################\n' % p)
+              f=open(p,'rb')
+              magic=f.read(4); ts=f.read(4)
+              out.write('magic=%s timestamp=%s\n' % (magic.encode('hex'), ts.encode('hex')))
+              co=marshal.load(f)
+              f.close()
+              walk(co)
+          out.close()
+          PY"
+
+      - name: Extract targeted owner excerpts
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('audit128/out/EXACT_128_PY27_DISASSEMBLY.txt')
+          txt=p.read_text(errors='replace')
+          keys=[
+            '_apply_hangar_visibility',
+            '_sync_hangar_visibility',
+            '_on_hangar_status',
+            '_on_vehicle',
+            '_push',
+            '_najx_update_visible_route',
+            '_apply',
+            '_leaf_state',
+            '_state_id',
+          ]
+          out=[]
+          for key in keys:
+              pos=0
+              while True:
+                  i=txt.find('CODE ',pos)
+                  if i<0: break
+                  j=txt.find('=====\n',i+5)
+                  if j<0: break
+                  header=txt[i:j]
+                  nexti=txt.find('===== CODE ',j+6)
+                  block=txt[i: nexti if nexti>=0 else len(txt)]
+                  if key in header:
+                      out.append(block)
+                  pos=j+6
+          Path('audit128/out/TARGETED_LOBBY_OWNER_EXCERPTS.txt').write_text('\n'.join(out),errors='replace')
+          PY
+
+      - name: Upload exact audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-1.2.8-exact-lobby-owner-audit
+          path: |
+            audit128/out/EXACT_128_PY27_DISASSEMBLY.txt
+            audit128/out/TARGETED_LOBBY_OWNER_EXCERPTS.txt
+          if-no-files-found: error
