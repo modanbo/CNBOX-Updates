@@ -24,8 +24,8 @@ Creator remains an engineering flavor on GitHub/Drive and is not mirrored to Git
 - SHA256: `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`
 - WoT: `2.4.0.1`
 - XVM: `13.1.0.0090`
-- Creator/Aslain compatibility lock: `2401-08-R34-R2F9-FINAL_LOCK-R5`
-- Aslain #08 compatibility did not change the 534-file R5 Public payload bytes.
+- Creator/Aslain compatibility lock: `2401-09-R34-R2F9-FINAL_LOCK-R5`
+- Aslain #09 selected-dependency LOW_RISK_REBASE did not change the 534-file R5 Public payload bytes; trigger was Aslain Mod Menu 2.0.17 -> 2.1.01, with Runtime not required for this delta.
 
 ### Language
 - packVersion: `1.1`
