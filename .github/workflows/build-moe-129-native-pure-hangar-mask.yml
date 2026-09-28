@@ -379,7 +379,7 @@ jobs:
           mkdir -p out129/package/mods/2.4.0.1
           cp out129/najxbox.moe_independent_1.2.4.wotmod out129/package/mods/2.4.0.1/
           (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
-          sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
+          sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
           sha256sum out129/najxbox.moe_independent_1.2.4.wotmod > out129/CANDIDATE_WOTMOD_SHA256.txt
 
       - name: Review 1 - owner and package boundary
@@ -447,7 +447,7 @@ jobs:
               assert z.read('res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc')[:4] == bytes.fromhex('03f30d0a')
               root=ET.fromstring(z.read('meta.xml'))
               assert root.findtext('version') == '1.2.9'
-          outer='out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_WOT_2.4.0.1_TEST_CANDIDATE.zip'
+          outer='out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip'
           with zipfile.ZipFile(outer) as z:
               assert z.namelist() == ['mods/','mods/2.4.0.1/','mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod']
           open('out129/REVIEW_2.md','w').write(
@@ -468,7 +468,7 @@ jobs:
         with:
           name: moe-1.2.9-native-pure-hangar-mask-r2-test-candidate
           path: |
-            out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_WOT_2.4.0.1_TEST_CANDIDATE.zip
+            out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip
             out129/CANDIDATE_SHA256.txt
             out129/CANDIDATE_WOTMOD_SHA256.txt
             out129/STATIC_DIFF.json
