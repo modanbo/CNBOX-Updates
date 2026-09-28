@@ -1,0 +1,99 @@
+name: analyze-moe-current-128-visibility
+
+on:
+  push:
+    branches:
+      - work/moe-1.2.9-lobby-mask-analysis
+    paths:
+      - '.github/workflows/analyze-moe-current-128-visibility.yml'
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-1.2.9-lobby-mask-analysis
+
+      - name: Extract exact current 1.2.8 package
+        shell: bash
+        run: |
+          set -euxo pipefail
+          pkg='moe/1.2.8/NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip'
+          echo '71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e  '"$pkg" | sha256sum -c -
+          root="$RUNNER_TEMP/current128"
+          mkdir -p "$root/outer" "$root/inner" "$GITHUB_WORKSPACE/out128"
+          unzip -q "$pkg" -d "$root/outer"
+          wotmod=$(find "$root/outer" -type f -name '*.wotmod' -print -quit)
+          test -n "$wotmod"
+          echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
+          unzip -q "$wotmod" -d "$root/inner"
+          python3 - "$wotmod" > out128/inner_zip_methods.txt <<'PY'
+          import sys,zipfile
+          p=sys.argv[1]
+          with zipfile.ZipFile(p) as z:
+              for i in z.infolist():
+                  print('%s\tmethod=%s\tsize=%s\tcrc=%s' % (i.filename,i.compress_type,i.file_size,i.CRC))
+          PY
+
+      - name: Recursively disassemble current UI and visibility helper
+        shell: bash
+        run: |
+          set -euxo pipefail
+          root="$RUNNER_TEMP/current128"
+          cat > "$GITHUB_WORKSPACE/out128/disasm27.py" <<'PY'
+          import sys, marshal, types, dis, binascii
+          p=sys.argv[1]
+          raw=open(p,'rb').read()
+          print('FILE=' + p)
+          print('PYC_MAGIC=' + binascii.hexlify(raw[:4]))
+          print('PYC_HEADER=' + binascii.hexlify(raw[:8]))
+          co=marshal.loads(raw[8:])
+          seen=set()
+          def walk(code, depth=0):
+              if id(code) in seen:
+                  return
+              seen.add(id(code))
+              print('\n' + '='*110)
+              print('DEPTH=%d NAME=%s FILE=%s FIRSTLINE=%s ARGC=%s VARNAMES=%r' % (
+                  depth, code.co_name, code.co_filename, code.co_firstlineno,
+                  code.co_argcount, code.co_varnames))
+              print('NAMES=%r' % (code.co_names,))
+              print('STRINGS=%r' % (tuple(x for x in code.co_consts if isinstance(x, basestring)),))
+              print('-'*110)
+              dis.dis(code)
+              for x in code.co_consts:
+                  if isinstance(x, types.CodeType):
+                      walk(x, depth+1)
+          walk(co)
+          PY
+          docker run --rm             -v "$root/inner:/inner:ro"             -v "$GITHUB_WORKSPACE/out128:/out"             python:2.7-slim             sh -lc "python /out/disasm27.py /inner/res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc"             > out128/current_ui_disassembly.txt
+          docker run --rm             -v "$root/inner:/inner:ro"             -v "$GITHUB_WORKSPACE/out128:/out"             python:2.7-slim             sh -lc "python /out/disasm27.py /inner/res/scripts/client/gui/mods/mod_najxbox_moe_lobby_visibility.pyc"             > out128/current_visibility_helper_disassembly.txt
+
+      - name: Extract visibility owner evidence
+        shell: bash
+        run: |
+          set -euxo pipefail
+          {
+            echo '=== CURRENT UI VISIBILITY FUNCTIONS ==='
+            grep -n -Ei -C 35 'NAME=(_apply_hangar_visibility|_sync_hangar_visibility|_on_hangar_status|_push|populated|_populate)' out128/current_ui_disassembly.txt || true
+            echo
+            echo '=== CURRENT HELPER FUNCTIONS ==='
+            grep -n -Ei -C 35 'NAME=(_apply|_najx_update_visible_route|_leaf_state|_state_id|_lobby_view)' out128/current_visibility_helper_disassembly.txt || true
+            echo
+            echo '=== MASK API REFERENCES ==='
+            grep -n -Ei -C 10 'MaskLobby|maskLobby|as_setMask|as_showLobbyPanel|as_hideLobbyPanel' out128/current_ui_disassembly.txt out128/current_visibility_helper_disassembly.txt || true
+          } > out128/current_visibility_evidence.txt
+          cat out128/current_visibility_evidence.txt
+
+      - name: Upload current analysis
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-current-128-visibility-analysis
+          path: |
+            out128/inner_zip_methods.txt
+            out128/current_ui_disassembly.txt
+            out128/current_visibility_helper_disassembly.txt
+            out128/current_visibility_evidence.txt
+          if-no-files-found: error
