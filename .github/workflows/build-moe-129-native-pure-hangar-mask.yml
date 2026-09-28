@@ -1,4 +1,4 @@
-name: build-moe-129-native-pure-hangar-mask
+name: build-moe-129-native-pure-hangar-mask-r2
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
           cp "$wotmod" "$root/original/current.wotmod"
 
-      - name: Write minimal native pure-Hangar visibility helper
+      - name: Write R2 active-Hangar whitelist visibility helper
         shell: bash
         run: |
           set -euxo pipefail
@@ -104,26 +104,68 @@ jobs:
                   traceback.print_exc()
                   return None
 
+          def _active_subview_alias():
+              try:
+                  if ServicesLocator is None or APP_NAME_SPACE is None or WindowLayer is None:
+                      return ''
+                  app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+                  if app is None:
+                      return ''
+                  manager = getattr(app, 'containerManager', None)
+                  if manager is None:
+                      return ''
+                  container = manager.getContainer(WindowLayer.SUB_VIEW)
+                  if container is None:
+                      return ''
+                  view = container.getView()
+                  if view is None:
+                      return ''
+                  return str(getattr(view, 'alias', ''))
+              except Exception:
+                  print _TAG, 'active subview lookup failed'
+                  traceback.print_exc()
+                  return ''
+
+          def _has_foreground_blocker():
+              try:
+                  if WindowLayer is None or WindowStatus is None:
+                      return True
+                  manager = _window_manager()
+                  if manager is None:
+                      return True
+                  blocker_layers = (
+                      WindowLayer.FULLSCREEN_WINDOW,
+                      WindowLayer.OVERLAY,
+                      WindowLayer.TOP_SUB_VIEW)
+                  active_statuses = (
+                      WindowStatus.LOADING,
+                      WindowStatus.LOADED)
+                  blockers = manager.findWindows(
+                      lambda w: w.layer in blocker_layers and
+                      getattr(w, 'windowStatus', None) in active_statuses)
+                  return len(blockers) > 0
+              except Exception:
+                  print _TAG, 'foreground blocker check failed'
+                  traceback.print_exc()
+                  return True
+
           def _is_pure_hangar():
               try:
-                  if isInHangarState is None or WindowLayer is None:
+                  if isInHangarState is None or VIEW_ALIAS is None:
                       return False
                   if not isInHangarState():
                       return False
-                  manager = _window_manager()
-                  if manager is None:
+                  alias = _active_subview_alias()
+                  allowed = (
+                      VIEW_ALIAS.LOBBY_HANGAR,
+                      VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
+                  if alias not in allowed:
+                      print _TAG, 'active subview is not Hangar:', alias
                       return False
-
-                  # Exact WoT 2.4.0.1 lobby vehicle-marker visibility model:
-                  # Hangar state + exactly one window across the layers that
-                  # replace/cover Hangar content. No page-name blacklist.
-                  layers = (
-                      WindowLayer.FULLSCREEN_WINDOW,
-                      WindowLayer.OVERLAY,
-                      WindowLayer.SUB_VIEW,
-                      WindowLayer.TOP_SUB_VIEW)
-                  windows = manager.findWindows(lambda w: w.layer in layers)
-                  return len(windows) == 1
+                  if _has_foreground_blocker():
+                      print _TAG, 'foreground blocker present'
+                      return False
+                  return True
               except Exception:
                   print _TAG, 'pure-hangar check failed'
                   traceback.print_exc()
@@ -225,7 +267,7 @@ jobs:
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, '1.2.9 native-pure-hangar+official-mask helper installed'
+                  print _TAG, '1.2.9 R2 active-hangar-whitelist+official-mask helper installed'
                   _ensure_window_listener()
               except Exception:
                   print _TAG, 'hook install failed'
@@ -336,7 +378,7 @@ jobs:
           set -euxo pipefail
           mkdir -p out129/package/mods/2.4.0.1
           cp out129/najxbox.moe_independent_1.2.4.wotmod out129/package/mods/2.4.0.1/
-          (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
+          (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
           sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
           sha256sum out129/najxbox.moe_independent_1.2.4.wotmod > out129/CANDIDATE_WOTMOD_SHA256.txt
 
@@ -358,7 +400,7 @@ jobs:
           assert 'WindowLayer.OVERLAY' in src
           assert 'WindowLayer.SUB_VIEW' in src
           assert 'WindowLayer.TOP_SUB_VIEW' in src
-          assert 'return len(windows) == 1' in src
+          assert 'VIEW_ALIAS.LOBBY_HANGAR' in src
           assert "view._hangar_visible = visible" in src
           assert 'as_setMaskLobbyPanel' in src
           assert 'mask_fn(not visible)' in src
@@ -379,8 +421,8 @@ jobs:
               '- Base: exact MoE 1.2.8 FINAL_LOCK.\n'
               '- Changed runtime code: Lobby visibility helper only.\n'
               '- meta.xml: version/description only.\n'
-              '- Uses WoT 2.4.0.1 native pure-Hangar model: isInHangarState + windowsManager layers.\n'
-              '- No page-name blacklist; unknown/future Lobby pages fail closed to masked/hidden.\n'
+              '- Uses WoT 2.4.0.1 active SUB_VIEW Hangar whitelist + generic higher-layer blockers.\n'
+              '- No page-name blacklist; only active Hangar SUB_VIEW may show, with FULLSCREEN/OVERLAY/TOP_SUB_VIEW blockers.\n'
               '- Restores official SWF mask semantics before show/hide.\n'
               '- Existing LobbyView _hangar_visible is synchronized; retry-counter API called with 0.\n'
               '- Existing return-to-Hangar _on_vehicle refresh retained.\n'
@@ -424,7 +466,7 @@ jobs:
       - name: Upload private candidate and reviews
         uses: actions/upload-artifact@v4
         with:
-          name: moe-1.2.9-native-pure-hangar-mask-test-candidate
+          name: moe-1.2.9-native-pure-hangar-mask-r2-test-candidate
           path: |
             out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_WOT_2.4.0.1_TEST_CANDIDATE.zip
             out129/CANDIDATE_SHA256.txt
