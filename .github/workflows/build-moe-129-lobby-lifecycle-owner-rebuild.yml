@@ -192,9 +192,19 @@ jobs:
                   return False
               return True
 
+          def _view_ready(view):
+              try:
+                  if view is None:
+                      return False
+                  if not bool(getattr(view, '_alive', False)):
+                      return False
+                  return getattr(view, 'flashObject', None) is not None
+              except Exception:
+                  return False
+
           def _apply_to_view(view, visible, refresh):
               global _LAST_APPLIED_VISIBLE, _LAST_VIEW_ID
-              if view is None:
+              if not _view_ready(view):
                   return False
 
               visible = bool(visible)
@@ -413,13 +423,19 @@ jobs:
                       _LAST_VIEW_ID = None
                       return
 
+                  if not _view_ready(view):
+                      print _TAG, 'own LobbyView exists but is not populated/ready'
+                      _schedule_reconcile('own-view-not-ready', 0.05)
+                      return
+
                   current_view_id = id(view)
                   new_view = (_LAST_VIEW_ID != current_view_id)
                   refresh = bool(desired and (new_view or _LAST_APPLIED_VISIBLE is not True))
 
                   # Always reconcile on lifecycle events so persistent SWF mask
                   # cannot drift after later data updates.
-                  _apply_to_view(view, desired, refresh)
+                  if not _apply_to_view(view, desired, refresh):
+                      _schedule_reconcile('apply-retry', 0.05)
               except Exception:
                   print _TAG, 'reconcile failed', reason
                   traceback.print_exc()
@@ -591,6 +607,8 @@ jobs:
               "onViewLoaded",
               "_ensure_lobby_view",
               "_base_lobby_ready",
+              "_view_ready",
+              "own LobbyView exists but is not populated/ready",
               "_on_vehicle"
           ]
           for token in required:
@@ -623,7 +641,7 @@ jobs:
               '- R1-R4 code is not inherited.\n'
               '- Exact official Hangar route equality replaces substring matching.\n'
               '- Missing own LobbyView is recreated through its already-registered SFViewLoadParams alias.\n'
-              '- Visibility state is advanced only after a real View exists.\n'
+              '- Visibility state is advanced only after a real populated View with Flash exists.\n'
               '- Official persistent Flash mask semantics restored.\n'
               '- Exact 1.2.8 retry-counter API is called with 0.\n'
               '- Generic foreground blockers use structural high layers only; no SUB_VIEW counting and no page-name blacklist.\n'
