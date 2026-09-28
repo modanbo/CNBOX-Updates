@@ -1,4 +1,4 @@
-name: build-moe-129-native-pure-hangar-mask-r2
+name: build-moe-129-native-pure-hangar-mask-r3
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
           cp "$wotmod" "$root/original/current.wotmod"
 
-      - name: Write R2 active-Hangar whitelist visibility helper
+      - name: Write R3 Hangar-state plus foreground-blocker helper
         shell: bash
         run: |
           set -euxo pipefail
@@ -104,35 +104,13 @@ jobs:
                   traceback.print_exc()
                   return None
 
-          def _active_subview_alias():
-              try:
-                  if ServicesLocator is None or APP_NAME_SPACE is None or WindowLayer is None:
-                      return ''
-                  app = ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
-                  if app is None:
-                      return ''
-                  manager = getattr(app, 'containerManager', None)
-                  if manager is None:
-                      return ''
-                  container = manager.getContainer(WindowLayer.SUB_VIEW)
-                  if container is None:
-                      return ''
-                  view = container.getView()
-                  if view is None:
-                      return ''
-                  return str(getattr(view, 'alias', ''))
-              except Exception:
-                  print _TAG, 'active subview lookup failed'
-                  traceback.print_exc()
-                  return ''
-
-          def _has_foreground_blocker():
+          def _foreground_blocker_windows():
               try:
                   if WindowLayer is None or WindowStatus is None:
-                      return True
+                      return None
                   manager = _window_manager()
                   if manager is None:
-                      return True
+                      return None
                   blocker_layers = (
                       WindowLayer.FULLSCREEN_WINDOW,
                       WindowLayer.OVERLAY,
@@ -140,35 +118,51 @@ jobs:
                   active_statuses = (
                       WindowStatus.LOADING,
                       WindowStatus.LOADED)
-                  blockers = manager.findWindows(
+                  return manager.findWindows(
                       lambda w: w.layer in blocker_layers and
                       getattr(w, 'windowStatus', None) in active_statuses)
-                  return len(blockers) > 0
               except Exception:
-                  print _TAG, 'foreground blocker check failed'
+                  print _TAG, 'foreground blocker lookup failed'
                   traceback.print_exc()
-                  return True
+                  return None
 
           def _is_pure_hangar():
               try:
-                  if isInHangarState is None or VIEW_ALIAS is None:
+                  if isInHangarState is None:
                       return False
                   if not isInHangarState():
                       return False
-                  alias = _active_subview_alias()
-                  allowed = (
-                      VIEW_ALIAS.LOBBY_HANGAR,
-                      VIEW_ALIAS.LEGACY_LOBBY_HANGAR)
-                  if alias not in allowed:
-                      print _TAG, 'active subview is not Hangar:', alias
+
+                  blockers = _foreground_blocker_windows()
+                  if blockers is None:
                       return False
-                  if _has_foreground_blocker():
-                      print _TAG, 'foreground blocker present'
+                  if len(blockers) > 0:
+                      print _TAG, 'foreground blockers=', len(blockers)
                       return False
+
+                  # Important R3 rule:
+                  # do not count SUB_VIEW windows and do not whitelist the active
+                  # SUB_VIEW alias. Vehicle selection can churn normal Hangar
+                  # window/view objects without leaving the Hangar state.
                   return True
               except Exception:
                   print _TAG, 'pure-hangar check failed'
                   traceback.print_exc()
+                  return False
+
+          def _is_blocker_window_event(unique_id):
+              try:
+                  manager = _window_manager()
+                  if manager is None or WindowLayer is None:
+                      return False
+                  window = manager.getWindow(unique_id)
+                  if window is None:
+                      return False
+                  return getattr(window, 'layer', None) in (
+                      WindowLayer.FULLSCREEN_WINDOW,
+                      WindowLayer.OVERLAY,
+                      WindowLayer.TOP_SUB_VIEW)
+              except Exception:
                   return False
 
           def _apply(visible, returning_to_hangar):
@@ -233,7 +227,13 @@ jobs:
                   traceback.print_exc()
 
           def _on_window_status_changed(*args, **kwargs):
-              _recheck('window-status')
+              try:
+                  unique_id = args[0] if args else None
+                  if unique_id is not None and _is_blocker_window_event(unique_id):
+                      _recheck('foreground-window-status')
+              except Exception:
+                  print _TAG, 'window-status callback failed'
+                  traceback.print_exc()
 
           def _ensure_window_listener():
               global _WINDOW_LISTENER_BOUND
@@ -267,7 +267,7 @@ jobs:
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, '1.2.9 R2 active-hangar-whitelist+official-mask helper installed'
+                  print _TAG, '1.2.9 R3 hangar-state+foreground-blocker+official-mask helper installed'
                   _ensure_window_listener()
               except Exception:
                   print _TAG, 'hook install failed'
@@ -308,7 +308,7 @@ jobs:
           meta=meta.replace('<version>1.2.8</version>','<version>1.2.9</version>')
           meta=meta.replace(
               '<description>1.2.4 baseline + NA BattlePage compatibility guard; no data/drag/lifecycle changes</description>',
-              '<description>1.2.8 baseline + WoT-native pure-Hangar visibility and official mask semantics; BattlePage guard retained</description>')
+              '<description>1.2.8 baseline + Hangar-state foreground-blocker mask semantics; BattlePage guard retained</description>')
           ET.fromstring(meta)
           replacement={
               'meta.xml':meta.encode('utf-8'),
@@ -378,8 +378,8 @@ jobs:
           set -euxo pipefail
           mkdir -p out129/package/mods/2.4.0.1
           cp out129/najxbox.moe_independent_1.2.4.wotmod out129/package/mods/2.4.0.1/
-          (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
-          sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
+          (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
+          sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
           sha256sum out129/najxbox.moe_independent_1.2.4.wotmod > out129/CANDIDATE_WOTMOD_SHA256.txt
 
       - name: Review 1 - owner and package boundary
@@ -421,8 +421,8 @@ jobs:
               '- Base: exact MoE 1.2.8 FINAL_LOCK.\n'
               '- Changed runtime code: Lobby visibility helper only.\n'
               '- meta.xml: version/description only.\n'
-              '- Uses WoT 2.4.0.1 active SUB_VIEW Hangar whitelist + generic higher-layer blockers.\n'
-              '- No page-name blacklist; only active Hangar SUB_VIEW may show, with FULLSCREEN/OVERLAY/TOP_SUB_VIEW blockers.\n'
+              '- Uses WoT 2.4.0.1 Hangar state as the base owner plus generic higher-layer blockers.\n'
+              '- No page-name blacklist and no SUB_VIEW counting/alias whitelist; future non-Hangar routes fail closed, while FULLSCREEN/OVERLAY/TOP_SUB_VIEW block Hangar display.\n'
               '- Restores official SWF mask semantics before show/hide.\n'
               '- Existing LobbyView _hangar_visible is synchronized; retry-counter API called with 0.\n'
               '- Existing return-to-Hangar _on_vehicle refresh retained.\n'
@@ -447,7 +447,7 @@ jobs:
               assert z.read('res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc')[:4] == bytes.fromhex('03f30d0a')
               root=ET.fromstring(z.read('meta.xml'))
               assert root.findtext('version') == '1.2.9'
-          outer='out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip'
+          outer='out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip'
           with zipfile.ZipFile(outer) as z:
               assert z.namelist() == ['mods/','mods/2.4.0.1/','mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod']
           open('out129/REVIEW_2.md','w').write(
@@ -458,7 +458,7 @@ jobs:
               '- 1.2.8 BattlePage compatibility bytes retained.\n'
               '- Candidate install path remains the exact existing WOTMOD path.\n'
               '- Rollback authority remains 1.2.8 WOTMOD SHA256 7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb.\n'
-              '- Candidate is TEST_CANDIDATE only; no channel/manifest/public promotion performed.\n'
+              '- R1/R2 remain failed Runtime evidence; R3 rebases from exact 1.2.8, not from either failed candidate.\n- Candidate is TEST_CANDIDATE only; no channel/manifest/public promotion performed.\n'
               '- Runtime first gate: game startup must show no WOTMOD load rejection.\n'
           )
           PY
@@ -466,9 +466,9 @@ jobs:
       - name: Upload private candidate and reviews
         uses: actions/upload-artifact@v4
         with:
-          name: moe-1.2.9-native-pure-hangar-mask-r2-test-candidate
+          name: moe-1.2.9-native-pure-hangar-mask-r3-test-candidate
           path: |
-            out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R2_WOT_2.4.0.1_TEST_CANDIDATE.zip
+            out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip
             out129/CANDIDATE_SHA256.txt
             out129/CANDIDATE_WOTMOD_SHA256.txt
             out129/STATIC_DIFF.json
