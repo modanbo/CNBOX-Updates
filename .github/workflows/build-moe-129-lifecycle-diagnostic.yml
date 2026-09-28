@@ -1,0 +1,698 @@
+name: build-moe-129-lifecycle-diagnostic
+
+on:
+  push:
+    branches:
+      - work/moe-1.2.9-lobby-mask-candidate-20260927
+    paths:
+      - '.github/workflows/build-moe-129-lifecycle-diagnostic.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-1.2.9-lobby-mask-candidate-20260927
+
+      - name: Verify exact 1.2.8 authority
+        shell: bash
+        run: |
+          set -euxo pipefail
+          pkg='moe/1.2.8/NAJXBOX_MoE_INDEPENDENT_1.2.8_BATTLEPAGE_RUNTIME_FIX_WOT_2.4.0.1.zip'
+          echo '71bc51dff5e3b72d835b97f41267b2e9d6e445bd030706cc8145ef31c8966a2e  '"$pkg" | sha256sum -c -
+          root="$RUNNER_TEMP/moe129diag"
+          rm -rf "$root" outdiag
+          mkdir -p "$root/outer" "$root/original" outdiag
+          unzip -q "$pkg" -d "$root/outer"
+          wotmod=$(find "$root/outer" -type f -name '*.wotmod' -print -quit)
+          test -n "$wotmod"
+          echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
+          cp "$wotmod" "$root/original/current.wotmod"
+
+      - name: Write additive read-only diagnostic source
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cat > outdiag/mod_najxbox_moe_lifecycle_diag.py <<'PY'
+          # -*- coding: utf-8 -*-
+          import logging
+          import traceback
+
+          _TAG = '[NAJXBox.MoE.DIAG]'
+          _LOBBY_ALIAS = 'NAJXBOX_MOE_INDEPENDENT_LOBBY'
+          _BOUND_LSM = None
+          _BOUND_WINDOWS = None
+          _BOUND_LOADER = None
+          _VEHICLE_BOUND = False
+          _BIND_ATTEMPTS = 0
+
+          APP_NAME_SPACE = None
+          ServicesLocator = None
+          WindowLayer = None
+          POP_UP_CRITERIA = None
+          g_eventBus = None
+          EVENT_BUS_SCOPE = None
+          events = None
+          dependency = None
+          IGuiLoader = None
+          getLobbyStateMachine = None
+          isInHangarState = None
+
+          _logger = logging.getLogger('NAJXBox.MoE.Diagnostic')
+
+          def _emit(msg):
+              try:
+                  print _TAG, msg
+              except Exception:
+                  pass
+              try:
+                  _logger.warning('%s %s', _TAG, msg)
+              except Exception:
+                  pass
+
+          try:
+              from frameworks.wulf import WindowLayer
+              from gui.app_loader.settings import APP_NAME_SPACE
+              from gui.shared.personality import ServicesLocator
+              from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+              from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+              from helpers import dependency
+              from skeletons.gui.impl import IGuiLoader
+              from gui.Scaleform.lobby_entry import getLobbyStateMachine
+              from gui.lobby_state_machine.states import isInHangarState
+          except Exception:
+              _emit('optional import failure; diagnostics remain fail-safe')
+              traceback.print_exc()
+
+          def _safe_repr(value):
+              try:
+                  return repr(value)
+              except Exception:
+                  return '<repr-failed>'
+
+          def _state_id(state):
+              if state is None:
+                  return ''
+              try:
+                  return str(state.getStateID())
+              except Exception:
+                  try:
+                      return str(getattr(state, 'STATE_ID', ''))
+                  except Exception:
+                      return ''
+
+          def _state_info(state):
+              if state is None:
+                  return 'None'
+              sid = _state_id(state)
+              flags = None
+              parent = ''
+              try:
+                  flags = int(state.getFlags())
+              except Exception:
+                  flags = None
+              try:
+                  parent = _state_id(state.getParent())
+              except Exception:
+                  parent = ''
+              try:
+                  cls = state.__class__.__name__
+              except Exception:
+                  cls = '?'
+              return 'id=%s cls=%s flags=%s parent=%s repr=%s' % (
+                  sid, cls, flags, parent, _safe_repr(state))
+
+          def _lobby_app():
+              try:
+                  if ServicesLocator is None or APP_NAME_SPACE is None:
+                      return None
+                  return ServicesLocator.appLoader.getApp(APP_NAME_SPACE.SF_LOBBY)
+              except Exception:
+                  return None
+
+          def _moe_view():
+              try:
+                  app = _lobby_app()
+                  if app is None:
+                      return None
+                  manager = getattr(app, 'containerManager', None)
+                  if manager is None or WindowLayer is None or POP_UP_CRITERIA is None:
+                      return None
+                  criteria = {POP_UP_CRITERIA.VIEW_ALIAS: _LOBBY_ALIAS}
+                  return manager.getView(WindowLayer.WINDOW, criteria)
+              except Exception:
+                  return None
+
+          def _window_manager():
+              try:
+                  if dependency is None or IGuiLoader is None:
+                      return None
+                  gui = dependency.instance(IGuiLoader)
+                  if gui is None:
+                      return None
+                  return getattr(gui, 'windowsManager', None)
+              except Exception:
+                  return None
+
+          def _window_info(window):
+              if window is None:
+                  return 'None'
+              try:
+                  cls = window.__class__.__name__
+              except Exception:
+                  cls = '?'
+              try:
+                  layer = getattr(window, 'layer', None)
+              except Exception:
+                  layer = None
+              try:
+                  status = getattr(window, 'windowStatus', None)
+              except Exception:
+                  status = None
+              try:
+                  showing = getattr(window, 'showingStatus', None)
+              except Exception:
+                  showing = None
+              content = None
+              try:
+                  content = getattr(window, 'content', None)
+              except Exception:
+                  pass
+              try:
+                  content_cls = content.__class__.__name__ if content is not None else ''
+              except Exception:
+                  content_cls = '?'
+              try:
+                  layout = getattr(content, 'layoutID', None)
+              except Exception:
+                  layout = None
+              alias = ''
+              try:
+                  load_params = getattr(window, 'loadParams', None)
+                  view_key = getattr(load_params, 'viewKey', None)
+                  alias = str(getattr(view_key, 'alias', '') or '')
+              except Exception:
+                  alias = ''
+              return 'cls=%s layer=%s status=%s showing=%s alias=%s content=%s layout=%s repr=%s' % (
+                  cls, layer, status, showing, alias, content_cls, _safe_repr(layout), _safe_repr(window))
+
+          def _vehicle_info():
+              try:
+                  from CurrentVehicle import g_currentVehicle
+                  if not g_currentVehicle.isPresent():
+                      return 'not-present'
+                  item = g_currentVehicle.item
+                  return 'intCD=%s name=%s short=%s' % (
+                      getattr(item, 'intCD', None),
+                      _safe_repr(getattr(item, 'userName', '')),
+                      _safe_repr(getattr(item, 'shortUserName', '')))
+              except Exception:
+                  return 'vehicle-info-failed'
+
+          def _snapshot(reason):
+              try:
+                  lsm = getLobbyStateMachine() if getLobbyStateMachine is not None else None
+                  in_hangar = None
+                  try:
+                      in_hangar = bool(isInHangarState()) if isInHangarState is not None else None
+                  except Exception:
+                      in_hangar = None
+
+                  visible_state = None
+                  route_info = None
+                  leaf_states = []
+                  all_states = []
+                  if lsm is not None:
+                      try:
+                          visible_state = lsm.visibleState
+                      except Exception:
+                          pass
+                      try:
+                          route_info = lsm.visibleRouteInfo
+                      except Exception:
+                          pass
+                      try:
+                          leaf_states = lsm.getNonEmptyEnteredStates()
+                      except Exception:
+                          pass
+                      try:
+                          all_states = lsm.getNonEmptyEnteredStates(onlyLeaves=False)
+                      except Exception:
+                          pass
+
+                  view = _moe_view()
+                  view_state = 'None'
+                  if view is not None:
+                      try:
+                          last = getattr(view, '_last', None)
+                          data_visible = last[11] if last is not None and len(last) > 11 else None
+                      except Exception:
+                          data_visible = None
+                      try:
+                          view_state = 'alive=%s mode=%s hangar_visible=%s data_visible=%s flash=%s' % (
+                              getattr(view, '_alive', None),
+                              getattr(view, 'MODE', None),
+                              getattr(view, '_hangar_visible', None),
+                              data_visible,
+                              getattr(view, 'flashObject', None) is not None)
+                      except Exception:
+                          view_state = 'view-state-failed'
+
+                  manager = _window_manager()
+                  windows = []
+                  if manager is not None:
+                      try:
+                          windows = manager.findWindows(lambda w: True)
+                      except Exception:
+                          windows = []
+
+                  _emit('SNAPSHOT reason=%s vehicle=[%s] inHangar=%s visible=[%s] routeInfo=%s moe=[%s] windows=%d' % (
+                      reason, _vehicle_info(), in_hangar, _state_info(visible_state),
+                      _safe_repr(route_info), view_state, len(windows)))
+                  _emit('LEAF_STATES %s' % ' || '.join(_state_info(s) for s in leaf_states))
+                  _emit('ALL_STATES %s' % ' || '.join(_state_info(s) for s in all_states))
+                  for idx, window in enumerate(windows[:40]):
+                      _emit('WINDOW[%02d] %s' % (idx, _window_info(window)))
+              except Exception:
+                  _emit('snapshot failure reason=%s' % reason)
+                  traceback.print_exc()
+
+          def _on_route_changed(route_info):
+              try:
+                  state = getattr(route_info, 'state', None)
+                  _emit('ROUTE_CHANGED state=[%s] params=%s visualBack=%s' % (
+                      _state_info(state),
+                      _safe_repr(getattr(route_info, 'params', None)),
+                      _state_info(getattr(route_info, 'visualBackNavigationTarget', None))))
+              except Exception:
+                  _emit('route callback decode failed')
+              _snapshot('route-changed')
+
+          def _on_window_status(unique_id, new_status):
+              manager = _window_manager()
+              window = None
+              if manager is not None:
+                  try:
+                      window = manager.getWindow(unique_id)
+                  except Exception:
+                      window = None
+              _emit('WINDOW_STATUS id=%s status=%s current=%s' % (
+                  unique_id, new_status, _window_info(window)))
+              _snapshot('window-status-%s' % new_status)
+
+          def _on_window_showing_status(unique_id, new_status):
+              manager = _window_manager()
+              window = None
+              if manager is not None:
+                  try:
+                      window = manager.getWindow(unique_id)
+                  except Exception:
+                      window = None
+              _emit('WINDOW_SHOWING id=%s status=%s current=%s' % (
+                  unique_id, new_status, _window_info(window)))
+
+          def _on_view_status(unique_id, new_status):
+              manager = _window_manager()
+              view = None
+              if manager is not None:
+                  try:
+                      view = manager.getView(unique_id)
+                  except Exception:
+                      view = None
+              _emit('VIEW_STATUS id=%s status=%s view=%s' % (
+                  unique_id, new_status, _safe_repr(view)))
+              _snapshot('view-status-%s' % new_status)
+
+          def _on_scaleform_view_loaded(*args):
+              _emit('SCALEFORM_VIEW_LOADED args=%s' % _safe_repr(args))
+              _snapshot('scaleform-view-loaded')
+
+          def _on_vehicle_changed(*args, **kwargs):
+              _emit('VEHICLE_CHANGED args=%s kwargs=%s now=%s' % (
+                  _safe_repr(args), _safe_repr(kwargs), _vehicle_info()))
+              _snapshot('vehicle-changed')
+
+          def _unbind_lobby():
+              global _BOUND_LSM, _BOUND_WINDOWS, _BOUND_LOADER, _VEHICLE_BOUND
+              if _BOUND_LSM is not None:
+                  try:
+                      _BOUND_LSM.onVisibleRouteChanged -= _on_route_changed
+                  except Exception:
+                      pass
+              if _BOUND_WINDOWS is not None:
+                  try:
+                      _BOUND_WINDOWS.onWindowStatusChanged -= _on_window_status
+                  except Exception:
+                      pass
+                  try:
+                      _BOUND_WINDOWS.onWindowShowingStatusChanged -= _on_window_showing_status
+                  except Exception:
+                      pass
+                  try:
+                      _BOUND_WINDOWS.onViewStatusChanged -= _on_view_status
+                  except Exception:
+                      pass
+              if _BOUND_LOADER is not None:
+                  try:
+                      _BOUND_LOADER.onViewLoaded -= _on_scaleform_view_loaded
+                  except Exception:
+                      pass
+              if _VEHICLE_BOUND:
+                  try:
+                      from CurrentVehicle import g_currentVehicle
+                      g_currentVehicle.onChanged -= _on_vehicle_changed
+                  except Exception:
+                      pass
+              _BOUND_LSM = None
+              _BOUND_WINDOWS = None
+              _BOUND_LOADER = None
+              _VEHICLE_BOUND = False
+              _emit('UNBOUND lobby diagnostics')
+
+          def _bind_lobby(reason):
+              global _BOUND_LSM, _BOUND_WINDOWS, _BOUND_LOADER, _VEHICLE_BOUND, _BIND_ATTEMPTS
+              try:
+                  app = _lobby_app()
+                  lsm = getLobbyStateMachine() if getLobbyStateMachine is not None else None
+                  manager = _window_manager()
+
+                  if lsm is not None and _BOUND_LSM is None:
+                      lsm.onVisibleRouteChanged += _on_route_changed
+                      _BOUND_LSM = lsm
+                      _emit('BOUND visible-route event')
+
+                  if manager is not None and _BOUND_WINDOWS is None:
+                      manager.onWindowStatusChanged += _on_window_status
+                      manager.onWindowShowingStatusChanged += _on_window_showing_status
+                      manager.onViewStatusChanged += _on_view_status
+                      _BOUND_WINDOWS = manager
+                      _emit('BOUND Wulf window/view events')
+
+                  if app is not None:
+                      loader = getattr(app, 'loaderManager', None)
+                      if loader is not None and _BOUND_LOADER is None:
+                          loader.onViewLoaded += _on_scaleform_view_loaded
+                          _BOUND_LOADER = loader
+                          _emit('BOUND Scaleform onViewLoaded')
+
+                  if not _VEHICLE_BOUND:
+                      try:
+                          from CurrentVehicle import g_currentVehicle
+                          g_currentVehicle.onChanged += _on_vehicle_changed
+                          _VEHICLE_BOUND = True
+                          _emit('BOUND CurrentVehicle.onChanged')
+                      except Exception:
+                          pass
+
+                  if _BOUND_LSM is not None and _BOUND_WINDOWS is not None:
+                      _snapshot('bind-complete-%s' % reason)
+                      return
+
+                  _BIND_ATTEMPTS += 1
+                  if _BIND_ATTEMPTS <= 20:
+                      try:
+                          import BigWorld
+                          BigWorld.callback(0.5, lambda: _bind_lobby('retry-%d' % _BIND_ATTEMPTS))
+                      except Exception:
+                          pass
+              except Exception:
+                  _emit('bind failure reason=%s' % reason)
+                  traceback.print_exc()
+
+          def _on_app_initialized(event):
+              try:
+                  if APP_NAME_SPACE is not None and event.ns == APP_NAME_SPACE.SF_LOBBY:
+                      _emit('APP_INITIALIZED SF_LOBBY')
+                      _bind_lobby('app-initialized')
+              except Exception:
+                  traceback.print_exc()
+
+          def _on_app_destroyed(event):
+              try:
+                  if APP_NAME_SPACE is not None and event.ns == APP_NAME_SPACE.SF_LOBBY:
+                      _emit('APP_DESTROYED SF_LOBBY')
+                      _snapshot('app-destroying')
+                      _unbind_lobby()
+              except Exception:
+                  traceback.print_exc()
+
+          try:
+              if g_eventBus is not None and events is not None and EVENT_BUS_SCOPE is not None:
+                  g_eventBus.addListener(
+                      events.AppLifeCycleEvent.INITIALIZED,
+                      _on_app_initialized,
+                      EVENT_BUS_SCOPE.GLOBAL)
+                  g_eventBus.addListener(
+                      events.AppLifeCycleEvent.DESTROYED,
+                      _on_app_destroyed,
+                      EVENT_BUS_SCOPE.GLOBAL)
+              _emit('diagnostic module installed; no visibility methods patched')
+              _bind_lobby('module-load')
+          except Exception:
+              _emit('diagnostic module setup failed safely')
+              traceback.print_exc()
+          PY
+
+      - name: Compile diagnostic with CPython 2.7
+        shell: bash
+        run: |
+          set -euxo pipefail
+          docker run --rm -v "$PWD/outdiag:/out" python:2.7-slim sh -lc "python -m py_compile /out/mod_najxbox_moe_lifecycle_diag.py && python - <<'PY'
+          import hashlib
+          p='/out/mod_najxbox_moe_lifecycle_diag.pyc'
+          d=open(p,'rb').read()
+          print('PYC_MAGIC=' + d[:4].encode('hex'))
+          print('PYC_SHA256=' + hashlib.sha256(d).hexdigest())
+          PY"
+          test "$(xxd -p -l 4 outdiag/mod_najxbox_moe_lifecycle_diag.pyc)" = "03f30d0a"
+
+      - name: Build additive diagnostic WOTMOD as ZIP Stored
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import zipfile, hashlib, xml.etree.ElementTree as ET, os, json
+          root=os.environ['RUNNER_TEMP']+'/moe129diag'
+          src=root+'/original/current.wotmod'
+          dst='outdiag/najxbox.moe_independent_1.2.4.wotmod'
+          diag='outdiag/mod_najxbox_moe_lifecycle_diag.pyc'
+          diag_name='res/scripts/client/gui/mods/mod_najxbox_moe_lifecycle_diag.pyc'
+
+          with zipfile.ZipFile(src,'r') as zin:
+              infos=zin.infolist()
+              original={i.filename:zin.read(i.filename) for i in infos}
+
+          assert len(infos) == 12
+          assert all(i.compress_type == zipfile.ZIP_STORED for i in infos)
+
+          meta=original['meta.xml'].decode('utf-8')
+          meta=meta.replace('<version>1.2.8</version>','<version>1.2.9</version>')
+          meta=meta.replace(
+              '<description>1.2.4 baseline + NA BattlePage compatibility guard; no data/drag/lifecycle changes</description>',
+              '<description>1.2.8 exact runtime bytes + additive read-only Lobby lifecycle diagnostics; no visibility behavior changes</description>')
+          ET.fromstring(meta)
+
+          with zipfile.ZipFile(dst,'w') as zout:
+              for info in infos:
+                  data=meta.encode('utf-8') if info.filename=='meta.xml' else original[info.filename]
+                  zi=zipfile.ZipInfo(info.filename, info.date_time)
+                  zi.comment=info.comment
+                  zi.extra=info.extra
+                  zi.create_system=info.create_system
+                  zi.create_version=info.create_version
+                  zi.extract_version=info.extract_version
+                  zi.flag_bits=info.flag_bits
+                  zi.volume=info.volume
+                  zi.internal_attr=info.internal_attr
+                  zi.external_attr=info.external_attr
+                  zi.compress_type=zipfile.ZIP_STORED
+                  zout.writestr(zi,data)
+
+              zi=zipfile.ZipInfo(diag_name,(2026,9,28,0,0,0))
+              zi.create_system=3
+              zi.external_attr=0o644 << 16
+              zi.compress_type=zipfile.ZIP_STORED
+              zout.writestr(zi,open(diag,'rb').read())
+
+          with zipfile.ZipFile(dst,'r') as z:
+              cinfos=z.infolist()
+              candidate={i.filename:z.read(i.filename) for i in cinfos}
+
+          assert len(cinfos)==13
+          assert all(i.compress_type==zipfile.ZIP_STORED for i in cinfos)
+          assert [i.filename for i in cinfos[:12]] == [i.filename for i in infos]
+          assert cinfos[12].filename == diag_name
+          assert candidate[diag_name][:4] == bytes.fromhex('03f30d0a')
+
+          changed=[]
+          for name in original:
+              if original[name] != candidate[name]:
+                  changed.append(name)
+          assert changed == ['meta.xml'], changed
+
+          # Every pre-existing runtime member except meta.xml must stay byte-identical.
+          locked=[n for n in original if n!='meta.xml']
+          for name in locked:
+              assert original[name] == candidate[name], name
+
+          # Critical: keep the formal 1.2.8 visibility helper byte-identical.
+          helper='res/scripts/client/gui/mods/mod_najxbox_moe_lobby_visibility.pyc'
+          assert hashlib.sha256(original[helper]).digest() == hashlib.sha256(candidate[helper]).digest()
+
+          report={
+              'base_wotmod_sha256':hashlib.sha256(open(src,'rb').read()).hexdigest(),
+              'candidate_wotmod_sha256':hashlib.sha256(open(dst,'rb').read()).hexdigest(),
+              'base_members':len(infos),
+              'candidate_members':len(cinfos),
+              'changed_existing_members':changed,
+              'added_member':diag_name,
+              'all_inner_members_stored':True,
+              'diagnostic_magic':candidate[diag_name][:4].hex(),
+              'existing_helper_sha256':hashlib.sha256(candidate[helper]).hexdigest(),
+              'locked_existing_member_sha256':{n:hashlib.sha256(candidate[n]).hexdigest() for n in locked}
+          }
+          open('outdiag/STATIC_DIFF.json','w').write(json.dumps(report,indent=2,sort_keys=True))
+          print(json.dumps(report,indent=2,sort_keys=True))
+          PY
+
+      - name: Build outer diagnostic candidate
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p outdiag/package/mods/2.4.0.1
+          cp outdiag/najxbox.moe_independent_1.2.4.wotmod outdiag/package/mods/2.4.0.1/
+          (cd outdiag/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_DIAGNOSTIC_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
+          sha256sum outdiag/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_DIAGNOSTIC_WOT_2.4.0.1_TEST_CANDIDATE.zip > outdiag/CANDIDATE_SHA256.txt
+          sha256sum outdiag/najxbox.moe_independent_1.2.4.wotmod > outdiag/CANDIDATE_WOTMOD_SHA256.txt
+
+      - name: Review 1 - diagnostic must be read-only
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import json
+          r=json.load(open('outdiag/STATIC_DIFF.json'))
+          assert r['base_wotmod_sha256']=='7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb'
+          assert r['base_members']==12
+          assert r['candidate_members']==13
+          assert r['changed_existing_members']==['meta.xml']
+          assert r['all_inner_members_stored'] is True
+          assert r['diagnostic_magic']=='03f30d0a'
+          src=open('outdiag/mod_najxbox_moe_lifecycle_diag.py',encoding='utf-8').read()
+
+          # Positive diagnostic owners.
+          for token in [
+              'onVisibleRouteChanged',
+              'onWindowStatusChanged',
+              'onWindowShowingStatusChanged',
+              'onViewStatusChanged',
+              'loader.onViewLoaded',
+              'g_currentVehicle.onChanged',
+              'visibleRouteInfo',
+              'getNonEmptyEnteredStates',
+              'isInHangarState',
+              '_hangar_visible'
+          ]:
+              assert token in src, token
+
+          # Negative behavior-mutation gate.
+          for token in [
+              'as_showLobbyPanel',
+              'as_hideLobbyPanel',
+              'as_setMaskLobbyPanel',
+              'hangarDisposedS',
+              '._hangar_visible =',
+              '_LobbyStateMachine__updateVisibleRoute =',
+              'PlayerAvatar.onBattleEvents',
+              'loadView(',
+              'destroy()'
+          ]:
+              assert token not in src, token
+
+          open('outdiag/REVIEW_1.md','w').write(
+              '# Review 1 — PASS\n\n'
+              '- Exact 1.2.8 WOTMOD is the base.\n'
+              '- All 11 pre-existing runtime members outside meta.xml are byte-identical.\n'
+              '- Existing 1.2.8 visibility helper is byte-identical.\n'
+              '- One additive diagnostic pyc only.\n'
+              '- Diagnostic subscribes to public/read-only events; no visibility, route, battle or data owner is patched.\n'
+              '- Inner WOTMOD is entirely ZIP Stored / method 0.\n'
+              '- Diagnostic pyc is CPython 2.7 magic 03f30d0a.\n'
+          )
+          PY
+
+      - name: Review 2 - rollback and regression boundary
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          import json,zipfile,hashlib,xml.etree.ElementTree as ET
+          r=json.load(open('outdiag/STATIC_DIFF.json'))
+          cand='outdiag/najxbox.moe_independent_1.2.4.wotmod'
+          with zipfile.ZipFile(cand) as z:
+              assert len(z.infolist())==13
+              assert all(i.compress_type==0 for i in z.infolist())
+              root=ET.fromstring(z.read('meta.xml'))
+              assert root.findtext('version')=='1.2.9'
+              assert z.read('res/scripts/client/gui/mods/mod_najxbox_moe_lifecycle_diag.pyc')[:4]==bytes.fromhex('03f30d0a')
+              # BattlePage/UI/data bytes must still be the locked 1.2.8 bytes.
+              assert hashlib.sha256(z.read('res/gui/flash/najxbox_moe_en.swf')).hexdigest()=='6c49c2c686b3215f3a6455dbbabc747951c54ab0ea33ebff60cc3b7d8b535d0d'
+              assert hashlib.sha256(z.read('res/gui/flash/najxbox_moe_zh.swf')).hexdigest()=='d3fdb4b66ef000626220fc2715ea6b6c35c4c3fe42daa1e621df2c8fbf4e102e'
+              assert hashlib.sha256(z.read('res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc')).hexdigest()=='5939eebf1a80429818eb52c3d553bd754d05d225252e2182bb2a2eb08cdfc2b1'
+          outer='outdiag/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_DIAGNOSTIC_WOT_2.4.0.1_TEST_CANDIDATE.zip'
+          with zipfile.ZipFile(outer) as z:
+              assert z.namelist()==['mods/','mods/2.4.0.1/','mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod']
+
+          open('outdiag/REVIEW_2.md','w').write(
+              '# Review 2 — PASS\n\n'
+              '- No R1/R2/R3/R4 functional visibility code is inherited.\n'
+              '- Formal 1.2.8 helper/UI/SWF/data/BattlePage bytes stay unchanged.\n'
+              '- Diagnostic adds one read-only module and meta identity only.\n'
+              '- Rollback is exact 1.2.8 WOTMOD SHA256 7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb.\n'
+              '- Candidate is diagnostic TEST_CANDIDATE only; promotion is forbidden.\n'
+          )
+          PY
+
+      - name: Write diagnostic Runtime steps
+        shell: bash
+        run: |
+          cat > outdiag/DIAGNOSTIC_RUNTIME_STEPS.txt <<'TXT'
+          NAJXBox MoE 1.2.9 Lobby Lifecycle Diagnostic
+
+          This package does not attempt a visibility fix.
+          It preserves the exact 1.2.8 behavior and adds read-only lifecycle logging.
+
+          Test one continuous session:
+          1. Start WoT and enter Hangar.
+          2. Wait 5 seconds.
+          3. Switch 5-10 vehicles.
+          4. Open Tech Tree; wait 3 seconds; return to Hangar; wait 3 seconds.
+          5. Open Depot/Storage; wait 3 seconds; return to Hangar; wait 3 seconds.
+          6. Open one event/lootbox/fullscreen or overlay page; wait 3 seconds; return to Hangar; wait 3 seconds.
+          7. Enter one battle if convenient; return to Hangar.
+          8. Do not install another candidate during the session.
+
+          Expected diagnostic tag:
+          [NAJXBox.MoE.DIAG]
+
+          Collect the normal Runtime Problem package once after the sequence.
+          game.log is the primary WoT 2.4 runtime log.
+          No second package is needed unless the Runtime ZIP is corrupt or a specifically named log is absent.
+          TXT
+
+      - name: Upload diagnostic candidate and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: moe-1.2.9-lobby-lifecycle-diagnostic
+          path: |
+            outdiag/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_DIAGNOSTIC_WOT_2.4.0.1_TEST_CANDIDATE.zip
+            outdiag/CANDIDATE_SHA256.txt
+            outdiag/CANDIDATE_WOTMOD_SHA256.txt
+            outdiag/STATIC_DIFF.json
+            outdiag/REVIEW_1.md
+            outdiag/REVIEW_2.md
+            outdiag/DIAGNOSTIC_RUNTIME_STEPS.txt
+            outdiag/mod_najxbox_moe_lifecycle_diag.py
+          if-no-files-found: error
