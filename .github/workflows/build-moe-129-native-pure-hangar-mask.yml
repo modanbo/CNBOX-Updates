@@ -1,4 +1,4 @@
-name: build-moe-129-native-pure-hangar-mask-r3
+name: build-moe-129-native-pure-hangar-mask-r4
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           echo '7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb  '"$wotmod" | sha256sum -c -
           cp "$wotmod" "$root/original/current.wotmod"
 
-      - name: Write R3 Hangar-state plus foreground-blocker helper
+      - name: Write R4 return-to-Hangar destroy-event helper
         shell: bash
         run: |
           set -euxo pipefail
@@ -229,8 +229,23 @@ jobs:
           def _on_window_status_changed(*args, **kwargs):
               try:
                   unique_id = args[0] if args else None
-                  if unique_id is not None and _is_blocker_window_event(unique_id):
-                      _recheck('foreground-window-status')
+                  new_status = args[1] if len(args) > 1 else None
+
+                  # Opening/active foreground blockers: identify the live window
+                  # while it still exists, then mask immediately.
+                  if new_status in (WindowStatus.LOADING, WindowStatus.LOADED):
+                      if unique_id is not None and _is_blocker_window_event(unique_id):
+                          _recheck('foreground-window-open')
+                      return
+
+                  # Critical R4 return path:
+                  # by DESTROYED the closed window may already be absent from
+                  # windowsManager, so getWindow(unique_id) can no longer prove
+                  # its former layer. Re-evaluate the whole Hangar state instead.
+                  # This is harmless for ordinary Hangar/SUB_VIEW churn because
+                  # _is_pure_hangar() ignores SUB_VIEW objects.
+                  if new_status == WindowStatus.DESTROYED:
+                      _recheck('window-destroyed')
               except Exception:
                   print _TAG, 'window-status callback failed'
                   traceback.print_exc()
@@ -267,7 +282,7 @@ jobs:
                       return result
 
                   LobbyStateMachine._LobbyStateMachine__updateVisibleRoute = _najx_update_visible_route
-                  print _TAG, '1.2.9 R3 hangar-state+foreground-blocker+official-mask helper installed'
+                  print _TAG, '1.2.9 R4 hangar-state+foreground-blocker+destroy-return helper installed'
                   _ensure_window_listener()
               except Exception:
                   print _TAG, 'hook install failed'
@@ -308,7 +323,7 @@ jobs:
           meta=meta.replace('<version>1.2.8</version>','<version>1.2.9</version>')
           meta=meta.replace(
               '<description>1.2.4 baseline + NA BattlePage compatibility guard; no data/drag/lifecycle changes</description>',
-              '<description>1.2.8 baseline + Hangar-state foreground-blocker mask semantics; BattlePage guard retained</description>')
+              '<description>1.2.8 baseline + Hangar-state mask with destroyed-window return refresh; BattlePage guard retained</description>')
           ET.fromstring(meta)
           replacement={
               'meta.xml':meta.encode('utf-8'),
@@ -378,8 +393,8 @@ jobs:
           set -euxo pipefail
           mkdir -p out129/package/mods/2.4.0.1
           cp out129/najxbox.moe_independent_1.2.4.wotmod out129/package/mods/2.4.0.1/
-          (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
-          sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
+          (cd out129/package && zip -q -9 -r ../NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R4_WOT_2.4.0.1_TEST_CANDIDATE.zip mods)
+          sha256sum out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R4_WOT_2.4.0.1_TEST_CANDIDATE.zip > out129/CANDIDATE_SHA256.txt
           sha256sum out129/najxbox.moe_independent_1.2.4.wotmod > out129/CANDIDATE_WOTMOD_SHA256.txt
 
       - name: Review 1 - owner and package boundary
@@ -402,6 +417,9 @@ jobs:
           assert 'WindowLayer.SUB_VIEW' not in src
           assert '_foreground_blocker_windows' in src
           assert '_is_blocker_window_event' in src
+          assert 'WindowStatus.DESTROYED' in src
+          assert "_recheck('window-destroyed')" in src
+          assert "_recheck('foreground-window-open')" in src
           assert "view._hangar_visible = visible" in src
           assert 'as_setMaskLobbyPanel' in src
           assert 'mask_fn(not visible)' in src
@@ -423,7 +441,7 @@ jobs:
               '- Changed runtime code: Lobby visibility helper only.\n'
               '- meta.xml: version/description only.\n'
               '- Uses WoT 2.4.0.1 Hangar state as the base owner plus generic higher-layer blockers.\n'
-              '- No page-name blacklist and no SUB_VIEW counting/alias whitelist; future non-Hangar routes fail closed, while FULLSCREEN/OVERLAY/TOP_SUB_VIEW block Hangar display.\n'
+              '- No page-name blacklist and no SUB_VIEW counting/alias whitelist; FULLSCREEN/OVERLAY/TOP_SUB_VIEW block Hangar display, and DESTROYED triggers a whole-state return recheck.\n'
               '- Restores official SWF mask semantics before show/hide.\n'
               '- Existing LobbyView _hangar_visible is synchronized; retry-counter API called with 0.\n'
               '- Existing return-to-Hangar _on_vehicle refresh retained.\n'
@@ -448,7 +466,7 @@ jobs:
               assert z.read('res/scripts/client/gui/mods/najxbox_moe_independent/ui.pyc')[:4] == bytes.fromhex('03f30d0a')
               root=ET.fromstring(z.read('meta.xml'))
               assert root.findtext('version') == '1.2.9'
-          outer='out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip'
+          outer='out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R4_WOT_2.4.0.1_TEST_CANDIDATE.zip'
           with zipfile.ZipFile(outer) as z:
               assert z.namelist() == ['mods/','mods/2.4.0.1/','mods/2.4.0.1/najxbox.moe_independent_1.2.4.wotmod']
           open('out129/REVIEW_2.md','w').write(
@@ -459,7 +477,7 @@ jobs:
               '- 1.2.8 BattlePage compatibility bytes retained.\n'
               '- Candidate install path remains the exact existing WOTMOD path.\n'
               '- Rollback authority remains 1.2.8 WOTMOD SHA256 7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb.\n'
-              '- R1/R2 remain failed Runtime evidence; R3 rebases from exact 1.2.8, not from either failed candidate.\n'
+              '- R1/R2/R3 remain failed Runtime evidence; R4 rebases from exact 1.2.8, not from any failed candidate.\n'
               '- Candidate is TEST_CANDIDATE only; no channel/manifest/public promotion performed.\n'
               '- Runtime first gate: game startup must show no WOTMOD load rejection.\n'
           )
@@ -468,9 +486,9 @@ jobs:
       - name: Upload private candidate and reviews
         uses: actions/upload-artifact@v4
         with:
-          name: moe-1.2.9-native-pure-hangar-mask-r3-test-candidate
+          name: moe-1.2.9-native-pure-hangar-mask-r4-test-candidate
           path: |
-            out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R3_WOT_2.4.0.1_TEST_CANDIDATE.zip
+            out129/NAJXBOX_MoE_INDEPENDENT_1.2.9_NATIVE_PURE_HANGAR_MASK_R4_WOT_2.4.0.1_TEST_CANDIDATE.zip
             out129/CANDIDATE_SHA256.txt
             out129/CANDIDATE_WOTMOD_SHA256.txt
             out129/STATIC_DIFF.json
