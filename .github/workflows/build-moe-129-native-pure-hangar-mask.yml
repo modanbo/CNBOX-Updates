@@ -398,9 +398,10 @@ jobs:
           assert 'onWindowStatusChanged' in src
           assert 'WindowLayer.FULLSCREEN_WINDOW' in src
           assert 'WindowLayer.OVERLAY' in src
-          assert 'WindowLayer.SUB_VIEW' in src
           assert 'WindowLayer.TOP_SUB_VIEW' in src
-          assert 'VIEW_ALIAS.LOBBY_HANGAR' in src
+          assert 'WindowLayer.SUB_VIEW' not in src
+          assert '_foreground_blocker_windows' in src
+          assert '_is_blocker_window_event' in src
           assert "view._hangar_visible = visible" in src
           assert 'as_setMaskLobbyPanel' in src
           assert 'mask_fn(not visible)' in src
@@ -458,7 +459,8 @@ jobs:
               '- 1.2.8 BattlePage compatibility bytes retained.\n'
               '- Candidate install path remains the exact existing WOTMOD path.\n'
               '- Rollback authority remains 1.2.8 WOTMOD SHA256 7ec910ae68d82904b22ad984a4db14f3874f5abf010ce780ab6f97cc654190cb.\n'
-              '- R1/R2 remain failed Runtime evidence; R3 rebases from exact 1.2.8, not from either failed candidate.\n- Candidate is TEST_CANDIDATE only; no channel/manifest/public promotion performed.\n'
+              '- R1/R2 remain failed Runtime evidence; R3 rebases from exact 1.2.8, not from either failed candidate.\n'
+              '- Candidate is TEST_CANDIDATE only; no channel/manifest/public promotion performed.\n'
               '- Runtime first gate: game startup must show no WOTMOD load rejection.\n'
           )
           PY
