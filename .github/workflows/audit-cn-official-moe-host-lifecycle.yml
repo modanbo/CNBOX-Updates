@@ -1,0 +1,131 @@
+name: audit-cn-official-moe-host-lifecycle
+
+on:
+  push:
+    branches:
+      - work/moe-1.2.9-lobby-mask-candidate-20260927
+    paths:
+      - '.github/workflows/audit-cn-official-moe-host-lifecycle.yml'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: work/moe-1.2.9-lobby-mask-candidate-20260927
+
+      - name: Download exact official CN WBP
+        shell: bash
+        run: |
+          set -euxo pipefail
+          rm -rf audit_cn_host
+          mkdir -p audit_cn_host/wbp audit_cn_host/wotmod audit_cn_host/out
+          curl -fL --retry 3 --connect-timeout 20 \
+            'https://static.ouj.com/wotbox/2.4.0.1-105ad6c75b9855c6fd70c247bfa01312.wbp' \
+            -o audit_cn_host/cn_moe.wbp
+          echo '3eea4d9432a0e7ed0400583d2108bc4873b6e14531d576023dec2bd948c6bd16  audit_cn_host/cn_moe.wbp' | sha256sum -c -
+          unzip -q audit_cn_host/cn_moe.wbp -d audit_cn_host/wbp
+          echo 'd681691e7205b1b41f682fdbe7491bbed8af8c78d847afc6dbba93d1455501d4  audit_cn_host/wbp/Files/mod_mark_on_gun.wotmod' | sha256sum -c -
+          unzip -q audit_cn_host/wbp/Files/mod_mark_on_gun.wotmod -d audit_cn_host/wotmod
+          find audit_cn_host/wotmod -type f | sort > audit_cn_host/out/FILE_LIST.txt
+          find audit_cn_host/wotmod -type f -name '*.pyc' -print | sort > audit_cn_host/out/PYC_LIST.txt
+
+      - name: Strings around lifecycle and mask owners
+        shell: bash
+        run: |
+          set -euxo pipefail
+          pyc=$(find audit_cn_host/wotmod -type f -name 'mod_markongun.pyc' -print -quit)
+          test -n "$pyc"
+          strings -a -n 3 "$pyc" > audit_cn_host/out/mod_markongun.strings.txt
+          grep -niE 'setMaskLobbyPanel|maskLobbyPanel|new_loadView|loadView|new_lobby_view__populate|new_lobby_view__dispose|populate|dispose|HANGAR|hangar|VIEW_LOADED|VIEW_UNLOADED|LobbyState|onView|as_showLobbyPanel|as_hideLobbyPanel|WindowLayer|container|alias' \
+            audit_cn_host/out/mod_markongun.strings.txt > audit_cn_host/out/LIFECYCLE_MASK_STRING_HITS.txt || true
+
+      - name: CPython 2.7 disassembly
+        shell: bash
+        run: |
+          set -euxo pipefail
+          docker run --rm -v "$PWD/audit_cn_host:/audit" python:2.7-slim sh -lc "python - <<'PY'
+          import os, marshal, types, dis, sys, traceback
+          root='/audit/wotmod'
+          pyc=None
+          for base,dirs,files in os.walk(root):
+              for n in files:
+                  if n=='mod_markongun.pyc':
+                      pyc=os.path.join(base,n)
+                      break
+              if pyc: break
+          assert pyc
+          out=open('/audit/out/CN_OFFICIAL_HOST_PY27_DISASSEMBLY.txt','w')
+          out.write('PYC=%s\n' % pyc)
+          f=open(pyc,'rb')
+          magic=f.read(4); ts=f.read(4)
+          out.write('magic=%s timestamp=%s\n' % (magic.encode('hex'),ts.encode('hex')))
+          try:
+              co=marshal.load(f)
+          except Exception:
+              traceback.print_exc(file=out)
+              out.close()
+              sys.exit(0)
+          finally:
+              f.close()
+
+          def walk(co,path=''):
+              full=path + co.co_name
+              out.write('\n===== CODE %s =====\n' % full)
+              out.write('argcount=%r names=%r varnames=%r\n' % (co.co_argcount,co.co_names,co.co_varnames))
+              out.write('consts=%r\n' % (co.co_consts,))
+              old=sys.stdout; sys.stdout=out
+              try:
+                  dis.dis(co)
+              except Exception:
+                  traceback.print_exc(file=out)
+              finally:
+                  sys.stdout=old
+              for x in co.co_consts:
+                  if isinstance(x,types.CodeType):
+                      walk(x,full+'.')
+          walk(co)
+          out.close()
+          PY"
+
+      - name: Extract lifecycle-related disassembly blocks
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('audit_cn_host/out/CN_OFFICIAL_HOST_PY27_DISASSEMBLY.txt')
+          txt=p.read_text(errors='replace') if p.exists() else ''
+          keys=[
+              'setMaskLobbyPanel','maskLobbyPanel','new_loadView','loadView',
+              'new_lobby_view__populate','new_lobby_view__dispose',
+              'as_showLobbyPanel','as_hideLobbyPanel','hangar','lobby'
+          ]
+          blocks=[]
+          starts=[]
+          pos=0
+          while True:
+              i=txt.find('===== CODE ',pos)
+              if i<0: break
+              j=txt.find('===== CODE ',i+10)
+              block=txt[i:j if j>=0 else len(txt)]
+              if any(k.lower() in block.lower() for k in keys):
+                  blocks.append(block)
+              pos=i+10
+          Path('audit_cn_host/out/CN_OFFICIAL_LIFECYCLE_BLOCKS.txt').write_text('\n'.join(blocks),errors='replace')
+          PY
+
+      - name: Upload audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: cn-official-moe-host-lifecycle-audit
+          path: |
+            audit_cn_host/out/FILE_LIST.txt
+            audit_cn_host/out/PYC_LIST.txt
+            audit_cn_host/out/mod_markongun.strings.txt
+            audit_cn_host/out/LIFECYCLE_MASK_STRING_HITS.txt
+            audit_cn_host/out/CN_OFFICIAL_HOST_PY27_DISASSEMBLY.txt
+            audit_cn_host/out/CN_OFFICIAL_LIFECYCLE_BLOCKS.txt
+          if-no-files-found: error
