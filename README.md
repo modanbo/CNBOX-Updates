@@ -123,3 +123,30 @@ Important safety rule: **never run the cleanup block from `C:\Users\...` or anot
 For update decisions, always use `channel.json` in GitHub.
 For a human-readable snapshot, use `CURRENT_RELEASE_INDEX.md` in GitHub.
 These documentation files are not part of the Gitee three-file mirror.
+
+
+## Verified Gitee manual publish closure
+
+Status: **VERIFIED / LOCKED PROCEDURE**
+
+Successful Gitee closure:
+- Gitee commit: `5cc9d35`
+- push: `8425511..5cc9d35 main -> main`
+- final worktree: clean
+- final Gitee payload count: exactly **3 files**
+
+This exact sequence is the canonical manual Gitee procedure:
+1. clone with `git -c http.version=HTTP/1.1 clone --depth 1`;
+2. enter `$env:TEMP\NAJXBox_Gitee_Public`;
+3. verify current path equals the dedicated temp path;
+4. verify `.git` exists;
+5. only then delete every old Gitee file except `.git`;
+6. recreate only the Manager / Box / MoE target directories;
+7. download the three current FINAL files from GitHub;
+8. verify exactly three files exist;
+9. `git add -A`;
+10. commit;
+11. `git -c http.version=HTTP/1.1 push origin main`;
+12. verify `nothing to commit, working tree clean`.
+
+Do not improvise or skip the directory and `.git` guards. Do not run the destructive cleanup block from `C:\Users\...` or any normal user directory.
