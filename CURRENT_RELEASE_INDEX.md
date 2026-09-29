@@ -56,3 +56,14 @@ Canonical full PowerShell command is recorded in the root `README.md` under **St
 - GitHub `channel.json` is the machine authority.
 - This file is the human-readable release index.
 - Gitee is payload-only and carries no documentation or index files.
+
+
+## Verified Gitee closure
+
+- Verified closure: `5cc9d35`
+- Result: **PASS**
+- Final repository content: exactly 3 Public payload files
+- Final local status: clean
+- Procedure status: **LOCKED / REUSE AS-IS**
+
+Future Gitee updates must reuse the registered safe clone → guard → cleanup → download → 3-file verify → commit → push sequence. Do not replace it with an unguarded cleanup or a different ad-hoc workflow.
