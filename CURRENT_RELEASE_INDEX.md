@@ -18,9 +18,41 @@ Updated: 2026-09-29
 - Current Creator/Aslain compatibility identity: **2401-09-R34-R2F9-FINAL_LOCK-R5**
 - Aslain #09 did not change Public Box bytes.
 
-## Distribution boundary
+## Gitee distribution boundary
 
-- Gitee is **Public-only**.
-- Creator Manager 2.1.1 stays on GitHub/Google Drive and is not mirrored to Gitee.
-- Old Manager, Box, MoE, RC, TEST_CANDIDATE, and engineering-history files are removed from the Gitee working tree during every exact-mirror rebuild.
-- `channel.json` is the machine authority; this file is the human-readable release index.
+Gitee is a **three-file Public payload mirror only**.
+
+Published on Gitee:
+1. `manager/CNBOX_Manager.exe`
+2. `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip`
+3. `moe/1.2.9/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1.zip`
+
+Not published on Gitee:
+- README / documentation
+- release index
+- `channel.json`
+- manifest
+- language package
+- SHA256SUMS
+- Creator
+- RC / TEST_CANDIDATE / history
+
+## Registered Gitee update procedure
+
+Canonical manual command characteristics:
+- clone with `git -c http.version=HTTP/1.1 clone --depth 1`
+- use dedicated temp worktree: `$env:TEMP\NAJXBox_Gitee_Public`
+- require successful clone and `.git` before any deletion
+- require current directory to equal the dedicated temp worktree before cleanup
+- delete all old Gitee files only inside that guarded worktree
+- stage exactly the three current Public payload files
+- verify recursive file count equals **3**
+- then `git add -A`, commit, and push
+
+Canonical full PowerShell command is recorded in the root `README.md` under **Standard manual Gitee update command**.
+
+## Authority
+
+- GitHub `channel.json` is the machine authority.
+- This file is the human-readable release index.
+- Gitee is payload-only and carries no documentation or index files.
