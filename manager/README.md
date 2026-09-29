@@ -2,31 +2,42 @@
 
 Current authority: ../channel.json.
 
-Current version: **2.1.0**
+Current version: **2.1.1**
 
 Validated authority:
-- exact build head: 7778d7c5ce207236c65fe896b1b738557de7cf28
-- GitHub Actions run: 36436111096 - SUCCESS
+- exact source head: efb0f6d5ef2ec6bb538f1c3387066b9b6bd7e8eb
+- self-hosted build run: 36506936627 - SUCCESS
+- BO real-client cache gate run: 36506936510 - SUCCESS
 - Public SelfTest: PASS
 - Creator SelfTest: PASS
-- Aslain #07/#08/#09 standalone replacement semantics: PASS
-- startup MoE/language published-version refresh: PASS
-- current Aslain UI disambiguation: PASS
+- startup stale published MoE cache refresh: PASS on real client
+- full Check Updates WoT/Aslain/XVM/Box/language/MoE reconciliation: PASS on real client
+- failed online refresh preserves last successful display only while stale action authority remains cleared: PASS
+- Creator integration-test and MoE-test picker directories survive refresh/restart state: PASS
 
 Live GitHub files:
 - CNBOX_Manager.exe - legacy stable Public compatibility alias.
 - NAJXBox_Manager.exe - canonical stable Public alias.
-- NAJXBox_Manager_v2.1.0.exe - current versioned Public binary.
-- CNBOX_Manager_Creator.exe - legacy Creator engineering alias.
+- NAJXBox_Manager_v2.1.1.exe - current versioned Public binary.
+- CNBOX_Manager_Creator.exe - legacy Creator compatibility alias.
 - NAJXBox_Manager_Creator.exe - canonical Creator alias.
-- NAJXBox_Manager_Creator_v2.1.0.exe - current versioned Creator binary.
+- NAJXBox_Manager_Creator_v2.1.1.exe - current versioned Creator binary.
 
-Public Manager SHA256: 8269be29358176d30b2da3601b851897c69e294b7d2c17151c4f3018de0e2f8a
-Creator Manager SHA256: 3fe3640f96b3a66a54a57b606fd9a226268c4fc5d37fd2f2ac3074066bf5faec
+Public Manager SHA256: 35adb9af766646293eba0633b7bc7bc1901e0fa45383e35f39221ad7e7d2287b
+Creator Manager SHA256: 04ce46f68feee330bc97b22e574c08e8bc401bb04afacda587b9c6a6ca639244
 
-Public MoE binding: **1.2.9 FINAL_LOCK**.
+Public Box binding remains **2401-R34-R2F9-UNIFIED-R5**.
+Public MoE binding remains **1.2.9 FINAL_LOCK**.
+
+2.1.1 cache semantics:
+- “检查更新” still performs the complete existing reconciliation pipeline, including official/latest Aslain detection.
+- starting a new explicit check immediately invalidates stale install/update/repair authority.
+- the last successful dashboard text stays visible while refresh runs and when an online refresh fails.
+- stale display history never grants install/update/repair authority.
+- a successful startup lightweight language/MoE refresh replaces and persists stale published labels.
+- Creator remembers integration-test ZIP and MoE-test ZIP folders independently.
 
 Distribution boundary:
 - Public self-update channel points to the Public Manager.
 - Creator remains available on GitHub/Drive for engineering use.
-- Gitee remains Public-only and excludes Creator.
+- This publication does not modify Box, MoE payload, language/font payload, or unrelated Aslain plugins.
