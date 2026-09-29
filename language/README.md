@@ -44,4 +44,4 @@ Older donor dynamic `.mo` localization may remain usable for newer NA skeletons,
 
 ## Publication boundary
 
-GitHub + Google Drive hold the current localization authority. Gitee exact Public-only mirror is current at commit `9f83864` and carries the canonical package path.
+GitHub + Google Drive hold the current localization authority. Gitee exact Public-only mirror carrying the same language 1.1 bytes was last verified at commit `8425511b959c3ea3adddc5a2f24ca5828104914e`. Manager 2.1.1 itself is not yet mirrored there, but the language payload remains byte-identical/current.
