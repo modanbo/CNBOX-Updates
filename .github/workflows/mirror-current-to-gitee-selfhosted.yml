@@ -6,6 +6,8 @@ on:
     paths:
       - '.github/workflows/mirror-current-to-gitee-selfhosted.yml'
       - 'channel.json'
+      - 'README.md'
+      - 'CURRENT_RELEASE_INDEX.md'
       - 'manager/NAJXBox_Manager.exe'
       - 'payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip'
       - 'manifests/2.4.0.1/CNBOX_FUNCTIONAL_R34_R2F9_R5.json'
@@ -44,7 +46,7 @@ jobs:
           $sourceChannel = Get-Content (Join-Path $src "channel.json") -Raw -Encoding UTF8 | ConvertFrom-Json
 
           if ([string]$sourceChannel.managerVersion -ne "2.1.1") {
-            throw "GitHub Public Manager is not 2.1.0."
+            throw "GitHub Public Manager is not 2.1.1."
           }
           if (([string]$sourceChannel.managerSha256).ToLowerInvariant() -ne
               "35adb9af766646293eba0633b7bc7bc1901e0fa45383e35f39221ad7e7d2287b") {
@@ -121,6 +123,8 @@ jobs:
 
           # Exact physical allowlist.
           $allowed = @(
+            "README.md",
+            "CURRENT_RELEASE_INDEX.md",
             "channel.json",
             "manager/CNBOX_Manager.exe",
             "payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip",
@@ -154,7 +158,7 @@ jobs:
           git push origin main
 
           Write-Host "GITEE_EXACT_PUBLIC_LOCKED_MIRROR_PASS"
-          Write-Host "Manager=2.1.0"
+          Write-Host "Manager=2.1.1"
           Write-Host "Box=2401-R34-R2F9-UNIFIED-R5"
           Write-Host "MoE=1.2.9 FINAL_LOCK"
           Write-Host "Physical files=$($actualFiles.Count)"
