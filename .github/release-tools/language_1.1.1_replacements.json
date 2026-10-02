@@ -1,0 +1,78 @@
+{
+  "quests.mo": {
+    "bonusName/completionTokens_1_1": "IV号突击炮发动机",
+    "bonusName/completionTokens_1_2": "IV号突击炮车体",
+    "bonusName/completionTokens_1_3": "IV号突击炮悬挂装置",
+    "bonusName/completionTokens_1_4": "IV号突击炮火炮",
+    "bonusName/completionTokens_1_5": "IV号突击炮无线电台",
+    "bonusName/completionTokens_2_1": "T28(概念车)发动机",
+    "bonusName/completionTokens_2_2": "T28(概念车)车体",
+    "bonusName/completionTokens_2_3": "T28(概念车)悬挂装置",
+    "bonusName/completionTokens_2_4": "T28(概念车)火炮",
+    "bonusName/completionTokens_2_5": "T28(概念车)无线电台",
+    "bonusName/completionTokens_4_1": "260工程发动机",
+    "bonusName/completionTokens_4_2": "260工程车体",
+    "bonusName/completionTokens_4_3": "260工程悬挂装置",
+    "bonusName/completionTokens_4_4": "260工程火炮",
+    "bonusName/completionTokens_4_5": "260工程无线电台",
+    "bonusName/premium": "普通高级账号天数",
+    "bonuses/item/premium": "高级账号天数:",
+    "details/requirements/igr": "在网吧游戏",
+    "details/requirements/igrBasic": "在网吧进行游戏",
+    "details/requirements/igrPremium": "在特权网吧进行游戏",
+    "details/requirements/premiumAccount": "该任务仅对WG高级账号玩家开放。",
+    "token/default/tankrewards": "“坦克奖励”"
+  },
+  "personal_missions.mo": {
+    "operations/title1": "IV号突击炮",
+    "operations/title10": "黑岩",
+    "operations/title11": "幽壑",
+    "operations/title2": "T28(概念车)",
+    "operations/title4": "260工程",
+    "operations/title5": "圣剑",
+    "operations/title6": "奇美拉",
+    "operations/title7": "279工程早期型",
+    "operations/title8": "风猎者",
+    "operations/title9": "掠食者"
+  },
+  "personal_missions_details.mo": {
+    "pm2_5_1_12": "联合-12。遥不可及",
+    "pm2_6_2_10": "集团-10。帝王风范",
+    "pm2_7_2_7": "集团-7。终结",
+    "pm3_8_3_5_description_medal": "获得三级或更高等级的战斗嘉奖",
+    "tile_1": "IV号突击炮",
+    "tile_10": "黑岩",
+    "tile_10_descr": "适用所有类型坦克的一组任务，完成后可获得M系重型坦克黑岩。",
+    "tile_11": "幽壑",
+    "tile_11_descr": "适用所有类型坦克的一组任务，完成后可获得D系中型坦克幽壑 VM 68。",
+    "tile_1_descr": "适用所有类型坦克的一组任务，完成后可获得D系自行反坦克炮IV号突击炮。",
+    "tile_2": "T28(概念车)",
+    "tile_2_descr": "适用所有类型坦克的一组任务，完成后可获得M系自行反坦克炮T28(概念车)。",
+    "tile_3_descr": "适用所有类型坦克的一组任务，完成后可获得D系中型坦克T-55A。",
+    "tile_4": "260工程",
+    "tile_4_descr": "适用所有类型坦克的一组任务，完成后可获得S系重型坦克260工程。",
+    "tile_5": "圣剑",
+    "tile_5_descr": "适用所有类型坦克的一组任务，完成后可获得Y系自行反坦克炮圣剑。",
+    "tile_6": "奇美拉",
+    "tile_6_descr": "适用所有类型坦克的一组任务，完成后可获得Y系中型坦克奇美拉。",
+    "tile_7": "279工程早期型",
+    "tile_7_descr": "适用所有类型坦克的一组任务，完成后可获得S系重型坦克279工程早期型。",
+    "tile_8": "风猎者",
+    "tile_8_descr": "适用于所有类型坦克的一组任务，完成即可获得D系自行反坦克炮风猎者。",
+    "tile_9": "掠食者",
+    "tile_9_descr": "适用于所有类型坦克的一组任务，完成即可获得J系重型坦克Vz.60 S \"掠食者\"。"
+  },
+  "weekly_quests.mo": {
+    "condition/common/211": "获得三级或更高等级的战斗嘉奖"
+  },
+  "battle_pass.mo": {
+    "chapter/fullName/214": "毁灭战士",
+    "chapter/fullNameUppercased/214": "毁灭战士",
+    "intro/seasonDescription/text": "在战斗通行证赛季XVIII中，您将有机会获得专属3D风格，适用于本赛季的核心坦克: \"鼠\"式、IS-7、AMX&nbsp;50&nbsp;B。",
+    "postProgressionView/footer/extraChapter/title/text": "毁灭战士现已降临！"
+  },
+  "marathon.mo": {
+    "reward/title": "变节者挑战",
+    "vehiclePreview/title/tooltip/body/marathon/inprogress": "购买C系IX级金币重型坦克WZ114后，您还将获得所有未完成阶段的活动奖励。"
+  }
+}
