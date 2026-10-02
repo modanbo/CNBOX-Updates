@@ -1,0 +1,124 @@
+name: Publish Current Locked Modules
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-current-locked-modules.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: publish-current-locked-modules
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact Public repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Locate exact locked inputs and publish channel
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          Write-Host "Runner=$env:RUNNER_NAME"
+
+          $roots=New-Object System.Collections.Generic.List[string]
+          $settingsPath=Join-Path $env:LOCALAPPDATA 'CNBOX_Manager\settings.json'
+          if(Test-Path $settingsPath){
+            $settings=[IO.File]::ReadAllText($settingsPath,[Text.Encoding]::UTF8) | ConvertFrom-Json
+            foreach($name in @('lastCreatorTestPackageDirectory','lastCreatorMoeTestPackageDirectory','lastCreatorLanguageTestPackageDirectory','collectionSavePath')){
+              $v=[string]$settings.$name
+              if(-not [string]::IsNullOrWhiteSpace($v) -and (Test-Path $v)){ $roots.Add((Resolve-Path $v).Path) }
+            }
+          }
+          foreach($r in @(
+            (Join-Path $env:USERPROFILE 'Downloads'),
+            (Join-Path $env:USERPROFILE 'Desktop'),
+            (Join-Path $env:USERPROFILE 'Documents'),
+            'C:\Seagull\Seagull\Use'
+          )){
+            if(Test-Path $r){$roots.Add((Resolve-Path $r).Path)}
+          }
+          $roots=@($roots | Select-Object -Unique)
+          Write-Host ('Search roots: '+($roots -join '; '))
+
+          function Find-ExactZip([string]$sha,[string[]]$patterns){
+            foreach($root in $roots){
+              foreach($pattern in $patterns){
+                foreach($item in @(Get-ChildItem -LiteralPath $root -Filter $pattern -File -Recurse -ErrorAction SilentlyContinue)){
+                  $h=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                  if($h -eq $sha){
+                    Write-Host "FOUND exact $sha at $($item.FullName)"
+                    return $item.FullName
+                  }
+                }
+              }
+            }
+            throw "Exact ZIP not found: $sha"
+          }
+
+          $boxSha='b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2'
+          $moeSha='5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19'
+          $langBaseSha='b402d07e3b98a6ffbe5b0afc89b18f2be7224d2f730063a81d47c44f07c9fd1c'
+          $box=Find-ExactZip $boxSha @('*R34_R2F9*R6*20261002*.zip','*MANAGER_TEST_CANDIDATE_R6*.zip')
+          $moe=Find-ExactZip $moeSha @('*MoE*1.3.0*2.4.0.2*.zip','*MoE*WOT2402*COMPAT_REBASE*.zip')
+          $langBase=Find-ExactZip $langBaseSha @('*LANGUAGE*2.4.0.2*CUMULATIVE*CANDIDATE_R2*.zip','*LANGUAGE*CUMULATIVE_R2*.zip')
+
+          $langOut=Join-Path $env:RUNNER_TEMP 'NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip'
+          python '.github/release-tools/build_language_1_1_1_exact.py' $langBase '.github/release-tools/language_1.1.1_replacements.json' $langOut
+          if($LASTEXITCODE -ne 0){throw 'Language exact rebuild failed'}
+
+          python '.github/release-tools/publish_locked_modules.py' --repo (Get-Location).Path --box $box --moe $moe --language $langOut
+          if($LASTEXITCODE -ne 0){throw 'Public module publisher failed'}
+
+      - name: Verify exact current channel before commit
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          $channel=[IO.File]::ReadAllText((Resolve-Path 'channel.json'),[Text.Encoding]::UTF8) | ConvertFrom-Json
+          if([string]$channel.releases[0].cnboxVersion -ne '2402-01-R34-R2F9-UNIFIED-R6'){throw 'Current Public Box entry mismatch'}
+          if([string]$channel.releases[0].payloadSha256 -ne 'b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2'){throw 'Current Public Box hash mismatch'}
+          $moe=@($channel.moePacks | Where-Object { $_.version -eq '1.3.0' -and $_.wotVersion -eq '2.4.0.2' } | Select-Object -First 1)
+          if($moe.Count -ne 1 -or [string]$moe[0].payloadSha256 -ne '5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19'){throw 'Current MoE entry mismatch'}
+          $lang=@($channel.languagePacks | Where-Object { $_.packVersion -eq '1.1.1' -and $_.wotVersion -eq '2.4.0.2' } | Select-Object -First 1)
+          if($lang.Count -ne 1 -or [string]$lang[0].payloadSha256 -ne '88b4932ed7106e89183a1c7ca778c559db02225bfc6f12a1707e0d51c89d0667'){throw 'Current Language entry mismatch'}
+          foreach($pair in @(
+            @('payloads/2.4.0.2/unified/CNBOX_PAYLOAD_R6.zip','b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2'),
+            @('moe/1.3.0/NAJXBOX_MoE_INDEPENDENT_1.3.0_WOT_2.4.0.2_FINAL_LOCK.zip','5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19'),
+            @('language/NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip','88b4932ed7106e89183a1c7ca778c559db02225bfc6f12a1707e0d51c89d0667')
+          )){
+            $h=(Get-FileHash -LiteralPath $pair[0] -Algorithm SHA256).Hash.ToLowerInvariant()
+            if($h -ne $pair[1]){throw "File hash mismatch $($pair[0]): $h"}
+          }
+          Write-Host 'PUBLIC_CURRENT_MODULE_VERIFY_PASS'
+
+      - name: Commit and publish exact current modules
+        shell: powershell -NoProfile -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          git config user.name 'NAJXBox Release Bot'
+          git config user.email 'najxbox-release-bot@users.noreply.github.com'
+          git add channel.json CURRENT_RELEASE_INDEX.md manifests/2.4.0.2/CNBOX_FUNCTIONAL_R34_R2F9_R6.json payloads/2.4.0.2/unified/CNBOX_PAYLOAD_R6.zip moe/1.3.0 language/NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip language/NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt
+          git status --short
+          if($LASTEXITCODE -ne 0){throw 'git status failed'}
+          git diff --cached --quiet
+          if($LASTEXITCODE -eq 0){
+            Write-Host 'No publication delta.'
+          } elseif($LASTEXITCODE -eq 1) {
+            git commit -m 'release: publish Box R6 MoE 1.3.0 Language 1.1.1'
+            if($LASTEXITCODE -ne 0){throw 'git commit failed'}
+            git -c http.version=HTTP/1.1 push origin HEAD:main
+            if($LASTEXITCODE -ne 0){throw 'git push failed'}
+          } else {
+            throw "git diff failed $LASTEXITCODE"
+          }
+          git rev-parse HEAD
