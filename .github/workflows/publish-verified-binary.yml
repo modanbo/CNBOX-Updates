@@ -98,7 +98,8 @@ jobs:
             if ($security.finalSha256.ToLowerInvariant() -ne $outputHash) {
               throw "Security manifest SHA256 does not match Public EXE"
             }
-            if ($security.defender.status -ne "PASS") { throw "Microsoft Defender security gate is not PASS" }
+            # ISSUE-071: Microsoft Defender is not a publication gate.
+            # The manifest may omit Defender entirely or mark it NOT_REQUIRED.
             if ($security.virustotal.status -ne "PASS") { throw "VirusTotal security gate is not PASS" }
             if ([int]$security.virustotal.malicious -ne 0) { throw "VirusTotal malicious detections are non-zero" }
             if ([int]$security.virustotal.suspicious -ne 0) { throw "VirusTotal suspicious detections are non-zero" }
@@ -106,7 +107,7 @@ jobs:
             Write-Host "PUBLIC FREE SECURITY GATE PASS"
             Write-Host "  SHA256: $outputHash"
             Write-Host "  Authenticode: optional / may be NotSigned"
-            Write-Host "  Defender: PASS"
+            Write-Host "  Defender: NOT REQUIRED (ISSUE-071)"
             Write-Host "  VirusTotal malicious=0 suspicious=0"
           }
 
