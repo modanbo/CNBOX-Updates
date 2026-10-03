@@ -1,0 +1,11 @@
+{
+    "schemaVersion":  1,
+    "version":  "2.1.5",
+    "publicSha256":  "47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5",
+    "creatorSha256":  "caf3e20eabc1bd46ab1aeebeef3d75588d64c4beb24a3f007c2010388516f89e",
+    "defender":  "NOT_REQUIRED",
+    "virustotal":  "NOT_RUN_API_CREDENTIAL_UNAVAILABLE",
+    "disposition":  "USER_APPROVED_EXACT_SHA_RELEASE_EXCEPTION",
+    "userAuthorizedExactSha":  true,
+    "note":  "Exception applies only to the exact Public SHA above and does not change future security policy."
+}
