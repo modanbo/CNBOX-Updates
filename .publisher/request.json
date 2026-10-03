@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "active": true,
+  "active": false,
   "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-9620-81f7-ae14-21225b29bb68/raw?se=2026-10-03T00%3A49%3A54Z&sp=r&sv=2026-02-06&sr=b&scid=f1692664-7dc0-5b49-a1f7-7b38fb430065&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-02T18%3A20%3A28Z&ske=2026-10-03T18%3A20%3A28Z&sks=b&skv=2026-02-06&sig=KkX%2B8pfnbog55twHBVcpVQ3TTrgJYVS/J0jXWDc6wVg%3D",
   "destination": "manager/NAJXBox_Manager_Creator.exe",
   "aliases": [
@@ -11,5 +11,5 @@
   "outputSha256": "af37ac23811cd5a4787ab18ee7543f8766b0d748220ca1ed69d800dde1328c6f",
   "archive": "zip",
   "extract": "Creator/NAJXBox_Manager_2.1.2_Creator.exe",
-  "note": "Manager 2.1.2 Run11 frozen Creator exact-byte publication. No rebuild."
+  "note": "Manager 2.1.2 Public+Creator exact Run11 publication complete. Public exact-SHA VirusTotal exception recorded; no pending binary publish request."
 }
