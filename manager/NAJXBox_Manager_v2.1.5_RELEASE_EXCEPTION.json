@@ -1,11 +1,13 @@
 {
-    "schemaVersion":  1,
-    "version":  "2.1.5",
-    "publicSha256":  "47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5",
-    "creatorSha256":  "caf3e20eabc1bd46ab1aeebeef3d75588d64c4beb24a3f007c2010388516f89e",
-    "defender":  "NOT_REQUIRED",
-    "virustotal":  "NOT_RUN_API_CREDENTIAL_UNAVAILABLE",
-    "disposition":  "USER_APPROVED_EXACT_SHA_RELEASE_EXCEPTION",
-    "userAuthorizedExactSha":  true,
-    "note":  "Exception applies only to the exact Public SHA above and does not change future security policy."
+  "schemaVersion": 1,
+  "version": "2.1.5",
+  "publicSha256": "47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5",
+  "creatorSha256": "682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8",
+  "defender": "NOT_REQUIRED",
+  "virustotal": "NOT_RUN_API_CREDENTIAL_UNAVAILABLE",
+  "disposition": "USER_APPROVED_EXACT_SHA_RELEASE_EXCEPTION",
+  "userAuthorizedExactSha": true,
+  "note": "Exception applies only to the exact Public SHA above and does not change future security policy.",
+  "creatorSourceHead": "b0c91e6aa190c81242b53ba993adce1c0e8dc4ff",
+  "creatorLabelFix": "Creator Language-test install button label only"
 }

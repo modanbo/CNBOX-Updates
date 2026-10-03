@@ -5,7 +5,7 @@ Updated: 2026-10-03
 ## Current install authorities
 
 - Manager Public: 2.1.5 / 47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5
-- Manager Creator: 2.1.5 / caf3e20eabc1bd46ab1aeebeef3d75588d64c4beb24a3f007c2010388516f89e
+- Manager Creator: 2.1.5 / 682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8
 - Box formal/display: 1.1.0
 - Box Public compatibility: 2402-01-R34-R2F9-UNIFIED-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
 - Box Creator compatibility: 2402-01-R34-R2F9-FINAL_LOCK-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2

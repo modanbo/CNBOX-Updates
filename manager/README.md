@@ -36,3 +36,5 @@ Live Manager files:
 - `NAJXBox_Manager_v2.1.5_RELEASE_EXCEPTION.json` — exact-SHA security disposition.
 
 Superseded versioned Manager binaries are removed from the live tree; Git history/private rollback storage retains their provenance.
+
+Creator 2.1.5 label-only hotfix: language-test install button label updated; Public Manager bytes unchanged.
