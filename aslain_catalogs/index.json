@@ -3,6 +3,15 @@
   "catalogs": [
     {
       "schemaVersion": 2,
+      "wotVersion": "2.4.0.2",
+      "aslainVersion": "2.4.0.2 #01",
+      "contentVersion": "v2.4.0.2 #01 (2026.10.01)",
+      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/01/Configuration",
+      "configurationSha256": "2df0ccf2f22604bc7c55ddf9c8a6458429a8ef9a88f86cfa330650f57743f1a2",
+      "bytes": 1915589
+    },
+    {
+      "schemaVersion": 2,
       "wotVersion": "2.4.0.1",
       "aslainVersion": "2.4.0.1 #09",
       "contentVersion": "v2.4.0.1 #09 (2026.09.27)",
