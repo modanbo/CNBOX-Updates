@@ -2,7 +2,7 @@
 
 Current authority: ../channel.json.
 
-Current version: **2.1.5**
+Current version: **2.1.2**
 
 Exact final source: 4bf18c629a6608b810d416bd9b721e74cc71c219
 Final validation run: 37097744923
@@ -28,3 +28,4 @@ Live files:
 - CNBOX_Manager_Creator.exe - legacy Creator compatibility alias.
 - NAJXBox_Manager_Creator.exe - canonical Creator alias.
 - NAJXBox_Manager_Creator_v2.1.5.exe - versioned Creator binary.
+Manager 2.1.5 publication was reopened before final closure after UI review; canonical stable aliases are restored to exact 2.1.2 until the corrected 2.1.5 candidate is explicitly approved again.

@@ -4,8 +4,8 @@ Updated: 2026-10-03
 
 ## Current install authorities
 
-- Manager Public: 2.1.5 / d386e25a75bdc8badd8bf37b73ca5679e826223462f53f3392bb315742b6b3ad
-- Manager Creator: 2.1.5 / 2017f63cd1d7e531e1779604749cbdf6f3bb6aba22725e2bdd59a65b6c7e3c70
+- Manager Public: 2.1.2 / 9e6b7ca804ce4d71ba659246c8b1dfe03b1e12a26d65bbc39a4e6217538626c2
+- Manager Creator: 2.1.2 / af37ac23811cd5a4787ab18ee7543f8766b0d748220ca1ed69d800dde1328c6f
 - Box formal/display: 1.1.0
 - Box Public compatibility: 2402-01-R34-R2F9-UNIFIED-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
 - Box Creator compatibility: 2402-01-R34-R2F9-FINAL_LOCK-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
@@ -18,3 +18,4 @@ Updated: 2026-10-03
 Manager 2.1.5 Public exact SHA was explicitly authorized by the project owner for direct publication as an exact-SHA release exception. VirusTotal was not run because the repository API credential was unavailable. This exception applies only to this exact Public SHA and does not change future security policy.
 
 Older Public releases remain repository history/rollback only. channel.json current entries are the installation authority.
+- Manager 2.1.5 remains pre-release/reopened after UI review; stable aliases intentionally restored to 2.1.2.
