@@ -2722,7 +2722,7 @@
                          "notes":  "Public standalone alias of the exact Runtime-tested R6 bytes. Source manufacturing base Aslain #01 is provenance only; Public install remains Aslain-independent.",
                          "releaseTrack":  "PUBLIC_STANDALONE",
                          "functionalManifestUrl":  "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manifests/2.4.0.2/CNBOX_FUNCTIONAL_R34_R2F9_R6.json",
-                         "functionalManifestSha256":  "a5b601ad4ff844df454dfaca4979a835c2ce62f3cc745492c7073983b3954b26"
+                         "functionalManifestSha256":  "660894af3c01a5222358268b6363ffdbf1c32ec84f7ee3afd13a17d1f23fa6c5"
                      },
                      {
                          "status":  "FINAL_LOCK",
