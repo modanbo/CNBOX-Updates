@@ -1,0 +1,18 @@
+{
+    "id":  "CNBOX_MOE",
+    "version":  "1.3.0",
+    "status":  "FINAL_LOCK",
+    "wotVersion":  "2.4.0.2",
+    "sourceCore":  "NAJXBox independent; exact 1.2.9 functional bytes + 2.4.0.2 generation/meta rebase",
+    "payloadUrl":  "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/moe/1.3.0/NAJXBOX_MoE_INDEPENDENT_1.3.0_WOT_2.4.0.2_FINAL_LOCK.zip",
+    "payloadSha256":  "5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19",
+    "notes":  "Exact real-client Runtime-tested 1.3.0 FINAL_LOCK bytes. Historical internal WOTMOD filename 1.2.4 is retained; no cosmetic repack.",
+    "installedFiles":  [
+                           {
+                               "path":  "mods/{WOT_VERSION}/najxbox.moe_independent_1.2.4.wotmod",
+                               "sha256":  "8ecb8017d8a38fca4415f542b1d4501b5d16c91f2460f5ab882e41e75c9c3804",
+                               "required":  true,
+                               "shared":  false
+                           }
+                       ]
+}
