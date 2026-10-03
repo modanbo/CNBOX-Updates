@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "active": true,
+  "artifactUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-c518-81f7-a716-4f24d6a824d3/raw?se=2026-10-03T00%3A29%3A43Z&sp=r&sv=2026-02-06&sr=b&scid=784215a5-f55d-5473-8b35-3c1fd30ecddf&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-02T18%3A06%3A59Z&ske=2026-10-03T18%3A06%3A59Z&sks=b&skv=2026-02-06&sig=PeQiGXJ5mrOX9WSGNcyUiJp%2BGNzrRTka6nmQI7dGM1Q%3D",
+  "artifactSha256": "2d1560623432d4467a4ae41cbd9477bb67ad63fc68139cf5c7a19d28e96d04b7",
+  "publicSha256": "9e6b7ca804ce4d71ba659246c8b1dfe03b1e12a26d65bbc39a4e6217538626c2",
+  "creatorSha256": "af37ac23811cd5a4787ab18ee7543f8766b0d748220ca1ed69d800dde1328c6f",
+  "sourceManagerCommit": "b7ba1d1c062cc433ee37af4d84d232e6e12970ba",
+  "sourceManagerRun": 37080651689,
+  "policy": "Build + SelfTest + UI + Review1 + Review2 + exact SHA; Defender/VT/Authenticode not required"
+}
