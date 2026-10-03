@@ -6,10 +6,12 @@ Current machine authority: `../channel.json`.
 
 **2.1.5**
 
-- exact final source: `810a1a4e8d6141e26768a7624a5324daf277da57`
-- final validation Run: `37124572198`
+- Public source: `810a1a4e8d6141e26768a7624a5324daf277da57`
+- Creator source: `b0c91e6aa190c81242b53ba993adce1c0e8dc4ff`
+- Public final validation Run: `37124572198`
+- Creator label-fix validation Run: `37142598542`
 - Public SHA256: `47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5`
-- Creator SHA256: `caf3e20eabc1bd46ab1aeebeef3d75588d64c4beb24a3f007c2010388516f89e`
+- Creator SHA256: `682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8`
 - Public/Creator Build + SelfTest + UI: PASS
 - final full-button/closure audit: PASS
 - real-machine bottom-border correction: PASS
@@ -38,3 +40,5 @@ Live Manager files:
 Superseded versioned Manager binaries are removed from the live tree; Git history/private rollback storage retains their provenance.
 
 Creator 2.1.5 label-only hotfix: language-test install button label updated; Public Manager bytes unchanged.
+
+Creator Language-test install button current label: `安装汉化测试包`; rollback label remains `回滚汉化测试包`.
