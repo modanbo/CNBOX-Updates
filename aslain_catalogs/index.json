@@ -9,68 +9,6 @@
       "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/01/Configuration",
       "configurationSha256": "2df0ccf2f22604bc7c55ddf9c8a6458429a8ef9a88f86cfa330650f57743f1a2",
       "bytes": 1915589
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.1",
-      "aslainVersion": "2.4.0.1 #09",
-      "contentVersion": "v2.4.0.1 #09 (2026.09.27)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.1/09/Configuration",
-      "configurationSha256": "efe89e10eef012996bf3507d1f60eeacc385f0a79a33d88249c2128b73b9b738",
-      "bytes": 1915277,
-      "previousAslainVersion": "2.4.0.1 #08",
-      "configurationDiffSha256": "65e91e35a237c955ddfbbda9949121158cb721e14ca234b70eb4d3108d47e064"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.1",
-      "aslainVersion": "2.4.0.1 #08",
-      "contentVersion": "v2.4.0.1 #08 (2026.09.26)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.1/08/Configuration",
-      "configurationSha256": "71237ca7343c1fbaa0c7435f6205f4d78cfc6aa245628f0f649478fd0be02e7b",
-      "bytes": 1914957,
-      "previousAslainVersion": "2.4.0.1 #07",
-      "configurationDiffSha256": "c2e90dfea4e4beb64276bc42915f32594256a31b9be6a583cfcfd3c4f81fa5ca"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.1",
-      "aslainVersion": "2.4.0.1 #07",
-      "contentVersion": "v2.4.0.1 #07 (2026.09.23)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.1/07/Configuration",
-      "configurationSha256": "e470e2e41a1857ed9c50b2783f30797b291ba9b4667951349c52f6031744af3f",
-      "bytes": 1884753,
-      "previousAslainVersion": "2.4.0.1 #06",
-      "configurationDiffSha256": "34b570a3a19ffbc1f8487b7a5ad169357e463c754f00a819eb02286b1b747a5e"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.1",
-      "aslainVersion": "2.4.0.1 #06",
-      "contentVersion": "v2.4.0.1 #06 (2026.09.22)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.1/06/Configuration",
-      "configurationSha256": "5ff37a09af592cf63e45ff939be1d76eb501b77d47d9fe13fc74554f777fd76e",
-      "bytes": 1884753,
-      "previousAslainVersion": "2.4.0.1 #05",
-      "configurationDiffSha256": "f1f11ac3f548b1fc640937fde9e1dc8c862ca80a4b17d397d1d02b9238b8262b"
-    },
-    {
-      "schemaVersion": 1,
-      "wotVersion": "2.4.0.1",
-      "aslainVersion": "2.4.0.1 #05",
-      "contentVersion": "v2.4.0.1 #05 (2026.09.21)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.1/05/Configuration",
-      "configurationSha256": "3bd8a74f49a772b1455f18a1b35f30adbdd0c3c5811a26cbafc6b131ff55fe07",
-      "bytes": 1884753
-    },
-    {
-      "schemaVersion": 1,
-      "wotVersion": "2.4.0.1",
-      "aslainVersion": "2.4.0.1 #04",
-      "contentVersion": "v2.4.0.1 #04 (2026.09.20)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.1/04/Configuration",
-      "configurationSha256": "de9daeb7d8b26708e708658f5bfc5e769a58c3fbdc9adbea3f7b529a4e8d3db2",
-      "bytes": 1884753
     }
   ]
 }
