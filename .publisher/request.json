@@ -2,21 +2,14 @@
   "schemaVersion": 1,
   "active": true,
   "sourceUrl": "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-9620-81f7-ae14-21225b29bb68/raw?se=2026-10-03T00%3A49%3A54Z&sp=r&sv=2026-02-06&sr=b&scid=f1692664-7dc0-5b49-a1f7-7b38fb430065&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-02T18%3A20%3A28Z&ske=2026-10-03T18%3A20%3A28Z&sks=b&skv=2026-02-06&sig=KkX%2B8pfnbog55twHBVcpVQ3TTrgJYVS/J0jXWDc6wVg%3D",
-  "destination": "manager/NAJXBox_Manager.exe",
+  "destination": "manager/NAJXBox_Manager_Creator.exe",
   "aliases": [
-    "manager/CNBOX_Manager.exe",
-    "manager/NAJXBox_Manager_v2.1.2.exe"
+    "manager/CNBOX_Manager_Creator.exe",
+    "manager/NAJXBox_Manager_Creator_v2.1.2.exe"
   ],
   "sourceSha256": "2d1560623432d4467a4ae41cbd9477bb67ad63fc68139cf5c7a19d28e96d04b7",
-  "outputSha256": "9e6b7ca804ce4d71ba659246c8b1dfe03b1e12a26d65bbc39a4e6217538626c2",
+  "outputSha256": "af37ac23811cd5a4787ab18ee7543f8766b0d748220ca1ed69d800dde1328c6f",
   "archive": "zip",
-  "extract": "Public/NAJXBox_Manager_2.1.2_Public.exe",
-  "virusTotalException": {
-    "approved": true,
-    "sha256": "9e6b7ca804ce4d71ba659246c8b1dfe03b1e12a26d65bbc39a4e6217538626c2",
-    "reportUrl": "https://www.virustotal.com/gui/file/9e6b7ca804ce4d71ba659246c8b1dfe03b1e12a26d65bbc39a4e6217538626c2",
-    "detection": "Microsoft: Trojan:Win32/Wacatac.B!ml",
-    "authorization": "Project owner explicitly requested Manager 2.1.2 formal release after reviewing the exact-file VirusTotal detection."
-  },
-  "note": "Manager 2.1.2 Run11 frozen Public exact-byte publication. User-approved exact-SHA VirusTotal exception; no rebuild."
+  "extract": "Creator/NAJXBox_Manager_2.1.2_Creator.exe",
+  "note": "Manager 2.1.2 Run11 frozen Creator exact-byte publication. No rebuild."
 }
