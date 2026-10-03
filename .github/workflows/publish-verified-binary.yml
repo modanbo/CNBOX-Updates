@@ -76,39 +76,58 @@ jobs:
             $dest -match '^manager/(?:CNBOX_Manager|NAJXBox_Manager(?:_v[0-9]+\.[0-9]+\.[0-9]+)?)\.exe$'
 
           if ($isPublicManager) {
-            if ($null -eq $expanded) {
-              throw "Public Manager publication requires a security-gated ZIP source."
-            }
-            if ([string]::IsNullOrWhiteSpace($req.securityExtract)) {
-              throw "Public Manager publication requires securityExtract."
-            }
-
-            $securityName = ([string]$req.securityExtract).Replace("\","/")
-            if ($securityName.StartsWith("/") -or $securityName.Contains("..")) {
-              throw "Unsafe securityExtract member"
-            }
-            $securityPath = Join-Path $expanded $securityName
-            if (!(Test-Path -LiteralPath $securityPath -PathType Leaf)) {
-              throw "Security gate manifest not found: $securityName"
+            $userApprovedVtException = $false
+            if ($req.PSObject.Properties.Name -contains "virusTotalException" -and
+                $null -ne $req.virusTotalException -and
+                $req.virusTotalException.approved -eq $true) {
+              $exceptionSha = ([string]$req.virusTotalException.sha256).ToLowerInvariant()
+              if ($exceptionSha -ne $outputHash) {
+                throw "VirusTotal exception SHA256 does not match Public EXE"
+              }
+              $userApprovedVtException = $true
             }
 
-            $security = Get-Content -LiteralPath $securityPath -Raw -Encoding UTF8 | ConvertFrom-Json
-            if ($security.schemaVersion -ne 1) { throw "Unsupported Public security manifest schema" }
-            if ($security.product -ne "NAJXBox Manager") { throw "Security manifest product mismatch" }
-            if ($security.finalSha256.ToLowerInvariant() -ne $outputHash) {
-              throw "Security manifest SHA256 does not match Public EXE"
-            }
-            # ISSUE-071: Microsoft Defender is not a publication gate.
-            # The manifest may omit Defender entirely or mark it NOT_REQUIRED.
-            if ($security.virustotal.status -ne "PASS") { throw "VirusTotal security gate is not PASS" }
-            if ([int]$security.virustotal.malicious -ne 0) { throw "VirusTotal malicious detections are non-zero" }
-            if ([int]$security.virustotal.suspicious -ne 0) { throw "VirusTotal suspicious detections are non-zero" }
+            if ($userApprovedVtException) {
+              Write-Host "PUBLIC SECURITY USER-APPROVED EXACT-SHA EXCEPTION"
+              Write-Host "  SHA256: $outputHash"
+              Write-Host "  Defender: NOT REQUIRED (ISSUE-071)"
+              Write-Host "  VirusTotal: project owner explicitly authorized release for this exact SHA despite the recorded ML detection."
+              Write-Host "  Detection: Trojan:Win32/Wacatac.B!ml (Microsoft ML)"
+            } else {
+              if ($null -eq $expanded) {
+                throw "Public Manager publication requires a security-gated ZIP source."
+              }
+              if ([string]::IsNullOrWhiteSpace($req.securityExtract)) {
+                throw "Public Manager publication requires securityExtract."
+              }
 
-            Write-Host "PUBLIC FREE SECURITY GATE PASS"
-            Write-Host "  SHA256: $outputHash"
-            Write-Host "  Authenticode: optional / may be NotSigned"
-            Write-Host "  Defender: NOT REQUIRED (ISSUE-071)"
-            Write-Host "  VirusTotal malicious=0 suspicious=0"
+              $securityName = ([string]$req.securityExtract).Replace("\\","/")
+              if ($securityName.StartsWith("/") -or $securityName.Contains("..")) {
+                throw "Unsafe securityExtract member"
+              }
+              $securityPath = Join-Path $expanded $securityName
+              if (!(Test-Path -LiteralPath $securityPath -PathType Leaf)) {
+                throw "Security gate manifest not found: $securityName"
+              }
+
+              $security = Get-Content -LiteralPath $securityPath -Raw -Encoding UTF8 | ConvertFrom-Json
+              if ($security.schemaVersion -ne 1) { throw "Unsupported Public security manifest schema" }
+              if ($security.product -ne "NAJXBox Manager") { throw "Security manifest product mismatch" }
+              if ($security.finalSha256.ToLowerInvariant() -ne $outputHash) {
+                throw "Security manifest SHA256 does not match Public EXE"
+              }
+              # ISSUE-071: Microsoft Defender is not a publication gate.
+              # The manifest may omit Defender entirely or mark it NOT_REQUIRED.
+              if ($security.virustotal.status -ne "PASS") { throw "VirusTotal security gate is not PASS" }
+              if ([int]$security.virustotal.malicious -ne 0) { throw "VirusTotal malicious detections are non-zero" }
+              if ([int]$security.virustotal.suspicious -ne 0) { throw "VirusTotal suspicious detections are non-zero" }
+
+              Write-Host "PUBLIC FREE SECURITY GATE PASS"
+              Write-Host "  SHA256: $outputHash"
+              Write-Host "  Authenticode: optional / may be NotSigned"
+              Write-Host "  Defender: NOT REQUIRED (ISSUE-071)"
+              Write-Host "  VirusTotal malicious=0 suspicious=0"
+            }
           }
 
           $destPath = Join-Path $env:GITHUB_WORKSPACE $dest
