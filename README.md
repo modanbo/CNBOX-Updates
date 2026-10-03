@@ -1,152 +1,44 @@
 # NAJXBox Updates — Public Distribution
 
-Role: **CURRENT PUBLIC DISTRIBUTION ONLY**
+Role: **CURRENT PUBLIC DISTRIBUTION**
 
-This repository is the stable Public update endpoint for NAJXBox Manager and legacy CNBOX-compatible clients.
+Machine update authority: `channel.json`.
 
-Source of truth for machine update logic: `channel.json`.
+## Current release set
 
-## Current Public release
+- Manager Public: **2.1.5**
+  - `manager/NAJXBox_Manager.exe`
+  - legacy alias: `manager/CNBOX_Manager.exe`
+  - SHA256: `47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5`
+- Manager Creator (GitHub engineering distribution only): **2.1.5**
+  - SHA256: `caf3e20eabc1bd46ab1aeebeef3d75588d64c4beb24a3f007c2010388516f89e`
+- Box: **1.1.0**
+  - compatibility/public alias: `2402-01-R34-R2F9-UNIFIED-R6`
+  - WoT: `2.4.0.2`
+  - payload: `payloads/2.4.0.2/unified/CNBOX_PAYLOAD_R6.zip`
+  - SHA256: `b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2`
+- MoE / 打环: **1.3.0**
+  - payload: `moe/1.3.0/NAJXBOX_MoE_INDEPENDENT_1.3.0_WOT_2.4.0.2_FINAL_LOCK.zip`
+  - SHA256: `5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19`
+- Language / 汉化: **1.1.1**
+  - payload: `language/NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip`
+  - SHA256: `88b4932ed7106e89183a1c7ca778c559db02225bfc6f12a1707e0d51c89d0667`
 
-### Manager Public
-- Version: **2.1.1**
-- Canonical binary: `manager/NAJXBox_Manager.exe`
-- Legacy compatibility alias: `manager/CNBOX_Manager.exe`
-- SHA256: `35adb9af766646293eba0633b7bc7bc1901e0fa45383e35f39221ad7e7d2287b`
+Environment baseline:
+- WoT `2.4.0.2`
+- Aslain `#01`
+- XVM `13.1.0.0093`
 
-Creator 2.1.1 remains an engineering distribution on GitHub/Google Drive and is **not mirrored to Public Gitee**.
+## Current-tree retention rule
 
-### Box
-- Public release: **2401-R34-R2F9-UNIFIED-R5**
-- Status: **FINAL_LOCK**
-- WoT: **2.4.0.1**
-- XVM: **13.1.0.0090**
-- Package: `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip`
-- SHA256: `cf8ce97f9e33ee013c0383d2c940d5ee37985749bd8e12e299b13a8ad70829b6`
-- Current Creator/Aslain compatibility lock: **2401-09-R34-R2F9-FINAL_LOCK-R5**
+This repository's live distribution tree keeps the current installable release set. Superseded binary releases are retained by Git history and by the private engineering/Drive rollback archives rather than as competing current files.
 
-Aslain #09 is a low-risk dependency rebase. The Public R5 Box payload remains byte-identical; no Public Box rebuild was required.
+Unique engineering history/reference material such as `moe/HISTORY.md`, `moe/reference/`, `moe/source/` and `moe/diagnostics/` is retained.
 
-### Language
-- Pack version: **1.1**
-- Package: `language/CNBOX_LANGUAGE_PACK_2.4.0.1.zip`
-- SHA256: `e6fd0b357617bf4267a3b29458f9b810be9717d907d929c5c8c0fcb5b098a3a7`
+## Gitee
 
-### MoE / 打环
-- Version: **1.2.9**
-- Status: **FINAL_LOCK / Runtime PASS**
-- Package: `moe/1.2.9/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1.zip`
-- Package SHA256: `624276153a5b65bd74eda0009ffba23061cb0d111ccb78dd7f1328b1f100136c`
-- Installed WOTMOD SHA256: `fc81ac5bf0baa92339a179373835cd0246be78fb9cddde44d239270f5c8035b2`
+Gitee `modanbo/cnbox-updates-cn` is a **Public-only exact mirror** rebuilt from the current GitHub channel. Creator/private/history/test/evidence content is forbidden there.
 
-## Public Gitee mirror
+Current Manager 2.1.5 GitHub publication is complete; Gitee synchronization is the remaining manual publication gate before the private engineering authority promotes Manager 2.1.5 as CURRENT_RELEASE.
 
-Gitee repository: `modanbo/cnbox-updates-cn`
-
-**Gitee contains only three current Public payload files. No README, index, channel, manifest, language, SHA256SUMS, Creator, test package, or history file is published there.**
-
-Exact Gitee file set:
-- `manager/CNBOX_Manager.exe`
-- `payloads/2.4.0.1/unified/CNBOX_PAYLOAD_R5.zip`
-- `moe/1.2.9/NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1.zip`
-
-## Standard manual Gitee update command
-
-Use this PowerShell procedure for manual Gitee replacement. It is intentionally fail-closed: cleanup is permitted only after the clone succeeds, the working path matches the dedicated temp directory, and `.git` exists.
-
-```powershell
-$ErrorActionPreference = "Stop"
-
-$work = "$env:TEMP\NAJXBox_Gitee_Public"
-$repo = "https://gitee.com/modanbo/cnbox-updates-cn.git"
-
-# Set these to the exact current FINAL files before publishing.
-$PublicManager = "C:\PATH\NAJXBox_Manager_v2.1.1.exe"
-$Box = "C:\PATH\NAJXBOX_ASLAIN06_Y30_LOCKED_FINAL_1007_BILINGUAL_JX_NAME_R2_REVIEWED.zip"
-$MoE = "C:\PATH\NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1.zip"
-
-if (Test-Path $work) {
-    Remove-Item $work -Recurse -Force
-}
-
-git -c http.version=HTTP/1.1 clone --depth 1 $repo $work
-
-if ($LASTEXITCODE -ne 0 -or !(Test-Path (Join-Path $work ".git"))) {
-    throw "Gitee clone failed. STOPPED before cleanup."
-}
-
-Set-Location $work
-
-if ((Get-Location).Path -ne $work) {
-    throw "Wrong working directory. STOPPED before cleanup."
-}
-
-if (!(Test-Path ".git")) {
-    throw "Not a Git repository. STOPPED before cleanup."
-}
-
-git config user.name "modanbo"
-git config user.email "modanbo@users.noreply.gitee.com"
-
-# Destructive cleanup is allowed only after all guards above pass.
-Get-ChildItem -Force |
-    Where-Object { $_.Name -ne ".git" } |
-    Remove-Item -Recurse -Force
-
-New-Item ".\manager" -ItemType Directory -Force | Out-Null
-New-Item ".\payloads\2.4.0.1\unified" -ItemType Directory -Force | Out-Null
-New-Item ".\moe\1.2.9" -ItemType Directory -Force | Out-Null
-
-Copy-Item $PublicManager ".\manager\CNBOX_Manager.exe" -Force
-Copy-Item $Box ".\payloads\2.4.0.1\unified\CNBOX_PAYLOAD_R5.zip" -Force
-Copy-Item $MoE ".\moe\1.2.9\NAJXBOX_MoE_INDEPENDENT_1.2.9_LOBBY_LIFECYCLE_OWNER_REBUILD_WOT_2.4.0.1.zip" -Force
-
-$files = @(Get-ChildItem -File -Recurse)
-if ($files.Count -ne 3) {
-    $files.FullName
-    throw "Gitee staging must contain exactly 3 files."
-}
-
-git add -A
-git status
-git commit -m "Update Public Manager Box and MoE only"
-git push origin main
-
-git status
-git log -1 --oneline
-```
-
-Important safety rule: **never run the cleanup block from `C:\Users\...` or another normal user directory.** If clone fails, stop and fix clone first.
-
-## Authority
-
-For update decisions, always use `channel.json` in GitHub.
-For a human-readable snapshot, use `CURRENT_RELEASE_INDEX.md` in GitHub.
-These documentation files are not part of the Gitee three-file mirror.
-
-
-## Verified Gitee manual publish closure
-
-Status: **VERIFIED / LOCKED PROCEDURE**
-
-Successful Gitee closure:
-- Gitee commit: `5cc9d35`
-- push: `8425511..5cc9d35 main -> main`
-- final worktree: clean
-- final Gitee payload count: exactly **3 files**
-
-This exact sequence is the canonical manual Gitee procedure:
-1. clone with `git -c http.version=HTTP/1.1 clone --depth 1`;
-2. enter `$env:TEMP\NAJXBox_Gitee_Public`;
-3. verify current path equals the dedicated temp path;
-4. verify `.git` exists;
-5. only then delete every old Gitee file except `.git`;
-6. recreate only the Manager / Box / MoE target directories;
-7. download the three current FINAL files from GitHub;
-8. verify exactly three files exist;
-9. `git add -A`;
-10. commit;
-11. `git -c http.version=HTTP/1.1 push origin main`;
-12. verify `nothing to commit, working tree clean`.
-
-Do not improvise or skip the directory and `.git` guards. Do not run the destructive cleanup block from `C:\Users\...` or any normal user directory.
+For release identity, always use `channel.json` and `CURRENT_RELEASE_INDEX.md`.
