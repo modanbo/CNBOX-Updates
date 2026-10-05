@@ -1,0 +1,48 @@
+name: Fetch current Aslain installer artifact
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/fetch-current-aslain-installer.yml"
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve current Aslain build and download installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re,pathlib,urllib.request,hashlib
+          idx=json.loads(pathlib.Path("aslain_catalogs/index.json").read_text(encoding="utf-8"))
+          cur=idx["catalogs"][0]
+          game=cur["wotVersion"]
+          m=re.search(r'#\s*(\d+)',cur["aslainVersion"])
+          if not m: raise SystemExit("bad build")
+          build=int(m.group(1))
+          name=f"Aslains_WoT_Modpack_Installer_v.{game}_{build:02d}.exe"
+          url=f"https://filez.aslain.com/{name}"
+          req=urllib.request.Request(url,headers={"User-Agent":"NAJXBox-Aslain-Installer-Archiver/1.0","Cache-Control":"no-cache"})
+          with urllib.request.urlopen(req,timeout=180) as r:
+              data=r.read()
+              final=r.geturl()
+              ctype=r.headers.get("Content-Type","")
+          if len(data)<1000000: raise SystemExit(f"installer too small: {len(data)}")
+          pathlib.Path(name).write_bytes(data)
+          sha=hashlib.sha256(data).hexdigest()
+          meta={"aslainVersion":cur["aslainVersion"],"wotVersion":game,"build":f"{build:02d}","fileName":name,"sourceUrl":url,"finalUrl":final,"contentType":ctype,"bytes":len(data),"sha256":sha}
+          pathlib.Path("installer_metadata.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
+          print(json.dumps(meta,indent=2))
+          PY
+      - name: Upload installer artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: current-aslain-installer
+          path: |
+            Aslains_WoT_Modpack_Installer_v.*.exe
+            installer_metadata.json
+          if-no-files-found: error
+          retention-days: 1
