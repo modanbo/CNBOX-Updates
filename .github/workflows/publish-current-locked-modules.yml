@@ -42,12 +42,7 @@ jobs:
               }
             }
           }
-          foreach($r in @(
-            (Join-Path $env:USERPROFILE 'Downloads'),
-            (Join-Path $env:USERPROFILE 'Desktop'),
-            (Join-Path $env:USERPROFILE 'Documents'),
-            'C:\Seagull\Seagull\Use'
-          )){
+          foreach($r in @((Join-Path $env:USERPROFILE 'Downloads'),(Join-Path $env:USERPROFILE 'Desktop'),(Join-Path $env:USERPROFILE 'Documents'),'C:\Seagull\Seagull\Use')){
             if(Test-Path -LiteralPath $r){$roots.Add((Resolve-Path -LiteralPath $r).Path)}
           }
           $roots=@($roots|Select-Object -Unique)
@@ -68,57 +63,18 @@ jobs:
             return $null
           }
 
-          $final=Find-ExactZip $FinalSha @('*LANGUAGE*1.1.2*FINAL*.zip')
           $stage=Join-Path $env:RUNNER_TEMP 'NAJXBOX_LANGUAGE_112_FINAL'
           if(Test-Path -LiteralPath $stage){Remove-Item -LiteralPath $stage -Recurse -Force}
           New-Item -ItemType Directory -Path $stage -Force | Out-Null
           $out=Join-Path $stage 'NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'
 
+          $final=Find-ExactZip $FinalSha @('*LANGUAGE*1.1.2*FINAL*.zip')
           if($final){
             Copy-Item -LiteralPath $final -Destination $out -Force
           } else {
             $r7=Find-ExactZip $R7Sha @('*GLOBAL_COMPLETENESS*CANDIDATE_R7*.zip','*LANGUAGE*R7*.zip')
             if(-not $r7){throw 'Neither exact final nor exact R7 package found.'}
-            $py=Join-Path $stage 'freeze_112.py'
-            $pyText=@'
-import copy, json, sys, zipfile
-src,out=sys.argv[1],sys.argv[2]
-with zipfile.ZipFile(src,'r') as zin:
-    m=json.loads(zin.read('language_pack_manifest.json').decode('utf-8-sig'))
-    m.update({
-        'packVersion':'1.1.2',
-        'previousFormalVersion':'1.1.1',
-        'previousFormalDisplay':'1.1.1',
-        'changeClass':'PATCH_GLOBAL_COMPLETENESS_AND_VEHICLE_NAME_STANDARDIZATION',
-        'createdAtUtc':'2026-10-04T00:00:00Z',
-        'runtimeRequired':True,
-        'runtimeStatus':'PASS / USER_CONFIRMED_NO_ISSUES / EXACT_R7_CONTENT',
-        'runtimeAuthorityCandidateRevision':'R7',
-        'runtimeAuthorityCandidateSha256':'14f09a1b2aa64da70f5910a29b38d13c804d7ac680d6c5221d8fc347a9dc5fe9',
-        'runtimeConfirmationDate':'2026-10-04',
-        'lockAuthorization':'EXPLICIT_USER_FORMAL_LOCK_1.1.2_20261004',
-        'candidateState':'FINAL_LOCK',
-        'candidateRevision':None,
-        'formalState':'FINAL_LOCK',
-        'formalLockDate':'2026-10-04',
-        'finalIdentityDelta':'MANIFEST_ONLY_FROM_RUNTIME_PASSED_R7; ALL 312 NON-MANIFEST MEMBERS BYTE-IDENTICAL TO R7',
-        'candidateRuntimeGate':'CLOSED / R7 RUNTIME PASS / USER CONFIRMED NO ISSUES / FINAL IDENTITY MANIFEST-ONLY REPACK',
-        'engineeringSourceCandidate':{
-            'revision':'R7',
-            'file':'NAJXBOX_LANGUAGE_GLOBAL_COMPLETENESS_CANDIDATE_R7_20261003.zip',
-            'sha256':'14f09a1b2aa64da70f5910a29b38d13c804d7ac680d6c5221d8fc347a9dc5fe9',
-            'reviews':['REVIEW5_PASS','REVIEW6_PASS'],
-            'runtime':'PASS / USER_CONFIRMED_NO_ISSUES'
-        }
-    })
-    mb=(json.dumps(m,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
-    with zipfile.ZipFile(out,'w') as zout:
-        for info in zin.infolist():
-            zi=copy.copy(info)
-            zout.writestr(zi, mb if info.filename=='language_pack_manifest.json' else zin.read(info.filename))
-'@
-            [IO.File]::WriteAllText($py,$pyText,(New-Object Text.UTF8Encoding($false)))
-            python $py $r7 $out
+            python '.github\release-tools\freeze_language_112_from_r7.py' $r7 $out
             if($LASTEXITCODE -ne 0){throw "Final identity repack failed: $LASTEXITCODE"}
           }
 
@@ -140,10 +96,7 @@ with zipfile.ZipFile(src,'r') as zin:
           $dst='language\NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'
           Copy-Item -LiteralPath $env:FINAL_PATH -Destination $dst -Force
           if((Get-FileHash -LiteralPath $dst -Algorithm SHA256).Hash.ToLowerInvariant() -ne $FinalSha){throw 'Public Language copy SHA mismatch'}
-          foreach($old in @(
-            'language\NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip',
-            'language\NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt'
-          )){
+          foreach($old in @('language\NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip','language\NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt')){
             if(Test-Path -LiteralPath $old){Remove-Item -LiteralPath $old -Force}
           }
           Write-Utf8NoBom 'language\NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt' ($FinalSha+'  NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'+$NL)
@@ -201,6 +154,8 @@ with zipfile.ZipFile(src,'r') as zin:
           git config user.email 'najxbox-release-bot@users.noreply.github.com'
           git rm -- '.github/workflows/publish-current-locked-modules.yml'
           if($LASTEXITCODE -ne 0){throw 'publisher cleanup git rm failed'}
+          git rm -- '.github/release-tools/freeze_language_112_from_r7.py'
+          if($LASTEXITCODE -ne 0){throw 'freeze-helper cleanup git rm failed'}
           git add -A -- channel.json CURRENT_RELEASE_INDEX.md language
           git status --short
           if($LASTEXITCODE -ne 0){throw 'git status failed'}
