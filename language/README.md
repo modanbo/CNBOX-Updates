@@ -14,8 +14,8 @@ Current authority: `../channel.json`.
 
 ## Manager language modes
 
-- 涓枃鐣岄潰 + 涓枃鍧﹀厠鍚?
-- 涓枃鐣岄潰 + 鑻辨枃鍧﹀厠鍚?
-- 鎭㈠鍘熷璇█
+- 中文界面 + 中文坦克名
+- 中文界面 + 英文坦克名
+- 恢复原始语言
 
 The enhanced TahomaZH/fontconfig layer is unchanged. Language 1.1.1 remains rollback/history outside the live Public language tree.
