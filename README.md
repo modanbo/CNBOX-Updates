@@ -11,7 +11,7 @@ Machine update authority: `channel.json`.
   - legacy alias: `manager/CNBOX_Manager.exe`
   - SHA256: `47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5`
 - Manager Creator (GitHub engineering distribution only): **2.1.5**
-  - SHA256: `caf3e20eabc1bd46ab1aeebeef3d75588d64c4beb24a3f007c2010388516f89e`
+  - SHA256: `682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8`
 - Box: **1.1.0**
   - compatibility/public alias: `2402-01-R34-R2F9-UNIFIED-R6`
   - WoT: `2.4.0.2`
@@ -20,13 +20,13 @@ Machine update authority: `channel.json`.
 - MoE / 打环: **1.3.0**
   - payload: `moe/1.3.0/NAJXBOX_MoE_INDEPENDENT_1.3.0_WOT_2.4.0.2_FINAL_LOCK.zip`
   - SHA256: `5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19`
-- Language / 汉化: **1.1.1**
-  - payload: `language/NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip`
-  - SHA256: `88b4932ed7106e89183a1c7ca778c559db02225bfc6f12a1707e0d51c89d0667`
+- Language / 汉化: **1.1.2**
+  - payload: `language/NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip`
+  - SHA256: `1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18`
 
 Environment baseline:
 - WoT `2.4.0.2`
-- Aslain `#01`
+- Aslain Creator/engineering compatibility `#02` (Public Box bytes remain the same R6 payload)
 - XVM `13.1.0.0093`
 
 ## Current-tree retention rule
