@@ -5,14 +5,11 @@ permissions:
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
-      - '.github/workflows/publish-current-locked-modules.yml'
+      - .github/workflows/publish-current-locked-modules.yml
   workflow_dispatch:
-
-concurrency:
-  group: publish-language-1-1-2-exact
-  cancel-in-progress: false
 
 jobs:
   publish:
@@ -26,83 +23,90 @@ jobs:
 
       - name: Publish exact Language 1.1.2
         env:
-          LANGUAGE_URL: 'https://sdmntprcentralus.oaiusercontent.com/files/00000000-e6e0-81f5-8109-17c8923a04f8/raw?se=2026-10-05T00%3A59%3A07Z&sp=r&sv=2026-02-06&sr=b&scid=e5f2684b-4a3a-53e2-b9a1-95da43c8177a&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-04T16%3A00%3A19Z&ske=2026-10-05T16%3A00%3A19Z&sks=b&skv=2026-02-06&sig=tV3WIP%2BYohzAt6I/2S9yhwThFRv9SweH5561STxQyqE%3D'
-          LANGUAGE_SHA: '1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18'
+          LANGUAGE_URL: "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-18dc-81f7-ace3-ed9e68362c77/raw?se=2026-10-05T01%3A02%3A43Z&sp=r&sv=2026-02-06&sr=b&scid=6eb9b4db-3d4e-559d-bc90-64821e76a517&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-04T16%3A11%3A21Z&ske=2026-10-05T16%3A11%3A21Z&sks=b&skv=2026-02-06&sig=M0zDsS9YPqWr6sIsemCdCLJ3V0DPzb4yEP8K%2BdgIO30%3D"
+          LANGUAGE_SHA: "1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18"
         run: |
           python - <<'PY'
-          import hashlib, json, os, pathlib, urllib.request
-          root=pathlib.Path('.')
-          url=os.environ['LANGUAGE_URL']
-          expected=os.environ['LANGUAGE_SHA']
-          dst=root/'language'/'NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'
-          dst.parent.mkdir(parents=True,exist_ok=True)
-          data=urllib.request.urlopen(url,timeout=120).read()
-          got=hashlib.sha256(data).hexdigest()
-          if got!=expected: raise SystemExit(f'Language SHA mismatch: {got}')
+          import hashlib, json, os, pathlib, re, urllib.request
+          root = pathlib.Path(".")
+          expected = os.environ["LANGUAGE_SHA"]
+          data = urllib.request.urlopen(os.environ["LANGUAGE_URL"], timeout=120).read()
+          got = hashlib.sha256(data).hexdigest()
+          if got != expected:
+              raise SystemExit("Language SHA mismatch: " + got)
+          dst = root / "language" / "NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip"
+          dst.parent.mkdir(parents=True, exist_ok=True)
           dst.write_bytes(data)
-          for old in [
-            root/'language'/'NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip',
-            root/'language'/'NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt'
+          for old_name in [
+              "NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip",
+              "NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt",
           ]:
-            if old.exists(): old.unlink()
-          (root/'language'/'NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt').write_text(
-            expected+'  NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip\n',encoding='ascii')
-          cp=root/'channel.json'
-          ch=json.loads(cp.read_text(encoding='utf-8-sig'))
-          assert ch['managerVersion']=='2.1.5'
-          assert ch['releases'][0]['payloadSha256']=='b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2'
-          assert ch['moePacks'][0]['payloadSha256']=='5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19'
-          raw='https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main'
-          ch['languagePacks']=[{
-            'packVersion':'1.1.2','wotVersion':'2.4.0.2',
-            'payloadUrl':raw+'/language/NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip',
-            'payloadSha256':expected,
-            'notes':'FINAL_LOCK. Current-NA-key authoritative global completeness + same-key CN fallback + current-NA vehicle-name standardization with CN Box JX compact-display cross-check. R7 real-client Runtime PASS; final 1.1.2 differs from tested R7 only by release-identity manifest. Review 5 + Review 6 + Final Review 1 + Final Review 2 PASS.'
+              old = root / "language" / old_name
+              if old.exists():
+                  old.unlink()
+          (root / "language" / "NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt").write_text(
+              expected + "  NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip\n",
+              encoding="ascii",
+          )
+          cp = root / "channel.json"
+          ch = json.loads(cp.read_text(encoding="utf-8-sig"))
+          assert ch["managerVersion"] == "2.1.5"
+          assert ch["releases"][0]["payloadSha256"] == "b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2"
+          assert ch["moePacks"][0]["payloadSha256"] == "5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19"
+          raw = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main"
+          ch["languagePacks"] = [{
+              "packVersion": "1.1.2",
+              "wotVersion": "2.4.0.2",
+              "payloadUrl": raw + "/language/NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip",
+              "payloadSha256": expected,
+              "notes": "FINAL_LOCK. Current-NA-key authoritative global completeness + exact same-key CN fallback + current-NA vehicle-name standardization with CN Box JX 80x24 compact-display cross-check. R7 real-client Runtime PASS; final 1.1.2 differs from tested R7 only by release-identity manifest. Review 5 + Review 6 + Final Review 1 + Final Review 2 PASS.",
           }]
-          cp.write_text(json.dumps(ch,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          idx=root/'CURRENT_RELEASE_INDEX.md'
-          t=idx.read_text(encoding='utf-8')
-          import re
-          t=re.sub(r'(?m)^Updated: .*$', 'Updated: 2026-10-04', t)
-          t=re.sub(r'(?m)^- Language: .*$', '- Language: 1.1.2 / '+expected, t)
-          idx.write_text(t,encoding='utf-8')
-          (root/'language'/'README.md').write_text("""# NAJXBox Language Packs
-
-Current authority: `../channel.json`.
-
-## Current language authority
-
-- formal version: **1.1.2**
-- WoT: `2.4.0.2`
-- package: `NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip`
-- SHA256: `1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18`
-- enhanced TahomaZH SHA256: `108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45`
-- global UI completeness: 521 current-NA exact-key replacements
-- vehicle-name layer: current NA identity authority + exact same-key CN donor + CN Box JX 80x24 compact-display cross-check
-- Runtime: R7 real-client PASS; final 1.1.2 members are byte-identical to R7 except `language_pack_manifest.json`
-- Review: R7 Review 5 PASS + Review 6 PASS + Final Review 1 PASS + Final Review 2 PASS
-
-## Manager language modes
-
-- 中文界面 + 中文坦克名
-- 中文界面 + 英文坦克名
-- 恢复原始语言
-
-Only current-NA keys/vehicles are eligible. CN-only vehicles/events/keys are not imported.
-""",encoding='utf-8')
-          assert hashlib.sha256(dst.read_bytes()).hexdigest()==expected
-          assert json.loads(cp.read_text(encoding='utf-8'))['languagePacks'][0]['packVersion']=='1.1.2'
-          print('LANGUAGE_1_1_2_PUBLIC_STAGE_PASS')
+          cp.write_text(json.dumps(ch, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          idx = root / "CURRENT_RELEASE_INDEX.md"
+          text = idx.read_text(encoding="utf-8")
+          text = re.sub(r"(?m)^Updated: .*$", "Updated: 2026-10-04", text)
+          text = re.sub(r"(?m)^- Language: .*$", "- Language: 1.1.2 / " + expected, text)
+          idx.write_text(text, encoding="utf-8")
+          readme_lines = [
+              "# NAJXBox Language Packs",
+              "",
+              "Current authority: `../channel.json`.",
+              "",
+              "## Current language authority",
+              "",
+              "- formal version: **1.1.2**",
+              "- WoT: `2.4.0.2`",
+              "- package: `NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip`",
+              "- SHA256: `" + expected + "`",
+              "- enhanced TahomaZH SHA256: `108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45`",
+              "- global UI completeness: 521 current-NA exact-key replacements",
+              "- vehicle-name layer: current NA identity authority + exact same-key CN donor + CN Box JX 80x24 compact-display cross-check",
+              "- Runtime: R7 real-client PASS; final 1.1.2 members are byte-identical to R7 except `language_pack_manifest.json`",
+              "- Review: R7 Review 5 PASS + Review 6 PASS + Final Review 1 PASS + Final Review 2 PASS",
+              "",
+              "## Manager language modes",
+              "",
+              "- 中文界面 + 中文坦克名",
+              "- 中文界面 + 英文坦克名",
+              "- 恢复原始语言",
+              "",
+              "Only current-NA keys/vehicles are eligible. CN-only vehicles/events/keys are not imported.",
+              "",
+          ]
+          (root / "language" / "README.md").write_text("\n".join(readme_lines), encoding="utf-8")
+          assert hashlib.sha256(dst.read_bytes()).hexdigest() == expected
+          assert json.loads(cp.read_text(encoding="utf-8"))["languagePacks"][0]["packVersion"] == "1.1.2"
+          print("LANGUAGE_1_1_2_PUBLIC_STAGE_PASS")
           PY
 
       - name: Commit exact Public update
         run: |
           set -euo pipefail
-          git config user.name 'NAJXBox Release Bot'
-          git config user.email 'najxbox-release-bot@users.noreply.github.com'
+          git config user.name "NAJXBox Release Bot"
+          git config user.email "najxbox-release-bot@users.noreply.github.com"
           git add -A -- channel.json CURRENT_RELEASE_INDEX.md language .github/workflows/publish-current-locked-modules.yml
           git status --short
-          git commit -m 'release: publish Language 1.1.2 exact'
+          git commit -m "release: publish Language 1.1.2 exact"
           git push origin HEAD:main
           echo "LANGUAGE_1_1_2_PUBLIC_PUBLISH_PASS HEAD=$(git rev-parse HEAD)"
 
