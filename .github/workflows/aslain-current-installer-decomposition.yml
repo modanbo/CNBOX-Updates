@@ -1,0 +1,64 @@
+name: Aslain current installer decomposition
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/aslain-current-installer-decomposition.yml"
+  workflow_dispatch:
+jobs:
+  decompose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install innoextract
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y innoextract
+          innoextract --version
+      - name: Resolve, download, hash, and extract current installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,re,pathlib
+          idx=json.loads(pathlib.Path("aslain_catalogs/index.json").read_text(encoding="utf-8"))
+          cur=idx["catalogs"][0]
+          m=re.search(r'#\s*(\d+)',cur["aslainVersion"])
+          if not m: raise SystemExit("cannot resolve Aslain build")
+          game=cur["wotVersion"]; build=int(m.group(1))
+          name=f"Aslains_WoT_Modpack_Installer_v.{game}_{build:02d}.exe"
+          url=f"https://filez.aslain.com/{name}"
+          pathlib.Path("resolved.env").write_text(
+            f"ASLAIN_VERSION={cur['aslainVersion']}\nWOT_VERSION={game}\nBUILD={build:02d}\nINSTALLER={name}\nURL={url}\n",
+            encoding="utf-8")
+          PY
+          source resolved.env
+          curl -L --fail --retry 4 --retry-delay 2 -o "$INSTALLER" "$URL"
+          sha256sum "$INSTALLER" | tee installer.sha256
+          stat -c '%n %s' "$INSTALLER" | tee installer.size
+          mkdir extracted
+          innoextract -e -d extracted "$INSTALLER"
+          mkdir -p evidence
+          find extracted -type f -printf '%P\t%s\n' | LC_ALL=C sort > evidence/file-list.tsv
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib
+          root=pathlib.Path("extracted")
+          rows=[]
+          for p in sorted(x for x in root.rglob("*") if x.is_file()):
+              b=p.read_bytes()
+              rows.append({"path":p.relative_to(root).as_posix(),"bytes":len(b),"sha256":hashlib.sha256(b).hexdigest()})
+          pathlib.Path("evidence/full-sha256.json").write_text(json.dumps(rows,indent=2)+"\n",encoding="utf-8")
+          interesting=("xvm","openwg","battle","playerspanel","playerpanel","vehiclemarker","marker","modmenu","sixthsense","guiflash","customuiscale","minimap","penetration")
+          selected=[r for r in rows if any(k in r["path"].lower() for k in interesting)]
+          pathlib.Path("evidence/interesting-sha256.json").write_text(json.dumps(selected,indent=2)+"\n",encoding="utf-8")
+          pathlib.Path("evidence/summary.json").write_text(json.dumps({"files":len(rows),"interestingFiles":len(selected)},indent=2)+"\n",encoding="utf-8")
+          PY
+          cp installer.sha256 installer.size resolved.env evidence/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aslain-current-installer-decomposition
+          path: evidence
+          if-no-files-found: error
+          retention-days: 2
