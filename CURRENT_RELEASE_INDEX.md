@@ -1,6 +1,6 @@
 # NAJXBox Current Public Release Index
 
-Updated: 2026-10-03
+Updated: 2026-10-04
 
 ## Current install authorities
 
@@ -10,7 +10,7 @@ Updated: 2026-10-03
 - Box Public compatibility: 2402-01-R34-R2F9-UNIFIED-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
 - Box Creator compatibility: 2402-01-R34-R2F9-FINAL_LOCK-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
 - MoE: 1.3.0 / 5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19
-- Language: 1.1.1 / 88b4932ed7106e89183a1c7ca778c559db02225bfc6f12a1707e0d51c89d0667
+- Language: 1.1.2 / 1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18
 - WoT: 2.4.0.2
 - Aslain manufacturing/Creator base: #01
 - XVM: 13.1.0.0093
