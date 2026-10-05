@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "wotVersion": "2.4.0.2",
+  "fromAslainVersion": "2.4.0.2 #01",
+  "toAslainVersion": "2.4.0.2 #02",
+  "fromConfigurationSha256": "2df0ccf2f22604bc7c55ddf9c8a6458429a8ef9a88f86cfa330650f57743f1a2",
+  "toConfigurationSha256": "65084d1a418bc81db4a69425060f4e8c0240361431057637c548c90d35e99cc9",
+  "fromBytes": 1915589,
+  "toBytes": 1934347,
+  "fromLines": 3925,
+  "toLines": 3972,
+  "diffHunks": 72,
+  "removedLines": 912,
+  "addedLines": 959,
+  "diffFile": "diff_from_01.diff",
+  "diffSha256": "2f008c64451556bf20759b732a61fa6284fdef64a7400162fbe023a3746fac6e"
+}
