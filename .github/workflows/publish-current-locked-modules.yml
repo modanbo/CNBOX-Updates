@@ -8,106 +8,206 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/publish-current-locked-modules.yml
+      - '.github/workflows/publish-current-locked-modules.yml'
   workflow_dispatch:
+
+concurrency:
+  group: publish-language-1-1-2-exact
+  cancel-in-progress: false
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Publish exact Language 1.1.2
-        env:
-          LANGUAGE_URL: "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-18dc-81f7-ace3-ed9e68362c77/raw?se=2026-10-05T01%3A02%3A43Z&sp=r&sv=2026-02-06&sr=b&scid=6eb9b4db-3d4e-559d-bc90-64821e76a517&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-04T16%3A11%3A21Z&ske=2026-10-05T16%3A11%3A21Z&sks=b&skv=2026-02-06&sig=M0zDsS9YPqWr6sIsemCdCLJ3V0DPzb4yEP8K%2BdgIO30%3D"
-          LANGUAGE_SHA: "1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18"
+      - name: Resolve exact final Language bytes from local Runtime authority
+        shell: powershell
         run: |
-          python - <<'PY'
-          import hashlib, json, os, pathlib, re, urllib.request
-          root = pathlib.Path(".")
-          expected = os.environ["LANGUAGE_SHA"]
-          data = urllib.request.urlopen(os.environ["LANGUAGE_URL"], timeout=120).read()
-          got = hashlib.sha256(data).hexdigest()
-          if got != expected:
-              raise SystemExit("Language SHA mismatch: " + got)
-          dst = root / "language" / "NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip"
-          dst.parent.mkdir(parents=True, exist_ok=True)
-          dst.write_bytes(data)
-          for old_name in [
-              "NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip",
-              "NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt",
-          ]:
-              old = root / "language" / old_name
-              if old.exists():
-                  old.unlink()
-          (root / "language" / "NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt").write_text(
-              expected + "  NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip\n",
-              encoding="ascii",
-          )
-          cp = root / "channel.json"
-          ch = json.loads(cp.read_text(encoding="utf-8-sig"))
-          assert ch["managerVersion"] == "2.1.5"
-          assert ch["releases"][0]["payloadSha256"] == "b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2"
-          assert ch["moePacks"][0]["payloadSha256"] == "5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19"
-          raw = "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main"
-          ch["languagePacks"] = [{
-              "packVersion": "1.1.2",
-              "wotVersion": "2.4.0.2",
-              "payloadUrl": raw + "/language/NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip",
-              "payloadSha256": expected,
-              "notes": "FINAL_LOCK. Current-NA-key authoritative global completeness + exact same-key CN fallback + current-NA vehicle-name standardization with CN Box JX 80x24 compact-display cross-check. R7 real-client Runtime PASS; final 1.1.2 differs from tested R7 only by release-identity manifest. Review 5 + Review 6 + Final Review 1 + Final Review 2 PASS.",
-          }]
-          cp.write_text(json.dumps(ch, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-          idx = root / "CURRENT_RELEASE_INDEX.md"
-          text = idx.read_text(encoding="utf-8")
-          text = re.sub(r"(?m)^Updated: .*$", "Updated: 2026-10-04", text)
-          text = re.sub(r"(?m)^- Language: .*$", "- Language: 1.1.2 / " + expected, text)
-          idx.write_text(text, encoding="utf-8")
-          readme_lines = [
-              "# NAJXBox Language Packs",
-              "",
-              "Current authority: `../channel.json`.",
-              "",
-              "## Current language authority",
-              "",
-              "- formal version: **1.1.2**",
-              "- WoT: `2.4.0.2`",
-              "- package: `NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip`",
-              "- SHA256: `" + expected + "`",
-              "- enhanced TahomaZH SHA256: `108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45`",
-              "- global UI completeness: 521 current-NA exact-key replacements",
-              "- vehicle-name layer: current NA identity authority + exact same-key CN donor + CN Box JX 80x24 compact-display cross-check",
-              "- Runtime: R7 real-client PASS; final 1.1.2 members are byte-identical to R7 except `language_pack_manifest.json`",
-              "- Review: R7 Review 5 PASS + Review 6 PASS + Final Review 1 PASS + Final Review 2 PASS",
-              "",
-              "## Manager language modes",
-              "",
-              "- 中文界面 + 中文坦克名",
-              "- 中文界面 + 英文坦克名",
-              "- 恢复原始语言",
-              "",
-              "Only current-NA keys/vehicles are eligible. CN-only vehicles/events/keys are not imported.",
-              "",
-          ]
-          (root / "language" / "README.md").write_text("\n".join(readme_lines), encoding="utf-8")
-          assert hashlib.sha256(dst.read_bytes()).hexdigest() == expected
-          assert json.loads(cp.read_text(encoding="utf-8"))["languagePacks"][0]["packVersion"] == "1.1.2"
-          print("LANGUAGE_1_1_2_PUBLIC_STAGE_PASS")
-          PY
+          $ErrorActionPreference='Stop'
+          $FinalSha='1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18'
+          $R7Sha='14f09a1b2aa64da70f5910a29b38d13c804d7ac680d6c5221d8fc347a9dc5fe9'
+          $settingsPath=Join-Path $env:LOCALAPPDATA 'CNBOX_Manager\settings.json'
+          $roots=New-Object System.Collections.Generic.List[string]
+          if(Test-Path -LiteralPath $settingsPath){
+            $settings=[IO.File]::ReadAllText($settingsPath,[Text.Encoding]::UTF8) | ConvertFrom-Json
+            foreach($name in @('lastCreatorLanguageTestPackageDirectory','collectionSavePath','lastCreatorTestPackageDirectory')){
+              $v=[string]$settings.$name
+              if(-not [string]::IsNullOrWhiteSpace($v) -and (Test-Path -LiteralPath $v)){
+                $roots.Add((Resolve-Path -LiteralPath $v).Path)
+              }
+            }
+          }
+          foreach($r in @(
+            (Join-Path $env:USERPROFILE 'Downloads'),
+            (Join-Path $env:USERPROFILE 'Desktop'),
+            (Join-Path $env:USERPROFILE 'Documents'),
+            'C:\Seagull\Seagull\Use'
+          )){
+            if(Test-Path -LiteralPath $r){$roots.Add((Resolve-Path -LiteralPath $r).Path)}
+          }
+          $roots=@($roots|Select-Object -Unique)
+          Write-Host ('Search roots: '+($roots -join '; '))
 
-      - name: Commit exact Public update
+          function Find-ExactZip([string]$Sha,[string[]]$Patterns){
+            foreach($root in $roots){
+              foreach($pattern in $Patterns){
+                foreach($item in @(Get-ChildItem -LiteralPath $root -Filter $pattern -File -Recurse -ErrorAction SilentlyContinue)){
+                  $h=(Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+                  if($h -eq $Sha){
+                    Write-Host "FOUND exact $Sha at $($item.FullName)"
+                    return $item.FullName
+                  }
+                }
+              }
+            }
+            return $null
+          }
+
+          $final=Find-ExactZip $FinalSha @('*LANGUAGE*1.1.2*FINAL*.zip')
+          $stage=Join-Path $env:RUNNER_TEMP 'NAJXBOX_LANGUAGE_112_FINAL'
+          if(Test-Path -LiteralPath $stage){Remove-Item -LiteralPath $stage -Recurse -Force}
+          New-Item -ItemType Directory -Path $stage -Force | Out-Null
+          $out=Join-Path $stage 'NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'
+
+          if($final){
+            Copy-Item -LiteralPath $final -Destination $out -Force
+          } else {
+            $r7=Find-ExactZip $R7Sha @('*GLOBAL_COMPLETENESS*CANDIDATE_R7*.zip','*LANGUAGE*R7*.zip')
+            if(-not $r7){throw 'Neither exact final nor exact R7 package found.'}
+            $py=Join-Path $stage 'freeze_112.py'
+            $pyText=@'
+import copy, json, sys, zipfile
+src,out=sys.argv[1],sys.argv[2]
+with zipfile.ZipFile(src,'r') as zin:
+    m=json.loads(zin.read('language_pack_manifest.json').decode('utf-8-sig'))
+    m.update({
+        'packVersion':'1.1.2',
+        'previousFormalVersion':'1.1.1',
+        'previousFormalDisplay':'1.1.1',
+        'changeClass':'PATCH_GLOBAL_COMPLETENESS_AND_VEHICLE_NAME_STANDARDIZATION',
+        'createdAtUtc':'2026-10-04T00:00:00Z',
+        'runtimeRequired':True,
+        'runtimeStatus':'PASS / USER_CONFIRMED_NO_ISSUES / EXACT_R7_CONTENT',
+        'runtimeAuthorityCandidateRevision':'R7',
+        'runtimeAuthorityCandidateSha256':'14f09a1b2aa64da70f5910a29b38d13c804d7ac680d6c5221d8fc347a9dc5fe9',
+        'runtimeConfirmationDate':'2026-10-04',
+        'lockAuthorization':'EXPLICIT_USER_FORMAL_LOCK_1.1.2_20261004',
+        'candidateState':'FINAL_LOCK',
+        'candidateRevision':None,
+        'formalState':'FINAL_LOCK',
+        'formalLockDate':'2026-10-04',
+        'finalIdentityDelta':'MANIFEST_ONLY_FROM_RUNTIME_PASSED_R7; ALL 312 NON-MANIFEST MEMBERS BYTE-IDENTICAL TO R7',
+        'candidateRuntimeGate':'CLOSED / R7 RUNTIME PASS / USER CONFIRMED NO ISSUES / FINAL IDENTITY MANIFEST-ONLY REPACK',
+        'engineeringSourceCandidate':{
+            'revision':'R7',
+            'file':'NAJXBOX_LANGUAGE_GLOBAL_COMPLETENESS_CANDIDATE_R7_20261003.zip',
+            'sha256':'14f09a1b2aa64da70f5910a29b38d13c804d7ac680d6c5221d8fc347a9dc5fe9',
+            'reviews':['REVIEW5_PASS','REVIEW6_PASS'],
+            'runtime':'PASS / USER_CONFIRMED_NO_ISSUES'
+        }
+    })
+    mb=(json.dumps(m,ensure_ascii=False,indent=2)+'\n').encode('utf-8')
+    with zipfile.ZipFile(out,'w') as zout:
+        for info in zin.infolist():
+            zi=copy.copy(info)
+            zout.writestr(zi, mb if info.filename=='language_pack_manifest.json' else zin.read(info.filename))
+'@
+            [IO.File]::WriteAllText($py,$pyText,(New-Object Text.UTF8Encoding($false)))
+            python $py $r7 $out
+            if($LASTEXITCODE -ne 0){throw "Final identity repack failed: $LASTEXITCODE"}
+          }
+
+          $got=(Get-FileHash -LiteralPath $out -Algorithm SHA256).Hash.ToLowerInvariant()
+          if($got -ne $FinalSha){throw "Final exact SHA mismatch after resolve/repack: $got"}
+          Add-Content -LiteralPath $env:GITHUB_ENV -Value ("FINAL_PATH="+$out)
+          Write-Host "LANGUAGE_1_1_2_EXACT_RESOLVE_PASS SHA=$got"
+
+      - name: Update Public current Language authority
+        shell: powershell
         run: |
-          set -euo pipefail
-          git config user.name "NAJXBox Release Bot"
-          git config user.email "najxbox-release-bot@users.noreply.github.com"
-          git add -A -- channel.json CURRENT_RELEASE_INDEX.md language .github/workflows/publish-current-locked-modules.yml
+          $ErrorActionPreference='Stop'
+          $NL=[Environment]::NewLine
+          $FinalSha='1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18'
+          function Write-Utf8NoBom([string]$Path,[string]$Text){
+            [IO.File]::WriteAllText($Path,$Text,(New-Object Text.UTF8Encoding($false)))
+          }
+
+          $dst='language\NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'
+          Copy-Item -LiteralPath $env:FINAL_PATH -Destination $dst -Force
+          if((Get-FileHash -LiteralPath $dst -Algorithm SHA256).Hash.ToLowerInvariant() -ne $FinalSha){throw 'Public Language copy SHA mismatch'}
+          foreach($old in @(
+            'language\NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip',
+            'language\NAJXBOX_LANGUAGE_1.1.1_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt'
+          )){
+            if(Test-Path -LiteralPath $old){Remove-Item -LiteralPath $old -Force}
+          }
+          Write-Utf8NoBom 'language\NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip.sha256.txt' ($FinalSha+'  NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip'+$NL)
+
+          $channel=[IO.File]::ReadAllText((Resolve-Path 'channel.json'),[Text.Encoding]::UTF8)|ConvertFrom-Json
+          if([string]$channel.managerVersion -ne '2.1.5'){throw 'Manager drift'}
+          if([string]$channel.releases[0].payloadSha256 -ne 'b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2'){throw 'Box drift'}
+          if([string]$channel.moePacks[0].payloadSha256 -ne '5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19'){throw 'MoE drift'}
+          $raw='https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main'
+          $channel.languagePacks=@([pscustomobject][ordered]@{
+            packVersion='1.1.2'
+            wotVersion='2.4.0.2'
+            payloadUrl="$raw/language/NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip"
+            payloadSha256=$FinalSha
+            notes='FINAL_LOCK. Current-NA-key authoritative global completeness + exact same-key CN fallback + current-NA vehicle-name standardization with CN Box JX 80x24 compact-display cross-check. R7 real-client Runtime PASS; final 1.1.2 differs from tested R7 only by release-identity manifest. Review 5 + Review 6 + Final Review 1 + Final Review 2 PASS.'
+          })
+          Write-Utf8NoBom 'channel.json' (($channel|ConvertTo-Json -Depth 100)+$NL)
+
+          $idx=[IO.File]::ReadAllText((Resolve-Path 'CURRENT_RELEASE_INDEX.md'),[Text.Encoding]::UTF8)
+          $idx=[regex]::Replace($idx,'(?m)^Updated: .*$', 'Updated: 2026-10-04')
+          $idx=[regex]::Replace($idx,'(?m)^- Language: .*$', '- Language: 1.1.2 / '+$FinalSha)
+          Write-Utf8NoBom 'CURRENT_RELEASE_INDEX.md' $idx
+
+          $readme=@(
+            '# NAJXBox Language Packs','',
+            'Current authority: ../channel.json.','',
+            '## Current language authority','',
+            '- formal version: **1.1.2**',
+            '- WoT: 2.4.0.2',
+            '- package: NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip',
+            '- SHA256: '+$FinalSha,
+            '- enhanced TahomaZH SHA256: 108e0ae0dbd7ad0330114cf082bdc33ecdae30aa6dcb3cb3b1a82dae75331b45',
+            '- global UI completeness: 521 current-NA exact-key replacements',
+            '- vehicle-name layer: current NA identity authority + exact same-key CN donor + CN Box JX 80x24 compact-display cross-check',
+            '- Runtime: R7 real-client PASS; final 1.1.2 members are byte-identical to R7 except language_pack_manifest.json',
+            '- Review: R7 Review 5 PASS + Review 6 PASS + Final Review 1 PASS + Final Review 2 PASS','',
+            '## Manager language modes','',
+            '- 中文界面 + 中文坦克名',
+            '- 中文界面 + 英文坦克名',
+            '- 恢复原始语言','',
+            'Only current-NA keys/vehicles are eligible. CN-only vehicles/events/keys are not imported.',''
+          ) -join $NL
+          Write-Utf8NoBom 'language\README.md' $readme
+
+          $verify=[IO.File]::ReadAllText((Resolve-Path 'channel.json'),[Text.Encoding]::UTF8)|ConvertFrom-Json
+          if([string]$verify.languagePacks[0].packVersion -ne '1.1.2'){throw 'Language version verify failed'}
+          if([string]$verify.languagePacks[0].payloadSha256 -ne $FinalSha){throw 'Language hash verify failed'}
+          Write-Host 'LANGUAGE_1_1_2_PUBLIC_STAGE_PASS'
+
+      - name: Commit exact Public update and remove one-time publisher
+        shell: powershell
+        run: |
+          $ErrorActionPreference='Stop'
+          git config user.name 'NAJXBox Release Bot'
+          git config user.email 'najxbox-release-bot@users.noreply.github.com'
+          git rm -- '.github/workflows/publish-current-locked-modules.yml'
+          if($LASTEXITCODE -ne 0){throw 'publisher cleanup git rm failed'}
+          git add -A -- channel.json CURRENT_RELEASE_INDEX.md language
           git status --short
-          git commit -m "release: publish Language 1.1.2 exact"
-          git push origin HEAD:main
-          echo "LANGUAGE_1_1_2_PUBLIC_PUBLISH_PASS HEAD=$(git rev-parse HEAD)"
+          if($LASTEXITCODE -ne 0){throw 'git status failed'}
+          git commit -m 'release: publish exact Language 1.1.2'
+          if($LASTEXITCODE -ne 0){throw 'git commit failed'}
+          git -c http.version=HTTP/1.1 push origin HEAD:main
+          if($LASTEXITCODE -ne 0){throw 'git push failed'}
+          Write-Host "LANGUAGE_1_1_2_PUBLIC_PUBLISH_PASS HEAD=$((git rev-parse HEAD).Trim())"
 
-# one-time exact publication source: Drive FINAL file 1XMphhS629sCCvS_BLjJYwwr6EW7rRfkm
+# exact target SHA 1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18
