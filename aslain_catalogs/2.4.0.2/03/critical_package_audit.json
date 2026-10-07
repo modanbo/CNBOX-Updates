@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "wotVersion": "2.4.0.2",
+  "fromAslainVersion": "2.4.0.2 #02",
+  "toAslainVersion": "2.4.0.2 #03",
+  "fromConfigurationSha256": "65084d1a418bc81db4a69425060f4e8c0240361431057637c548c90d35e99cc9",
+  "toConfigurationSha256": "a57bf37fc1cd7e2cafcafbf418c5e48116ddee78d34ff05d89dea8b33b582787",
+  "changedModIds": [
+    "Camera_Sight_Responsive_Reticle",
+    "GFXenhancers_camo_selector",
+    "GarageMods_Garage_Mastery_OldSkool",
+    "GarageMods_challenges",
+    "GarageMods_dynamic_playlists",
+    "GarageMods_garage_HangarManagerHangMan",
+    "GarageMods_random_tank_picker",
+    "crosshairs_1_crosshairAimCircle",
+    "crosshairs_1_crosshairAimCircle_More_Visible_Aiming_Circle",
+    "various_overmatch"
+  ],
+  "changedModCount": 10,
+  "criticalPattern": "(^XVM_|^Player_Panels_|playerspanel|openwg|players_panel|battlevehiclemarkers|vehiclemarkers)",
+  "criticalChangedModIds": [],
+  "criticalChangedModCount": 0,
+  "criticalAudits": []
+}
