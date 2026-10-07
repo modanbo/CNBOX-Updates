@@ -1,5 +1,5 @@
 name: Aslain critical package preflight
-# trigger: 2026-10-05 aslain-02 audit
+# trigger: 2026-10-07 aslain-03 audit
 
 permissions:
   contents: write
