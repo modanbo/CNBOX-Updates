@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "wotVersion": "2.4.0.2",
+  "fromAslainVersion": "2.4.0.2 #02",
+  "toAslainVersion": "2.4.0.2 #03",
+  "selectionSource": {
+    "type": "GoogleDriveChoicePreset",
+    "drivePath": "/Google Drive/WOT/Choice.wotpreset",
+    "savedAt": "2026-09-25 22:07:56",
+    "sha256": "d0db0f719a7cba5d309da47aa2e6797e66582ab69f5d8d7c92dbdb7b3b6a63ca",
+    "bytes": 3534
+  },
+  "selectedModCount": 48,
+  "changedSelectedModCount": 0,
+  "changedSelectedModIds": [],
+  "unchangedSelectedModCount": 48,
+  "selectedAudits": []
+}
