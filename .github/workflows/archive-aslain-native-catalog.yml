@@ -1,5 +1,5 @@
 name: Archive Aslain native catalog
-# trigger: 2026-10-05 aslain-02 re-audit
+# trigger: 2026-10-07 aslain-03 archive
 
 permissions:
   contents: write
