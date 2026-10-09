@@ -1,0 +1,1565 @@
+{
+  "schemaVersion": 1,
+  "wotVersion": "2.4.0.2",
+  "fromAslainVersion": "2.4.0.2 #03",
+  "toAslainVersion": "2.4.0.2 #04",
+  "selectionSource": {
+    "type": "GoogleDriveChoicePreset",
+    "drivePath": "/Google Drive/WOT/Choice.wotpreset",
+    "savedAt": "2026-09-25 22:07:56",
+    "sha256": "d0db0f719a7cba5d309da47aa2e6797e66582ab69f5d8d7c92dbdb7b3b6a63ca",
+    "bytes": 3534
+  },
+  "selectedModCount": 48,
+  "changedSelectedModCount": 2,
+  "changedSelectedModIds": [
+    "Non_XVM_6th_Senses_CustomSixthSense",
+    "various_Custom_UI_Scale"
+  ],
+  "unchangedSelectedModCount": 46,
+  "selectedAudits": [
+    {
+      "modId": "Non_XVM_6th_Senses_CustomSixthSense",
+      "existsOld": true,
+      "existsNew": true,
+      "semanticChangedIgnoringOrder": true,
+      "refsChanged": true,
+      "oldRefs": [
+        "../Files/Non_XVM_6th_Senses/Non_XVM_6th_Senses_CustomSixthSense_80f45663.zip",
+        "https://repo.aslain.com/WoT/CustomSixthSense_2.3.1.1.7z"
+      ],
+      "newRefs": [
+        "../Files/Non_XVM_6th_Senses/Non_XVM_6th_Senses_CustomSixthSense_9d769546.zip",
+        "https://repo.aslain.com/WoT/CustomSixthSense_2.3.1.1.7z"
+      ],
+      "oldArchives": [
+        {
+          "ref": "../Files/Non_XVM_6th_Senses/Non_XVM_6th_Senses_CustomSixthSense_80f45663.zip",
+          "url": "https://repo.aslain.com/wot_modmanager/Files/Non_XVM_6th_Senses/Non_XVM_6th_Senses_CustomSixthSense_80f45663.zip",
+          "sha256": "42f133a89d043676fad8f3f4e5fc84850a37f27be009ae6da0894bfd78b954b7",
+          "bytes": 595452,
+          "entries": {
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod": {
+              "sha256": "113dbb4793d9acd6275b68580ff85ad6a4f5454ed8e9df3b59bc7a40c385faaa",
+              "bytes": 171797
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!meta.xml": {
+              "sha256": "040f92e8267378792425094b3000334ca33ffb373f7a387489d9f528e32a2637",
+              "bytes": 213
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/gui/mods/mod_customsixthsense.pyc": {
+              "sha256": "ef87cfbcf15fcbd47be3034459aaf96d5604874e1d818ce360a09502b3b94f16",
+              "bytes": 85040
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/de.yml": {
+              "sha256": "a5034f9b9c83fef2e28a7456f9e50d8109642e14f135dcb04cef414496763219",
+              "bytes": 7235
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/en.yml": {
+              "sha256": "836a5f0c7d380ac7184058b847c51a2810720c2a11124066a0046a62b8b6ac75",
+              "bytes": 6448
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/es.yml": {
+              "sha256": "0d0b3cd985cb367d06adfd95e8bd8199f7c476ea63d7615d20ef41037e156ddc",
+              "bytes": 7397
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/fr.yml": {
+              "sha256": "fdccc1fc65c09921941f09d21593694f9433274f964cc9eedaf54870edf1dee2",
+              "bytes": 7524
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/it.yml": {
+              "sha256": "92cfae295057d6656841a48e46d5c2414417da7cd33cf8c655ee463c576046f6",
+              "bytes": 7290
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/pl.yml": {
+              "sha256": "202a7524c00980545c4a251d520f6b57b4d6f7fbbb73170de2c75d5cec513e9f",
+              "bytes": 6973
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/ru.yml": {
+              "sha256": "e8df187f280d58d0b813e4acd3ad998d143a2b3690ec060a75c6415d70fb04a2",
+              "bytes": 10967
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/uk.yml": {
+              "sha256": "59177fa40b1db47015d409f71ccdd321f5f08b816b987fc98b79f3c8ed7cbfeb",
+              "bytes": 10635
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/__init__.pyc": {
+              "sha256": "129d97d9ad5d3ee43410187dc73b3a5b1a0900eb8a7271592660a2f386fef932",
+              "bytes": 98
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/flash/sixth_sense_flash.pyc": {
+              "sha256": "27c3b7558d06c57365d94e2203deaa4b4635674113d3da6ae46a57f3c5360037",
+              "bytes": 5977
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/flash/__init__.pyc": {
+              "sha256": "129d97d9ad5d3ee43410187dc73b3a5b1a0900eb8a7271592660a2f386fef932",
+              "bytes": 98
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/gui/flash/CustomSixthSenseFlash.swf": {
+              "sha256": "c2d6d4941b5b31cb772564f8a6c9f78746ba46af3c07632f5d4b6e2f8dbeee98",
+              "bytes": 6532
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/cs.yml": {
+              "sha256": "dd3c7a8dfb36ed0c9c8d2a4fc655ee73def923c5d7ca5d0acfa844f8d04a07bb",
+              "bytes": 7014
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod": {
+              "sha256": "5d5eed6fd24aacf46e9b534cf0cbf2e3ddc274f04f60df6b02cadafdb0372032",
+              "bytes": 871005
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!meta.xml": {
+              "sha256": "0430789bf831a239dccb885a2d8208c57b6c20e4bf459b5d2d48b10c6174d8b8",
+              "bytes": 337
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!NOTICE": {
+              "sha256": "a0eff6469b564d2fa2f58a0ce6ed0fbede1a9f39437ca958b31c3dd0e7e7bad9",
+              "bytes": 1712
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!README.txt": {
+              "sha256": "a1b585237d6201de4f1bacc1feb1142a855454b334f6cd3e99d911456cc11f6b",
+              "bytes": 696
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/__init__.pyc": {
+              "sha256": "61b579291c743c5b1084e3d1fe18f42007195f4fee7397790692e5b968592e47",
+              "bytes": 14396
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_constants.pyc": {
+              "sha256": "5f3b81c5fabd6a7b01ae0fef1d9789532fc9ef70c997f7fa6878627ed76ffb15",
+              "bytes": 15170
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_diag.pyc": {
+              "sha256": "f9697e2bd9a44c46c50c8a3098d78bb121ba596144e393a65d117f589c485db1",
+              "bytes": 12056
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_gameface.pyc": {
+              "sha256": "8cfd64ea6d7c787dade8dfd10285be8f88c87a0724b5ce58df0566a4068dc5e3",
+              "bytes": 13930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/api.pyc": {
+              "sha256": "f74b7a1efba66d5a715926c3efe701c1fe339177d0a3bc20a68624306327e20a",
+              "bytes": 49695
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/button.pyc": {
+              "sha256": "31f749d5e6422b610369949f66b5661f758dd072d5eaef5c727fadc5a9330b26",
+              "bytes": 22176
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/context_menu.pyc": {
+              "sha256": "93af762659ca45c8720e1c46c909733c85544075ca69c0885395b698ba2d22c0",
+              "bytes": 15257
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/entries.pyc": {
+              "sha256": "bd84ccb9e633bfcc54fc23a08dc26a4b16b6fd1e465f29a16579b42ed33edc14",
+              "bytes": 14734
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/frontend.pyc": {
+              "sha256": "18bb4743f8298cf80e796b609f2e1cddf165ec64f7d1c27b40fef1515a543aac",
+              "bytes": 11723
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/hotkeys.pyc": {
+              "sha256": "2877a790e64f038ac4df1429ae45e0680a4a35f17ce83b80f147694653e4067d",
+              "bytes": 17862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/l10n.pyc": {
+              "sha256": "1cc4b42f6ec74e40c3232a92639b4d843c01e745d694e0e61e6d4be2eadb252b",
+              "bytes": 13919
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/login.pyc": {
+              "sha256": "e85c3c57417ca5e16b47b83c4562cef9c2d42cc28eda770097570cfd04686199",
+              "bytes": 16421
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/modslist_shim.pyc": {
+              "sha256": "b519c290058ce47697786e8b4ab807a39889435445ead4e0a1ae4d544958c640",
+              "bytes": 14930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/skeleton.pyc": {
+              "sha256": "7fb8a04977d16df66ec8dd861f95d257171c58fd947cdded11f6aec5cf616630",
+              "bytes": 12172
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/templates.pyc": {
+              "sha256": "6269e0026f09af44d5656317501dfbea8da5e8f15c4b60e2544c955139b5ee58",
+              "bytes": 20589
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/utils.pyc": {
+              "sha256": "1e13ceed739b87db618a1acd4beae4028a8fd038f25fae60b6d1b3a863a2d2e0",
+              "bytes": 20082
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/view.pyc": {
+              "sha256": "3814fc290e21d4f970b0f22753afd6d5a47b39a1b2b7b63193f929c3e3d8c491",
+              "bytes": 73059
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/mods/mod_modmenu.pyc": {
+              "sha256": "8631b2592e5d44377146f7c6ab86151dbdc49f5f39b1e960904184ed03a973fa",
+              "bytes": 13814
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/flash/ModMenuLoginButton.swf": {
+              "sha256": "2b8f48326986c52e1d4be707cf787d65b5df46894ae445d47154605f7480d41f",
+              "bytes": 2112
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.css": {
+              "sha256": "924aac7658673d35cb806f75efd627c89f8c838c965206c29d05e5a7adc9e145",
+              "bytes": 64142
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.html": {
+              "sha256": "efbd8d25b777bc82a953cdb61fee0d23dd1fb2d3b26acf442fc169b979281494",
+              "bytes": 4522
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.js": {
+              "sha256": "e89f9e714ff76d2157a7158570a682c13430901b347fd6513d5c4ff9ff62498b",
+              "bytes": 252002
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt": {
+              "sha256": "549a01bb8e3024dac88a5ece1934a326e5650703715c26a4112d0cd99c6af1eb",
+              "bytes": 406
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf": {
+              "sha256": "aa1358e4be2f65b49fbf75bdbed04b84acdb5dbdd77b060971af5c917126b9da",
+              "bytes": 29052
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/img/play.png": {
+              "sha256": "3abbb659d33edec56a0ec37b339dbaa55ae65999571ef02a2d83c1d1d9204ee9",
+              "bytes": 1466
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css": {
+              "sha256": "ffe6ea614d6e63e01c760625d606d8f1243ab05c6f91b9d4d30586ab99d0842f",
+              "bytes": 826
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html": {
+              "sha256": "68c3bce3dea4b3b078e8ef7c162252ed119f365eccfb510bcada2a23b0dc26d5",
+              "bytes": 404
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js": {
+              "sha256": "65e7aa3582659120a08abdb5c642533bd42425590abf56249b5766096f61dd3d",
+              "bytes": 8937
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gen_resources/aslain_modmenu.json": {
+              "sha256": "21ff9748946c4195671093601089b4805e5fd21bdc2752b15b97bfbe33dd9fd7",
+              "bytes": 395
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenu.json": {
+              "sha256": "220f87f4d0d495be39ed30a0279b997e20af2c2cdfaf8e9b94304b94e1d085c1",
+              "bytes": 251
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenuButton.json": {
+              "sha256": "e97336af68b04c1fb69012ee4825ae46c2b463a8aed3b7364d5a30ecc1fc0f4a",
+              "bytes": 275
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon.png": {
+              "sha256": "7d213a10b54a195ca06b6927a3e8aae7871f159d02c292be4f46dd05fec5cbc2",
+              "bytes": 2909
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_128.png": {
+              "sha256": "00759cb2c31638c0b25990c4b7ce958e42ce8c38e8ec973440b88a6e5bbea064",
+              "bytes": 7838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_64.png": {
+              "sha256": "ec9d065cde71eb7daa68eec17d0089a9f98eb8e1414d762192cc7b748ba3fc3d",
+              "bytes": 3793
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/be.yml": {
+              "sha256": "6f5cd1a81bc63f98cd43fa358207664a733a211e29f09db4614f11ad8649d166",
+              "bytes": 5289
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/bg.yml": {
+              "sha256": "5fa5821f161ed15262ad415e5f3d1591972675e89ca02789a98d227b41cb6a7f",
+              "bytes": 5414
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/cs.yml": {
+              "sha256": "e4df54c15d394a1c2e0ba42f5f7b97b788066117b438fb7eab31af1dd1745628",
+              "bytes": 3836
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/da.yml": {
+              "sha256": "1d1bf757bb1f74e7de667d45688310d7d0931052fedb76dc5e5fe3d74a59b6b1",
+              "bytes": 3719
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/de.yml": {
+              "sha256": "344932f39d05e6b1d028e6224584a52056f9564800ef6d6f96b5cbc0972fc2ef",
+              "bytes": 3954
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/el.yml": {
+              "sha256": "558da18de415fb4c95e5b1f199b5bdc87a063a5ab39424c9a345939853d60620",
+              "bytes": 5540
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/en.yml": {
+              "sha256": "ca093c93489006261a7579b8384ab6c12711b062a080560758ed4f7aa3cb54a1",
+              "bytes": 3592
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/es.yml": {
+              "sha256": "16a9149dd724cff47ce94ae61d20a2b9563e19d0bc21fe4f94a4f02b43317e99",
+              "bytes": 3890
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fi.yml": {
+              "sha256": "b679db35d9add63a5eba1392e2d279930b4ecd1e269b1c437d4867623fce45d6",
+              "bytes": 3858
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fr.yml": {
+              "sha256": "d97d82e6c837a577857919a41453d49412ef7239cfb31358c9b38317be48913b",
+              "bytes": 3979
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hr.yml": {
+              "sha256": "510c3011a1aa89099f43fe74fef404dd16b8eb5d8c85ae6a3a74d76c2eb5e763",
+              "bytes": 3739
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hu.yml": {
+              "sha256": "9d91603d64e25f9ba6306377bff15f9473035e43f56d35ed2b2f2160fc0abecb",
+              "bytes": 4021
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/it.yml": {
+              "sha256": "d047b46ba9ba1799875c04c1a34d4b6652f5bb42d98fdc71b25c1ecbdc6a3c05",
+              "bytes": 3862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lt.yml": {
+              "sha256": "1a9084a21ede5b72a9c1b174e74725bec3b2f95ed38c7d97c92a76b54a2505e3",
+              "bytes": 3874
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lv.yml": {
+              "sha256": "a976a45ea56cb5f0f917e998f59f092812722680cc5aaaae7db6d72befd31d43",
+              "bytes": 3872
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/nl.yml": {
+              "sha256": "2eb56b769dbf73e0f9262cd0ed9525764450cb6f9843d6fa332d73013e92ede8",
+              "bytes": 3878
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/no.yml": {
+              "sha256": "1c3bc84d5adc213026c3ba0f40a606ee00b5db5d610f23c6432a22c354189f6e",
+              "bytes": 3745
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pl.yml": {
+              "sha256": "8674d07041d68f9e3731e873d6dbcfffe6015391747419c3e9ebbf33afa4bc0b",
+              "bytes": 3843
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pt.yml": {
+              "sha256": "544a296a3b025b73a163964d83524763b5c3635cf2e2ec76239a32350b6621da",
+              "bytes": 3799
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ro.yml": {
+              "sha256": "ae8afb5e20bbed0ed3ff4ac5ed33b1f886b4ff054c0ef6b9b18491e22f9fdc7c",
+              "bytes": 3899
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ru.yml": {
+              "sha256": "931ca77c8816a40162e245b24d9e313e4e481ba30fa4b065303b428135a3a4ff",
+              "bytes": 5362
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sr.yml": {
+              "sha256": "3b575676599f4774ee590f6b159e2338399c39d1a94af5bfc70c202c4edaf55d",
+              "bytes": 4266
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sv.yml": {
+              "sha256": "9fcb7c61793db2afffa1731bb4271b449ffb3f026ca3f8692002b31048050281",
+              "bytes": 3876
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/tr.yml": {
+              "sha256": "9bc0bde3d04c47bf7e16254c8894410958b967576e2fe20d5658a8f6862a074c",
+              "bytes": 3838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/uk.yml": {
+              "sha256": "b45986803ece364bc32b32fc7ac812a40c88defdb95c60e99212211ce1e88c64",
+              "bytes": 5342
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod": {
+              "sha256": "64bfd57bc8ab77f3909920759d7b0c3ee24bf837708fd8ca043672dddc870ec8",
+              "bytes": 15823
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!meta.xml": {
+              "sha256": "ae586cfbe61027625d4b9c7bec9d9e05e30eeef96c1582828ca18df65d20b677",
+              "bytes": 351
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!res/scripts/client/gui/mods/mod_aslainMenu.pyc": {
+              "sha256": "7484734c449caf32d0dee81fb7816787b9448460981120c953aa289d8ed551cc",
+              "bytes": 15190
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod": {
+              "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+              "bytes": 42703
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!meta.xml": {
+              "sha256": "e56f7e6edbe8c446d780bb327d59121df4d6efc198bacc7cc1925265c4950184",
+              "bytes": 260
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/scripts/client/openwg_gameface.pyc": {
+              "sha256": "19a6656729459d5bafc616847eb2e90348a6a4dd6f0f20430b0da8b7861b487c",
+              "bytes": 13969
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/js/index.js": {
+              "sha256": "f24c1b4b48ec487d1f2e1834832870eff0242deb2d70221579c4414d0a5e7c93",
+              "bytes": 4900
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/common.js": {
+              "sha256": "667736e16d9a87e70ff1f6e7550417beb7d62b5180722e42de972ca49715d8d9",
+              "bytes": 905
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/debug.js": {
+              "sha256": "8630f6827e82131118a5d4e6c2b1500c522b7da0c63dab5caa62a2cea77e1ce5",
+              "bytes": 5338
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/media.js": {
+              "sha256": "20010424231d527c1182aac033a32a4bf7920f0384a5bdea4006ed9aec6aebb4",
+              "bytes": 5159
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/model.js": {
+              "sha256": "4637b8a0fa1a3a56ad31291262ac74ad5fdf42067113b8492bf5ef4a99649de5",
+              "bytes": 3351
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/sound.js": {
+              "sha256": "a89247f230fb7acff08d10c9653f2932ae81c3f2cff5426df8b38bfa1efaaf3b",
+              "bytes": 345
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/views.js": {
+              "sha256": "7200ddd39c6e484acb4e0230e70f1e2082d903d782d7d0ebe17df179509da913",
+              "bytes": 6230
+            }
+          }
+        },
+        {
+          "ref": "https://repo.aslain.com/WoT/CustomSixthSense_2.3.1.1.7z",
+          "url": "https://repo.aslain.com/WoT/CustomSixthSense_2.3.1.1.7z",
+          "sha256": "826cd42c356ce2f1d89d7529b6c566e0f9bba4edd41c0d9e7360dad668e2ed43",
+          "bytes": 17970765,
+          "entries": {}
+        }
+      ],
+      "newArchives": [
+        {
+          "ref": "../Files/Non_XVM_6th_Senses/Non_XVM_6th_Senses_CustomSixthSense_9d769546.zip",
+          "url": "https://repo.aslain.com/wot_modmanager/Files/Non_XVM_6th_Senses/Non_XVM_6th_Senses_CustomSixthSense_9d769546.zip",
+          "sha256": "9397d402d50f117a7ed23dbac8eb98748c4ce35ab65393aa91f886cbdda7f8d7",
+          "bytes": 594506,
+          "entries": {
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod": {
+              "sha256": "9e25b9f145aaa0582c6ae35a2719246511acd0ae23fa0f92bb21545babd1542a",
+              "bytes": 170718
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!meta.xml": {
+              "sha256": "040f92e8267378792425094b3000334ca33ffb373f7a387489d9f528e32a2637",
+              "bytes": 213
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/gui/mods/mod_customsixthsense.pyc": {
+              "sha256": "903dc989641046fb51752eabdbee22a7ddd9b3fb4330b5ca8317f92562aec4a0",
+              "bytes": 83961
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/de.yml": {
+              "sha256": "a5034f9b9c83fef2e28a7456f9e50d8109642e14f135dcb04cef414496763219",
+              "bytes": 7235
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/en.yml": {
+              "sha256": "836a5f0c7d380ac7184058b847c51a2810720c2a11124066a0046a62b8b6ac75",
+              "bytes": 6448
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/es.yml": {
+              "sha256": "0d0b3cd985cb367d06adfd95e8bd8199f7c476ea63d7615d20ef41037e156ddc",
+              "bytes": 7397
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/fr.yml": {
+              "sha256": "fdccc1fc65c09921941f09d21593694f9433274f964cc9eedaf54870edf1dee2",
+              "bytes": 7524
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/it.yml": {
+              "sha256": "92cfae295057d6656841a48e46d5c2414417da7cd33cf8c655ee463c576046f6",
+              "bytes": 7290
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/pl.yml": {
+              "sha256": "202a7524c00980545c4a251d520f6b57b4d6f7fbbb73170de2c75d5cec513e9f",
+              "bytes": 6973
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/ru.yml": {
+              "sha256": "e8df187f280d58d0b813e4acd3ad998d143a2b3690ec060a75c6415d70fb04a2",
+              "bytes": 10967
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/uk.yml": {
+              "sha256": "59177fa40b1db47015d409f71ccdd321f5f08b816b987fc98b79f3c8ed7cbfeb",
+              "bytes": 10635
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/__init__.pyc": {
+              "sha256": "fce4fcddaf70a7ff3107b92006b64cf0e89c9a6b5100fa24d6f36d49c85ba309",
+              "bytes": 98
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/flash/sixth_sense_flash.pyc": {
+              "sha256": "41f7caa8850dadf088d9a0325334dfc17105a2493df86325af2ac5a0519b929a",
+              "bytes": 5977
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/flash/__init__.pyc": {
+              "sha256": "fce4fcddaf70a7ff3107b92006b64cf0e89c9a6b5100fa24d6f36d49c85ba309",
+              "bytes": 98
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/gui/flash/CustomSixthSenseFlash.swf": {
+              "sha256": "c2d6d4941b5b31cb772564f8a6c9f78746ba46af3c07632f5d4b6e2f8dbeee98",
+              "bytes": 6532
+            },
+            "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/mods/customsixthsense/text/cs.yml": {
+              "sha256": "dd3c7a8dfb36ed0c9c8d2a4fc655ee73def923c5d7ca5d0acfa844f8d04a07bb",
+              "bytes": 7014
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod": {
+              "sha256": "5d5eed6fd24aacf46e9b534cf0cbf2e3ddc274f04f60df6b02cadafdb0372032",
+              "bytes": 871005
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!meta.xml": {
+              "sha256": "0430789bf831a239dccb885a2d8208c57b6c20e4bf459b5d2d48b10c6174d8b8",
+              "bytes": 337
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!NOTICE": {
+              "sha256": "a0eff6469b564d2fa2f58a0ce6ed0fbede1a9f39437ca958b31c3dd0e7e7bad9",
+              "bytes": 1712
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!README.txt": {
+              "sha256": "a1b585237d6201de4f1bacc1feb1142a855454b334f6cd3e99d911456cc11f6b",
+              "bytes": 696
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/__init__.pyc": {
+              "sha256": "61b579291c743c5b1084e3d1fe18f42007195f4fee7397790692e5b968592e47",
+              "bytes": 14396
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_constants.pyc": {
+              "sha256": "5f3b81c5fabd6a7b01ae0fef1d9789532fc9ef70c997f7fa6878627ed76ffb15",
+              "bytes": 15170
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_diag.pyc": {
+              "sha256": "f9697e2bd9a44c46c50c8a3098d78bb121ba596144e393a65d117f589c485db1",
+              "bytes": 12056
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_gameface.pyc": {
+              "sha256": "8cfd64ea6d7c787dade8dfd10285be8f88c87a0724b5ce58df0566a4068dc5e3",
+              "bytes": 13930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/api.pyc": {
+              "sha256": "f74b7a1efba66d5a715926c3efe701c1fe339177d0a3bc20a68624306327e20a",
+              "bytes": 49695
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/button.pyc": {
+              "sha256": "31f749d5e6422b610369949f66b5661f758dd072d5eaef5c727fadc5a9330b26",
+              "bytes": 22176
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/context_menu.pyc": {
+              "sha256": "93af762659ca45c8720e1c46c909733c85544075ca69c0885395b698ba2d22c0",
+              "bytes": 15257
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/entries.pyc": {
+              "sha256": "bd84ccb9e633bfcc54fc23a08dc26a4b16b6fd1e465f29a16579b42ed33edc14",
+              "bytes": 14734
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/frontend.pyc": {
+              "sha256": "18bb4743f8298cf80e796b609f2e1cddf165ec64f7d1c27b40fef1515a543aac",
+              "bytes": 11723
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/hotkeys.pyc": {
+              "sha256": "2877a790e64f038ac4df1429ae45e0680a4a35f17ce83b80f147694653e4067d",
+              "bytes": 17862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/l10n.pyc": {
+              "sha256": "1cc4b42f6ec74e40c3232a92639b4d843c01e745d694e0e61e6d4be2eadb252b",
+              "bytes": 13919
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/login.pyc": {
+              "sha256": "e85c3c57417ca5e16b47b83c4562cef9c2d42cc28eda770097570cfd04686199",
+              "bytes": 16421
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/modslist_shim.pyc": {
+              "sha256": "b519c290058ce47697786e8b4ab807a39889435445ead4e0a1ae4d544958c640",
+              "bytes": 14930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/skeleton.pyc": {
+              "sha256": "7fb8a04977d16df66ec8dd861f95d257171c58fd947cdded11f6aec5cf616630",
+              "bytes": 12172
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/templates.pyc": {
+              "sha256": "6269e0026f09af44d5656317501dfbea8da5e8f15c4b60e2544c955139b5ee58",
+              "bytes": 20589
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/utils.pyc": {
+              "sha256": "1e13ceed739b87db618a1acd4beae4028a8fd038f25fae60b6d1b3a863a2d2e0",
+              "bytes": 20082
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/view.pyc": {
+              "sha256": "3814fc290e21d4f970b0f22753afd6d5a47b39a1b2b7b63193f929c3e3d8c491",
+              "bytes": 73059
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/mods/mod_modmenu.pyc": {
+              "sha256": "8631b2592e5d44377146f7c6ab86151dbdc49f5f39b1e960904184ed03a973fa",
+              "bytes": 13814
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/flash/ModMenuLoginButton.swf": {
+              "sha256": "2b8f48326986c52e1d4be707cf787d65b5df46894ae445d47154605f7480d41f",
+              "bytes": 2112
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.css": {
+              "sha256": "924aac7658673d35cb806f75efd627c89f8c838c965206c29d05e5a7adc9e145",
+              "bytes": 64142
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.html": {
+              "sha256": "efbd8d25b777bc82a953cdb61fee0d23dd1fb2d3b26acf442fc169b979281494",
+              "bytes": 4522
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.js": {
+              "sha256": "e89f9e714ff76d2157a7158570a682c13430901b347fd6513d5c4ff9ff62498b",
+              "bytes": 252002
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt": {
+              "sha256": "549a01bb8e3024dac88a5ece1934a326e5650703715c26a4112d0cd99c6af1eb",
+              "bytes": 406
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf": {
+              "sha256": "aa1358e4be2f65b49fbf75bdbed04b84acdb5dbdd77b060971af5c917126b9da",
+              "bytes": 29052
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/img/play.png": {
+              "sha256": "3abbb659d33edec56a0ec37b339dbaa55ae65999571ef02a2d83c1d1d9204ee9",
+              "bytes": 1466
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css": {
+              "sha256": "ffe6ea614d6e63e01c760625d606d8f1243ab05c6f91b9d4d30586ab99d0842f",
+              "bytes": 826
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html": {
+              "sha256": "68c3bce3dea4b3b078e8ef7c162252ed119f365eccfb510bcada2a23b0dc26d5",
+              "bytes": 404
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js": {
+              "sha256": "65e7aa3582659120a08abdb5c642533bd42425590abf56249b5766096f61dd3d",
+              "bytes": 8937
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gen_resources/aslain_modmenu.json": {
+              "sha256": "21ff9748946c4195671093601089b4805e5fd21bdc2752b15b97bfbe33dd9fd7",
+              "bytes": 395
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenu.json": {
+              "sha256": "220f87f4d0d495be39ed30a0279b997e20af2c2cdfaf8e9b94304b94e1d085c1",
+              "bytes": 251
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenuButton.json": {
+              "sha256": "e97336af68b04c1fb69012ee4825ae46c2b463a8aed3b7364d5a30ecc1fc0f4a",
+              "bytes": 275
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon.png": {
+              "sha256": "7d213a10b54a195ca06b6927a3e8aae7871f159d02c292be4f46dd05fec5cbc2",
+              "bytes": 2909
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_128.png": {
+              "sha256": "00759cb2c31638c0b25990c4b7ce958e42ce8c38e8ec973440b88a6e5bbea064",
+              "bytes": 7838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_64.png": {
+              "sha256": "ec9d065cde71eb7daa68eec17d0089a9f98eb8e1414d762192cc7b748ba3fc3d",
+              "bytes": 3793
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/be.yml": {
+              "sha256": "6f5cd1a81bc63f98cd43fa358207664a733a211e29f09db4614f11ad8649d166",
+              "bytes": 5289
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/bg.yml": {
+              "sha256": "5fa5821f161ed15262ad415e5f3d1591972675e89ca02789a98d227b41cb6a7f",
+              "bytes": 5414
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/cs.yml": {
+              "sha256": "e4df54c15d394a1c2e0ba42f5f7b97b788066117b438fb7eab31af1dd1745628",
+              "bytes": 3836
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/da.yml": {
+              "sha256": "1d1bf757bb1f74e7de667d45688310d7d0931052fedb76dc5e5fe3d74a59b6b1",
+              "bytes": 3719
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/de.yml": {
+              "sha256": "344932f39d05e6b1d028e6224584a52056f9564800ef6d6f96b5cbc0972fc2ef",
+              "bytes": 3954
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/el.yml": {
+              "sha256": "558da18de415fb4c95e5b1f199b5bdc87a063a5ab39424c9a345939853d60620",
+              "bytes": 5540
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/en.yml": {
+              "sha256": "ca093c93489006261a7579b8384ab6c12711b062a080560758ed4f7aa3cb54a1",
+              "bytes": 3592
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/es.yml": {
+              "sha256": "16a9149dd724cff47ce94ae61d20a2b9563e19d0bc21fe4f94a4f02b43317e99",
+              "bytes": 3890
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fi.yml": {
+              "sha256": "b679db35d9add63a5eba1392e2d279930b4ecd1e269b1c437d4867623fce45d6",
+              "bytes": 3858
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fr.yml": {
+              "sha256": "d97d82e6c837a577857919a41453d49412ef7239cfb31358c9b38317be48913b",
+              "bytes": 3979
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hr.yml": {
+              "sha256": "510c3011a1aa89099f43fe74fef404dd16b8eb5d8c85ae6a3a74d76c2eb5e763",
+              "bytes": 3739
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hu.yml": {
+              "sha256": "9d91603d64e25f9ba6306377bff15f9473035e43f56d35ed2b2f2160fc0abecb",
+              "bytes": 4021
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/it.yml": {
+              "sha256": "d047b46ba9ba1799875c04c1a34d4b6652f5bb42d98fdc71b25c1ecbdc6a3c05",
+              "bytes": 3862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lt.yml": {
+              "sha256": "1a9084a21ede5b72a9c1b174e74725bec3b2f95ed38c7d97c92a76b54a2505e3",
+              "bytes": 3874
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lv.yml": {
+              "sha256": "a976a45ea56cb5f0f917e998f59f092812722680cc5aaaae7db6d72befd31d43",
+              "bytes": 3872
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/nl.yml": {
+              "sha256": "2eb56b769dbf73e0f9262cd0ed9525764450cb6f9843d6fa332d73013e92ede8",
+              "bytes": 3878
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/no.yml": {
+              "sha256": "1c3bc84d5adc213026c3ba0f40a606ee00b5db5d610f23c6432a22c354189f6e",
+              "bytes": 3745
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pl.yml": {
+              "sha256": "8674d07041d68f9e3731e873d6dbcfffe6015391747419c3e9ebbf33afa4bc0b",
+              "bytes": 3843
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pt.yml": {
+              "sha256": "544a296a3b025b73a163964d83524763b5c3635cf2e2ec76239a32350b6621da",
+              "bytes": 3799
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ro.yml": {
+              "sha256": "ae8afb5e20bbed0ed3ff4ac5ed33b1f886b4ff054c0ef6b9b18491e22f9fdc7c",
+              "bytes": 3899
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ru.yml": {
+              "sha256": "931ca77c8816a40162e245b24d9e313e4e481ba30fa4b065303b428135a3a4ff",
+              "bytes": 5362
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sr.yml": {
+              "sha256": "3b575676599f4774ee590f6b159e2338399c39d1a94af5bfc70c202c4edaf55d",
+              "bytes": 4266
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sv.yml": {
+              "sha256": "9fcb7c61793db2afffa1731bb4271b449ffb3f026ca3f8692002b31048050281",
+              "bytes": 3876
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/tr.yml": {
+              "sha256": "9bc0bde3d04c47bf7e16254c8894410958b967576e2fe20d5658a8f6862a074c",
+              "bytes": 3838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/uk.yml": {
+              "sha256": "b45986803ece364bc32b32fc7ac812a40c88defdb95c60e99212211ce1e88c64",
+              "bytes": 5342
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod": {
+              "sha256": "64bfd57bc8ab77f3909920759d7b0c3ee24bf837708fd8ca043672dddc870ec8",
+              "bytes": 15823
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!meta.xml": {
+              "sha256": "ae586cfbe61027625d4b9c7bec9d9e05e30eeef96c1582828ca18df65d20b677",
+              "bytes": 351
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!res/scripts/client/gui/mods/mod_aslainMenu.pyc": {
+              "sha256": "7484734c449caf32d0dee81fb7816787b9448460981120c953aa289d8ed551cc",
+              "bytes": 15190
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod": {
+              "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+              "bytes": 42703
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!meta.xml": {
+              "sha256": "e56f7e6edbe8c446d780bb327d59121df4d6efc198bacc7cc1925265c4950184",
+              "bytes": 260
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/scripts/client/openwg_gameface.pyc": {
+              "sha256": "19a6656729459d5bafc616847eb2e90348a6a4dd6f0f20430b0da8b7861b487c",
+              "bytes": 13969
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/js/index.js": {
+              "sha256": "f24c1b4b48ec487d1f2e1834832870eff0242deb2d70221579c4414d0a5e7c93",
+              "bytes": 4900
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/common.js": {
+              "sha256": "667736e16d9a87e70ff1f6e7550417beb7d62b5180722e42de972ca49715d8d9",
+              "bytes": 905
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/debug.js": {
+              "sha256": "8630f6827e82131118a5d4e6c2b1500c522b7da0c63dab5caa62a2cea77e1ce5",
+              "bytes": 5338
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/media.js": {
+              "sha256": "20010424231d527c1182aac033a32a4bf7920f0384a5bdea4006ed9aec6aebb4",
+              "bytes": 5159
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/model.js": {
+              "sha256": "4637b8a0fa1a3a56ad31291262ac74ad5fdf42067113b8492bf5ef4a99649de5",
+              "bytes": 3351
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/sound.js": {
+              "sha256": "a89247f230fb7acff08d10c9653f2932ae81c3f2cff5426df8b38bfa1efaaf3b",
+              "bytes": 345
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/views.js": {
+              "sha256": "7200ddd39c6e484acb4e0230e70f1e2082d903d782d7d0ebe17df179509da913",
+              "bytes": 6230
+            }
+          }
+        },
+        {
+          "ref": "https://repo.aslain.com/WoT/CustomSixthSense_2.3.1.1.7z",
+          "url": "https://repo.aslain.com/WoT/CustomSixthSense_2.3.1.1.7z",
+          "sha256": "826cd42c356ce2f1d89d7529b6c566e0f9bba4edd41c0d9e7360dad668e2ed43",
+          "bytes": 17970765,
+          "entries": {}
+        }
+      ],
+      "internalComparison": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod",
+          "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/__init__.pyc",
+          "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/flash/__init__.pyc",
+          "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/customsixthsense/flash/sixth_sense_flash.pyc",
+          "mods/2.4.0.2/aslain.customsixthsense_1.1.02.wotmod!res/scripts/client/gui/mods/mod_customsixthsense.pyc"
+        ],
+        "unchangedCount": 87
+      }
+    },
+    {
+      "modId": "various_Custom_UI_Scale",
+      "existsOld": true,
+      "existsNew": true,
+      "semanticChangedIgnoringOrder": true,
+      "refsChanged": true,
+      "oldRefs": [
+        "../Files/various/various_Custom_UI_Scale_9abe4eb2.zip"
+      ],
+      "newRefs": [
+        "../Files/various/various_Custom_UI_Scale_5f596be9.zip"
+      ],
+      "oldArchives": [
+        {
+          "ref": "../Files/various/various_Custom_UI_Scale_9abe4eb2.zip",
+          "url": "https://repo.aslain.com/wot_modmanager/Files/various/various_Custom_UI_Scale_9abe4eb2.zip",
+          "sha256": "8d48a9f626317d81a531e625aab56843d3faba3bf42c8ef125edfb06cd8697aa",
+          "bytes": 536714,
+          "entries": {
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod": {
+              "sha256": "f698c472981accd128b31bc6789c16c9586bac16bb5db1e4801e98f4562d7ac4",
+              "bytes": 91896
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!meta.xml": {
+              "sha256": "771bdef118f0480a4eab35af6e39abcfa0337a773269a90498a823d42b3462f5",
+              "bytes": 257
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/scripts/client/gui/mods/mod_CustomUIScale.pyc": {
+              "sha256": "f9f546f55c43eba9b01477eab43e50c622d1f8552fbed947d7de61b4bd7e5110",
+              "bytes": 39695
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/cs.yml": {
+              "sha256": "95afa30861433989101a1204d7b28d44a07371da04745ece641ddb5ad46fcbac",
+              "bytes": 4915
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/de.yml": {
+              "sha256": "98e78529f973be631d001b9deedfa2a54a5de947d42b84695a179530ae69c966",
+              "bytes": 5159
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/en.yml": {
+              "sha256": "66c446a0357d927250c88998181fb1942e2a0680eeef15260381a3b9c60a2fff",
+              "bytes": 4576
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/es.yml": {
+              "sha256": "a480b6259879fe07849c3298835ed93ea5e52c662f3e6b635773a26f8a692fcb",
+              "bytes": 5053
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/fr.yml": {
+              "sha256": "f188290c2b7b2e7af51731308097c907beadf22f06ad5d9cd3cd663a3e038ef1",
+              "bytes": 5225
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/it.yml": {
+              "sha256": "9e9841da9dfb48b49df63c46970ccf05e089337a7dddc948ab592e1fa585dd17",
+              "bytes": 5120
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/pl.yml": {
+              "sha256": "11d68fe9b0f5c38308186ae233ee287bbed79f25539e078decfef7d0e363d925",
+              "bytes": 4908
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/ru.yml": {
+              "sha256": "24a728d4f7732316f05e59566d2e7c34fbeee0bf0de70d839b6f9cc5c2e1b717",
+              "bytes": 7780
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/uk.yml": {
+              "sha256": "527995e9392db217976d0dc74f41e9ff0597fa47294e5030543252a095fcfbbf",
+              "bytes": 7624
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod": {
+              "sha256": "5d5eed6fd24aacf46e9b534cf0cbf2e3ddc274f04f60df6b02cadafdb0372032",
+              "bytes": 871005
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!meta.xml": {
+              "sha256": "0430789bf831a239dccb885a2d8208c57b6c20e4bf459b5d2d48b10c6174d8b8",
+              "bytes": 337
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!NOTICE": {
+              "sha256": "a0eff6469b564d2fa2f58a0ce6ed0fbede1a9f39437ca958b31c3dd0e7e7bad9",
+              "bytes": 1712
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!README.txt": {
+              "sha256": "a1b585237d6201de4f1bacc1feb1142a855454b334f6cd3e99d911456cc11f6b",
+              "bytes": 696
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/__init__.pyc": {
+              "sha256": "61b579291c743c5b1084e3d1fe18f42007195f4fee7397790692e5b968592e47",
+              "bytes": 14396
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_constants.pyc": {
+              "sha256": "5f3b81c5fabd6a7b01ae0fef1d9789532fc9ef70c997f7fa6878627ed76ffb15",
+              "bytes": 15170
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_diag.pyc": {
+              "sha256": "f9697e2bd9a44c46c50c8a3098d78bb121ba596144e393a65d117f589c485db1",
+              "bytes": 12056
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_gameface.pyc": {
+              "sha256": "8cfd64ea6d7c787dade8dfd10285be8f88c87a0724b5ce58df0566a4068dc5e3",
+              "bytes": 13930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/api.pyc": {
+              "sha256": "f74b7a1efba66d5a715926c3efe701c1fe339177d0a3bc20a68624306327e20a",
+              "bytes": 49695
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/button.pyc": {
+              "sha256": "31f749d5e6422b610369949f66b5661f758dd072d5eaef5c727fadc5a9330b26",
+              "bytes": 22176
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/context_menu.pyc": {
+              "sha256": "93af762659ca45c8720e1c46c909733c85544075ca69c0885395b698ba2d22c0",
+              "bytes": 15257
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/entries.pyc": {
+              "sha256": "bd84ccb9e633bfcc54fc23a08dc26a4b16b6fd1e465f29a16579b42ed33edc14",
+              "bytes": 14734
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/frontend.pyc": {
+              "sha256": "18bb4743f8298cf80e796b609f2e1cddf165ec64f7d1c27b40fef1515a543aac",
+              "bytes": 11723
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/hotkeys.pyc": {
+              "sha256": "2877a790e64f038ac4df1429ae45e0680a4a35f17ce83b80f147694653e4067d",
+              "bytes": 17862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/l10n.pyc": {
+              "sha256": "1cc4b42f6ec74e40c3232a92639b4d843c01e745d694e0e61e6d4be2eadb252b",
+              "bytes": 13919
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/login.pyc": {
+              "sha256": "e85c3c57417ca5e16b47b83c4562cef9c2d42cc28eda770097570cfd04686199",
+              "bytes": 16421
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/modslist_shim.pyc": {
+              "sha256": "b519c290058ce47697786e8b4ab807a39889435445ead4e0a1ae4d544958c640",
+              "bytes": 14930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/skeleton.pyc": {
+              "sha256": "7fb8a04977d16df66ec8dd861f95d257171c58fd947cdded11f6aec5cf616630",
+              "bytes": 12172
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/templates.pyc": {
+              "sha256": "6269e0026f09af44d5656317501dfbea8da5e8f15c4b60e2544c955139b5ee58",
+              "bytes": 20589
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/utils.pyc": {
+              "sha256": "1e13ceed739b87db618a1acd4beae4028a8fd038f25fae60b6d1b3a863a2d2e0",
+              "bytes": 20082
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/view.pyc": {
+              "sha256": "3814fc290e21d4f970b0f22753afd6d5a47b39a1b2b7b63193f929c3e3d8c491",
+              "bytes": 73059
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/mods/mod_modmenu.pyc": {
+              "sha256": "8631b2592e5d44377146f7c6ab86151dbdc49f5f39b1e960904184ed03a973fa",
+              "bytes": 13814
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/flash/ModMenuLoginButton.swf": {
+              "sha256": "2b8f48326986c52e1d4be707cf787d65b5df46894ae445d47154605f7480d41f",
+              "bytes": 2112
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.css": {
+              "sha256": "924aac7658673d35cb806f75efd627c89f8c838c965206c29d05e5a7adc9e145",
+              "bytes": 64142
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.html": {
+              "sha256": "efbd8d25b777bc82a953cdb61fee0d23dd1fb2d3b26acf442fc169b979281494",
+              "bytes": 4522
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.js": {
+              "sha256": "e89f9e714ff76d2157a7158570a682c13430901b347fd6513d5c4ff9ff62498b",
+              "bytes": 252002
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt": {
+              "sha256": "549a01bb8e3024dac88a5ece1934a326e5650703715c26a4112d0cd99c6af1eb",
+              "bytes": 406
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf": {
+              "sha256": "aa1358e4be2f65b49fbf75bdbed04b84acdb5dbdd77b060971af5c917126b9da",
+              "bytes": 29052
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/img/play.png": {
+              "sha256": "3abbb659d33edec56a0ec37b339dbaa55ae65999571ef02a2d83c1d1d9204ee9",
+              "bytes": 1466
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css": {
+              "sha256": "ffe6ea614d6e63e01c760625d606d8f1243ab05c6f91b9d4d30586ab99d0842f",
+              "bytes": 826
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html": {
+              "sha256": "68c3bce3dea4b3b078e8ef7c162252ed119f365eccfb510bcada2a23b0dc26d5",
+              "bytes": 404
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js": {
+              "sha256": "65e7aa3582659120a08abdb5c642533bd42425590abf56249b5766096f61dd3d",
+              "bytes": 8937
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gen_resources/aslain_modmenu.json": {
+              "sha256": "21ff9748946c4195671093601089b4805e5fd21bdc2752b15b97bfbe33dd9fd7",
+              "bytes": 395
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenu.json": {
+              "sha256": "220f87f4d0d495be39ed30a0279b997e20af2c2cdfaf8e9b94304b94e1d085c1",
+              "bytes": 251
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenuButton.json": {
+              "sha256": "e97336af68b04c1fb69012ee4825ae46c2b463a8aed3b7364d5a30ecc1fc0f4a",
+              "bytes": 275
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon.png": {
+              "sha256": "7d213a10b54a195ca06b6927a3e8aae7871f159d02c292be4f46dd05fec5cbc2",
+              "bytes": 2909
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_128.png": {
+              "sha256": "00759cb2c31638c0b25990c4b7ce958e42ce8c38e8ec973440b88a6e5bbea064",
+              "bytes": 7838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_64.png": {
+              "sha256": "ec9d065cde71eb7daa68eec17d0089a9f98eb8e1414d762192cc7b748ba3fc3d",
+              "bytes": 3793
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/be.yml": {
+              "sha256": "6f5cd1a81bc63f98cd43fa358207664a733a211e29f09db4614f11ad8649d166",
+              "bytes": 5289
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/bg.yml": {
+              "sha256": "5fa5821f161ed15262ad415e5f3d1591972675e89ca02789a98d227b41cb6a7f",
+              "bytes": 5414
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/cs.yml": {
+              "sha256": "e4df54c15d394a1c2e0ba42f5f7b97b788066117b438fb7eab31af1dd1745628",
+              "bytes": 3836
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/da.yml": {
+              "sha256": "1d1bf757bb1f74e7de667d45688310d7d0931052fedb76dc5e5fe3d74a59b6b1",
+              "bytes": 3719
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/de.yml": {
+              "sha256": "344932f39d05e6b1d028e6224584a52056f9564800ef6d6f96b5cbc0972fc2ef",
+              "bytes": 3954
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/el.yml": {
+              "sha256": "558da18de415fb4c95e5b1f199b5bdc87a063a5ab39424c9a345939853d60620",
+              "bytes": 5540
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/en.yml": {
+              "sha256": "ca093c93489006261a7579b8384ab6c12711b062a080560758ed4f7aa3cb54a1",
+              "bytes": 3592
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/es.yml": {
+              "sha256": "16a9149dd724cff47ce94ae61d20a2b9563e19d0bc21fe4f94a4f02b43317e99",
+              "bytes": 3890
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fi.yml": {
+              "sha256": "b679db35d9add63a5eba1392e2d279930b4ecd1e269b1c437d4867623fce45d6",
+              "bytes": 3858
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fr.yml": {
+              "sha256": "d97d82e6c837a577857919a41453d49412ef7239cfb31358c9b38317be48913b",
+              "bytes": 3979
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hr.yml": {
+              "sha256": "510c3011a1aa89099f43fe74fef404dd16b8eb5d8c85ae6a3a74d76c2eb5e763",
+              "bytes": 3739
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hu.yml": {
+              "sha256": "9d91603d64e25f9ba6306377bff15f9473035e43f56d35ed2b2f2160fc0abecb",
+              "bytes": 4021
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/it.yml": {
+              "sha256": "d047b46ba9ba1799875c04c1a34d4b6652f5bb42d98fdc71b25c1ecbdc6a3c05",
+              "bytes": 3862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lt.yml": {
+              "sha256": "1a9084a21ede5b72a9c1b174e74725bec3b2f95ed38c7d97c92a76b54a2505e3",
+              "bytes": 3874
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lv.yml": {
+              "sha256": "a976a45ea56cb5f0f917e998f59f092812722680cc5aaaae7db6d72befd31d43",
+              "bytes": 3872
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/nl.yml": {
+              "sha256": "2eb56b769dbf73e0f9262cd0ed9525764450cb6f9843d6fa332d73013e92ede8",
+              "bytes": 3878
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/no.yml": {
+              "sha256": "1c3bc84d5adc213026c3ba0f40a606ee00b5db5d610f23c6432a22c354189f6e",
+              "bytes": 3745
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pl.yml": {
+              "sha256": "8674d07041d68f9e3731e873d6dbcfffe6015391747419c3e9ebbf33afa4bc0b",
+              "bytes": 3843
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pt.yml": {
+              "sha256": "544a296a3b025b73a163964d83524763b5c3635cf2e2ec76239a32350b6621da",
+              "bytes": 3799
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ro.yml": {
+              "sha256": "ae8afb5e20bbed0ed3ff4ac5ed33b1f886b4ff054c0ef6b9b18491e22f9fdc7c",
+              "bytes": 3899
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ru.yml": {
+              "sha256": "931ca77c8816a40162e245b24d9e313e4e481ba30fa4b065303b428135a3a4ff",
+              "bytes": 5362
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sr.yml": {
+              "sha256": "3b575676599f4774ee590f6b159e2338399c39d1a94af5bfc70c202c4edaf55d",
+              "bytes": 4266
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sv.yml": {
+              "sha256": "9fcb7c61793db2afffa1731bb4271b449ffb3f026ca3f8692002b31048050281",
+              "bytes": 3876
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/tr.yml": {
+              "sha256": "9bc0bde3d04c47bf7e16254c8894410958b967576e2fe20d5658a8f6862a074c",
+              "bytes": 3838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/uk.yml": {
+              "sha256": "b45986803ece364bc32b32fc7ac812a40c88defdb95c60e99212211ce1e88c64",
+              "bytes": 5342
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod": {
+              "sha256": "64bfd57bc8ab77f3909920759d7b0c3ee24bf837708fd8ca043672dddc870ec8",
+              "bytes": 15823
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!meta.xml": {
+              "sha256": "ae586cfbe61027625d4b9c7bec9d9e05e30eeef96c1582828ca18df65d20b677",
+              "bytes": 351
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!res/scripts/client/gui/mods/mod_aslainMenu.pyc": {
+              "sha256": "7484734c449caf32d0dee81fb7816787b9448460981120c953aa289d8ed551cc",
+              "bytes": 15190
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod": {
+              "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+              "bytes": 42703
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!meta.xml": {
+              "sha256": "e56f7e6edbe8c446d780bb327d59121df4d6efc198bacc7cc1925265c4950184",
+              "bytes": 260
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/scripts/client/openwg_gameface.pyc": {
+              "sha256": "19a6656729459d5bafc616847eb2e90348a6a4dd6f0f20430b0da8b7861b487c",
+              "bytes": 13969
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/js/index.js": {
+              "sha256": "f24c1b4b48ec487d1f2e1834832870eff0242deb2d70221579c4414d0a5e7c93",
+              "bytes": 4900
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/common.js": {
+              "sha256": "667736e16d9a87e70ff1f6e7550417beb7d62b5180722e42de972ca49715d8d9",
+              "bytes": 905
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/debug.js": {
+              "sha256": "8630f6827e82131118a5d4e6c2b1500c522b7da0c63dab5caa62a2cea77e1ce5",
+              "bytes": 5338
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/media.js": {
+              "sha256": "20010424231d527c1182aac033a32a4bf7920f0384a5bdea4006ed9aec6aebb4",
+              "bytes": 5159
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/model.js": {
+              "sha256": "4637b8a0fa1a3a56ad31291262ac74ad5fdf42067113b8492bf5ef4a99649de5",
+              "bytes": 3351
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/sound.js": {
+              "sha256": "a89247f230fb7acff08d10c9653f2932ae81c3f2cff5426df8b38bfa1efaaf3b",
+              "bytes": 345
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/views.js": {
+              "sha256": "7200ddd39c6e484acb4e0230e70f1e2082d903d782d7d0ebe17df179509da913",
+              "bytes": 6230
+            }
+          }
+        }
+      ],
+      "newArchives": [
+        {
+          "ref": "../Files/various/various_Custom_UI_Scale_5f596be9.zip",
+          "url": "https://repo.aslain.com/wot_modmanager/Files/various/various_Custom_UI_Scale_5f596be9.zip",
+          "sha256": "fcb92b9815c33c311afd5717ceaf266a40feab4674cbcb8dd948d7afb631288c",
+          "bytes": 537335,
+          "entries": {
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod": {
+              "sha256": "fadfc1334890b3fef0b7261b73ba7ecced0532c90ff20d300bb16ff48a3a602f",
+              "bytes": 92705
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!meta.xml": {
+              "sha256": "771bdef118f0480a4eab35af6e39abcfa0337a773269a90498a823d42b3462f5",
+              "bytes": 257
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/scripts/client/gui/mods/mod_CustomUIScale.pyc": {
+              "sha256": "6396fde61d36ae340a8c08505ab4eb698929b2961d8bcecffce135de8825de65",
+              "bytes": 40504
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/cs.yml": {
+              "sha256": "95afa30861433989101a1204d7b28d44a07371da04745ece641ddb5ad46fcbac",
+              "bytes": 4915
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/de.yml": {
+              "sha256": "98e78529f973be631d001b9deedfa2a54a5de947d42b84695a179530ae69c966",
+              "bytes": 5159
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/en.yml": {
+              "sha256": "66c446a0357d927250c88998181fb1942e2a0680eeef15260381a3b9c60a2fff",
+              "bytes": 4576
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/es.yml": {
+              "sha256": "a480b6259879fe07849c3298835ed93ea5e52c662f3e6b635773a26f8a692fcb",
+              "bytes": 5053
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/fr.yml": {
+              "sha256": "f188290c2b7b2e7af51731308097c907beadf22f06ad5d9cd3cd663a3e038ef1",
+              "bytes": 5225
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/it.yml": {
+              "sha256": "9e9841da9dfb48b49df63c46970ccf05e089337a7dddc948ab592e1fa585dd17",
+              "bytes": 5120
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/pl.yml": {
+              "sha256": "11d68fe9b0f5c38308186ae233ee287bbed79f25539e078decfef7d0e363d925",
+              "bytes": 4908
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/ru.yml": {
+              "sha256": "24a728d4f7732316f05e59566d2e7c34fbeee0bf0de70d839b6f9cc5c2e1b717",
+              "bytes": 7780
+            },
+            "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/mods/customuiscale/text/uk.yml": {
+              "sha256": "527995e9392db217976d0dc74f41e9ff0597fa47294e5030543252a095fcfbbf",
+              "bytes": 7624
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod": {
+              "sha256": "5d5eed6fd24aacf46e9b534cf0cbf2e3ddc274f04f60df6b02cadafdb0372032",
+              "bytes": 871005
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!meta.xml": {
+              "sha256": "0430789bf831a239dccb885a2d8208c57b6c20e4bf459b5d2d48b10c6174d8b8",
+              "bytes": 337
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!NOTICE": {
+              "sha256": "a0eff6469b564d2fa2f58a0ce6ed0fbede1a9f39437ca958b31c3dd0e7e7bad9",
+              "bytes": 1712
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!README.txt": {
+              "sha256": "a1b585237d6201de4f1bacc1feb1142a855454b334f6cd3e99d911456cc11f6b",
+              "bytes": 696
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/__init__.pyc": {
+              "sha256": "61b579291c743c5b1084e3d1fe18f42007195f4fee7397790692e5b968592e47",
+              "bytes": 14396
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_constants.pyc": {
+              "sha256": "5f3b81c5fabd6a7b01ae0fef1d9789532fc9ef70c997f7fa6878627ed76ffb15",
+              "bytes": 15170
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_diag.pyc": {
+              "sha256": "f9697e2bd9a44c46c50c8a3098d78bb121ba596144e393a65d117f589c485db1",
+              "bytes": 12056
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/_gameface.pyc": {
+              "sha256": "8cfd64ea6d7c787dade8dfd10285be8f88c87a0724b5ce58df0566a4068dc5e3",
+              "bytes": 13930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/api.pyc": {
+              "sha256": "f74b7a1efba66d5a715926c3efe701c1fe339177d0a3bc20a68624306327e20a",
+              "bytes": 49695
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/button.pyc": {
+              "sha256": "31f749d5e6422b610369949f66b5661f758dd072d5eaef5c727fadc5a9330b26",
+              "bytes": 22176
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/context_menu.pyc": {
+              "sha256": "93af762659ca45c8720e1c46c909733c85544075ca69c0885395b698ba2d22c0",
+              "bytes": 15257
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/entries.pyc": {
+              "sha256": "bd84ccb9e633bfcc54fc23a08dc26a4b16b6fd1e465f29a16579b42ed33edc14",
+              "bytes": 14734
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/frontend.pyc": {
+              "sha256": "18bb4743f8298cf80e796b609f2e1cddf165ec64f7d1c27b40fef1515a543aac",
+              "bytes": 11723
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/hotkeys.pyc": {
+              "sha256": "2877a790e64f038ac4df1429ae45e0680a4a35f17ce83b80f147694653e4067d",
+              "bytes": 17862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/l10n.pyc": {
+              "sha256": "1cc4b42f6ec74e40c3232a92639b4d843c01e745d694e0e61e6d4be2eadb252b",
+              "bytes": 13919
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/login.pyc": {
+              "sha256": "e85c3c57417ca5e16b47b83c4562cef9c2d42cc28eda770097570cfd04686199",
+              "bytes": 16421
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/modslist_shim.pyc": {
+              "sha256": "b519c290058ce47697786e8b4ab807a39889435445ead4e0a1ae4d544958c640",
+              "bytes": 14930
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/skeleton.pyc": {
+              "sha256": "7fb8a04977d16df66ec8dd861f95d257171c58fd947cdded11f6aec5cf616630",
+              "bytes": 12172
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/templates.pyc": {
+              "sha256": "6269e0026f09af44d5656317501dfbea8da5e8f15c4b60e2544c955139b5ee58",
+              "bytes": 20589
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/utils.pyc": {
+              "sha256": "1e13ceed739b87db618a1acd4beae4028a8fd038f25fae60b6d1b3a863a2d2e0",
+              "bytes": 20082
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/aslainMenu/view.pyc": {
+              "sha256": "3814fc290e21d4f970b0f22753afd6d5a47b39a1b2b7b63193f929c3e3d8c491",
+              "bytes": 73059
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/scripts/client/gui/mods/mod_modmenu.pyc": {
+              "sha256": "8631b2592e5d44377146f7c6ab86151dbdc49f5f39b1e960904184ed03a973fa",
+              "bytes": 13814
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/flash/ModMenuLoginButton.swf": {
+              "sha256": "2b8f48326986c52e1d4be707cf787d65b5df46894ae445d47154605f7480d41f",
+              "bytes": 2112
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.css": {
+              "sha256": "924aac7658673d35cb806f75efd627c89f8c838c965206c29d05e5a7adc9e145",
+              "bytes": 64142
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.html": {
+              "sha256": "efbd8d25b777bc82a953cdb61fee0d23dd1fb2d3b26acf442fc169b979281494",
+              "bytes": 4522
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/ModMenu.js": {
+              "sha256": "e89f9e714ff76d2157a7158570a682c13430901b347fd6513d5c4ff9ff62498b",
+              "bytes": 252002
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/LICENSE-JetBrainsMono.txt": {
+              "sha256": "549a01bb8e3024dac88a5ece1934a326e5650703715c26a4112d0cd99c6af1eb",
+              "bytes": 406
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/fonts/ModMenuMono.ttf": {
+              "sha256": "aa1358e4be2f65b49fbf75bdbed04b84acdb5dbdd77b060971af5c917126b9da",
+              "bytes": 29052
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenu/img/play.png": {
+              "sha256": "3abbb659d33edec56a0ec37b339dbaa55ae65999571ef02a2d83c1d1d9204ee9",
+              "bytes": 1466
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.css": {
+              "sha256": "ffe6ea614d6e63e01c760625d606d8f1243ab05c6f91b9d4d30586ab99d0842f",
+              "bytes": 826
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.html": {
+              "sha256": "68c3bce3dea4b3b078e8ef7c162252ed119f365eccfb510bcada2a23b0dc26d5",
+              "bytes": 404
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gameface/mods/aslain/ModMenuButton/ModMenuButton.js": {
+              "sha256": "65e7aa3582659120a08abdb5c642533bd42425590abf56249b5766096f61dd3d",
+              "bytes": 8937
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/gen_resources/aslain_modmenu.json": {
+              "sha256": "21ff9748946c4195671093601089b4805e5fd21bdc2752b15b97bfbe33dd9fd7",
+              "bytes": 395
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenu.json": {
+              "sha256": "220f87f4d0d495be39ed30a0279b997e20af2c2cdfaf8e9b94304b94e1d085c1",
+              "bytes": 251
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/configs/res_map/ModMenuButton.json": {
+              "sha256": "e97336af68b04c1fb69012ee4825ae46c2b463a8aed3b7364d5a30ecc1fc0f4a",
+              "bytes": 275
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon.png": {
+              "sha256": "7d213a10b54a195ca06b6927a3e8aae7871f159d02c292be4f46dd05fec5cbc2",
+              "bytes": 2909
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_128.png": {
+              "sha256": "00759cb2c31638c0b25990c4b7ce958e42ce8c38e8ec973440b88a6e5bbea064",
+              "bytes": 7838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/gui/maps/icons/aslainMenu/icon_64.png": {
+              "sha256": "ec9d065cde71eb7daa68eec17d0089a9f98eb8e1414d762192cc7b748ba3fc3d",
+              "bytes": 3793
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/be.yml": {
+              "sha256": "6f5cd1a81bc63f98cd43fa358207664a733a211e29f09db4614f11ad8649d166",
+              "bytes": 5289
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/bg.yml": {
+              "sha256": "5fa5821f161ed15262ad415e5f3d1591972675e89ca02789a98d227b41cb6a7f",
+              "bytes": 5414
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/cs.yml": {
+              "sha256": "e4df54c15d394a1c2e0ba42f5f7b97b788066117b438fb7eab31af1dd1745628",
+              "bytes": 3836
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/da.yml": {
+              "sha256": "1d1bf757bb1f74e7de667d45688310d7d0931052fedb76dc5e5fe3d74a59b6b1",
+              "bytes": 3719
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/de.yml": {
+              "sha256": "344932f39d05e6b1d028e6224584a52056f9564800ef6d6f96b5cbc0972fc2ef",
+              "bytes": 3954
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/el.yml": {
+              "sha256": "558da18de415fb4c95e5b1f199b5bdc87a063a5ab39424c9a345939853d60620",
+              "bytes": 5540
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/en.yml": {
+              "sha256": "ca093c93489006261a7579b8384ab6c12711b062a080560758ed4f7aa3cb54a1",
+              "bytes": 3592
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/es.yml": {
+              "sha256": "16a9149dd724cff47ce94ae61d20a2b9563e19d0bc21fe4f94a4f02b43317e99",
+              "bytes": 3890
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fi.yml": {
+              "sha256": "b679db35d9add63a5eba1392e2d279930b4ecd1e269b1c437d4867623fce45d6",
+              "bytes": 3858
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/fr.yml": {
+              "sha256": "d97d82e6c837a577857919a41453d49412ef7239cfb31358c9b38317be48913b",
+              "bytes": 3979
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hr.yml": {
+              "sha256": "510c3011a1aa89099f43fe74fef404dd16b8eb5d8c85ae6a3a74d76c2eb5e763",
+              "bytes": 3739
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/hu.yml": {
+              "sha256": "9d91603d64e25f9ba6306377bff15f9473035e43f56d35ed2b2f2160fc0abecb",
+              "bytes": 4021
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/it.yml": {
+              "sha256": "d047b46ba9ba1799875c04c1a34d4b6652f5bb42d98fdc71b25c1ecbdc6a3c05",
+              "bytes": 3862
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lt.yml": {
+              "sha256": "1a9084a21ede5b72a9c1b174e74725bec3b2f95ed38c7d97c92a76b54a2505e3",
+              "bytes": 3874
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/lv.yml": {
+              "sha256": "a976a45ea56cb5f0f917e998f59f092812722680cc5aaaae7db6d72befd31d43",
+              "bytes": 3872
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/nl.yml": {
+              "sha256": "2eb56b769dbf73e0f9262cd0ed9525764450cb6f9843d6fa332d73013e92ede8",
+              "bytes": 3878
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/no.yml": {
+              "sha256": "1c3bc84d5adc213026c3ba0f40a606ee00b5db5d610f23c6432a22c354189f6e",
+              "bytes": 3745
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pl.yml": {
+              "sha256": "8674d07041d68f9e3731e873d6dbcfffe6015391747419c3e9ebbf33afa4bc0b",
+              "bytes": 3843
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/pt.yml": {
+              "sha256": "544a296a3b025b73a163964d83524763b5c3635cf2e2ec76239a32350b6621da",
+              "bytes": 3799
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ro.yml": {
+              "sha256": "ae8afb5e20bbed0ed3ff4ac5ed33b1f886b4ff054c0ef6b9b18491e22f9fdc7c",
+              "bytes": 3899
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/ru.yml": {
+              "sha256": "931ca77c8816a40162e245b24d9e313e4e481ba30fa4b065303b428135a3a4ff",
+              "bytes": 5362
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sr.yml": {
+              "sha256": "3b575676599f4774ee590f6b159e2338399c39d1a94af5bfc70c202c4edaf55d",
+              "bytes": 4266
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/sv.yml": {
+              "sha256": "9fcb7c61793db2afffa1731bb4271b449ffb3f026ca3f8692002b31048050281",
+              "bytes": 3876
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/tr.yml": {
+              "sha256": "9bc0bde3d04c47bf7e16254c8894410958b967576e2fe20d5658a8f6862a074c",
+              "bytes": 3838
+            },
+            "mods/2.4.0.2/aslain.modmenu_2.1.02.wotmod!res/mods/aslain.modmenu/text/uk.yml": {
+              "sha256": "b45986803ece364bc32b32fc7ac812a40c88defdb95c60e99212211ce1e88c64",
+              "bytes": 5342
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod": {
+              "sha256": "64bfd57bc8ab77f3909920759d7b0c3ee24bf837708fd8ca043672dddc870ec8",
+              "bytes": 15823
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!meta.xml": {
+              "sha256": "ae586cfbe61027625d4b9c7bec9d9e05e30eeef96c1582828ca18df65d20b677",
+              "bytes": 351
+            },
+            "mods/2.4.0.2/aslain.modssettingsbridge_1.0.3.wotmod!res/scripts/client/gui/mods/mod_aslainMenu.pyc": {
+              "sha256": "7484734c449caf32d0dee81fb7816787b9448460981120c953aa289d8ed551cc",
+              "bytes": 15190
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod": {
+              "sha256": "26b190d216c758ccffa824766cbd6bb7cbfc9dfa041e530b99b0d1f02129d5e1",
+              "bytes": 42703
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!meta.xml": {
+              "sha256": "e56f7e6edbe8c446d780bb327d59121df4d6efc198bacc7cc1925265c4950184",
+              "bytes": 260
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/scripts/client/openwg_gameface.pyc": {
+              "sha256": "19a6656729459d5bafc616847eb2e90348a6a4dd6f0f20430b0da8b7861b487c",
+              "bytes": 13969
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/js/index.js": {
+              "sha256": "f24c1b4b48ec487d1f2e1834832870eff0242deb2d70221579c4414d0a5e7c93",
+              "bytes": 4900
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/common.js": {
+              "sha256": "667736e16d9a87e70ff1f6e7550417beb7d62b5180722e42de972ca49715d8d9",
+              "bytes": 905
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/debug.js": {
+              "sha256": "8630f6827e82131118a5d4e6c2b1500c522b7da0c63dab5caa62a2cea77e1ce5",
+              "bytes": 5338
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/media.js": {
+              "sha256": "20010424231d527c1182aac033a32a4bf7920f0384a5bdea4006ed9aec6aebb4",
+              "bytes": 5159
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/model.js": {
+              "sha256": "4637b8a0fa1a3a56ad31291262ac74ad5fdf42067113b8492bf5ef4a99649de5",
+              "bytes": 3351
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/sound.js": {
+              "sha256": "a89247f230fb7acff08d10c9653f2932ae81c3f2cff5426df8b38bfa1efaaf3b",
+              "bytes": 345
+            },
+            "mods/2.4.0.2/net.openwg/net.openwg.gameface_1.1.6.wotmod!res/gui/gameface/mods/libs/views.js": {
+              "sha256": "7200ddd39c6e484acb4e0230e70f1e2082d903d782d7d0ebe17df179509da913",
+              "bytes": 6230
+            }
+          }
+        }
+      ],
+      "internalComparison": {
+        "added": [],
+        "removed": [],
+        "changed": [
+          "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod",
+          "mods/2.4.0.2/aslain.customuiscale_1.2.00.wotmod!res/scripts/client/gui/mods/mod_CustomUIScale.pyc"
+        ],
+        "unchangedCount": 86
+      }
+    }
+  ]
+}
