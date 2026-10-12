@@ -67,5 +67,11 @@
   "ownershipNotes": {
     "various_Custom_UI_Scale": "ASLAIN_OWNED_NOT_BOX",
     "XVM_*": "Selection/config surface only; Box owner decisions still follow CURRENT/manifest/worklog."
+  },
+  "lastAuditRequested": {
+    "dateLocal": "2026-10-12",
+    "target": "2.4.0.2 #05",
+    "selectionUnchanged": true,
+    "method": "catalog delta + recursive selected-package fingerprint; no ad-hoc plugins"
   }
 }
