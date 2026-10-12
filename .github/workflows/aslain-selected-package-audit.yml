@@ -1,5 +1,5 @@
 name: Aslain selected plugin package audit
-# trigger: 2026-10-09 aslain-04 selected audit
+# trigger: 2026-10-12 aslain-06
 
 permissions:
   contents: write
