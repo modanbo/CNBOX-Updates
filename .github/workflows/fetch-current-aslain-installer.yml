@@ -1,5 +1,5 @@
 name: Fetch current Aslain installer artifact
-# trigger: 2026-10-12 aslain-05 resume
+# trigger: 2026-10-12 aslain-06
 permissions:
   contents: read
 on:
