@@ -559,3 +559,14 @@ Runtime closure:
 
 Promotion rule:
 the formal archive is byte-for-byte identical to the exact Runtime-tested candidate. 1.2.5 / 1.2.6 / older 1.2.7 experiments remain HISTORY/negative evidence.
+
+## 2026-10-14 — MoE 1.3.1 WoT 2.4.1.0 FINAL_LOCK
+
+Exact user-tested R2 ZIP bytes promoted without repacking. SEAGULL read-only Run 38658969004 confirms that the installed WoT 2.4.1.0 WOTMOD hash is identical to R2. The user confirmed no gameplay problems and explicitly authorized formal lock.
+
+- Package: `moe/1.3.1/NAJXBOX_MoE_1.3.1_WOT_2.4.1.0_FINAL_LOCK.zip` SHA256 `e003fbeaf1b015ae03fae521878a3ddf8a0e26dbb3b0c247fce3cfe1a6f34d2f`
+- Inner file: `mods/2.4.1.0/najxbox.moe_independent_1.2.4.wotmod` SHA256 `0f8d833d18de2398e6fcdcdc6f809af5f3d30bea9c8e8480c54ea76f119bdec1`
+- 13 inner ZIP members / all Stored method 0 / Python magic 03f30d0a. No MoE math rewrite, no cosmetic repack. Metadata name 'Runtime Test Candidate' remains historically unchanged.
+- WoT 2.4.1 entry shim and missing-threshold NaN guard are part of the tested package. A missing mark threshold renders -- rather than NaN. Manager manual threshold data cache remains an independent feature, not a requirement for this MoE release.
+- WoT 2.4.0.2 MoE 1.3.0 preserved as separate release row and exact package.
+- Game-log evidence was not available in the SEAGULL read-only probe paths; actual in-game PASS was user confirmed and installed candidate identity was independently proven.
