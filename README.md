@@ -17,17 +17,19 @@ Machine update authority: `channel.json`.
   - WoT: `2.4.0.2`
   - payload: `payloads/2.4.0.2/unified/CNBOX_PAYLOAD_R6.zip`
   - SHA256: `b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2`
-- MoE / 打环: **1.3.0**
-  - payload: `moe/1.3.0/NAJXBOX_MoE_INDEPENDENT_1.3.0_WOT_2.4.0.2_FINAL_LOCK.zip`
-  - SHA256: `5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19`
-- Language / 汉化: **1.1.2**
-  - payload: `language/NAJXBOX_LANGUAGE_1.1.2_WOT_2.4.0.2_FINAL_LOCK.zip`
-  - SHA256: `1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18`
+- MoE / 打环 (WoT 2.4.1.0): **1.3.1 FINAL_LOCK / GitHub+Drive frozen, consolidated Gitee pending**
+  - payload: `moe/1.3.1/NAJXBOX_MoE_1.3.1_WOT_2.4.1.0_FINAL_LOCK.zip`
+  - SHA256: `e003fbeaf1b015ae03fae521878a3ddf8a0e26dbb3b0c247fce3cfe1a6f34d2f`
+  - Older-client compatibility (WoT 2.4.0.2): **1.3.0**, SHA256 `5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19`; preserved, not the WoT241 package
+- Language / 汉化 (WoT 2.4.1.0): **1.1.3 FINAL_LOCK**
+  - payload: `language/NAJXBOX_LANGUAGE_1.1.3_WOT_2.4.1.0_FINAL_LOCK_20261014.zip`
+  - SHA256: `592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5`
+  - Previous 1.1.2 / WoT 2.4.0.2 remains rollback/history, not the current Language pack
 
-Environment baseline:
-- WoT `2.4.0.2`
-- Aslain Creator/engineering compatibility `#02` (Public Box bytes remain the same R6 payload)
-- XVM `13.1.0.0093`
+Environment boundaries (module-specific; not one universal WoT version):
+- Box 1.1.0/R6 formally targets WoT `2.4.0.2`, frozen XVM `13.1.0.0093`; its WoT 2.4.1.0 / Aslain #02 engineering migration has failed real-client Runtime in prior attempts and is **not** a promoted Public Box release.
+- MoE 1.3.1 and Language 1.1.3 target WoT `2.4.1.0`; older-client MoE 1.3.0 is retained separately.
+- For exact client matching and package selection, `channel.json` is the machine install authority; do not infer compatibility from a single global version line.
 
 ## Current-tree retention rule
 
@@ -39,6 +41,6 @@ Unique engineering history/reference material such as `moe/HISTORY.md`, `moe/ref
 
 Gitee `modanbo/cnbox-updates-cn` is a **Public-only exact mirror** rebuilt from the current GitHub channel. Creator/private/history/test/evidence content is forbidden there.
 
-Current Manager 2.1.5 GitHub publication is complete; Gitee synchronization is the remaining manual publication gate before the private engineering authority promotes Manager 2.1.5 as CURRENT_RELEASE.
+Manager 2.1.5 is already the established Public release. Gitee is a distinct Public-only publication gate: MoE 1.3.1 consolidated Gitee synchronization is **intentionally deferred by the owner** until Language and Box overall closure. GitHub/Drive exact frozen MoE 1.3.1 does not imply that the latest Gitee mirror has passed. Do not push Creator or test artifacts to Gitee.
 
 For release identity, always use `channel.json` and `CURRENT_RELEASE_INDEX.md`.
