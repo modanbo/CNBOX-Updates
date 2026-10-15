@@ -19,4 +19,4 @@ Updated: 2026-10-14
 Manager 2.1.5 Public exact SHA was explicitly authorized by the project owner for direct publication as an exact-SHA release exception. VirusTotal was not run. This exception applies only to this exact Public SHA and does not change future security policy.
 
 Older Public releases remain repository history/rollback only. channel.json current entries are the installation authority.
-Aslain #02 compatibility closure: A_LOW_RISK_REBASE / selected Choice deltas 5/48 / Box payload byte-identical / Review 1+2 and synthetic rollback PASS / Runtime not required. Public Box payload remains unchanged; Creator/engineering provenance advances to #02.
+Historical selected-plugin #02 low-risk static rebase: Review 1/2 and synthetic rollback passed for the candidate, but subsequent WoT 2.4.1 real-client Box Runtime failed. **Do not treat the old static result as a Box WoT241 FINAL_LOCK or Runtime PASS.** The formal Public Box 1.1.0/R6 package for WoT 2.4.0.2 is unchanged; refer to the private unified Master/Box workstream for ongoing migration.
