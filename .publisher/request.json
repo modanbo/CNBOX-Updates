@@ -1,8 +1,9 @@
 {
   "schemaVersion": 1,
-  "active": true,
-  "sourceUrl": "https://sdmntpreastus2.oaiusercontent.com/files/00000000-318c-81f6-b62e-22a2b2b3cd78/raw?se=2026-10-15T00%3A25%3A53Z&sp=r&sv=2026-02-06&sr=b&scid=c27797b8-283e-590d-8a87-bf91fb430a65&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-14T03%3A17%3A06Z&ske=2026-10-15T03%3A17%3A06Z&sks=b&skv=2026-02-06&sig=eT0BzaziFyS8rs4OElYB9jqhJodfX5Evxdu1H4TrmnA%3D",
+  "active": false,
   "destination": "language/NAJXBOX_LANGUAGE_1.1.3_WOT_2.4.1.0_FINAL_LOCK_20261014.zip",
   "sourceSha256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5",
-  "outputSha256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5"
+  "outputSha256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5",
+  "completedPublicationSHA256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5",
+  "completedWork": "LANGUAGE_1_1_3_PUBLISHER_DONE_ALREADY_MIRRORED"
 }
