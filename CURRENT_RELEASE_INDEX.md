@@ -1,22 +1,21 @@
 # NAJXBox Current Public Release Index
 
-Updated: 2026-10-14
+Updated: 2026-10-16
 
 ## Current install authorities
 
 - Manager Public: 2.1.5 / 47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5
 - Manager Creator: 2.1.5 / 682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8
-- Box formal/display: 1.1.0
-- Box Public compatibility: 2402-01-R34-R2F9-UNIFIED-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
-- Box Creator compatibility: 2402-02-R34-R2F9-FINAL_LOCK-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2
+- Box formal/display **current frozen baseline: 1.2.0** / WoT 2.4.1.0 / Aslain #03 / XVM 13.1.0.0098; **exact original T06 bytes, no rebuild**, 533 files, SHA256 `70c756fe280c76dbac2655d5bb1428d635f0e004f52d480dc5acf8fbb9ee1fe9`; Google Drive FINAL (access-controlled) https://drive.google.com/file/d/1g6T6pSm97lmF7-L7VIcHAgV1X03rKvWd/view. Engineering exact manifest: https://github.com/modanbo/NA-BOX/blob/main/06_RELEASES/manifests/NAJXBOX_BOX_1.2.0_WOT241_ASLAIN03_FINAL_LOCK_20261016.json
+- Box **previous 1.1.0 (HISTORY / WoT 2.4.0.2 legacy install track)**: published Public compatibility alias 2402-01-R34-R2F9-UNIFIED-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2. Legacy Public `channel.json` remains unchanged and operational for old clients; this is NOT the current 1.2.0 baseline.
+- Box previous Creator compatibility: 2402-02-R34-R2F9-FINAL_LOCK-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2 (HISTORY / legacy WoT2402).
 - MoE WoT 2.4.1.0: 1.3.1 / e003fbeaf1b015ae03fae521878a3ddf8a0e26dbb3b0c247fce3cfe1a6f34d2f
 - MoE WoT 2.4.0.2: 1.3.0 / 5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19 (previous-client compatibility retained)
 - Language: 1.1.3 / 592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5 (WoT 2.4.1.0, R13 user Runtime PASS)
-- Box WoT compatibility: 2.4.0.2; MoE: 2.4.1.0 and 2.4.0.2; Language WoT: 2.4.1.0
-- Aslain manufacturing/Creator base: #02
-- XVM: 13.1.0.0093
+- Box CURRENT formal 1.2.0 WoT compatibility: 2.4.1.0; PREVIOUS/legacy published 1.1.0 compatibility: 2.4.0.2; MoE: 2.4.1.0 and 2.4.0.2; Language WoT: 2.4.1.0
+- Box 1.2.0 original manufacturing/Creator base: Aslain 2.4.1.0 #03 (not an install prerequisite); previous Box 1.1.0 original manufacturing provenance #01, compatibility #06
+- XVM: 13.1.0.0098 for current Box 1.2.0; old 13.1.0.0093 is WoT2402 legacy only
 
 Manager 2.1.5 Public exact SHA was explicitly authorized by the project owner for direct publication as an exact-SHA release exception. VirusTotal was not run. This exception applies only to this exact Public SHA and does not change future security policy.
 
-Older Public releases remain repository history/rollback only. channel.json current entries are the installation authority.
-Historical selected-plugin #02 low-risk static rebase: Review 1/2 and synthetic rollback passed for the candidate, but subsequent WoT 2.4.1 real-client Box Runtime failed. **Do not treat the old static result as a Box WoT241 FINAL_LOCK or Runtime PASS.** The formal Public Box 1.1.0/R6 package for WoT 2.4.0.2 is unchanged; refer to the private unified Master/Box workstream for ongoing migration.
+**Release records synchronized:** GitHub engineering manifest + formal decision, Google Drive exact 1.2.0 ZIP, old 1.1.0 Drive folder marked HISTORY/ROLLBACK. The 1.2.0 ZIP is not stored as a binary in this Public GitHub repository; therefore `channel.json` continues serving the verified old WoT2402 1.1.0 asset and must not be represented as an active WoT241 1.2.0 auto-update. No Windows Runner workflow or monitor is active. This index records the formal 1.2.0 lock and links its exact Drive artifact. The earlier #02 failed candidates are historical technical evidence, not substitutes for 1.2.0.
