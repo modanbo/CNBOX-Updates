@@ -46,7 +46,7 @@ jobs:
           if($files.Count -lt 1000){ throw "Too few extracted files: $($files.Count)" }
           $rows=foreach($f in $files){
             $rel=$f.FullName.Substring($base.Length+1).Replace('\','/')
-            $hash=(Get-FileHash -Algorithm SHA256 $f.FullName).Hash.ToLowerInvariant()
+            $hash=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName -ErrorAction Stop).Hash.ToLowerInvariant()
             ($rel+[char]9+$f.Length+[char]9+$hash)
           }
           $rows | Sort-Object | Set-Content -Encoding utf8 evidence\CLEAN04_FULL_SHA256_MANIFEST.tsv
