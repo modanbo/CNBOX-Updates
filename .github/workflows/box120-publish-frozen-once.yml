@@ -1,0 +1,77 @@
+name: Publish Exact Frozen BOX 1.2.0 To Manager
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/box120-publish-frozen-once.yml'
+permissions:
+  contents: write
+concurrency:
+  group: box120-immutable-public-finalize
+  cancel-in-progress: false
+jobs:
+  finalize:
+    if: github.repository == 'modanbo/CNBOX-Updates'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+      - name: Reassemble EXACT original tested Box ZIP and verify 533 member SHA values
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 .release-staging/box120/publish.py
+      - name: Publish ZIP and Manager channel together; remove temporary transfer material
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .release-staging/box120
+          rm .github/workflows/box120-publish-frozen-once.yml
+          git config user.name 'NAJXBox Release Bot'
+          git config user.email 'najxbox-release-bot@users.noreply.github.com'
+          git add -A -- .release-staging/box120 .github/workflows/box120-publish-frozen-once.yml channel.json CURRENT_RELEASE_INDEX.md manifests/2.4.1.0/CNBOX_FUNCTIONAL_R34_R2F9_R6.json payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip
+          git diff --cached --name-status
+          git diff --cached --quiet && { echo 'No staged changes; stop'; exit 1; } || code=$?
+          test "$code" -eq 1
+          git commit -m 'release(box241): publish exact Box 1.2.0 tested payload, 533 path manifest and Manager channel'
+          git -c http.version=HTTP/1.1 push origin HEAD:main
+      - name: Verify published RAW ZIP and Manager current channel (no game tests)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, subprocess, time, urllib.request
+          SHA = '70c756fe280c76dbac2655d5bb1428d635f0e004f52d480dc5acf8fbb9ee1fe9'
+          OLD = 'b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2'
+          commit = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          root='https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/'
+          binary=root+'payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip?verify='+commit
+          channel=root+'channel.json?verify='+commit
+          errors=[]
+          for attempt in range(6):
+            try:
+              with urllib.request.urlopen(urllib.request.Request(binary,headers={'Cache-Control':'no-cache'}),timeout=75) as r:
+                h=hashlib.sha256(); total=0
+                while True:
+                  part=r.read(1024*1024)
+                  if not part:break
+                  total+=len(part);h.update(part)
+              assert total==14585152 and h.hexdigest()==SHA,(total,h.hexdigest())
+              with urllib.request.urlopen(urllib.request.Request(channel,headers={'Cache-Control':'no-cache'}),timeout=30) as r:
+                c=json.load(r)
+              assert len(c['releases'])==4
+              assert c['releases'][0]['wotVersion']=='2.4.1.0'
+              assert c['releases'][0]['displayVersion']=='1.2.0'
+              assert c['releases'][0]['payloadSha256']==SHA
+              assert len(c['releases'][0]['installedFiles'])==533
+              assert any(x['wotVersion']=='2.4.0.2' and x['payloadSha256']==OLD for x in c['releases'])
+              print('BOX_1.2.0_PUBLIC_MANAGER_RELEASE_EXACT_SHA_AND_CHANNEL_PASS',commit)
+              break
+            except Exception as e:
+              errors.append(str(e))
+              if attempt==5:raise RuntimeError('Public raw verification failed '+str(errors))
+              time.sleep(8)
+          PY
