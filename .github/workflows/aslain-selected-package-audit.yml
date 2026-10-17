@@ -44,7 +44,54 @@ jobs:
           current = catalogs[0]
           previous = next((x for x in catalogs[1:] if x.get("wotVersion") == current.get("wotVersion")), None)
           if previous is None:
-              raise SystemExit("No previous catalog for same WoT version")
+              # A new WoT generation may have a preserved #03 installer baseline
+              # but no archived #03 Configuration. Never substitute the old 2.4.0.2 XML.
+              # Emit an honest current-native 48-ID receipt. Independent preserved
+              # installer path/digest diff decides whether a migration was triggered.
+              game = current["wotVersion"]
+              mb = re.search(r'#\s*(\d+)', current.get("aslainVersion", ""))
+              if not mb:
+                  raise SystemExit("Unparseable new-generation build")
+              build = int(mb.group(1))
+              live_root = ET.fromstring((rootdir / game / f"{build:02d}" / "Configuration").read_bytes())
+              by_id = {m.attrib["Id"]: m for m in live_root.iter("Mod") if m.attrib.get("Id")}
+              selected = selection.get("selectedModIds", [])
+              if len(selected) != 48 or len(set(selected)) != 48:
+                  raise SystemExit("Selection must be the locked 48 unique IDs")
+              missing = [k for k in selected if k not in by_id]
+              if missing:
+                  raise SystemExit(f"Current native Configuration missing selected IDs: {missing}")
+              rows = []
+              for mid in selected:
+                  node = by_id[mid]
+                  refs = []
+                  if node.attrib.get("File", "").strip():
+                      refs.append(node.attrib["File"].strip())
+                  for child in list(node):
+                      if child.tag == "Package" and child.attrib.get("File", "").strip():
+                          refs.append(child.attrib["File"].strip())
+                  clean_node = copy.deepcopy(node)
+                  for elem in clean_node.iter():
+                      elem.attrib.pop("InstallOrder", None)
+                      elem.attrib.pop("Order", None)
+                  rows.append({
+                      "modId": mid, "present": True,
+                      "directRefs": list(dict.fromkeys(refs)),
+                      "semanticSha256IgnoringOrder": hashlib.sha256(ET.tostring(clean_node, encoding="utf-8")).hexdigest()
+                  })
+              report = {
+                  "schemaVersion": 2, "wotVersion": game,
+                  "fromAslainVersion": None, "toAslainVersion": current["aslainVersion"],
+                  "selectionSource": selection.get("source"),
+                  "selectedModCount": len(selected), "presentSelectedModCount": len(rows),
+                  "changedSelectedModCount": None, "comparisonMethod": "CURRENT_NATIVE_48_ONLY",
+                  "warning": "Prior same-generation Configuration not archived. No old-generation XML substitution; exact #03 to #04 installed Source/Components and full 10108-file digest comparison is separate engineering evidence.",
+                  "selectedCurrentRecords": rows
+              }
+              out = rootdir / game / f"{build:02d}" / "selected_package_audit.json"
+              out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+              print(json.dumps({"to":current["aslainVersion"], "selection":len(rows), "comparisonMethod":"CURRENT_NATIVE_48_ONLY","output":str(out)}))
+              raise SystemExit(0)
 
           game = current["wotVersion"]
           def build_of(item):
