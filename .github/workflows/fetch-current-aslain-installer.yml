@@ -34,6 +34,11 @@ jobs:
           if len(data)<1000000: raise SystemExit(f"installer too small: {len(data)}")
           pathlib.Path(name).write_bytes(data)
           sha=hashlib.sha256(data).hexdigest()
+          expected_path=pathlib.Path("aslain_catalogs")/game/f"{build:02d}"/"official_installer_sha256.txt"
+          if not expected_path.is_file(): raise SystemExit(f"Missing official installer SHA: {expected_path}")
+          expected_sha=expected_path.read_text(encoding="utf-8").split()[0].lower()
+          if sha!=expected_sha: raise SystemExit(f"Official SHA mismatch expected={expected_sha} actual={sha}")
+          print(f"OFFICIAL_SHA256_PASS: {sha}")
           meta={"aslainVersion":cur["aslainVersion"],"wotVersion":game,"build":f"{build:02d}","fileName":name,"sourceUrl":url,"finalUrl":final,"contentType":ctype,"bytes":len(data),"sha256":sha}
           pathlib.Path("installer_metadata.json").write_text(json.dumps(meta,indent=2)+"\n",encoding="utf-8")
           print(json.dumps(meta,indent=2))
@@ -46,4 +51,4 @@ jobs:
             Aslains_WoT_Modpack_Installer_v.*.exe
             installer_metadata.json
           if-no-files-found: error
-          retention-days: 1
+          retention-days: 5
