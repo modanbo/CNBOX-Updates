@@ -1,0 +1,64 @@
+name: CNBOX Aslain #04 full installer evidence
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/aslain2410-04-clean-extract.yml"
+  workflow_dispatch:
+jobs:
+  clean:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Obtain verified official installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force -Path work,out,tool,evidence | Out-Null
+          $exe='work\Aslains_WoT_Modpack_Installer_v.2.4.1.0_04.exe'
+          Invoke-WebRequest -Uri 'https://filez.aslain.com/Aslains_WoT_Modpack_Installer_v.2.4.1.0_04.exe' -OutFile $exe
+          $expected=(Get-Content 'aslain_catalogs\2.4.1.0\04\official_installer_sha256.txt' -Raw).Trim().Split(' ')[0].ToLowerInvariant()
+          $actual=(Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
+          if($expected -ne $actual){ throw "SHA mismatch expected=$expected actual=$actual" }
+          ("SHA256="+$actual+" SIZE="+(Get-Item $exe).Length) | Set-Content -Encoding utf8 evidence\INSTALLER_SHA256_SIZE.txt
+      - name: Download pinned official-history innounp
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $pinned='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/$pinned/innounp-2/bin/innounp-2.zip" -OutFile tool\innounp-2.zip
+          ("COMMIT="+$pinned+" ZIP_SHA256="+(Get-FileHash -Algorithm SHA256 tool\innounp-2.zip).Hash.ToLowerInvariant()) | Set-Content -Encoding utf8 evidence\EXTRACTOR_PROVENANCE.txt
+          Expand-Archive tool\innounp-2.zip -DestinationPath tool\innounp -Force
+          $iu=Get-ChildItem tool\innounp -Recurse -Filter innounp.exe | Select-Object -First 1
+          if(-not $iu){ throw 'Missing innounp' }
+          $iu.FullName | Set-Content -Encoding ascii tool\innounp_path.txt
+      - name: Full clean decomposition and recursive hash manifest
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $iu=(Get-Content tool\innounp_path.txt -Raw).Trim()
+          & $iu -h -o -b -y -q -a -m -x '-dout' 'work\Aslains_WoT_Modpack_Installer_v.2.4.1.0_04.exe' 2>&1 | Out-File -Encoding utf8 evidence\INNOUNP_EXTRACT_LOG.txt
+          if($LASTEXITCODE -ne 0){ throw "innounp failed: $LASTEXITCODE" }
+          $base=(Resolve-Path out).Path
+          $files=@(Get-ChildItem out -Recurse -File)
+          if($files.Count -lt 1000){ throw "Too few extracted files: $($files.Count)" }
+          $rows=foreach($f in $files){
+            $rel=$f.FullName.Substring($base.Length+1).Replace('\','/')
+            $hash=(Get-FileHash -Algorithm SHA256 $f.FullName).Hash.ToLowerInvariant()
+            ($rel+[char]9+$f.Length+[char]9+$hash)
+          }
+          $rows | Sort-Object | Set-Content -Encoding utf8 evidence\CLEAN04_FULL_SHA256_MANIFEST.tsv
+          ("ExtractedCount="+$files.Count) | Set-Content -Encoding ascii evidence\CLEAN04_INTAKE_SUMMARY.txt
+          $rows | Where-Object {$_ -match '(?i)install_script\.iss|xvm_13\.1|openwg\.common|battlevehiclemarkers|modmenu|modssettingsbridge|gameface|damage.sticker|hangman|playerspanel'} | Set-Content -Encoding utf8 evidence\CLEAN04_SELECTED_SHARED_OWNER_PATHS.tsv
+          $iss=Get-ChildItem out -Recurse -Filter install_script.iss | Select-Object -First 1
+          if($iss){Copy-Item $iss.FullName evidence\install_script.iss}
+      - name: Save full delta evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Aslain2410-04-full-decomposition
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
