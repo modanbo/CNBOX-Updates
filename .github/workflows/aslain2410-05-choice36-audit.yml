@@ -1,0 +1,97 @@
+name: NA-BOX Aslain #05 Choice36 native selection audit TEST ONLY
+on:
+  push:
+    branches:
+      - engineering/aslain-2410-05-choice36-intake-20261017
+    paths:
+      - .github/workflows/aslain2410-05-choice36-audit.yml
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare all 36 exact Choice IDs to #04 and #05 native XML
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python3 - <<'PY'
+          import copy, hashlib, json, urllib.request, xml.etree.ElementTree as ET
+          from pathlib import Path
+          ids = """iconset_original
+          Camera_zoomout
+          Camera_zoomout_arcade
+          Camera_zoomout_arcade_300
+          Camera_zoomout_arcadeTactical
+          Camera_zoomout_arcadeTactical_300
+          Camera_zoomout_strategic
+          Camera_zoomout_strategic_300
+          AimHelpingMods_AimInfo_PenetrationIndicator_armor_penetration_calculator
+          AimHelpingMods_AimInfo_PenetrationIndicator_armor_penetration_calculator_v1
+          Non_XVM_6th_Senses_CustomSixthSense
+          GFXenhancers_Hangar_FPS_Uncapper
+          GFXenhancers_FPS_Optimizer
+          GFXenhancers_LimpidStickers
+          MapEnviromentMods_Fog_remover_fog
+          MapEnviromentMods_Fog_remover_glare
+          skinpacks_hitzones_Esther
+          various_Custom_UI_Scale
+          XVM_panels_remove_ClanIcon
+          XVM_panels_HideFlags
+          XVM_panels_HideXVMIcons
+          XVM_minimap
+          XVM_minimap_iconScale_1
+          XVM_minimap_zoom_size_very_big
+          XVM_minimap_zoom_position_right_bottom_corner
+          XVM_minimap_zoom_hotkey_ctrl
+          XVM_colors_original
+          XVM_xvmstats_ratingscale_Aslains_six
+          XVM_hangar_XVM_clock_24
+          XVM_hangar_XVM_clock_position_right
+          XVM_hangar_XVM_clock_colorize
+          XVM_hangar_XVM_clock_removebackground
+          XVM_addons_autologin
+          XVM_addons_pingservers
+          XVM_addons_pingservers_position_default
+          XVM_addons_serverInfo""".split()
+          assert len(ids)==36 and len(set(ids))==36
+          p4=Path("aslain_catalogs/2.4.1.0/04/Configuration")
+          old_bytes=p4.read_bytes()
+          req=urllib.request.Request("https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration",headers={"User-Agent":"NA-BOX-Choice36-audit/1.0","Cache-Control":"no-cache"})
+          new_bytes=urllib.request.urlopen(req,timeout=100).read()
+          expected="2a172cd418eb18fd5efa7bb2bccee2e1931a7694874295bb75889834fecf46c4"
+          assert hashlib.sha256(new_bytes).hexdigest()==expected, "CURRENT_NATIVE_CONFIGURATION_SHA_MISMATCH"
+          old=ET.fromstring(old_bytes);new=ET.fromstring(new_bytes)
+          assert "#04" in old.get("ContentVersion","")
+          assert "#05" in new.get("ContentVersion","")
+          def by_id(root):
+            return {x.get("Id"):x for x in root.iter("Mod") if x.get("Id")}
+          a=by_id(old);b=by_id(new)
+          def direct(x):
+            if x is None:return None
+            attrs={k:v for k,v in x.attrib.items() if k not in ("InstallOrder","Order","Installs","SizeKb")}
+            refs=([x.get("File")] if x.get("File") else [])+[c.get("File") for c in x if c.tag=="Package" and c.get("File")]
+            actions=[{k:v for k,v in c.attrib.items() if k!="Order"} for c in x if c.tag=="Action"]
+            children=[c.get("Id") for c in x if c.tag=="Mod"]
+            packages=[{k:v for k,v in c.attrib.items() if k not in ("Order","SizeKb")} for c in x if c.tag=="Package"]
+            return {"attrs":attrs,"refs":refs,"actions":actions,"packages":packages,"childModIds":children}
+          rows=[]
+          for mid in ids:
+            x=direct(a.get(mid));y=direct(b.get(mid))
+            rows.append({"modId":mid,"foundOld":x is not None,"foundNew":y is not None,"selectedNodeChanged":x!=y,"old":x,"new":y})
+          missing=[x["modId"] for x in rows if not x["foundOld"] or not x["foundNew"]]
+          if missing: raise SystemExit("MISSING_SELECTED_NODES "+repr(missing))
+          report={"target":"2.4.1.0 #05","from":"2.4.1.0 #04","choiceFileSha256":"aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f","selectionCount":len(ids),"configuration05Sha256":expected,"configuration04Sha256":hashlib.sha256(old_bytes).hexdigest(),"selectedDirectChanged":[r["modId"] for r in rows if r["selectedNodeChanged"]],"selectedDirectUnchangedCount":sum(not x["selectedNodeChanged"] for x in rows),"rows":rows,"status":"CURRENT_NATIVE_36_ID_DIRECT_NODE_COMPARE_PASS"}
+          Path("evidence/Choice36_Selected_04_vs_05_Native_Audit.json").write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n")
+          Path("evidence/Selection_Source.json").write_text(json.dumps({"saved":"2026-10-17 22:36:57","sha256":report["choiceFileSha256"],"selectedModIds":ids},indent=2,ensure_ascii=False)+"\n")
+          print(json.dumps({"selected":len(ids),"changed":report["selectedDirectChanged"],"unchanged":report["selectedDirectUnchangedCount"]}))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NA-BOX-ASLAIN05-Choice36-NATIVE-AUDIT-TESTONLY
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
