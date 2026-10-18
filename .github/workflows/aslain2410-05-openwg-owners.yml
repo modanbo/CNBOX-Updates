@@ -1,0 +1,84 @@
+name: NA-BOX Aslain05 OpenWG logical-owner forensic TEST ONLY
+on:
+  push:
+    branches: [engineering/aslain-2410-05-choice36-intake-20261017]
+    paths: [.github/workflows/aslain2410-05-openwg-owners.yml]
+permissions:
+  contents: read
+jobs:
+  owners:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify #05 clean source and unpacker
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force -Path work,tool,evidence,out | Out-Null
+          $exe='work/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe'
+          Invoke-WebRequest 'https://filez.aslain.com/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe' -OutFile $exe -TimeoutSec 240
+          $sha=(Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
+          if($sha -ne '165d219d98f40c6f5f78307045f1cbde51417ccabb7c142049270dc91e7cf9e4'){throw "WRONG_SOURCE_SHA $sha"}
+          $commit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest "https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/$commit/innounp-2/bin/innounp-2.zip" -OutFile tool/innounp-2.zip -TimeoutSec 120
+          $h=(Get-FileHash -Algorithm SHA256 tool/innounp-2.zip).Hash.ToLowerInvariant()
+          if($h -ne 'f2f037fdbc63de31248efae9ccb294398d160dc0cbad5f36d14c2f159e17bbf5'){throw "WRONG_EXTRACTOR_SHA $h"}
+          Expand-Archive tool/innounp-2.zip -DestinationPath tool/innounp -Force
+          $iu=Get-ChildItem tool/innounp -Recurse -Filter innounp.exe | Select-Object -First 1
+          if(-not $iu){throw "EXTRACTOR_NOT_FOUND"}
+          $iu.FullName | Set-Content -Encoding ascii tool/innounp_path.txt
+          "Official EXE_SHA=$sha, extracted using pinned $commit" | Set-Content -Encoding ascii evidence/provenance.txt
+      - name: Extract actual four OpenWG packages
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $iu=(Get-Content tool/innounp_path.txt -Raw).Trim()
+          $exe=(Resolve-Path work/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe).Path
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence/extract.log
+          if($LASTEXITCODE -ne 0){throw "INNOUNP_FAILED"}
+          @'
+          import pathlib, zipfile, hashlib, json, collections, xml.etree.ElementTree as ET
+          root=pathlib.Path("out")
+          pattern="net.openwg.fix."
+          files=sorted(p for p in root.rglob("*.wotmod") if p.name.lower().startswith(pattern) and any(x in p.name.lower() for x in ("battleresultscache","battleresultsreplays")))
+          print("MATCHED",len(files))
+          if len(files)<8: raise SystemExit("MISSING_EXPECTED_OFFICIAL_4xSOURCES")
+          entries=[]
+          for p in files:
+            bs=p.read_bytes()
+            z=zipfile.ZipFile(p);inner={}
+            for i in z.infolist():
+              if i.is_dir():continue
+              x=z.read(i)
+              item={"sha256":hashlib.sha256(x).hexdigest(),"bytes":len(x)}
+              if i.filename.lower().endswith("meta.xml"):
+                try:
+                  rt=ET.fromstring(x)
+                  item["xml_root_attrs"]=rt.attrib
+                  item["xml_name"]=rt.findtext("id") or rt.findtext("name")
+                  item["xml_version"]=rt.findtext("version")
+                  item["xml_raw_excerpt"]=x.decode("utf-8","replace")[:1200]
+                except Exception as e: item["xml_parse_error"]=str(e)
+              inner[i.filename.replace("\\","/")]=item
+            entries.append({"sourcePath":str(p).replace("\\","/"),"sourceSha256":hashlib.sha256(bs).hexdigest(),"packageBytes":len(bs),"internal":inner})
+          providers=collections.defaultdict(list)
+          for rec in entries:
+            for fn,meta in rec["internal"].items():
+              if fn.lower().endswith((".pyc",".pyo",".py")):
+                providers[fn.lower()].append({"path":rec["sourcePath"],"hash":meta["sha256"]})
+          conflicts={k:v for k,v in providers.items() if len(set(x["hash"] for x in v))>1 and len(v)>1}
+          logical={k:v for k,v in providers.items() if len(v)>1}
+          report={"scope":"SOURCE ARCHIVES IN SAME CLEAN ASLAIN #05 INSTALLER; NOT PROOF OF CLIENT LOAD","source":"verified official 2.4.1.0 #05","total_matching":len(entries),"sourceWotmods":entries,"sharedScriptPaths":logical,"sharedDifferingScriptPaths":conflicts,"allPackagesFound":len(files)>=8,"runtimeNotTested":True,"doNotAutoDeletePackages":True}
+          pathlib.Path("evidence/ASLAIN05_OPENWG_NATIVE_LOGICAL_OWNER_DIAGNOSTIC.json").write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf8")
+          print("WOTMOD SOURCES:",[(x["sourcePath"],len(x["internal"])) for x in entries])
+          print("SHARED_SCRIPT_PATHS:",len(logical),"DIFFERENT_SHA:",len(conflicts))
+          '@ | Set-Content -Encoding utf8 tool/audit.py
+          python tool/audit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: NA-BOX-Aslain05-FreshInstall-OpenWG-Owner-Audit-TESTONLY
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
