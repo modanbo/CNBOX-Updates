@@ -1,0 +1,94 @@
+name: NA-BOX Aslain #05 selected packages nested audit TEST ONLY
+on:
+  push:
+    branches:
+      - engineering/aslain-2410-05-choice36-intake-20261017
+    paths:
+      - .github/workflows/aslain2410-05-selected-nested-audit.yml
+permissions:
+  contents: read
+jobs:
+  selected:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit all changed Choice36 package references recursively
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, BadZipFile
+          from xml.etree import ElementTree as ET
+          from hashlib import sha256
+          from urllib.request import urlopen, Request
+          from urllib.parse import urljoin
+          import json,io
+          old=ET.fromstring(Path("aslain_catalogs/2.4.1.0/04/Configuration").read_bytes())
+          uri="https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration"
+          new_bytes=urlopen(Request(uri,headers={"User-Agent":"NA-BOX-Choice36-Selected-Diff/1.0","Cache-Control":"no-cache"}),timeout=120).read()
+          assert sha256(new_bytes).hexdigest()=="2a172cd418eb18fd5efa7bb2bccee2e1931a7694874295bb75889834fecf46c4"
+          new=ET.fromstring(new_bytes)
+          oldby={x.get("Id"):x for x in old.iter("Mod") if x.get("Id")}
+          newby={x.get("Id"):x for x in new.iter("Mod") if x.get("Id")}
+          ids="""Camera_zoomout
+          AimHelpingMods_AimInfo_PenetrationIndicator_armor_penetration_calculator
+          Non_XVM_6th_Senses_CustomSixthSense
+          GFXenhancers_LimpidStickers
+          various_Custom_UI_Scale""".split()
+          def refs(x):
+            return list(dict.fromkeys(([x.get("File")] if x.get("File") else [])+[y.get("File") for y in x if y.tag=="Package" and y.get("File")]))
+          cache={}
+          def fetch(ref):
+            if ref not in cache:
+              url=urljoin(uri,ref)
+              data=urlopen(Request(url,headers={"User-Agent":"NA-BOX-Selected-Package-Review/1.0"}),timeout=150).read()
+              cache[ref]=(url,data)
+            return cache[ref]
+          def flatten(data,prefix="",depth=0):
+            try:z=ZipFile(io.BytesIO(data))
+            except BadZipFile:return {}
+            ans={}
+            for info in z.infolist():
+              if info.is_dir():continue
+              data1=z.read(info)
+              key=prefix+info.filename.replace("\\","/")
+              ans[key]={"sha256":sha256(data1).hexdigest(),"bytes":len(data1)}
+              if depth < 3 and (key.lower().endswith(".wotmod") or key.lower().endswith(".zip")) and len(data1)<35000000:
+                ans.update(flatten(data1,key+"!",depth+1))
+            return ans
+          rows=[]
+          for mid in ids:
+            a,b=oldby[mid],newby[mid];prev=refs(a);cur=refs(b)
+            rec=[]
+            for side,li in [("old",prev),("new",cur)]:
+              for ref in li:
+                url,data=fetch(ref)
+                entries=flatten(data)
+                rec.append({"side":side,"ref":ref,"url":url,"sha256":sha256(data).hexdigest(),"bytes":len(data),"entries":entries})
+            def combined(tag):
+              dest={}
+              for t in rec:
+                if t["side"]==tag:
+                  for p,m in t["entries"].items():dest[p]=m
+              return dest
+            o,n=combined("old"),combined("new")
+            added=sorted(set(n)-set(o));removed=sorted(set(o)-set(n))
+            changed=sorted(k for k in set(n)&set(o) if o[k]["sha256"]!=n[k]["sha256"])
+            common=sum(o[k]["sha256"]==n[k]["sha256"] for k in set(o)&set(n))
+            rows.append({"selectedId":mid,"oldRefs":prev,"newRefs":cur,
+              "archiveSummary":[{"side":x["side"],"ref":x["ref"],"sha256":x["sha256"],"bytes":x["bytes"],"memberCount":len(x["entries"])} for x in rec],
+              "nestedDiff":{"added":added,"removed":removed,"changed":changed,"identicalCount":common},
+              "changedMemberSha":[{"path":k,"old":o[k],"new":n[k]} for k in changed]})
+          p=Path("evidence/Choice36_Five_Changed_Packages_Nested_Diff.json")
+          p.write_text(json.dumps({"target":"2.4.1.0 #05","source":"official 04 and 05 XML","selectedModCount":36,"changedSelectedModCount":len(rows),"rows":rows,"status":"RECURSIVE_CHANGED_SELECTED_PACKAGE_HASHED"},indent=2,ensure_ascii=False)+"\n",encoding="utf8")
+          print(json.dumps({"selectedChanged":len(rows),"summary":[{"modId":r["selectedId"],"added":len(r["nestedDiff"]["added"]),"removed":len(r["nestedDiff"]["removed"]),"changed":len(r["nestedDiff"]["changed"])} for r in rows]}))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NA-BOX-ASLAIN05-Choice36-PACKAGE-RECURSIVE-TESTONLY
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
