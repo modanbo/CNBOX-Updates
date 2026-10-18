@@ -1,0 +1,92 @@
+name: NA-BOX Aslain #05 native intake TEST ONLY
+on:
+  push:
+    branches:
+      - engineering/aslain-2410-05-choice36-intake-20261017
+    paths:
+      - .github/workflows/aslain2410-05-native-intake.yml
+permissions:
+  contents: read
+jobs:
+  clean_native:
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify official Aslain 2.4.1.0 #05
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          New-Item -ItemType Directory -Force -Path work,tool,evidence,out | Out-Null
+          $exe = 'work/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe'
+          $uri = 'https://filez.aslain.com/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe'
+          Invoke-WebRequest -Uri $uri -OutFile $exe -TimeoutSec 240
+          $sha = (Get-FileHash -Algorithm SHA256 $exe).Hash.ToLowerInvariant()
+          $expected = '165d219d98f40c6f5f78307045f1cbde51417ccabb7c142049270dc91e7cf9e4'
+          if ($sha -ne $expected) { throw "OFFICIAL_INSTALLER_SHA_MISMATCH expected=$expected actual=$sha" }
+          if ((Get-Item $exe).Length -lt 10000000) { throw 'Installer unexpectedly small' }
+          "SHA256=$sha SIZE=$((Get-Item $exe).Length) URL=$uri" | Set-Content -Encoding ascii evidence/INSTALLER_SHA256_SIZE.txt
+          'OFFICIAL_SOURCE_SHA_PASS' | Set-Content -Encoding ascii evidence/INSTALLER_GATE.txt
+      - name: Fetch exact native Configuration
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $uri = 'https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration'
+          Invoke-WebRequest -Uri $uri -OutFile evidence/Configuration -TimeoutSec 120
+          $raw = Get-Content evidence/Configuration -Raw -Encoding UTF8
+          if ($raw -notmatch '2\.4\.1\.0\s*#05') { throw 'CONFIGURATION_CONTENTVERSION_NOT_05' }
+          $hash = (Get-FileHash -Algorithm SHA256 evidence/Configuration).Hash.ToLowerInvariant()
+          "ConfigurationSha256=$hash" | Set-Content -Encoding ascii evidence/CONFIGURATION_SHA256.txt
+      - name: Download pinned native Inno unpacker
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $commit = '6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest -Uri "https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/$commit/innounp-2/bin/innounp-2.zip" -OutFile tool/innounp-2.zip -TimeoutSec 120
+          $h = (Get-FileHash -Algorithm SHA256 tool/innounp-2.zip).Hash.ToLowerInvariant()
+          $expected = 'f2f037fdbc63de31248efae9ccb294398d160dc0cbad5f36d14c2f159e17bbf5'
+          if ($h -ne $expected) { throw "PINNED_INNOUNP_SHA_MISMATCH $h" }
+          Expand-Archive tool/innounp-2.zip -DestinationPath tool/innounp -Force
+          $iu = Get-ChildItem tool/innounp -Recurse -Filter innounp.exe | Select-Object -First 1
+          if (-not $iu) { throw 'MISSING_INNOUNP_EXE' }
+          $iu.FullName | Set-Content -Encoding ascii tool/innounp_path.txt
+          "COMMIT=$commit SHA256=$h" | Set-Content -Encoding ascii evidence/EXTRACTOR_PROVENANCE.txt
+      - name: Extract entire clean installer and hash all files
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $iu = (Get-Content tool/innounp_path.txt -Raw).Trim()
+          $exe = (Resolve-Path work/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe).Path
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence/INNOUNP_EXTRACT_LOG.txt
+          if ($LASTEXITCODE -ne 0) { throw "INNOUNP_EXIT_$LASTEXITCODE" }
+          $base = (Resolve-Path out).Path
+          $all = @(Get-ChildItem out -File -Recurse)
+          if ($all.Count -lt 1000) { throw "TOO_FEW_EXTRACTED_FILES $($all.Count)" }
+          $rows = foreach ($f in $all) {
+            $rel = $f.FullName.Substring($base.Length + 1).Replace('\','/')
+            $h = (Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+            ($rel + [char]9 + $f.Length + [char]9 + $h)
+          }
+          $rows | Sort-Object | Set-Content -Encoding utf8 evidence/CLEAN05_FULL_SHA256_MANIFEST.tsv
+          $rows | Where-Object { $_ -match '(?i)install_script\.iss|xvm_13\.1|openwg\.common|battlevehiclemarkers|modmenu|modssettingsbridge|gameface|hangman|player.*panel|prestige|battleatlas' } | Set-Content -Encoding utf8 evidence/CLEAN05_SELECTED_SHARED_OWNER_PATHS.tsv
+          $iss = Get-ChildItem out -Recurse -Filter install_script.iss | Select-Object -First 1
+          if (-not $iss) { throw 'INSTALL_SCRIPT_MISSING' }
+          Copy-Item -LiteralPath $iss.FullName -Destination evidence/install_script.iss
+          "ExtractedCount=$($all.Count)" | Set-Content -Encoding ascii evidence/CLEAN05_INTAKE_SUMMARY.txt
+          'PASS_SHA_NATIVE_COMPLETE' | Set-Content -Encoding ascii evidence/NATIVE_STATIC_GATE.txt
+      - name: Publish engineering evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NA-BOX-ASLAIN2410-05-CLEAN-NATIVE-TESTONLY
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
+      - name: Publish verified official EXE for controlled local audit
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NA-BOX-ASLAIN2410-05-VERIFIED-INSTALLER-TESTONLY
+          path: work/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe
+          if-no-files-found: error
+          retention-days: 5
