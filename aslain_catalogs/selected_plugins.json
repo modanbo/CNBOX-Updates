@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
   "source": {
-    "type": "GoogleDriveChoicePreset",
-    "drivePath": "/Google Drive/WOT/Choice.wotpreset",
-    "savedAt": "2026-09-25 22:07:56",
-    "sha256": "d0db0f719a7cba5d309da47aa2e6797e66582ab69f5d8d7c92dbdb7b3b6a63ca",
-    "bytes": 3534
+    "type": "UserChoice36ExactArchive",
+    "filename": "Choice(1).wotpreset",
+    "savedAt": "2026-10-17 22:36:57",
+    "sha256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
+    "bytes": 2622,
+    "reference": "NA-BOX 00_STATE/CURRENT_WORKSTREAM_2410_ASLAIN05_CHOICE36.md; Drive source archive ID 1vrCZDrbDP-EZ0bwpVwP8jNlNNa1_t0Ae"
   },
   "policy": {
     "noAdHocPluginSelection": true,
@@ -27,30 +28,18 @@
     "AimHelpingMods_AimInfo_PenetrationIndicator_armor_penetration_calculator_v1",
     "Non_XVM_6th_Senses_CustomSixthSense",
     "GFXenhancers_Hangar_FPS_Uncapper",
+    "GFXenhancers_FPS_Optimizer",
     "GFXenhancers_LimpidStickers",
     "MapEnviromentMods_Fog_remover_fog",
     "MapEnviromentMods_Fog_remover_glare",
     "skinpacks_hitzones_Esther",
-    "minimapMods_centered_minimap",
-    "minimapMods_images_Alt_YaYa_tactical",
     "various_Custom_UI_Scale",
-    "XVM_panels_DefaultXVM",
-    "XVM_panels_remove_ClassIcon",
     "XVM_panels_remove_ClanIcon",
     "XVM_panels_HideFlags",
     "XVM_panels_HideXVMIcons",
     "XVM_minimap",
-    "XVM_minimap_circles",
-    "XVM_minimap_circles_circle",
-    "XVM_minimap_circles_drawingRange",
-    "XVM_minimap_lines",
-    "XVM_minimap_lines_camera_yellow",
-    "XVM_minimap_lines_traverse",
-    "XVM_minimap_labels",
-    "XVM_minimap_labels_vehiclenames",
-    "XVM_minimap_labels_vehiclenames_full",
     "XVM_minimap_iconScale_1",
-    "XVM_minimap_zoom_size_big",
+    "XVM_minimap_zoom_size_very_big",
     "XVM_minimap_zoom_position_right_bottom_corner",
     "XVM_minimap_zoom_hotkey_ctrl",
     "XVM_colors_original",
@@ -69,9 +58,21 @@
     "XVM_*": "Selection/config surface only; Box owner decisions still follow CURRENT/manifest/worklog."
   },
   "lastAuditRequested": {
-    "dateLocal": "2026-10-12",
-    "target": "2.4.0.2 #05",
-    "selectionUnchanged": true,
-    "method": "catalog delta + recursive selected-package fingerprint; no ad-hoc plugins"
+    "dateLocal": "2026-10-19",
+    "target": "2.4.1.0 #06",
+    "selectionUnchangedFrom": "2026-10-17 Choice36",
+    "status": "AUDIT_IN_PROGRESS",
+    "method": "native ContentVersion + complete installer selected component RPN + source hash diff; no ad hoc plugin selection"
+  },
+  "previousSelection": {
+    "source": {
+      "type": "GoogleDriveChoicePreset",
+      "drivePath": "/Google Drive/WOT/Choice.wotpreset",
+      "savedAt": "2026-09-25 22:07:56",
+      "sha256": "d0db0f719a7cba5d309da47aa2e6797e66582ab69f5d8d7c92dbdb7b3b6a63ca",
+      "bytes": 3534
+    },
+    "count": 48,
+    "role": "HISTORY_ONLY_DO_NOT_USE_FOR_ASLAIN2410_06"
   }
 }
