@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - ".github/workflows/fetch-current-aslain-installer.yml"
+      - "aslain_catalogs/index.json"
   workflow_dispatch:
 jobs:
   fetch:
