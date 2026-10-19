@@ -1,0 +1,50 @@
+name: CNBOX T03 Choice36 native configuration intake
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/cnbox-t03-choice36-native-config-intake.yml"
+  workflow_dispatch:
+jobs:
+  native:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify current official installer and extract exact source files
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force -Path work,tool,results,out | Out-Null
+          $name='Aslains_WoT_Modpack_Installer_v.2.4.1.0_06.exe'
+          $inputExe=Join-Path (Get-Location).Path ('work/'+$name)
+          Invoke-WebRequest -Uri ('https://filez.aslain.com/'+$name) -OutFile $inputExe
+          $wanted=(Get-Content 'aslain_catalogs/2.4.1.0/06/official_installer_sha256.txt' -Raw).Trim().Split(' ')[0].ToLowerInvariant()
+          $actual=(Get-FileHash -Algorithm SHA256 -LiteralPath $inputExe).Hash.ToLowerInvariant()
+          if($actual -ne $wanted){throw 'Official installer SHA mismatch'}
+          $pinned='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest -Uri ('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$pinned+'/innounp-2/bin/innounp-2.zip') -OutFile tool/innounp-2.zip
+          Expand-Archive tool/innounp-2.zip -DestinationPath tool/innounp -Force
+          $iu=(Get-ChildItem tool/innounp -Recurse -Filter innounp.exe | Select-Object -First 1).FullName
+          if(-not $iu){throw 'Pinned extractor absent'}
+          & $iu -h -o -b -y -q -a -m -x '-dout' $inputExe 2>&1 | Out-File -Encoding utf8 results/EXTRACTION.txt
+          if($LASTEXITCODE -ne 0){throw 'Native extraction failed'}
+          $names=@('minimap.xc','minimapCircles.xc','minimapLabels.xc','minimapLabelsAlt.xc','minimapLines.xc')
+          $data=@()
+          foreach($n in $names){
+            $matches=@(Get-ChildItem out -Recurse -File -Filter $n | Where-Object {$_.FullName.Replace('\','/').ToLowerInvariant().Contains('/res_mods/configs/xvm/aslain/')})
+            if($matches.Count -ne 1){throw "Expected exactly one native source $n; found $($matches.Count)"}
+            Copy-Item -LiteralPath $matches[0].FullName -Destination ('results/'+$n) -Force
+            $data+=($n+' '+(Get-FileHash -Algorithm SHA256 -LiteralPath $matches[0].FullName).Hash.ToLowerInvariant())
+          }
+          $data | Set-Content -Encoding utf8 results/NATIVE_CONFIG_SOURCE_SHAS.tsv
+          ('Aslain #06 official installer '+$actual) | Set-Content -Encoding utf8 results/INSTALLER_IDENTITY.txt
+      - name: Preserve exact native config artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: CNBOX-T03-Choice36-native-minimap-config-reference
+          path: results/
+          if-no-files-found: error
+          retention-days: 5
