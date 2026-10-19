@@ -67,6 +67,89 @@ jobs:
           $iss=@(Get-ChildItem out -Recurse -File -Filter 'install_script.iss')
           if($iss.Count -gt 0){ Copy-Item -LiteralPath $iss[0].FullName -Destination evidence\install_script.iss }
           else { throw 'No install_script.iss found' }
+      - name: Independent previous-native shared-owner binary comparison
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $oldExe='work\Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe'
+          Invoke-WebRequest -Uri 'https://filez.aslain.com/Aslains_WoT_Modpack_Installer_v.2.4.1.0_05.exe' -OutFile $oldExe
+          $oldHash=(Get-FileHash -Algorithm SHA256 -LiteralPath $oldExe).Hash.ToLowerInvariant()
+          if($oldHash -ne '165d219d98f40c6f5f78307045f1cbde51417ccabb7c142049270dc91e7cf9e4') { throw 'Native previous #05 official SHA mismatch' }
+          New-Item -ItemType Directory -Force -Path previous_out | Out-Null
+          $iu=(Get-Content tool\innounp_path.txt -Raw).Trim()
+          & $iu -h -o -b -y -q -a -m -x '-dprevious_out' $oldExe 2>&1 | Out-File -Encoding utf8 evidence\INNOUNP_05_EXTRACT_LOG.txt
+          if($LASTEXITCODE -ne 0){ throw ('Previous #05 extraction failed: '+$LASTEXITCODE) }
+          @'
+          import hashlib,json,zipfile,pathlib,re
+          h=lambda d:hashlib.sha256(d).hexdigest()
+          def collect(root,pattern):
+            files=sorted((p for p in pathlib.Path(root).rglob('*') if p.is_file() and re.search(pattern,p.name,re.I)),key=str)
+            rec={}
+            for p in files:
+              sh=h(p.read_bytes())
+              rec.setdefault(sh,[]).append(str(p.relative_to(root)).replace('\\','/'))
+            return files,rec
+          old,om=collect('previous_out',r'^aslain\.modmenu_2\.1\.04(?:,\d+)?\.wotmod        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-current-native-extraction
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
+)
+          new,nm=collect('out',r'^aslain\.modmenu_2\.1\.05(?:,\d+)?\.wotmod        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-current-native-extraction
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
+)
+          assert old and new,(len(old),len(new))
+          def inner(p):
+            with zipfile.ZipFile(p) as z:return {x.filename:h(z.read(x)) for x in z.infolist() if not x.is_dir()}
+          def perhash(paths):
+            return {h(p.read_bytes()):inner(p) for p in paths if zipfile.is_zipfile(p)}
+          a,b=perhash(old),perhash(new)
+          oldinner=next(iter(a.values())) if len(a)==1 else {}
+          newinner=next(iter(b.values())) if len(b)==1 else {}
+          allpaths=sorted(set(oldinner)|set(newinner))
+          newkeys=[k for k in allpaths if k not in oldinner]
+          gone=[k for k in allpaths if k not in newinner]
+          changed=[k for k in allpaths if k in oldinner and k in newinner and oldinner[k]!=newinner[k]]
+          owners={}
+          for pattern in [r'^com\.modxvm\.xvm_13\.1\.0\.0098\.wotmod        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-current-native-extraction
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
+,r'^net\.openwg\.common_2\.8\.4\.0000(?:,\d+)?\.wotmod        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-current-native-extraction
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
+,r'^battleVehicleMarkersApp\.swf        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-current-native-extraction
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
+]:
+            _,oo=collect('previous_out',pattern)
+            _,nn=collect('out',pattern)
+            owners[pattern]={'old':oo,'new':nn,'byteIdentical':sorted(oo)==sorted(nn),'foundBoth':bool(oo and nn)}
+          result={'oldModMenu':om,'newModMenu':nm,'distinctOldHashCount':len(om),'distinctNewHashCount':len(nm),'innerOldEntries':len(oldinner),'innerNewEntries':len(newinner),'innerAdded':newkeys,'innerRemoved':gone,'innerModified':changed,'nativeCriticalOwner':owners}
+          pathlib.Path('evidence/MODMENU_SHARED_OWNER_INDEPENDENT_DEEP_AUDIT.json').write_text(json.dumps(result,indent=2)+'\n')
+          assert len(a)==len(b)==1,'ModMenu unresolved multi-version variants'
+          assert all(v['byteIdentical'] and v['foundBoth'] for v in owners.values()),'critical XVM/OpenWG/marker owner changed'
+          print('SELECTED_SHARED_OWNER_AUDIT_PASS ModMenu binary delta, XVM/OpenWG/marker exact identity',len(changed),'inner changed')
+          '@ | Set-Content -Encoding utf8 work\compare_owners.py
+          python work\compare_owners.py
       - name: Preserve full native evidence for independent delta audit
         if: always()
         uses: actions/upload-artifact@v4
