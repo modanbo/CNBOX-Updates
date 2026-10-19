@@ -1,0 +1,77 @@
+name: CNBOX Current Aslain Native Audit Evidence
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/cnbox-current-aslain-native-audit.yml"
+  workflow_dispatch:
+jobs:
+  clean:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve current native catalog and verified upstream installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          New-Item -ItemType Directory -Force -Path work,out,tool,evidence | Out-Null
+          $latest=(Get-Content 'aslain_catalogs/index.json' -Raw | ConvertFrom-Json).catalogs[0]
+          $game=$latest.wotVersion
+          $build=[int]([regex]::Match($latest.aslainVersion,'#\s*(\d+)').Groups[1].Value)
+          $name=('Aslains_WoT_Modpack_Installer_v.{0}_{1:D2}.exe' -f $game,$build)
+          $url='https://filez.aslain.com/'+$name
+          $expectedPath=('aslain_catalogs\{0}\{1:D2}\official_installer_sha256.txt' -f $game,$build)
+          $configPath=('aslain_catalogs\{0}\{1:D2}\Configuration' -f $game,$build)
+          if(!(Test-Path $expectedPath) -or !(Test-Path $configPath)){ throw 'Missing catalog / SHA pin' }
+          $expected=(Get-Content $expectedPath -Raw).Trim().Split(' ')[0].ToLowerInvariant()
+          $exe='work\'+$name
+          Invoke-WebRequest -Uri $url -OutFile $exe
+          $sha=(Get-FileHash -Algorithm SHA256 -LiteralPath $exe).Hash.ToLowerInvariant()
+          if($sha -ne $expected){ throw ('OFFICIAL_SHA_FAIL expected='+$expected+' got='+$sha) }
+          ('Version='+$latest.aslainVersion+'; Bytes='+(Get-Item $exe).Length+'; SHA256='+$sha) | Set-Content -Encoding utf8 evidence\INSTALLER_SHA256_SIZE.txt
+          Copy-Item -LiteralPath $configPath -Destination 'evidence/Configuration' -Force
+          Copy-Item -LiteralPath $expectedPath -Destination 'evidence/official_installer_sha256.txt' -Force
+          $exe | Set-Content -Encoding utf8 work\installer_path.txt
+      - name: Obtain known working pinned innounp
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $pinned='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest -Uri ('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$pinned+'/innounp-2/bin/innounp-2.zip') -OutFile 'tool/innounp-2.zip'
+          ('COMMIT='+$pinned+'; ZIP_SHA256='+(Get-FileHash -Algorithm SHA256 -LiteralPath 'tool/innounp-2.zip').Hash.ToLowerInvariant()) | Set-Content -Encoding utf8 evidence\EXTRACTOR_PROVENANCE.txt
+          Expand-Archive tool\innounp-2.zip -DestinationPath tool\innounp -Force
+          $iu=Get-ChildItem tool\innounp -Recurse -Filter innounp.exe | Select-Object -First 1
+          if(-not $iu){ throw 'Missing pinned innounp executable' }
+          $iu.FullName | Set-Content -Encoding ascii tool\innounp_path.txt
+      - name: Extract and hash complete native installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $iu=(Get-Content tool\innounp_path.txt -Raw).Trim()
+          $exe=(Get-Content work\installer_path.txt -Raw).Trim()
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence\INNOUNP_EXTRACT_LOG.txt
+          if($LASTEXITCODE -ne 0){ throw ('innounp extraction failed: '+$LASTEXITCODE) }
+          $root=(Resolve-Path out).Path
+          $all=@(Get-ChildItem out -File -Recurse)
+          if($all.Count -lt 1000){ throw ('Extracted count too low: '+$all.Count) }
+          $rows=@(foreach($f in $all){
+            $rel=$f.FullName.Substring($root.Length+1).Replace('\','/')
+            $hash=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName -ErrorAction Stop).Hash.ToLowerInvariant()
+            ($rel+[char]9+$f.Length+[char]9+$hash)
+          })
+          $rows | Sort-Object | Set-Content -Encoding utf8 evidence\CLEAN_FULL_SHA256_MANIFEST.tsv
+          ('ExtractedCount='+$all.Count) | Set-Content -Encoding ascii evidence\CLEAN_INTAKE_SUMMARY.txt
+          $rows | Where-Object {$_ -match '(?i)install_script\.iss|xvm_13\.1|openwg\.common|battlevehiclemarkers|modmenu|modssettingsbridge|gameface|hangman|playerspanel|classic'} | Set-Content -Encoding utf8 evidence\CLEAN_SHARED_OWNER_PATHS.tsv
+          $iss=@(Get-ChildItem out -Recurse -File -Filter 'install_script.iss')
+          if($iss.Count -gt 0){ Copy-Item -LiteralPath $iss[0].FullName -Destination evidence\install_script.iss }
+          else { throw 'No install_script.iss found' }
+      - name: Preserve full native evidence for independent delta audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-current-native-extraction
+          path: evidence
+          if-no-files-found: error
+          retention-days: 5
