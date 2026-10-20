@@ -1,12 +1,11 @@
 {
   "schemaVersion": 1,
-  "active": true,
-  "sourceUrl": "https://sdmntprwestus.oaiusercontent.com/files/00000000-eb70-8230-af60-538f3815a47d/raw?se=2026-10-20T15%3A39%3A03Z&sp=r&sv=2026-02-06&sr=b&scid=695684d7-919f-535b-95a3-6bfb3e0e8b08&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-19T21%3A23%3A42Z&ske=2026-10-20T21%3A23%3A42Z&sks=b&skv=2026-02-06&sig=ERwAhSK0Ip0snyVhHnrV17DeLbLPQiU1tIJUL6zg4Ns%3D",
+  "active": false,
   "destination": "payloads/2.4.1.0/unified/CNBOX_PAYLOAD_1.2.1.zip",
-  "sourceSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
-  "outputSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
-  "archive": "raw",
-  "purpose": "BOX 1.2.1 standalone exact user-approved T03; source Drive FINAL original byte-identical",
-  "outputBytes": 14608734,
-  "requestDate": "2026-10-20"
+  "completedPublicationSHA256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
+  "completedBytes": 14608734,
+  "completedGitBlobSHA1": "d8895dee71eb7a357107751cd5b8bc95b2426405",
+  "completedWork": "BOX_1_2_1_EXACT_T03_PUBLIC_SHA_VERIFIED; SOURCE_SIGNED_URL_REMOVED",
+  "completedRun": "39449616658",
+  "sourceSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f"
 }
