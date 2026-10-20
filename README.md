@@ -4,14 +4,15 @@ Role: **CURRENT PUBLIC DISTRIBUTION**
 
 Machine update authority: `channel.json`.
 
-## Current release set (verified 2026-10-16)
+## Current release set (rechecked 2026-10-20; Manager 2.1.6 promoted 2026-10-19)
 
-- Manager Public: **2.1.5**
+- Manager Public: **2.1.6 FINAL_LOCK**
   - `manager/NAJXBox_Manager.exe`
   - legacy alias: `manager/CNBOX_Manager.exe`
-  - SHA256: `47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5`
-- Manager Creator (GitHub engineering distribution only): **2.1.5**
-  - SHA256: `682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8`
+  - SHA256: `26bf0e7a0365095245a71752d22dd1139f681b9455e68bc40b72027ec5adcce8`
+- Manager Creator (GitHub engineering distribution only): **2.1.6 FINAL_LOCK**
+  - SHA256: `4df6364253fcd1f1873c8acc8ac4c7ea47e45a0c51a52735a06ace3f2426a64a`
+  - Formal manifest: `manager/NAJXBox_Manager_2.1.6_RELEASE_MANIFEST.json`; 2.1.5 versioned binaries remain retained as rollback/HISTORY.
 - Box (current WoT 2.4.1.0): **1.2.0 FINAL_LOCK**
   - Aslain clean build: `2.4.1.0 #03` (provenance, not standalone install prerequisite); XVM `13.1.0.0098`
   - exact original tested payload: `payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip`
@@ -38,7 +39,7 @@ Environment boundaries (module-specific; not one universal WoT version):
 
 ## Current-tree retention rule
 
-This repository's live distribution tree keeps the current installable release set. Superseded binary releases are retained by Git history and by the private engineering/Drive rollback archives rather than as competing current files.
+This repository's live distribution tree keeps the current installable release set. Superseded binary releases are retained by Git history and by private engineering/Drive rollback archives; the explicitly retained Manager/Creator 2.1.5 versioned executables are rollback/HISTORY, not competing current aliases.
 
 Unique engineering history/reference material such as `moe/HISTORY.md`, `moe/reference/`, `moe/source/` and `moe/diagnostics/` is retained.
 
@@ -46,6 +47,6 @@ Unique engineering history/reference material such as `moe/HISTORY.md`, `moe/ref
 
 Gitee `modanbo/cnbox-updates-cn` is a **Public-only exact mirror** rebuilt from the current GitHub channel. Creator/private/history/test/evidence content is forbidden there.
 
-Manager 2.1.5 is already the established Public release. Gitee is a separate **deferred, nonblocking backup mirror** for the current WoT241 release set; closing Box 1.2.0, MoE 1.3.1, and Language 1.1.3 on GitHub/Drive does **not** prove any newer Gitee synchronization. Keep Gitee status DEFERRED until its independent exact Public-only allowlist and hash readback passes. Never push Creator or test artifacts to Gitee.
+GitHub Public Manager/Creator **2.1.6** is the established current release. The last independently verified Gitee Public-only snapshot may still carry **Manager 2.1.5** and older Box/MoE bytes; it is a **deferred, nonblocking backup mirror**, not current GitHub release authority. Gitee synchronization for the current WoT241 release set is not proved; closing Box 1.2.0, MoE 1.3.1, and Language 1.1.3 on GitHub/Drive does **not** prove any newer Gitee synchronization. Keep Gitee status DEFERRED until its independent exact Public-only allowlist and hash readback passes. Never push Creator or test artifacts to Gitee.
 
 For release identity, always use `channel.json` and `CURRENT_RELEASE_INDEX.md`.
