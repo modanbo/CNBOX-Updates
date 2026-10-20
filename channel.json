@@ -25,13 +25,13 @@
       "status": "FINAL_LOCK",
       "wotVersion": "2.4.1.0",
       "xvmVersion": "13.1.0.0098",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip",
-      "payloadSha256": "70c756fe280c76dbac2655d5bb1428d635f0e004f52d480dc5acf8fbb9ee1fe9",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.1.0/unified/CNBOX_PAYLOAD_1.2.1.zip",
+      "payloadSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
       "baselineFiles": [],
       "installedFiles": [
         {
           "path": "mods/2.4.1.0/com.modxvm.xvm_13.1.0.0098.wotmod",
-          "sha256": "35ccebfac2648503ca6fba717ae431655fef5331e9de5c560ed6041986354512",
+          "sha256": "27488d37a8b5664398efac97e33667df5b09de724619922bfbd1565c4e63efdc",
           "required": true
         },
         {
@@ -146,12 +146,12 @@
         },
         {
           "path": "res_mods/configs/xvm/Aslain/battleLoading.xc",
-          "sha256": "709a9c6c8b6b48adf7ce6dc29e994c06007ede3f4c34be92ed70fd14d082bf9f",
+          "sha256": "830b19bc38893ccba9bea537191fac76bb67810f2fee738d291224a792fc7529",
           "required": true
         },
         {
           "path": "res_mods/configs/xvm/Aslain/battleLoadingTips.xc",
-          "sha256": "559565cd2e880930f577d6e78e6188dab6d5098f7e9082e473a6ab41fe14ca43",
+          "sha256": "cda216dbd1f392aa136372cb9a614e9244b62f3a7dfb541c557f317fcfa08c18",
           "required": true
         },
         {
@@ -2696,7 +2696,7 @@
         }
       ],
       "functionalId": "WOT2410-R34-R2F9",
-      "cnboxVersion": "2410-03-R34-R2F9-UNIFIED-R6",
+      "cnboxVersion": "2410-05-R34-R2F9-UNIFIED-R6",
       "aslainVersion": "ANY",
       "installMode": "CNBOX_AUTHORITATIVE",
       "managedDirectories": [
@@ -2712,23 +2712,23 @@
         "mods/{wotVersion}/net.openwg/net.openwg.fix.battleresultsreplays_*.wotmod",
         "res_mods/{wotVersion}/audioww/xvm*.bnk"
       ],
-      "notes": "Formal BOX1.2.0. Exact T06 tested 533-file bytes, no repack; WoT241 #03 native baseline provenance. User-approved disclosed unverified visual edges.",
+      "notes": "BOX 1.2.1 FINAL_LOCK / exact owner-approved T03 533-file immutable ZIP. Standalone independent of Aslain installation; #05 is manufacturing provenance only. Relative to previous 1.2.0: XVM Prestige/JX 1px + two Loading vehicle format placeholders removed; no map/minimap file byte change. Runtime not required by owner for this lock, NOT a claimed game PASS.",
       "releaseTrack": "PUBLIC_STANDALONE",
-      "functionalManifestUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manifests/2.4.1.0/CNBOX_FUNCTIONAL_R34_R2F9_R6.json",
-      "functionalManifestSha256": "3a51b7fd93e405d34620fc36136951c80edd086195b871950be5ec0d29ff6b9b",
-      "displayVersion": "1.2.0"
+      "functionalManifestUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manifests/2.4.1.0/CNBOX_FUNCTIONAL_R34_R2F9_R6_1.2.1.json",
+      "functionalManifestSha256": "ea9ac327d7c27e0fd1ab43cfd2ec08bc6fb79038f81c7c337504954745fec94b",
+      "displayVersion": "1.2.1"
     },
     {
       "status": "FINAL_LOCK",
       "wotVersion": "2.4.1.0",
       "xvmVersion": "13.1.0.0098",
-      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip",
-      "payloadSha256": "70c756fe280c76dbac2655d5bb1428d635f0e004f52d480dc5acf8fbb9ee1fe9",
+      "payloadUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.1.0/unified/CNBOX_PAYLOAD_1.2.1.zip",
+      "payloadSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
       "baselineFiles": [],
       "installedFiles": [
         {
           "path": "mods/2.4.1.0/com.modxvm.xvm_13.1.0.0098.wotmod",
-          "sha256": "35ccebfac2648503ca6fba717ae431655fef5331e9de5c560ed6041986354512",
+          "sha256": "27488d37a8b5664398efac97e33667df5b09de724619922bfbd1565c4e63efdc",
           "required": true
         },
         {
@@ -2843,12 +2843,12 @@
         },
         {
           "path": "res_mods/configs/xvm/Aslain/battleLoading.xc",
-          "sha256": "709a9c6c8b6b48adf7ce6dc29e994c06007ede3f4c34be92ed70fd14d082bf9f",
+          "sha256": "830b19bc38893ccba9bea537191fac76bb67810f2fee738d291224a792fc7529",
           "required": true
         },
         {
           "path": "res_mods/configs/xvm/Aslain/battleLoadingTips.xc",
-          "sha256": "559565cd2e880930f577d6e78e6188dab6d5098f7e9082e473a6ab41fe14ca43",
+          "sha256": "cda216dbd1f392aa136372cb9a614e9244b62f3a7dfb541c557f317fcfa08c18",
           "required": true
         },
         {
@@ -5393,11 +5393,11 @@
         }
       ],
       "functionalId": "WOT2410-R34-R2F9",
-      "cnboxVersion": "2410-03-R34-R2F9-FINAL_LOCK-R6",
-      "aslainVersion": "2.4.1.0 #03",
-      "notes": "Creator compatibility metadata for original BOX1.2.0 bytes. Separate Creator real rollback is not asserted PASS.",
+      "cnboxVersion": "2410-05-R34-R2F9-FINAL_LOCK-R6",
+      "aslainVersion": "2.4.1.0 #05",
+      "notes": "Creator metadata: BOX1.2.1 exact same standalone T03 payload; Aslain #05 records BOX build provenance, not a prerequisite for normal BOX standalone installation. New real Creator physical rollback NOT_RUN, not stated PASS.",
       "releaseTrack": "CREATOR_ASLAIN",
-      "compatibilityClassification": "B_CLEAN_TARGET_OWNER_API_REBASE",
+      "compatibilityClassification": "OWNER_APPROVED_BOX_STANDALONE_INDEPENDENT",
       "sharedByteAuthority": true
     },
     {
