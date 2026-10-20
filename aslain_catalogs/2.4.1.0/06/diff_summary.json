@@ -4,14 +4,14 @@
   "fromAslainVersion": "2.4.1.0 #04",
   "toAslainVersion": "2.4.1.0 #06",
   "fromConfigurationSha256": "24b1fadad9ec6bbae6f1ccf383b2360746b5434ea806d100b2333c261f66bd9c",
-  "toConfigurationSha256": "c4465e859776cddf8c2954f0a1506d457a93ae79e2c9eec53fa94f9baba57aa8",
+  "toConfigurationSha256": "2de4040a733cea2eeb5d52d5ca670de699c1b49aa6ca4d458cd86ba68259a324",
   "fromBytes": 1936311,
-  "toBytes": 1945699,
+  "toBytes": 1944814,
   "fromLines": 3947,
-  "toLines": 4000,
+  "toLines": 3992,
   "diffHunks": 72,
-  "removedLines": 1642,
-  "addedLines": 1695,
+  "removedLines": 1644,
+  "addedLines": 1689,
   "diffFile": "diff_from_04.diff",
-  "diffSha256": "08fc7c6f1351858f68aa99861d785370d5f4c8e50a3a495069dc35a0649d3902"
+  "diffSha256": "aab2b5d7d40b3696a68c46144ea41097b4d556732eaf3934bb39dc24afb9626f"
 }
