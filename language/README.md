@@ -12,7 +12,7 @@ Current installation authority: `../channel.json`.
 - Final-identity repack: only `language_pack_manifest.json` changed; the other **356** members are byte-identical to tested R13.
 - Static Review 1 / independent Review 2: PASS; the official 2.4.1 NA/ASIA/CN font SHA gate PASS.
 - Source rule: current-NA exact-key authority, cumulative ASIA donor plus safe exact CN-key fallback, historical dormant translations preserved; CN-only keys and vehicles excluded.
-- Manager/Creator: 2.1.5 existing one-click language install/restore owner unchanged; no manual CMD.
+- Manager/Creator: the Language 1.1.3 lock originally used Manager 2.1.5; current Manager/Creator **2.1.6 FINAL_LOCK** preserves the same one-click language install/restore owner, with the R6 missing-original-language-backup prompt. No manual CMD.
 
 ## Supported user modes
 
