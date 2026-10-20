@@ -1,9 +1,12 @@
 {
   "schemaVersion": 1,
-  "active": false,
-  "destination": "language/NAJXBOX_LANGUAGE_1.1.3_WOT_2.4.1.0_FINAL_LOCK_20261014.zip",
-  "sourceSha256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5",
-  "outputSha256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5",
-  "completedPublicationSHA256": "592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5",
-  "completedWork": "LANGUAGE_1_1_3_PUBLISHER_DONE_ALREADY_MIRRORED"
+  "active": true,
+  "sourceUrl": "https://sdmntprwestus.oaiusercontent.com/files/00000000-eb70-8230-af60-538f3815a47d/raw?se=2026-10-20T15%3A39%3A03Z&sp=r&sv=2026-02-06&sr=b&scid=695684d7-919f-535b-95a3-6bfb3e0e8b08&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-19T21%3A23%3A42Z&ske=2026-10-20T21%3A23%3A42Z&sks=b&skv=2026-02-06&sig=ERwAhSK0Ip0snyVhHnrV17DeLbLPQiU1tIJUL6zg4Ns%3D",
+  "destination": "payloads/2.4.1.0/unified/CNBOX_PAYLOAD_1.2.1.zip",
+  "sourceSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
+  "outputSha256": "ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f",
+  "archive": "raw",
+  "purpose": "BOX 1.2.1 standalone exact user-approved T03; source Drive FINAL original byte-identical",
+  "outputBytes": 14608734,
+  "requestDate": "2026-10-20"
 }
