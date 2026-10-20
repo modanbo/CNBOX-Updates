@@ -3,9 +3,9 @@
   "channel": "stable",
   "latestAslainVersion": "2.4.1.0 #06",
   "aslainUrl": "https://aslain.com/index.php?/topic/13-download-%E2%98%85-world-of-tanks-%E2%98%85-modpack/",
-  "managerVersion": "2.1.5",
+  "managerVersion": "2.1.6",
   "managerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
-  "managerSha256": "47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5",
+  "managerSha256": "26bf0e7a0365095245a71752d22dd1139f681b9455e68bc40b72027ec5adcce8",
   "collectionProfile": {
     "id": "CNBOX_DEPENDENCY_DIAG_V3",
     "description": "NAJXBox 依赖诊断：版本/日志 + Box 所需的全部 Aslain/XVM 依赖；不采集其它无关 Aslain 插件。",
@@ -10883,9 +10883,9 @@
       ]
     }
   ],
-  "creatorManagerVersion": "2.1.5",
+  "creatorManagerVersion": "2.1.6",
   "creatorManagerUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe",
-  "creatorManagerSha256": "682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8",
+  "creatorManagerSha256": "4df6364253fcd1f1873c8acc8ac4c7ea47e45a0c51a52735a06ace3f2426a64a",
   "productName": "NAJXBox",
   "legacyProductName": "CNBOX",
   "managerCanonicalUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",

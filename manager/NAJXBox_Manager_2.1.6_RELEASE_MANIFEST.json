@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "product": "NAJXBox Manager / Creator",
+  "version": "2.1.6",
+  "status": "OWNER_APPROVED_FINAL_LOCK",
+  "source_pr": "https://github.com/modanbo/NA-BOX/pull/18",
+  "source_build_commit": "095bde47f004a5a45fc8c21f94693a6ba085e11d",
+  "windows_validation_run": 39351711914,
+  "validation": "PUBLIC_CREATOR_BUILD_SELFTEST_UI_LIVE_NA_DISPOSABLE_CACHE_PASS",
+  "user_acceptance": "EXPLICIT_DIRECT_FINAL_LOCK / ACTUAL_SELECTED_CLIENT_POST_REPAIR_GUI_RECHECK_OWNER_ACCEPTED_NOT_RETESTED",
+  "public": {
+    "url": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager.exe",
+    "sha256": "26bf0e7a0365095245a71752d22dd1139f681b9455e68bc40b72027ec5adcce8",
+    "bytes": 559616
+  },
+  "creator": {
+    "url": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/manager/NAJXBox_Manager_Creator.exe",
+    "sha256": "4df6364253fcd1f1873c8acc8ac4c7ea47e45a0c51a52735a06ace3f2426a64a",
+    "bytes": 565760
+  },
+  "preceding_manager": "2.1.5 (exact history/rollback retained)",
+  "preserved": [
+    "R4 MoE manual update button",
+    "Creator Box/MoE safe stale transaction auto-retire and forced-rollback ownership guard",
+    "green component update text",
+    "R6 Aslain physical probe and Language missing-baseline prompt"
+  ],
+  "waived_unperformed": [
+    "selected-client actual post-repair GUI (owner accepted without repeat)",
+    "extra Language real backup/restore",
+    "extra R4 actual rollback",
+    "independent Tomato data rights review"
+  ],
+  "security": {
+    "virusTotal": "NOT_REQUIRED",
+    "apiKey": "NOT_REQUIRED",
+    "defender": "NOT_REQUIRED",
+    "rightsVerified": false
+  },
+  "scope": "manager_only; no Box/MoE/Language package byte changes"
+}
