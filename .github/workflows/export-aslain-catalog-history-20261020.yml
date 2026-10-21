@@ -1,0 +1,97 @@
+name: Export exact Aslain historical catalogs to Drive handoff
+on:
+  push:
+    paths:
+      - .github/workflows/export-aslain-catalog-history-20261020.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make original-byte archive and exhaustive hash manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, subprocess, zipfile
+          from pathlib import Path
+
+          base_commit = "e8d72d7a6aa49ae212b31f85441533ca1893c71b"
+          subprocess.run(["git", "merge-base", "--is-ancestor", base_commit, "HEAD"], check=True)
+          root = Path("aslain_catalogs")
+          files = sorted(p for p in root.rglob("*") if p.is_file())
+          total = sum(p.stat().st_size for p in files)
+          if len(files) != 45 or total != 28124611:
+              raise SystemExit(f"FAIL_CLOSED expected 45 / 28124611, got {len(files)} / {total}")
+          index = json.loads((root / "index.json").read_text(encoding="utf-8"))
+          for item in index["catalogs"]:
+              import re
+              version = int(re.search(r"#\s*(\d+)", item["aslainVersion"]).group(1))
+              p = root / item["wotVersion"] / f"{version:02d}" / "Configuration"
+              if not p.is_file():
+                  raise SystemExit(f"missing Configuration: {p}")
+              if hashlib.sha256(p.read_bytes()).hexdigest() != item["configurationSha256"]:
+                  raise SystemExit(f"Configuration sha mismatch: {p}")
+
+          records = []
+          for p in files:
+              path = p.as_posix()
+              data = p.read_bytes()
+              sha = hashlib.sha256(data).hexdigest()
+              gitsha = subprocess.check_output(["git", "hash-object", "--", path], text=True).strip()
+              indexed = subprocess.check_output(["git", "ls-files", "--stage", "--", path], text=True).strip().split()
+              if len(indexed) < 2 or indexed[1] != gitsha:
+                  raise SystemExit(f"Git index disagreement at {path}")
+              records.append({"path": path, "size": len(data), "sha256": sha, "gitBlobSha1": gitsha})
+
+          manifest = {
+              "schemaVersion": 1,
+              "role": "HISTORY_REFERENCE_ASLAIN_CATALOGS_FULL_ORIGINAL_BYTES",
+              "date": "2026-10-20",
+              "sourceRepo": "modanbo/CNBOX-Updates",
+              "sourceBaselineCommit": base_commit,
+              "sourceWorkflowCommit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+              "retainedAslainVersions": [x["aslainVersion"] for x in index["catalogs"]],
+              "fileCount": len(files),
+              "sumUncompressedFileBytes": total,
+              "files": records,
+              "note": "The archive stores every original public Git blob's uncompressed file bytes, preserving historic Configuration/diff/audit/metadata provenance. This is HISTORY, not CURRENT release/installer authority."
+          }
+          out = Path("NAJXBOX_ASLAIN_GITHUB_CATALOGS_RAW_20261020.zip")
+          mbytes = (json.dumps(manifest, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
+          with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9, allowZip64=True) as z:
+              for p in files:
+                  z.write(p, arcname=p.as_posix())
+              z.writestr("00_ORIGINAL_FILE_SHA256_MANIFEST.json", mbytes)
+          with zipfile.ZipFile(out, "r") as z:
+              actual = z.namelist()
+              if len(actual) != 46 or sorted(actual[:-1]) != sorted(x["path"] for x in records):
+                  raise SystemExit("Archive entry identity mismatch")
+              if z.testzip() is not None:
+                  raise SystemExit("Archive CRC mismatch")
+              for item in records:
+                  if hashlib.sha256(z.read(item["path"])).hexdigest() != item["sha256"]:
+                      raise SystemExit("Reverse SHA mismatch: " + item["path"])
+              if z.read("00_ORIGINAL_FILE_SHA256_MANIFEST.json") != mbytes:
+                  raise SystemExit("Embedded manifest mismatch")
+          Path("NAJXBOX_ASLAIN_ORIGINAL_FILE_SHA256_MANIFEST.json").write_bytes(mbytes)
+          sha = hashlib.sha256(out.read_bytes()).hexdigest()
+          Path("NAJXBOX_ASLAIN_ARCHIVE_SHA256.txt").write_text(
+              f"{sha}  {out.name}\n" +
+              f"ORIGINAL_COUNT=45 ORIGINAL_BYTES=28124611 CURRENT_MODULE_RELEASES_UNCHANGED\n",
+              encoding="utf-8")
+          print(f"FULL_ARCHIVE_PASS: 45 files, 28124611 raw member bytes, 46 zip entries; zip={out.stat().st_size}; SHA256={sha}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: najxbox-aslain-full-original-catalogs-20261020
+          path: |
+            NAJXBOX_ASLAIN_GITHUB_CATALOGS_RAW_20261020.zip
+            NAJXBOX_ASLAIN_ORIGINAL_FILE_SHA256_MANIFEST.json
+            NAJXBOX_ASLAIN_ARCHIVE_SHA256.txt
+          if-no-files-found: error
+          retention-days: 5
