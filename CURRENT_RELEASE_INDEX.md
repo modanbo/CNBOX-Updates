@@ -1,19 +1,21 @@
 # NAJXBox Current Public Release Index
 
-Updated: 2026-10-20 / BOX1.2.1 T03 exact formal lock and GitHub Public; Manager2.1.6 unchanged
+Updated: 2026-10-20 / Box1.2.1 and Manager2.1.6 current unchanged; legacy Box1.1.0 demoted to Drive history under 2-lock+1-test retention.
 
 ## Current install authorities
+
+**Storage boundary (Owner 2026-10-20):** Each of Box/MoE/Language/Manager+Creator retains at most current lock + immediate previous lock + one active test in GitHub; Drive is primary complete original/history repository. See private Master §9A and [storage Issue #19](https://github.com/modanbo/NA-BOX/issues/19). This index is a public distribution view, not an additional engineering Master.
 
 - Manager Public: 2.1.6 / 26bf0e7a0365095245a71752d22dd1139f681b9455e68bc40b72027ec5adcce8
 - Manager Creator: 2.1.6 / 4df6364253fcd1f1873c8acc8ac4c7ea47e45a0c51a52735a06ace3f2426a64a
 - Box formal/display **current published release: 1.2.1** / WoT 2.4.1.0 / XVM 13.1.0.0098; **exact original owner-approved BOX-only T03 bytes, no repackage**, 533 files, SHA256 `ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f`; GitHub Public `payloads/2.4.1.0/unified/CNBOX_PAYLOAD_1.2.1.zip`, functional manifest `manifests/2.4.1.0/CNBOX_FUNCTIONAL_R34_R2F9_R6_1.2.1.json` SHA256 `ea9ac327d7c27e0fd1ab43cfd2ec08bc6fb79038f81c7c337504954745fec94b`. Google Drive FINAL (access-controlled) https://drive.google.com/file/d/1sEPP-51tvNUPBWJ6KtpTAewwNCtB8WUM/view. **Normal standalone BOX does not depend on Aslain installation**; #05 is source provenance only. Owner explicitly waived new T03 Runtime as an admission condition; actual new Runtime remains **NOT_TESTED**, not PASS.
 - Box **immediate 1.2.0 ROLLBACK / WoT 2.4.1.0**: frozen original ZIP SHA256 `70c756fe280c76dbac2655d5bb1428d635f0e004f52d480dc5acf8fbb9ee1fe9`, preserved old Public `payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip` and original functional manifest; original Drive https://drive.google.com/file/d/1g6T6pSm97lmF7-L7VIcHAgV1X03rKvWd/view. Rollback is not a competing `channel.json` current row.
-- Box **previous 1.1.0 (HISTORY / WoT 2.4.0.2 legacy install track)**: published Public compatibility alias 2402-01-R34-R2F9-UNIFIED-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2. Previous WoT2402 release remains in the live `channel.json` for old clients, while WoT241 1.2.1 is current and 1.2.0 is immediate same-client rollback.
+- Box **1.1.0 (WoT 2.4.0.2 HISTORY / DRIVE ONLY)**: exact 534-file SHA256 b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2, [Drive original](https://drive.google.com/file/d/1hVtQ1Bw-lop9yAxo-yh2UFRT5GtYca0l/view). Owner storage policy removed the third Box GitHub ZIP and both WoT2402 Box live-channel rows after independent Drive SHA and Git blob verification. Historic client has no longer a current GitHub Box install route.
 - Box previous Creator compatibility: 2402-02-R34-R2F9-FINAL_LOCK-R6 / b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2 (HISTORY / legacy WoT2402).
 - MoE WoT 2.4.1.0: 1.3.1 / e003fbeaf1b015ae03fae521878a3ddf8a0e26dbb3b0c247fce3cfe1a6f34d2f
 - MoE WoT 2.4.0.2: 1.3.0 / 5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19 (previous-client compatibility retained)
 - Language: 1.1.3 / 592a0822cd3547f09772bb16ea70ddb2cc21da381c3a548ed6eae624e67afcc5 (WoT 2.4.1.0, R13 user Runtime PASS)
-- Box CURRENT formal 1.2.1 WoT compatibility: 2.4.1.0; PREVIOUS/legacy published 1.1.0 compatibility: 2.4.0.2; MoE: 2.4.1.0 and 2.4.0.2; Language WoT: 2.4.1.0
+- Box CURRENT 1.2.1 and immediately previous rollback 1.2.0 both target WoT 2.4.1.0. Box1.1.0/WoT2.4.0.2 is Drive historical only; MoE previous 1.3.0 may still target WoT2.4.0.2; Language current targets WoT2.4.1.0.
 - Box 1.2.1 original engineering source: T03 Aslain #05 (provenance only; not an install prerequisite); 1.2.0 rollback was sourced at #03; previous Box 1.1.0 original manufacturing provenance #01, compatibility #06
 - XVM: 13.1.0.0098 for current Box 1.2.1; old 13.1.0.0093 is WoT2402 legacy only
 

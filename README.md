@@ -21,10 +21,10 @@ Machine update authority: `channel.json`.
   - functional manifest: `manifests/2.4.1.0/CNBOX_FUNCTIONAL_R34_R2F9_R6_1.2.1.json`; Manager standalone/Creator `channel.json` each list all 533 exact files
   - [Google Drive FINAL exact copy](https://drive.google.com/file/d/1sEPP-51tvNUPBWJ6KtpTAewwNCtB8WUM/view); owner explicitly accepted formal lock without new T03 game Runtime; **NOT_TESTED, not fabricated PASS**
 - Box (previous WoT 2.4.1.0 / ROLLBACK): **1.2.0**; original 533-file SHA `70c756fe280c76dbac2655d5bb1428d635f0e004f52d480dc5acf8fbb9ee1fe9`, original public `payloads/2.4.1.0/unified/CNBOX_PAYLOAD_R6.zip`, manifest `manifests/2.4.1.0/CNBOX_FUNCTIONAL_R34_R2F9_R6.json` and original [Drive file](https://drive.google.com/file/d/1g6T6pSm97lmF7-L7VIcHAgV1X03rKvWd/view) retained unchanged.
-- Box (previous WoT 2.4.0.2 compatibility / HISTORY): **1.1.0**
-  - public compatibility alias: `2402-01-R34-R2F9-UNIFIED-R6`
-  - previous payload: `payloads/2.4.0.2/unified/CNBOX_PAYLOAD_R6.zip`
-  - SHA256: `b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2` (534 installed members; older client channel retained)
+- Box 1.1.0 / WoT 2.4.0.2 — **GOOGLE DRIVE HISTORY ONLY, NOT A THIRD GITHUB LOCKED VERSION**.
+  - Exact original 534-file SHA256: `b40c9b17b8ac42806b857bb92120e2ebc36148498ff28a6c046d72890d7406f2`.
+  - [Verified original Drive archive](https://drive.google.com/file/d/1hVtQ1Bw-lop9yAxo-yh2UFRT5GtYca0l/view); the original GitHub live ZIP was demoted and removed under owner Issue #19.
+  - No Box1.1.0 row remains in `channel.json`; WoT2.4.0.2 users cannot obtain this old Box through current GitHub update channel; recover exact file from Drive history when needed.
 - MoE / 打环 (WoT 2.4.1.0): **1.3.1 FINAL_LOCK / GitHub+Drive frozen, consolidated Gitee pending**
   - payload: `moe/1.3.1/NAJXBOX_MoE_1.3.1_WOT_2.4.1.0_FINAL_LOCK.zip`
   - SHA256: `e003fbeaf1b015ae03fae521878a3ddf8a0e26dbb3b0c247fce3cfe1a6f34d2f`
@@ -35,16 +35,19 @@ Machine update authority: `channel.json`.
   - Previous 1.1.2 / WoT 2.4.0.2 remains rollback/history, not the current Language pack
 
 Environment boundaries (module-specific; not one universal WoT version):
-- Box **1.2.1** targets WoT `2.4.1.0`, XVM `13.1.0.0098`, and is **independent of Aslain being installed**; source Aslain `#05` is provenance only. Box **1.2.0** is retained as same-WoT-generation history/rollback. Earlier Aslain migration failures remain engineering HISTORY, not the current release. Box **1.1.0** on WoT `2.4.0.2` / XVM `13.1.0.0093` is the preserved older-client compatibility track.
+- Box **1.2.1** targets WoT `2.4.1.0`, XVM `13.1.0.0098`, and is **independent of Aslain being installed**; source Aslain `#05` is provenance only. Box **1.2.0** is retained as same-WoT-generation history/rollback. Earlier Aslain migration failures remain engineering HISTORY, not the current release. Box **1.1.0** on WoT `2.4.0.2` / XVM `13.1.0.0093` is Drive-only historical evidence, no longer offered through this live channel.
 - MoE 1.3.1 and Language 1.1.3 target WoT `2.4.1.0`; older-client MoE 1.3.0 is retained separately.
 - For exact client matching and package selection, `channel.json` is the machine install authority; do not infer compatibility from a single global version line.
 
-## Current-tree retention rule
+## GitHub slim release storage / Google Drive historical authority (2026-10-20)
 
-This repository's live distribution tree keeps the current installable release set. Superseded binary releases are retained by Git history and by private engineering/Drive rollback archives; the explicitly retained Manager/Creator 2.1.5 versioned executables are rollback/HISTORY, not competing current aliases.
+Applies equally to **Box, MoE, Language and Manager+Creator**. Per module GitHub retains only **CURRENT_LOCKED + PREVIOUS_LOCKED + up to one ACTIVE_TEST** (empty when no ongoing candidate). Manager Public/Creator dual builds and necessary stable aliases count as one release identity. Google Drive is the **primary complete archive** for all original binaries, previous generations, source/reference comparisons, test failures/successes/retries, and Runtime/rollback evidence.
 
-Unique engineering history/reference material such as `moe/HISTORY.md`, `moe/reference/`, `moe/source/` and `moe/diagnostics/` is retained.
+The GitHub Public `channel.json` stays the **current install/update authority**; the private GitHub repository retains current source, Master, machine state, hashes and compact historical pointers. Archived past generations are not live channel entries. Historical archives are referenced by Drive ID + original SHA256; do not claim removed Git objects disappear from Git history. For any cleanup: prove Drive original SHA/size; audit consumer URLs; update channel/docs atomically with removal; independent Review 1/2 and reverse verification.
 
+**Current slots:** Box 1.2.1 / 1.2.0; MoE 1.3.1 / 1.3.0; Language 1.1.3 / 1.1.2; Manager+Creator 2.1.6 / 2.1.5; no active candidate. Older Box 1.1.0 has been moved to Drive-only HISTORY. Issue: https://github.com/modanbo/NA-BOX/issues/19 .
+
+Unique engineering knowledge in `moe/HISTORY.md`, `moe/reference/`, `moe/source/` and `moe/diagnostics/` is retained; it is not a competing binary release. Old Aslain catalog comparisons need their own complete-archive checksum gate before GitHub removal.
 ## Gitee
 
 Gitee `modanbo/cnbox-updates-cn` is a **Public-only exact mirror** rebuilt from the current GitHub channel. Creator/private/history/test/evidence content is forbidden there.
