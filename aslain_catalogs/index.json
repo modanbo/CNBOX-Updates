@@ -20,70 +20,20 @@
       "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.1.0/04/Configuration",
       "configurationSha256": "24b1fadad9ec6bbae6f1ccf383b2360746b5434ea806d100b2333c261f66bd9c",
       "bytes": 1936311
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.2",
-      "aslainVersion": "2.4.0.2 #06",
-      "contentVersion": "v2.4.0.2 #06 (2026.10.12)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/06/Configuration",
-      "configurationSha256": "b3f46f03238499982c46ba20a8785b1f5402976ac27fd035065ce65129089e5c",
-      "bytes": 1934931,
-      "previousAslainVersion": "2.4.0.2 #05",
-      "configurationDiffSha256": "33f03a4a80f4e9a1042fceed8da74fc4966c322990e4506aabf84177bf0e9732"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.2",
-      "aslainVersion": "2.4.0.2 #05",
-      "contentVersion": "v2.4.0.2 #05 (2026.10.11)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/05/Configuration",
-      "configurationSha256": "59466830dc151261f811904431450b9696e8ce1e671a0f4be7a7305abec6412a",
-      "bytes": 1922316,
-      "previousAslainVersion": "2.4.0.2 #04",
-      "configurationDiffSha256": "2a8c1314c54d65812c4ab8d5d86751bdb0e9c3652ee70e486519cba415a3051f"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.2",
-      "aslainVersion": "2.4.0.2 #04",
-      "contentVersion": "v2.4.0.2 #04 (2026.10.08)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/04/Configuration",
-      "configurationSha256": "c5a778bb714d6b4fa0f736209afe1d3b25d2ed78e14f02ab8954c16adf645004",
-      "bytes": 1965889,
-      "previousAslainVersion": "2.4.0.2 #03",
-      "configurationDiffSha256": "6f68be00a31de9089ddf8900cc86cf1c32567af624be2d3c7e9b8b33ffe4026b"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.2",
-      "aslainVersion": "2.4.0.2 #03",
-      "contentVersion": "v2.4.0.2 #03 (2026.10.07)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/03/Configuration",
-      "configurationSha256": "a57bf37fc1cd7e2cafcafbf418c5e48116ddee78d34ff05d89dea8b33b582787",
-      "bytes": 1934348,
-      "previousAslainVersion": "2.4.0.2 #02",
-      "configurationDiffSha256": "3ff5b1b3c5c957432a7052ef3e542f8de1f3d7c625a5381da68c0c9a236993b2"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.2",
-      "aslainVersion": "2.4.0.2 #02",
-      "contentVersion": "v2.4.0.2 #02 (2026.10.05)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/02/Configuration",
-      "configurationSha256": "65084d1a418bc81db4a69425060f4e8c0240361431057637c548c90d35e99cc9",
-      "bytes": 1934347,
-      "previousAslainVersion": "2.4.0.2 #01",
-      "configurationDiffSha256": "2f008c64451556bf20759b732a61fa6284fdef64a7400162fbe023a3746fac6e"
-    },
-    {
-      "schemaVersion": 2,
-      "wotVersion": "2.4.0.2",
-      "aslainVersion": "2.4.0.2 #01",
-      "contentVersion": "v2.4.0.2 #01 (2026.10.01)",
-      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.0.2/01/Configuration",
-      "configurationSha256": "2df0ccf2f22604bc7c55ddf9c8a6458429a8ef9a88f86cfa330650f57743f1a2",
-      "bytes": 1915589
     }
-  ]
+  ],
+  "historicalArchive": {
+    "role": "HISTORY_REFERENCE_UNCHANGED_ORIGINALS_NOT_CURRENT_RELEASE",
+    "googleDriveFileId": "1bmJQUJbG0s4ZoWG7x9nBQBp4OC3KuWos",
+    "googleDriveFolderId": "1cHuu9qfHchVU2h_wNRt0-olaIA7FCS4g",
+    "originalFileCount": 45,
+    "originalByteCount": 28124611,
+    "archiveOuterZipSha256": "65c3f3c4a78f8579c2e9057a7215ea3e744729624ea5f6bbcb054692ead75985",
+    "sourceInnerZipSha256": "0ac2e3b2138f799f2be84df0fd23925d7c2f34d6c8882e29837dc8a779ca11bb",
+    "rawManifestInsideArchive": true,
+    "archivedVersionCount": 8,
+    "sourceBaselineCommit": "e8d72d7a6aa49ae212b31f85441533ca1893c71b",
+    "verification": "DRIVE_RAW_DOWNLOAD_EQUALS_GITHUB_ARTIFACT/45_FILE_SHA256_GIT_BLOB_CRC_PASS"
+  },
+  "onlineStoragePolicy": "CURRENT_WOT241_ASLAIN06_AND_PREVIOUS_04_FOR_NATIVE_DIFF; ALL_2402_AND_OTHER_2410_COMPARE_HISTORY_DRIVE_ARCHIVED"
 }

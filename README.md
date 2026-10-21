@@ -55,3 +55,9 @@ Gitee `modanbo/cnbox-updates-cn` is a **Public-only exact mirror** rebuilt from 
 GitHub Public Manager/Creator **2.1.6** is the established current release. The last independently verified Gitee Public-only snapshot may still carry **Manager 2.1.5** and older Box/MoE bytes; it is a **deferred, nonblocking backup mirror**, not current GitHub release authority. Gitee synchronization for the current WoT241 release set is not proved; closing Box 1.2.1, MoE 1.3.1, and Language 1.1.3 on GitHub/Drive does **not** prove any newer Gitee synchronization. Keep Gitee status DEFERRED until its independent exact Public-only allowlist and hash readback passes. Never push Creator or test artifacts to Gitee.
 
 For release identity, always use `channel.json` and `CURRENT_RELEASE_INDEX.md`.
+
+## Aslain native catalog history storage — 2026-10-20
+
+The complete prior `aslain_catalogs` tree (45 exact original Git files / 28,124,611 original bytes, including WoT 2.4.0.2 histories and current-generation comparison/audit artifacts) was archived as an immutable, manifest-verified Google Drive [HISTORY/REFERENCE package](https://drive.google.com/file/d/1bmJQUJbG0s4ZoWG7x9nBQBp4OC3KuWos/view), SHA256 `65c3f3c4a78f8579c2e9057a7215ea3e744729624ea5f6bbcb054692ead75985`. Its inner source ZIP contains the exact original 45 files plus per-path SHA256, Git blob SHA1, size, and source commit metadata; every member was independently read back and verified.
+
+The GitHub live `aslain_catalogs` set retains only latest native WoT 2.4.1.0 #06, previous native #04 (to allow current-owner comparison), their installer hashes/metadata, the current selected audit, and the compact index/selection file. Archived paths are **not** live download endpoints. Module CURRENT_RELEASE binaries, rollback payloads, `channel.json` and Manager stable URLs remain unchanged. See private engineering Master §9A and Issue #19.
