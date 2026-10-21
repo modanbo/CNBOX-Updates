@@ -12,6 +12,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 3
       - name: Make original-byte archive and exhaustive hash manifest
         shell: bash
         run: |
