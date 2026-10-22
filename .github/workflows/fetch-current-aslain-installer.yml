@@ -1,5 +1,5 @@
 name: Fetch current Aslain installer artifact
-# trigger: 2026-10-12 aslain-06
+# trigger: 2026-10-21 aslain-07 official sha readback
 permissions:
   contents: read
 on:
@@ -52,4 +52,4 @@ jobs:
             Aslains_WoT_Modpack_Installer_v.*.exe
             installer_metadata.json
           if-no-files-found: error
-          retention-days: 5
+          retention-days: 2
