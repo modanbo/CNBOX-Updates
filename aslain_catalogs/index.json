@@ -4,6 +4,17 @@
     {
       "schemaVersion": 2,
       "wotVersion": "2.4.1.0",
+      "aslainVersion": "2.4.1.0 #07",
+      "contentVersion": "v2.4.1.0 #07 (2026.10.22)",
+      "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.1.0/07/Configuration",
+      "configurationSha256": "2a4a3b3a41118dcdaa0ff3e6b865da9c462e403c459ae57b6b4e11172e2300a0",
+      "bytes": 1946810,
+      "previousAslainVersion": "2.4.1.0 #06",
+      "configurationDiffSha256": "980399a181ee4d06b7e165ac9d0f6ff97b98ca81cd177a425644bd35b054cb5f"
+    },
+    {
+      "schemaVersion": 2,
+      "wotVersion": "2.4.1.0",
       "aslainVersion": "2.4.1.0 #06",
       "contentVersion": "v2.4.1.0 #06 (2026.10.19)",
       "configurationUrl": "https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/aslain_catalogs/2.4.1.0/06/Configuration",
@@ -21,19 +32,5 @@
       "configurationSha256": "24b1fadad9ec6bbae6f1ccf383b2360746b5434ea806d100b2333c261f66bd9c",
       "bytes": 1936311
     }
-  ],
-  "historicalArchive": {
-    "role": "HISTORY_REFERENCE_UNCHANGED_ORIGINALS_NOT_CURRENT_RELEASE",
-    "googleDriveFileId": "1bmJQUJbG0s4ZoWG7x9nBQBp4OC3KuWos",
-    "googleDriveFolderId": "1cHuu9qfHchVU2h_wNRt0-olaIA7FCS4g",
-    "originalFileCount": 45,
-    "originalByteCount": 28124611,
-    "archiveOuterZipSha256": "65c3f3c4a78f8579c2e9057a7215ea3e744729624ea5f6bbcb054692ead75985",
-    "sourceInnerZipSha256": "0ac2e3b2138f799f2be84df0fd23925d7c2f34d6c8882e29837dc8a779ca11bb",
-    "rawManifestInsideArchive": true,
-    "archivedVersionCount": 8,
-    "sourceBaselineCommit": "e8d72d7a6aa49ae212b31f85441533ca1893c71b",
-    "verification": "DRIVE_RAW_DOWNLOAD_EQUALS_GITHUB_ARTIFACT/45_FILE_SHA256_GIT_BLOB_CRC_PASS"
-  },
-  "onlineStoragePolicy": "CURRENT_WOT241_ASLAIN06_AND_PREVIOUS_04_FOR_NATIVE_DIFF; ALL_2402_AND_OTHER_2410_COMPARE_HISTORY_DRIVE_ARCHIVED"
+  ]
 }
