@@ -1,0 +1,101 @@
+name: Aslain #07 OpenWG exact technical owner read-only proof
+on:
+  push:
+    paths:
+      - ".github/workflows/aslain07-openwg-owner-source-audit.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  openwg-source:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify #07 installer original and pinned clean extractor
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $ProgressPreference='SilentlyContinue'
+          New-Item -ItemType Directory -Force -Path work,tool,out,evidence | Out-Null
+          $name='Aslains_WoT_Modpack_Installer_v.2.4.1.0_07.exe'
+          $expected='2ea37fe040b7b547959774feeb1f67bf3d8df6a8271dda3bc76f9224ee4c6c75'
+          Invoke-WebRequest -Uri ('https://filez.aslain.com/'+$name) -OutFile ('work/'+$name) -TimeoutSec 360
+          $item=Get-Item ('work/'+$name)
+          $sha=(Get-FileHash -Algorithm SHA256 -LiteralPath $item.FullName).Hash.ToLowerInvariant()
+          if($item.Length -ne 70634771 -or $sha -ne $expected){throw 'Aslain07 official byte identity mismatch'}
+          ('Original='+$name+'; Bytes='+$item.Length+'; SHA256='+$sha) | Set-Content -Encoding utf8 evidence\INSTALLER_ORIGINAL_SHA256_SIZE.txt
+          $pin='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest -Uri ('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$pin+'/innounp-2/bin/innounp-2.zip') -OutFile tool\innounp-2.zip -TimeoutSec 120
+          Expand-Archive tool\innounp-2.zip -DestinationPath tool\innounp -Force
+          $iu=Get-ChildItem tool\innounp -Recurse -Filter innounp.exe | Select-Object -First 1
+          if(-not $iu){throw 'missing pinned innounp'}
+          $iu.FullName | Set-Content -Encoding ascii tool\innounp_path.txt
+      - name: Extract two exact current-native OpenWG fix modules and their nested identity
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'
+          $exe=(Get-ChildItem work -File -Filter '*.exe' | Select-Object -First 1).FullName
+          $iu=(Get-Content tool\innounp_path.txt -Raw).Trim()
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence\EXTRACTOR_LOG.txt
+          if($LASTEXITCODE -ne 0){throw ('innounp exit='+$LASTEXITCODE)}
+          Add-Type -AssemblyName System.IO.Compression
+          $expect=@(
+             @{ name='net.openwg.fix.battleresultscache_1.9.0'; sha='a98a724e5dac3a1147a0a99a0ba20866db33dcc1378b412e036998170c0f06ab' },
+             @{ name='net.openwg.fix.battleresultsreplays_1.1.0'; sha='98a3eb1c509b33c247abf65b99bae40d77873e8b4f2ec58237b711f2a7228f2a' }
+          )
+          New-Item -ItemType Directory -Force -Path evidence\current_native_wotmods | Out-Null
+          $list=@()
+          foreach($ex in $expect){
+            $prefix=[string]$ex.name
+            $found=@(Get-ChildItem out -File -Recurse -Filter ($prefix+'*.wotmod') | Where-Object { $_.Name -match ('^'+[regex]::Escape($prefix)+',\d+\.wotmod$') } | Sort-Object Name)
+            if($found.Count -ne 5){throw ('Expected five Inno aliases for '+$prefix+' got '+$found.Count)}
+            foreach($f in $found){
+              $check=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+              if($check -ne [string]$ex.sha){throw ('Source alias differs SHA '+$f.Name+' '+$check)}
+            }
+            $selected=$found[0]
+            $outFile=Join-Path 'evidence\current_native_wotmods' ($prefix+'.wotmod')
+            Copy-Item -LiteralPath $selected.FullName -Destination $outFile
+            $zi=[System.IO.Compression.ZipFile]::OpenRead($selected.FullName)
+            try{
+              $entry=@($zi.Entries|Where-Object {$_.FullName -ieq 'meta.xml'})|Select-Object -First 1
+              if(-not $entry){throw ('No WOTMOD meta.xml '+$selected.Name)}
+              $stream=$entry.Open()
+              try{
+                 $reader=[System.IO.StreamReader]::new($stream)
+                 try{[xml]$xml=$reader.ReadToEnd()}finally{$reader.Dispose()}
+              }finally{$stream.Dispose()}
+              $script=@()
+              foreach($nested in $zi.Entries){
+                if($nested.FullName -notmatch '(?i)\.pyc$'){continue}
+                $input=$nested.Open()
+                try{
+                   $hasher=[System.Security.Cryptography.SHA256]::Create()
+                   try{$hash=([BitConverter]::ToString($hasher.ComputeHash($input))).Replace('-','').ToLowerInvariant()}finally{$hasher.Dispose()}
+                }finally{$input.Dispose()}
+                $script+=@{ path=$nested.FullName; sha256=$hash; size=$nested.Length }
+              }
+              $list+=@{file=($prefix+'.wotmod');bytes=$selected.Length;sha256=[string]$ex.sha;aliasCopiesVerified=$found.Count;technicalId=[string]$xml.root.id;version=[string]$xml.root.version;pycScripts=@($script);nestedMembers=$zi.Entries.Count}
+            }finally{$zi.Dispose()}
+          }
+          $report=@{
+            workId='ASLAIN2410-07-CHOICE36-COMPAT-20261021'
+            status='NATIVE_EXACT_WOTMOD_SOURCE_AND_META_ID_STATIC_PASS'
+            originalInstallerSha256='2ea37fe040b7b547959774feeb1f67bf3d8df6a8271dda3bc76f9224ee4c6c75'
+            exeNotExecuted=$true
+            sourceExtractionOnly=$true
+            currentNativeOpenWGFixModules=@($list)
+            clientRuntime='NOT_TESTED'
+            releasePayloadChanged=$false
+          }
+          $report|ConvertTo-Json -Depth 18|Set-Content -Encoding utf8 evidence\OPENWG_NEW_EXACT_TECH_ID_AND_PYC.json
+          Write-Host ('SOURCE_WOTMOD_TECH_ID_PROVEN: '+($list|ConvertTo-Json -Depth 12 -Compress))
+      - name: Retain only selected source WOTMOD and technical owner evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aslain2410-07-openwg-native-owner-proof
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 2
