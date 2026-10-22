@@ -1,8 +1,10 @@
 # NAJXBox Current Public Release Index
 
-Updated: 2026-10-20 / Box1.2.1 and Manager2.1.6 current unchanged; legacy Box1.1.0 demoted to Drive history under 2-lock+1-test retention.
+Updated: 2026-10-21 / Aslain upstream latest #07 metadata; Box1.2.1, Manager2.1.6, MoE1.3.1, Language1.1.3 exact formal current unchanged; legacy Box1.1.0 Drive history.
 
 ## Current install authorities
+
+**External Aslain upstream:** `latestAslainVersion` in the live `channel.json` is **`2.4.1.0 #07`**, independently verified from official original installer SHA `2ea37fe040b7b547959774feeb1f67bf3d8df6a8271dda3bc76f9224ee4c6c75`. Native Choice36 #07 compatibility is an **independent, private TEST_ONLY workstream** ([Issue #20](https://github.com/modanbo/NA-BOX/issues/20)); its candidate is **NOT published** to this Public channel and is **not** a new BOX formal version. Game Runtime and actual Creator physical Apply/Rollback remain NOT_TESTED. The product download versions and SHA entries below are unchanged.
 
 **Storage boundary (Owner 2026-10-20):** Each of Box/MoE/Language/Manager+Creator retains at most current lock + immediate previous lock + one active test in GitHub; Drive is primary complete original/history repository. See private Master §9A and [storage Issue #19](https://github.com/modanbo/NA-BOX/issues/19). This index is a public distribution view, not an additional engineering Master.
 
