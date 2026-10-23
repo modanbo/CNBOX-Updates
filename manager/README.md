@@ -29,6 +29,6 @@ Current machine authority: `../channel.json`.
 - `NAJXBox_Manager_Creator.exe` — canonical Creator alias.
 - `NAJXBox_Manager_Creator_v2.1.6.exe` — immutable versioned Creator binary.
 
-The previous exact **2.1.5** versioned Public and Creator binaries remain available as rollback HISTORY (historical SHA `47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5` / `682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8`). Old 2.1.6 PRESECURITY/PR16 binaries missing Creator safe auto-clean and green UI are SUPERSEDED, never current.
+The previous exact **2.1.5** binaries are **Google Drive-only rollback HISTORY**: original [Public+Creator bundle](https://drive.google.com/file/d/1javYKKLXdio5-mZcugVTsBSXb50mmmv3/view), ZIP SHA `8943d45aee034aae3ec36ef0c16b9a3160076540e1e1c410a09d6a735c3c707f`, exact old Public `47706d47671df61787a4fc8b5088e178b1fcc0c595590635a77f183d1bc469d5` / Creator `682a1804d76bf8d0fb9d22b26934d780889c86135acdef49649c96d703e368f8`. No old-version GitHub EXE remains online. Old 2.1.6 PRESECURITY/PR16 binaries missing Creator safety and green UI are SUPERSEDED, never current.
 
 Current formal exact-release manifest: `NAJXBox_Manager_2.1.6_RELEASE_MANIFEST.json` and private engineering manifest/README. Legacy 2.1.5 release-exception JSON remains historical and does not define current policy.

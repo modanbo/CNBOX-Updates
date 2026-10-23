@@ -1,3 +1,5 @@
+> 2026-10-22 storage-only policy update: original MoE 1.3.0 (WoT 2.4.0.2) is preserved exclusively on Google Drive (`1Js4yxjtZYLxXCOB2uDdlpDJxGhFWqhNC`, SHA256 `5d6bcfc871fdec58f8c8195eaecb0b9351a980ea917f3c054c0de66ebb134e19`) and **was removed from the current live `channel.json`**, without changing MoE 1.3.1 exact bytes. Historical notes below retain their original chronology.
+
 # CNBOX Standalone MoE — Public Package History
 
 This file is append-only release history for the Manager's independent MoE component.

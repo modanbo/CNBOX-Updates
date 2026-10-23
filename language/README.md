@@ -20,4 +20,4 @@ Current installation authority: `../channel.json`.
 - 中文界面 + 英文坦克名称
 - 恢复原始语言
 
-Immediate preceding formal Language 1.1.2 (WoT 2.4.0.2) remains rollback/history. Current Public endpoint and release-channel version are authoritative; history does not simultaneously advertise an older CURRENT_RELEASE.
+Previous formal Language **1.1.2** (WoT 2.4.0.2) is [Google Drive-only exact original rollback history](https://drive.google.com/file/d/1XMphhS629sCCvS_BLjJYwwr6EW7rRfkm/view); its SHA is `1f2fa9c38f9029dba2a3ef3e2660fa828b3760f4e0c5958c1e26818300442f18`. The GitHub current release channel advertises ONLY 1.1.3, and the current original package was not rebuilt.
