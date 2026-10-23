@@ -1,0 +1,97 @@
+name: Backup Git originals and protected tools for Drive (Public)
+on:
+  push:
+    paths:
+      - .github/workflows/backup-github-originals-drive-handoff-20261022.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout complete history (read-only)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Exact all-branch Git bundle and original-byte tool archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, subprocess, zipfile
+          from pathlib import Path
+          def git(*args, cwd=None):
+              return subprocess.check_output(["git", *args], cwd=cwd)
+          out = Path("history_handoff_public")
+          out.mkdir(exist_ok=True)
+          source_head = git("rev-parse", "HEAD").decode().strip()
+          git("fetch", "--force", "origin", "+refs/heads/*:refs/archive/heads/*", "--tags")
+          raw_refs = git("for-each-ref", "--format=%(refname) %(objectname)", "refs/archive/heads").decode().splitlines()
+          refs = {line.split()[0].replace("refs/archive/heads/",""): line.split()[1] for line in raw_refs}
+          actual_remote = git("ls-remote", "--heads", "origin").decode().splitlines()
+          remote = {line.split()[1].replace("refs/heads/",""):line.split()[0] for line in actual_remote}
+          if not remote or refs != remote or source_head != refs.get("main"):
+              raise SystemExit("FAIL_CLOSED ref inventory/HEAD mismatch")
+          bundle = out / "CNBOX-Updates_ALL_REFS_ORIGINAL_20261022.bundle"
+          subprocess.run(["git","bundle","create",str(bundle.resolve()),"--all"],check=True)
+          subprocess.run(["git","bundle","verify",str(bundle.resolve())],check=True)
+          toolpaths = [".github", ".publisher", "moe/source", "moe/diagnostics", "moe/reference"]
+          toolzip = out / "CNBOX-Updates_PROTECTED_TOOLS_ORIGINAL_PATHS_20261022.zip"
+          subprocess.run(["git","archive","--format=zip","--output="+str(toolzip.resolve()),"HEAD",*toolpaths],check=True)
+          with zipfile.ZipFile(toolzip) as z:
+              if z.testzip() is not None:
+                  raise SystemExit("FAIL_CLOSED tool ZIP CRC")
+              records=[]
+              for name in z.namelist():
+                  if name.endswith("/"):
+                      continue
+                  data=z.read(name)
+                  gitdata=git("show","HEAD:"+name)
+                  if data!=gitdata:
+                      raise SystemExit("FAIL_CLOSED tool byte drift "+name)
+                  gitblob=hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
+                  records.append(dict(path=name,size=len(data),sha256=hashlib.sha256(data).hexdigest(),gitBlobSha1=gitblob))
+          if len(records)<15:
+              raise SystemExit("FAIL_CLOSED unexpected tools count")
+          with __import__('tempfile').TemporaryDirectory() as td:
+              subprocess.run(["git","clone","--bare","--quiet",str(bundle.resolve()),td+"/restore"],check=True)
+              for name,sha in refs.items():
+                  got=git("cat-file","-t",sha,cwd=td+"/restore").decode().strip()
+                  if got!="commit":
+                      raise SystemExit("FAIL_CLOSED cannot restore commit "+name)
+          lfs = subprocess.run(["git","lfs","ls-files","--all"],capture_output=True,text=True)
+          lfs_status="NO_POINTERS" if lfs.returncode==0 and not lfs.stdout.strip() else ("PRESENT_ARCHIVE_SEPARATELY" if lfs.returncode==0 else "NOT_VERIFIED_GIT_LFS_COMMAND_UNAVAILABLE")
+          manifest = {
+              "role":"DRIVE_ARCHIVE_PUBLIC_RESTORABLE_GIT_REFS_AND_PROTECTED_TOOLS",
+              "repo":"modanbo/CNBOX-Updates","sourceHead":source_head,
+              "allObservedBranches":refs,"branchCount":len(refs),
+              "toolsOriginalGitPaths":records,"toolsFileCount":len(records),
+              "lfsInventoryStatus":lfs_status,
+              "files":[{"name":p.name,"size":p.stat().st_size,"sha256":hashlib.sha256(p.read_bytes()).hexdigest()} for p in [bundle,toolzip]],
+              "note":"Original files and Git commit graph; requires original-byte Google Drive SHA readback before any GitHub historical deletion. No release package or existing tool was changed."
+          }
+          manifestfile=out/"00_ORIGINALS_RESTORE_MANIFEST.json"
+          manifestfile.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+          print("ARCHIVE_SOURCE_AND_RESTORE_PASS",manifest["branchCount"],manifest["toolsFileCount"],lfs_status)
+          for item in manifest["files"]: print(item)
+          PY
+      - name: Upload complete public original Git bundle (Drive transfer only)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Updates-PUBLIC-FULL-GIT-HISTORY-20261022
+          path: |
+            history_handoff_public/CNBOX-Updates_ALL_REFS_ORIGINAL_20261022.bundle
+            history_handoff_public/00_ORIGINALS_RESTORE_MANIFEST.json
+          retention-days: 7
+          if-no-files-found: error
+      - name: Upload protected public tools (Drive transfer only)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Updates-PUBLIC-PROTECTED-TOOLS-20261022
+          path: |
+            history_handoff_public/CNBOX-Updates_PROTECTED_TOOLS_ORIGINAL_PATHS_20261022.zip
+            history_handoff_public/00_ORIGINALS_RESTORE_MANIFEST.json
+          retention-days: 7
+          if-no-files-found: error
