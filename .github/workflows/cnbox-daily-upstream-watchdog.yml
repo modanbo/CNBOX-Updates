@@ -9,6 +9,7 @@ on:
       - '.github/workflows/cnbox-daily-upstream-watchdog.yml'
 permissions:
   contents: read
+  actions: write
 jobs:
   daily-check:
     runs-on: ubuntu-latest
@@ -69,9 +70,12 @@ jobs:
           PY
       - name: Dynamically resolve all future releases and stage source evidence
         if: steps.gate.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           python3 - <<'PY'
-          import json,pathlib,re,urllib.request,hashlib,xml.etree.ElementTree as ET
+          import os,json,pathlib,re,urllib.request,hashlib,xml.etree.ElementTree as ET
           p=pathlib.Path("cnbox_daily_receipt.json")
           d=json.loads(p.read_text())
           native=d["sources"][0]
@@ -101,7 +105,13 @@ jobs:
           p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+"\n")
           print(json.dumps(d["handoff"],ensure_ascii=False))
           if new:
-              raise SystemExit("NEW_VERSION_INTAKE_REQUIRED: cannot report green until generic engineering/Drive work is completed")
+              url="https://api.github.com/repos/"+os.environ["GH_REPO"]+"/actions/workflows/cnbox-generic-aslain-intake.yml/dispatches"
+              payload=json.dumps({"ref":"main","inputs":{"target_version":native_version.lstrip("v")}}).encode()
+              req=urllib.request.Request(url,data=payload,method="POST",headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","Content-Type":"application/json"})
+              with urllib.request.urlopen(req,timeout=30) as response:
+                  d["handoff"]["dispatchHTTP"]=response.status
+              d["handoff"]["status"]="GENERIC_INTAKE_DISPATCHED_ENGINEERING_PENDING"
+              p.write_text(json.dumps(d,indent=2)+"\\n")
           PY
       - name: Upload daily execution receipt
         if: steps.gate.outputs.run == 'true' && always()
