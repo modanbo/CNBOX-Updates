@@ -1,0 +1,67 @@
+name: CNBOX Aslain08 native full teardown (ephemeral evidence)
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/cnbox-aslain08-native-full-teardown.yml"
+  workflow_dispatch:
+jobs:
+  native-windows:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Obtain official #08 installer, pinned innounp and full owner inventory
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'
+          New-Item -ItemType Directory -Force -Path 'work','tool','out','evidence' | Out-Null
+          $name='Aslains_WoT_Modpack_Installer_v.2.4.1.0_08.exe'
+          $wanted='d32a833868d2dedcc2a1108762464eee86d0acf4068f267ad6c9c9acd1b37923'
+          $exe='work/'+$name
+          Invoke-WebRequest -Uri ('https://filez.aslain.com/'+$name) -OutFile $exe -TimeoutSec 180
+          $got=(Get-FileHash -Algorithm SHA256 -LiteralPath $exe).Hash.ToLowerInvariant()
+          if($got -ne $wanted){throw ('OFFICIAL_SHA_MISMATCH '+$got)}
+          Write-Host ('OFFICIAL08_SECOND_DOWNLOAD_PASS '+(Get-Item $exe).Length+' SHA '+$got)
+          $url='https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration'
+          Invoke-WebRequest -Uri $url -OutFile 'work/Configuration' -TimeoutSec 180
+          $nativeHash=(Get-FileHash -Algorithm SHA256 -LiteralPath 'work/Configuration').Hash.ToLowerInvariant()
+          [xml]$native=Get-Content 'work/Configuration' -Raw -Encoding UTF8
+          $contentVersion=$native.DocumentElement.GetAttribute('ContentVersion')
+          Write-Host ('NATIVE08 '+$contentVersion+' SHA '+$nativeHash)
+          if($contentVersion -notmatch '2\.4\.1\.0\s*#\s*0?8'){throw ('NATIVE_VERSION_MISMATCH '+$contentVersion)}
+          Copy-Item work/Configuration evidence/Configuration
+          $pinned='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          Invoke-WebRequest -Uri ('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$pinned+'/innounp-2/bin/innounp-2.zip') -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
+          Expand-Archive tool/innounp-2.zip -DestinationPath tool/innounp -Force
+          $iu=(Get-ChildItem tool/innounp -Recurse -Filter innounp.exe | Select-Object -First 1).FullName
+          if(-not $iu){throw 'Pinned innounp missing'}
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence/EXTRACTOR.log
+          if($LASTEXITCODE -ne 0){throw ('INNOUNP_EXIT_'+$LASTEXITCODE)}
+          $all=@(Get-ChildItem out -File -Recurse)
+          if($all.Count -lt 10000){throw ('NATIVE_EXTRACTED_FILES_TOO_FEW '+$all.Count)}
+          $root=(Resolve-Path out).Path
+          $lines=@(foreach($f in $all) {
+            $rel=$f.FullName.Substring($root.Length+1).Replace('\','/')
+            $h=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+            ($rel+[char]9+$f.Length+[char]9+$h)
+          })
+          $lines|Sort-Object|Set-Content -Encoding UTF8 evidence/FULL_NATIVE_PATH_SHA256.tsv
+          $iss=@(Get-ChildItem out -Recurse -File -Filter 'install_script.iss')
+          if($iss.Count -ne 1){throw ('EXACT_ISS_COUNT_'+$iss.Count)}
+          Copy-Item $iss[0].FullName evidence/install_script.iss
+          $interesting=$lines|Where-Object {$_ -match '(?i)openwg|xvm_13|battlevehiclemarkers|playerspanel|battleloading|zoomout|customsixthsense|limpidstickers|modmenu|modssettingsbridge'}
+          $interesting|Set-Content -Encoding UTF8 evidence/BOX_AND_SELECTED_NATIVE_OWNERS.tsv
+          $report=[ordered]@{source='Official #08 original';installerSha256=$got;installerBytes=(Get-Item $exe).Length;nativeContentVersion=$contentVersion;nativeSHA256=$nativeHash;extractedFileCount=$all.Count;installerSourceUrl=('https://filez.aslain.com/'+$name);configSourceUrl=$url;extractorCommit=$pinned;status='COMPLETE_NATIVE_EXTRACTION_SHA_INVENTORY_ONLY';gameRuntime='NOT_TESTED';creatorRollback='NOT_TESTED';boxCodeChanged='NOT_YET_PROVEN';boxRebuild='NOT_PERFORMED'}
+          ($report|ConvertTo-Json -Depth 5)|Set-Content -Encoding UTF8 evidence/NATIVE08_SUMMARY.json
+          Write-Host ('FULL_NATIVE08_COUNT '+$all.Count)
+          Write-Host ('NATIVE08_OWNER_PATHS '+@($interesting).Count)
+      - name: Preserve extracted evidence for Drive only (do not commit bulky files)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Aslain08-native-full-owner-manifests
+          path: evidence/
+          retention-days: 1
+          if-no-files-found: error
