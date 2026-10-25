@@ -29,7 +29,7 @@ jobs:
           GH_RUN_ID: ${{ github.run_id }}
         run: |
           python3 - <<'PY'
-          import urllib.request,hashlib,re,json,datetime,pathlib
+          import urllib.request,hashlib,re,json,datetime,pathlib,zoneinfo
           now=datetime.datetime.now(datetime.timezone.utc)
           index=json.loads(pathlib.Path("aslain_catalogs/index.json").read_text())
           cat=index["catalogs"][0]
@@ -38,7 +38,7 @@ jobs:
             ("native",f"https://repo.aslain.com/wot_modmanager/{version}/Configuration"),
             ("official_page","https://aslain.com/index.php?/topic/13-aslains-wot-modpack/")
           ]
-          result={"checkedAtUTC":now.isoformat(),"dateNewYork":datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).isoformat(),"catalogReference":cat["aslainVersion"],"sources":[],"status":"UNKNOWN","note":"Independent upstream watchdog only; NOT runtime verification or full migration."}
+          result={"checkedAtUTC":now.isoformat(),"dateNewYork":datetime.datetime.now(zoneinfo.ZoneInfo("America/New_York")).isoformat(),"catalogReference":cat["aslainVersion"],"sources":[],"status":"UNKNOWN","note":"Independent upstream watchdog only; NOT runtime verification or full migration."}
           for label,url in sources:
             record={"name":label,"url":url}
             try:
