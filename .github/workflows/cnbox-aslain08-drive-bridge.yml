@@ -1,0 +1,81 @@
+name: CNBOX upstream current official intake (temporary Drive handoff)
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/cnbox-aslain08-drive-bridge.yml"
+  workflow_dispatch:
+jobs:
+  official-intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download official Aslain #08 and live native Configuration, verify independently
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          python3 - <<'PY'
+          import hashlib,json,pathlib,re,time,urllib.request,xml.etree.ElementTree as ET
+          root=pathlib.Path('out')
+          name='Aslains_WoT_Modpack_Installer_v.2.4.1.0_08.exe'
+          urls=['https://filez.aslain.com/'+name]
+          official='d32a833868d2dedcc2a1108762464eee86d0acf4068f267ad6c9c9acd1b37923'
+          def get(url,attempts=3):
+              last=None
+              for attempt in range(attempts):
+                  try:
+                      req=urllib.request.Request(url,headers={'User-Agent':'CNBOX-upstream-evidence/20261025','Cache-Control':'no-cache'})
+                      with urllib.request.urlopen(req,timeout=180) as f:return f.read(),f.geturl()
+                  except Exception as exc:
+                      last=str(exc)
+                      time.sleep(3*(attempt+1))
+              raise RuntimeError(url+' '+str(last))
+          exe,source=get(urls[0])
+          digest=hashlib.sha256(exe).hexdigest()
+          if digest!=official or len(exe)<60000000:raise SystemExit('OFFICIAL_SHA_OR_LENGTH_FAILED expected='+official+' got='+digest+' size='+str(len(exe)))
+          (root/name).write_bytes(exe)
+          record={'schema':'CNBOX_ASLAIN_OFFICIAL_INTAKE_V1','observedUTC':'2026-10-25T09:00:00Z','officialClassic':'2.4.1.0 #08','officialChangelogDate':'2026-10-24','installer':{'file':name,'source':source,'bytes':len(exe),'sha256':digest,'advertisedSha256':official,'shaPass':True},'native':{},'boxCurrentSHA':'ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f','latestChoicePreviouslyVerifiedSHA':'aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f','gameRuntime':'NOT_TESTED','creatorRealRollback':'NOT_TESTED','formalReleaseChanged':False}
+          print('OFFICIAL_ASLAIN08_EXE_SHA256_PASS',len(exe),digest,flush=True)
+          try:
+              cfg,link=get('https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration')
+              version=ET.fromstring(cfg).attrib.get('ContentVersion')
+              cfgsha=hashlib.sha256(cfg).hexdigest()
+              (root/'Configuration').write_bytes(cfg)
+              record['native']={'contentVersion':version,'sha256':cfgsha,'bytes':len(cfg),'source':link,'status':'FETCHED','sameVersionAsClassic':bool(re.search(r'2[.]4[.]1[.]0\s*#\s*0?8\b',version or ''))}
+              print('NATIVE_CONTENTVERSION',version,'SHA256',cfgsha,flush=True)
+              # Compare 36 selected Mod ids with published previous #07 selected list.
+              prev=pathlib.Path('aslain_catalogs/2.4.1.0/07/Configuration')
+              choices=pathlib.Path('aslain_catalogs/selected_plugins.json')
+              if prev.exists() and choices.exists():
+                  old=ET.fromstring(prev.read_bytes())
+                  new=ET.fromstring(cfg)
+                  selection=json.loads(choices.read_text(encoding='utf-8'))
+                  ids=selection.get('selectedModIds',[])
+                  def byid(doc):return {m.attrib['Id']:m for m in doc.iter('Mod') if 'Id' in m.attrib}
+                  b=byid(old);n=byid(new)
+                  def signature(node):
+                      if node is None:return None
+                      s=ET.tostring(node,encoding='utf-8')
+                      return hashlib.sha256(s).hexdigest()
+                  def refs(node):
+                      if node is None:return []
+                      return list(dict.fromkeys(([node.attrib['File']] if node.attrib.get('File') else []) +[x.attrib['File'] for x in node if x.tag=='Package' and x.attrib.get('File')]))
+                  changed=[{'modId':mid,'oldRefs':refs(b.get(mid)),'newRefs':refs(n.get(mid)),'semanticChange':signature(b.get(mid))!=signature(n.get(mid))} for mid in ids if signature(b.get(mid))!=signature(n.get(mid)) or refs(b.get(mid))!=refs(n.get(mid))]
+                  record['selectedStatic']={'idsFromRepo':len(ids),'missingIds':[mid for mid in ids if mid not in n],'changedSelected':changed,'selectionCaveat':'Source file selection must be matched against the latest original Choice.wotpreset, not assumed unchanged.'}
+                  (root/'selected_ref_delta.json').write_text(json.dumps(record['selectedStatic'],indent=2,ensure_ascii=False))
+                  print('SELECTED_REF_DELTA_IDS',len(changed),[c['modId'] for c in changed],flush=True)
+          except Exception as exc:
+              record['native']={'status':'TRANSIENT_RETRY','error':str(exc)}
+              print('NATIVE_TRANSIENT_RETRY',exc,flush=True)
+          (root/'intake_receipt.json').write_text(json.dumps(record,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+      - name: Stage ephemeral installer and native intake for immediate Google Drive archival
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Aslain08-official-original-Drive-handoff
+          path: out/
+          retention-days: 1
+          if-no-files-found: error
