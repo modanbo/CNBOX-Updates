@@ -1,0 +1,79 @@
+name: CNBOX generic Drive archive verification
+on:
+  workflow_dispatch:
+    inputs:
+      target_version:
+        description: 'Version such as 2.4.1.0 #09'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  drive-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Verify archive credentials and folder are available
+        env:
+          DRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.CNBOX_DRIVE_SERVICE_ACCOUNT_JSON }}
+          DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
+        run: |
+          test -n "$DRIVE_SERVICE_ACCOUNT_JSON" || { echo "::error::DRIVE_SERVICE_ACCOUNT_JSON missing; cannot claim archive"; exit 2; }
+          test -n "$DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID" || { echo "::error::DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID missing"; exit 2; }
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install google-api-python-client google-auth
+      - name: Acquire exact official original, write Drive and verify SHA
+        env:
+          ${{ inputs.target_version }}: ${{ inputs.target_version }}
+          DRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.CNBOX_DRIVE_SERVICE_ACCOUNT_JSON }}
+          DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
+        run: |
+          python3 - <<'PY'
+          import os,re,json,hashlib,io,urllib.request,time
+          from google.oauth2 import service_account
+          from googleapiclient.discovery import build
+          from googleapiclient.http import MediaIoBaseUpload,MediaIoBaseDownload
+          target=os.environ['${{ inputs.target_version }}']
+          m=re.fullmatch(r'(\d+\.\d+\.\d+\.\d+)\s*#\s*(\d+)',target)
+          if not m:raise SystemExit('INVALID_${{ inputs.target_version }}')
+          game,revision=m.group(1),int(m.group(2))
+          filename=f'Aslains_WoT_Modpack_Installer_v.{game}_{revision:02d}.exe'
+          def get(url):
+            req=urllib.request.Request(url,headers={'User-Agent':'CNBOX-verified-Drive-original/1.0','Cache-Control':'no-cache'})
+            with urllib.request.urlopen(req,timeout=180) as x:return x.read()
+          cfg=get(f'https://repo.aslain.com/wot_modmanager/{game}/Configuration')
+          if not re.search(rb'ContentVersion\s*=\s*["\x27]v?'+game.encode().replace(b'.',b'\\.')+rb'\s*#\s*0?'+str(revision).encode()+rb'\b',cfg):
+            raise SystemExit('LIVE_NATIVE_VERSION_MISMATCH')
+          data=get('https://filez.aslain.com/'+filename)
+          digest=hashlib.sha256(data).hexdigest()
+          if len(data)<1000000 or data[:2]!=b'MZ':raise SystemExit('INVALID_EXE')
+          # Official advertised digest still requires independent verification; never call it vendor-verified here.
+          credentials=service_account.Credentials.from_service_account_info(json.loads(os.environ['DRIVE_SERVICE_ACCOUNT_JSON']),scopes=['https://www.googleapis.com/auth/drive.file'])
+          drive=build('drive','v3',credentials=credentials,cache_discovery=False)
+          folder=os.environ['DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID']
+          # Check already stored file first; avoid duplicate originals or accidental deletion.
+          q="name = '"+filename.replace("'","\\'")+"' and '"+folder+"' in parents and trashed = false"
+          existing=drive.files().list(q=q,fields='files(id,name,size),nextPageToken').execute().get('files',[])
+          for file in existing:
+            stream=io.BytesIO()
+            req=drive.files().get_media(fileId=file['id'])
+            download=MediaIoBaseDownload(stream,req)
+            complete=False
+            while not complete:_,complete=download.next_chunk()
+            if hashlib.sha256(stream.getvalue()).hexdigest()==digest:
+              print('DRIVE_EXISTING_FULL_SHA_PASS',file['id'],digest,len(data))
+              break
+          else:
+            media=MediaIoBaseUpload(io.BytesIO(data),mimetype='application/x-msdownload',resumable=True)
+            created=drive.files().create(body={'name':filename,'parents':[folder],'description':'CNBOX upstream official original; SHA calculated, vendor SHA comparison separately required'},media_body=media,fields='id,name,size').execute()
+            stream=io.BytesIO()
+            req=drive.files().get_media(fileId=created['id'])
+            dl=MediaIoBaseDownload(stream,req)
+            finished=False
+            while not finished:_,finished=dl.next_chunk()
+            if stream.getvalue()!=data:raise SystemExit('DRIVE_FULL_RAW_ROUNDTRIP_FAILED')
+            print('DRIVE_NEW_RAW_ROUNDTRIP_PASS',created['id'],digest,len(data))
+          print('ARCHIVED_STANDALONE_VERIFIED; OLD CURRENT RAW NOT DELETED; vendor digest gate PENDING')
+          PY
