@@ -16,12 +16,32 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Enforce New York 05:00 (both DST and standard time)
+      - name: Select New York 05:00 cron even if GitHub runner starts late
         id: gate
         env:
           EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE_RULE: ${{ github.event.schedule }}
+        shell: bash
         run: |
-          if [ "$EVENT_NAME" != "schedule" ] || [ "$(TZ=America/New_York date +%H)" = "05" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
+          set -euo pipefail
+          if [ "$EVENT_NAME" != "schedule" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          expected=$(python3 - <<'PY'
+          from datetime import datetime,time,timezone
+          from zoneinfo import ZoneInfo
+          tz=ZoneInfo("America/New_York")
+          localdate=datetime.now(timezone.utc).astimezone(tz).date()
+          five=datetime.combine(localdate,time(5,0),tzinfo=tz)
+          print(f"0 {five.astimezone(timezone.utc).hour} * * *")
+          PY
+          )
+          if [ "$SCHEDULE_RULE" = "$expected" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Independent native upstream and official-site checks
         if: steps.gate.outputs.run == 'true'
         env:
@@ -111,7 +131,7 @@ jobs:
               with urllib.request.urlopen(req,timeout=30) as response:
                   d["handoff"]["dispatchHTTP"]=response.status
               d["handoff"]["status"]="GENERIC_INTAKE_DISPATCHED_ENGINEERING_PENDING"
-              p.write_text(json.dumps(d,indent=2)+"\\n")
+              p.write_text(json.dumps(d,indent=2,ensure_ascii=False))
           PY
       - name: Upload daily execution receipt
         if: steps.gate.outputs.run == 'true' && always()
