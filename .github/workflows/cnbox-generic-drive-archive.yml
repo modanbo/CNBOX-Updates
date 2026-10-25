@@ -16,28 +16,28 @@ jobs:
       - name: Verify archive credentials and folder are available
         env:
           DRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.CNBOX_DRIVE_SERVICE_ACCOUNT_JSON }}
-          DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
+          DRIVE_CURRENT_FOLDER_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
         run: |
           test -n "$DRIVE_SERVICE_ACCOUNT_JSON" || { echo "::error::DRIVE_SERVICE_ACCOUNT_JSON missing; cannot claim archive"; exit 2; }
-          test -n "$DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID" || { echo "::error::DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID missing"; exit 2; }
+          test -n "$DRIVE_CURRENT_FOLDER_ID" || { echo "::error::DRIVE_CURRENT_FOLDER_ID missing"; exit 2; }
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install google-api-python-client google-auth
       - name: Acquire exact official original, write Drive and verify SHA
         env:
-          ${{ inputs.target_version }}: ${{ inputs.target_version }}
+          TARGET: ${{ inputs.target_version }}
           DRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.CNBOX_DRIVE_SERVICE_ACCOUNT_JSON }}
-          DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
+          DRIVE_CURRENT_FOLDER_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
         run: |
           python3 - <<'PY'
           import os,re,json,hashlib,io,urllib.request,time
           from google.oauth2 import service_account
           from googleapiclient.discovery import build
           from googleapiclient.http import MediaIoBaseUpload,MediaIoBaseDownload
-          target=os.environ['${{ inputs.target_version }}']
+          target=os.environ['TARGET']
           m=re.fullmatch(r'(\d+\.\d+\.\d+\.\d+)\s*#\s*(\d+)',target)
-          if not m:raise SystemExit('INVALID_${{ inputs.target_version }}')
+          if not m:raise SystemExit('INVALID_TARGET')
           game,revision=m.group(1),int(m.group(2))
           filename=f'Aslains_WoT_Modpack_Installer_v.{game}_{revision:02d}.exe'
           def get(url):
@@ -52,7 +52,7 @@ jobs:
           # Official advertised digest still requires independent verification; never call it vendor-verified here.
           credentials=service_account.Credentials.from_service_account_info(json.loads(os.environ['DRIVE_SERVICE_ACCOUNT_JSON']),scopes=['https://www.googleapis.com/auth/drive.file'])
           drive=build('drive','v3',credentials=credentials,cache_discovery=False)
-          folder=os.environ['DRIVE_CURRENT_${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}_ID']
+          folder=os.environ['DRIVE_CURRENT_FOLDER_ID']
           # Check already stored file first; avoid duplicate originals or accidental deletion.
           q="name = '"+filename.replace("'","\\'")+"' and '"+folder+"' in parents and trashed = false"
           existing=drive.files().list(q=q,fields='files(id,name,size),nextPageToken').execute().get('files',[])
