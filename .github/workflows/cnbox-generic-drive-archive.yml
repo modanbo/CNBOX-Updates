@@ -1,5 +1,8 @@
 name: CNBOX generic Drive archive verification
 on:
+  push:
+    paths:
+      - '.github/workflows/cnbox-generic-drive-archive.yml'
   workflow_dispatch:
     inputs:
       target_version:
@@ -26,7 +29,7 @@ jobs:
       - run: pip install google-api-python-client google-auth
       - name: Acquire exact official original, write Drive and verify SHA
         env:
-          TARGET: ${{ inputs.target_version }}
+          TARGET: ${{ inputs.target_version || '2.4.1.0 #08' }}
           DRIVE_SERVICE_ACCOUNT_JSON: ${{ secrets.CNBOX_DRIVE_SERVICE_ACCOUNT_JSON }}
           DRIVE_CURRENT_FOLDER_ID: ${{ vars.CNBOX_DRIVE_CURRENT_FOLDER_ID }}
         run: |
