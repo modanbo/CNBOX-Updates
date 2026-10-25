@@ -9,7 +9,6 @@ on:
       - '.github/workflows/cnbox-daily-upstream-watchdog.yml'
 permissions:
   contents: read
-  actions: write
 jobs:
   daily-check:
     runs-on: ubuntu-latest
@@ -68,34 +67,41 @@ jobs:
           print(json.dumps(result,indent=2,ensure_ascii=False))
           if not any("httpStatus" in x for x in result["sources"]): raise SystemExit("Both independent upstream sources unavailable")
           PY
-      - name: Trigger verified existing engineering pipelines
+      - name: Dynamically resolve all future releases and stage source evidence
         if: steps.gate.outputs.run == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
         run: |
           python3 - <<'PY'
-          import pathlib,json,os,urllib.request
-          receipt=pathlib.Path("cnbox_daily_receipt.json")
-          data=json.loads(receipt.read_text())
-          if not data.get("migrationRequired"):
-              handoff={"status":"NO_NEW_BUILD"}
-          elif data["nativeDetectedBuild"]!=8:
-              handoff={"status":"UNSUPPORTED_NEW_VERSION","detected":data["nativeDetectedBuild"]}
-          else:
-              jobs=["cnbox-aslain08-drive-bridge.yml","cnbox-aslain08-native-full-teardown.yml","cnbox-aslain08-selected-package-audit.yml"]
-              results=[]
-              for job in jobs:
-                  url="https://api.github.com/repos/"+os.environ["GH_REPO"]+"/actions/workflows/"+job+"/dispatches"
-                  req=urllib.request.Request(url,data=b'{"ref":"main"}',method="POST",headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","Content-Type":"application/json"})
-                  try:
-                      with urllib.request.urlopen(req,timeout=25) as response:results.append({"job":job,"http":response.status})
-                  except Exception as e:results.append({"job":job,"error":str(e)})
-              handoff={"status":"DISPATCHED" if all(x.get("http")==204 for x in results) else "FAILED","jobs":results}
-          data["handoff"]=handoff
-          receipt.write_text(json.dumps(data,indent=2)+"\n")
-          print(json.dumps(handoff))
-          if handoff["status"] in ("FAILED","UNSUPPORTED_NEW_VERSION"):raise SystemExit("Engineering handoff not completed; never mark green.")
+          import json,pathlib,re,urllib.request,hashlib,xml.etree.ElementTree as ET
+          p=pathlib.Path("cnbox_daily_receipt.json")
+          d=json.loads(p.read_text())
+          native=d["sources"][0]
+          page=d["sources"][1]
+          versions=re.findall(r'2\.4\.\d+\.\d+\s*#\s*\d+',str(page.get("versionHints",[])))
+          native_version=(native.get("versionHints") or [None,None])[-1]
+          d["upstreamFullVersion"]=native_version
+          d["officialVersionHints"]=versions
+          if not native.get("httpStatus") or not page.get("httpStatus"):
+              d["handoff"]={"status":"TRANSIENT_RETRY","reason":"Both authoritative sources required before selecting upstream"}
+              p.write_text(json.dumps(d,indent=2)+"\n")
+              raise SystemExit("Both official sources must be available")
+          catalog=d["catalogReference"]
+          if not native_version or not re.fullmatch(r'v?\d+\.\d+\.\d+\.\d+\s*#\s*\d+',native_version):
+              d["handoff"]={"status":"TRANSIENT_RETRY","reason":"Cannot confirm native version"}
+              p.write_text(json.dumps(d,indent=2)+"\n")
+              raise SystemExit("Unknown native version")
+          def key(s):
+              a,b=re.search(r'(\d+\.\d+\.\d+\.\d+)\s*#\s*(\d+)',s).groups()
+              return tuple(map(int,a.split(".")))+(int(b),)
+          new=key(native_version)>key(catalog)
+          d["migrationRequired"]=new
+          d["handoff"]={"status":"NEW_VERSION_INTAKE_REQUIRED" if new else "UP_TO_DATE",
+                        "target":native_version,
+                        "nextAction":"Acquire official SHA-verified native installer; current-Choice owner audit; Drive archival; two reviews; real Runtime remains NOT_TESTED" if new else "Routine next daily check",
+                        "note":"For ANY future build; no fixed #08 workflows dispatched. Detection alone is not migrated/archived."}
+          p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+"\n")
+          print(json.dumps(d["handoff"],ensure_ascii=False))
+          if new:
+              raise SystemExit("NEW_VERSION_INTAKE_REQUIRED: cannot report green until generic engineering/Drive work is completed")
           PY
       - name: Upload daily execution receipt
         if: steps.gate.outputs.run == 'true' && always()
