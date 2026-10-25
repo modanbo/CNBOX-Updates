@@ -1,0 +1,67 @@
+name: CNBOX daily upstream execution watchdog
+on:
+  schedule:
+    - cron: '0 9 * * *'
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  daily-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce New York 05:00 (both DST and standard time)
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$(TZ=America/New_York date +%H)" = "05" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Independent native upstream and official-site checks
+        if: steps.gate.outputs.run == 'true'
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_RUN_ID: ${{ github.run_id }}
+        run: |
+          python3 - <<'PY'
+          import urllib.request,hashlib,re,json,datetime,pathlib
+          now=datetime.datetime.now(datetime.timezone.utc)
+          index=json.loads(pathlib.Path("aslain_catalogs/index.json").read_text())
+          cat=index["catalogs"][0]
+          version=cat["wotVersion"]
+          sources=[
+            ("native",f"https://repo.aslain.com/wot_modmanager/{version}/Configuration"),
+            ("official_page","https://aslain.com/index.php?/topic/13-aslains-wot-modpack/")
+          ]
+          result={"checkedAtUTC":now.isoformat(),"dateNewYork":datetime.datetime.now(datetime.timezone(datetime.timedelta(0))).isoformat(),"catalogReference":cat["aslainVersion"],"sources":[],"status":"UNKNOWN","note":"Independent upstream watchdog only; NOT runtime verification or full migration."}
+          for label,url in sources:
+            record={"name":label,"url":url}
+            try:
+              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 CNBOX-Upstream-Watchdog/1.0","Cache-Control":"no-cache"})
+              with urllib.request.urlopen(req,timeout=55) as response:
+                data=response.read(6000000)
+                record["httpStatus"]=response.status
+                record["bytesRead"]=len(data)
+                record["sha256OfReadBytes"]=hashlib.sha256(data).hexdigest()
+                text=data.decode("utf-8","replace")
+                matches=re.findall(r"(?:ContentVersion|v2\.4\.\d+\.\d+\s*#\s*\d+|2\.4\.\d+\.\d+\s*#\s*\d+)",text,re.I)
+                record["versionHints"]=matches[:12]
+                if label=="native":
+                  record["versionPatternMatches"]=re.findall(r"v?"+re.escape(version)+r"\s*#\s*(\d+)",text,re.I)[:20]
+            except Exception as e:
+              record["error"]=str(e)
+            result["sources"].append(record)
+          result["status"]="CHECKED" if all("httpStatus" in x for x in result["sources"]) else "PARTIAL_SOURCE_FAILURE"
+          pathlib.Path("cnbox_daily_receipt.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
+          print(json.dumps(result,indent=2,ensure_ascii=False))
+          if not any("httpStatus" in x for x in result["sources"]): raise SystemExit("Both independent upstream sources unavailable")
+          PY
+      - name: Upload daily execution receipt
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cnbox-daily-upstream-receipt
+          path: cnbox_daily_receipt.json
+          retention-days: 7
+          if-no-files-found: warn
