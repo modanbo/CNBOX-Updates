@@ -1,0 +1,103 @@
+name: CNBOX Aslain08 Choice36 selected changed-package binary audit
+permissions:
+  contents: read
+on:
+  push:
+    paths:
+      - ".github/workflows/cnbox-aslain08-selected-package-audit.yml"
+  workflow_dispatch:
+jobs:
+  selected:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exact Choice36 changed archives nested binary audit against frozen Box
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          python3 - <<'PY'
+          import urllib.request,urllib.parse,hashlib,zipfile,io,json,copy,xml.etree.ElementTree as ET,time
+          from pathlib import Path
+          def sha(b):return hashlib.sha256(b).hexdigest()
+          def fetch(url):
+              error=None
+              for attempt in range(3):
+                  try:
+                      req=urllib.request.Request(url,headers={'User-Agent':'NAJXBox-current-selected-binary/1.0','Cache-Control':'no-cache'})
+                      with urllib.request.urlopen(req,timeout=180) as f:return f.read(),f.geturl()
+                  except Exception as e:
+                      error=str(e);time.sleep(2*(attempt+1))
+              raise RuntimeError(url+' '+str(error))
+          boxUrl='https://raw.githubusercontent.com/modanbo/CNBOX-Updates/main/payloads/2.4.1.0/unified/CNBOX_PAYLOAD_1.2.1.zip'
+          boxData,_=fetch(boxUrl)
+          boxSha=sha(boxData)
+          if boxSha!='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f':raise SystemExit('FORMAL_BOX_SOURCE_HASH_MISMATCH '+boxSha)
+          with zipfile.ZipFile(io.BytesIO(boxData)) as z:
+              boxPaths={n.replace('\\','/').lower() for n in z.namelist() if not n.endswith('/')}
+          if len(boxPaths)!=533:raise SystemExit('FORMAL_BOX_MEMBER_COUNT_BAD')
+          rootOld=ET.fromstring(Path('aslain_catalogs/2.4.1.0/07/Configuration').read_bytes())
+          cfg,_=fetch('https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration')
+          rootNew=ET.fromstring(cfg)
+          if '#08' not in rootNew.attrib.get('ContentVersion',''):raise SystemExit('NATIVE_08_VERSION_BAD')
+          selected=json.loads(Path('aslain_catalogs/selected_plugins.json').read_text(encoding='utf-8'))
+          ids=selected['selectedModIds']
+          if len(ids)!=36 or len(set(ids))!=36:raise SystemExit('CHOICE_SELECTION_LIST_NOT_36')
+          def byid(root):return {m.attrib['Id']:m for m in root.iter('Mod') if m.attrib.get('Id')}
+          a,b=byid(rootOld),byid(rootNew)
+          def refs(node):
+              if node is None:return []
+              return list(dict.fromkeys(([node.attrib['File']] if node.attrib.get('File') else [])+[x.attrib['File'] for x in node if x.tag=='Package' and x.attrib.get('File')]))
+          changed=[mid for mid in ids if refs(a.get(mid))!=refs(b.get(mid))]
+          cache={}
+          def inventory(data,prefix='',depth=0):
+              o={}
+              if depth>4:return o
+              try:z=zipfile.ZipFile(io.BytesIO(data))
+              except (ValueError,zipfile.BadZipFile):return o
+              for info in z.infolist():
+                  if info.is_dir():continue
+                  bs=z.read(info.filename)
+                  name=prefix+info.filename.replace('\\','/')
+                  o[name]={'sha256':sha(bs),'bytes':len(bs)}
+                  if info.filename.lower().endswith(('.wotmod','.zip')) and len(bs)<100_000_000:
+                      o.update(inventory(bs,name+'!',depth+1))
+              return o
+          def get(ref):
+              if ref in cache:return cache[ref]
+              url=urllib.parse.urljoin('https://repo.aslain.com/wot_modmanager/2.4.1.0/Configuration',ref)
+              try:
+                  data,final=fetch(url)
+                  rec={'ref':ref,'source':final,'bytes':len(data),'sha256':sha(data),'members':inventory(data),'status':'OK'}
+              except Exception as e:
+                  rec={'ref':ref,'status':'TRANSIENT_SOURCE_MISSING','error':str(e),'members':{}}
+              cache[ref]=rec
+              return rec
+          results=[]
+          for mid in changed:
+              old=[get(x) for x in refs(a.get(mid))]
+              new=[get(x) for x in refs(b.get(mid))]
+              def flat(recs):
+                  d={}
+                  for rec in recs:
+                      for path,obj in rec['members'].items():d[path]=obj
+                  return d
+              oa,nb=flat(old),flat(new)
+              newChanged=sorted(p for p in nb if p not in oa or oa[p]['sha256']!=nb[p]['sha256'])
+              removed=sorted(p for p in oa if p not in nb)
+              boxHits=sorted(set(p.split('!')[-1].lower().replace('\\','/') for p in newChanged)&boxPaths)
+              results.append({'modId':mid,'fromRefs':refs(a.get(mid)),'toRefs':refs(b.get(mid)),'oldArchives':old,'newArchives':new,'modifiedOrAddedNestedPaths':newChanged,'removedNestedPaths':removed,'newPathsIntersectBox533':boxHits})
+              print('AUDITED',mid,'newpaths',len(newChanged),'boxOverlap',len(boxHits),'old',','.join(z['status'] for z in old),'new',','.join(z['status'] for z in new),flush=True)
+          report={'target':'2.4.1.0 #08','prior':'2.4.1.0 #07','native08SHA256':sha(cfg),'selectionFromPublicRecord':36,'sourceChoiceOriginalSHA256':'aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f','boxCurrentSHA256':boxSha,'boxMembers':len(boxPaths),'changedDirectRefsCount':len(changed),'changedDirectRefsMods':changed,'changedAudits':results,'anyNewChangedPackagePathIntersectBox':any(x['newPathsIntersectBox533'] for x in results),'fetchTransientCount':sum(1 for z in cache.values() if z['status']!='OK'),'realInstalledOwner':'NOT_PROVEN','gameRuntime':'NOT_TESTED','creatorPhysicalRollback':'NOT_TESTED','doesNotAuthorizeFormalPromotion':True}
+          Path('out/ASLAIN08_SELECTED_ARCHIVE_NESTED_OWNER_AUDIT.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('SELECTED_REFS_CHANGED',len(changed),'NEW_SOURCE_COLLISIONS',report['anyNewChangedPackagePathIntersectBox'],'TRANSIENT',report['fetchTransientCount'])
+          PY
+      - name: Preserve ephemeral selected archive audit for Drive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Aslain08-Choice36-selected-archive-nested-audit
+          path: out/
+          retention-days: 1
+          if-no-files-found: error
