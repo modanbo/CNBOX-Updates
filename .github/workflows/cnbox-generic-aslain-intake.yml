@@ -43,30 +43,14 @@ jobs:
               out["installerBytes"]=len(exe)
               out["installerSHA256"]=hashlib.sha256(exe).hexdigest()
               if len(exe)<1000000 or exe[:2]!=b"MZ":raise RuntimeError("INSTALLER_NOT_PE_OR_TOO_SHORT")
-              out["status"]="INTAKE_ONLY_DRIVE_ARCHIVAL_PENDING"
-              out["nextAction"]="Verify advertised SHA independently; archive Drive original; native unpack and Choice owner audit"
+              out["status"]="INTAKE_DONE_DRIVE_ARCHIVAL_PENDING"
+              out["nextAction"]="Resume latest existing Drive checkpoint, verify official SHA and archive via connected Drive workflow; DO NOT dispatch unauthenticated service-account runner"
           except Exception as e:
               out["status"]="TRANSIENT_RETRY"
               out["error"]=str(e)
           pathlib.Path("evidence/generic_intake.json").write_text(json.dumps(out,indent=2)+"\n")
           print(json.dumps(out,indent=2))
           if out["status"]=="TRANSIENT_RETRY":raise SystemExit(2)
-          PY
-      - name: Request Drive original archive verification
-        if: success()
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          TARGET: ${{ inputs.target_version }}
-        run: |
-          python3 - <<'PY'
-          import json,os,urllib.request
-          url='https://api.github.com/repos/'+os.environ['GH_REPO']+'/actions/workflows/cnbox-generic-drive-archive.yml/dispatches'
-          payload=json.dumps({'ref':'main','inputs':{'target_version':os.environ['TARGET']}}).encode()
-          req=urllib.request.Request(url,method='POST',data=payload,headers={'Authorization':'Bearer '+os.environ['GH_TOKEN'],'Accept':'application/vnd.github+json','Content-Type':'application/json'})
-          with urllib.request.urlopen(req,timeout=30) as response:
-              if response.status!=204:raise SystemExit('DRIVE_ARCHIVE_DISPATCH_FAILED')
-              print('DRIVE_ARCHIVE_REQUESTED_NOT_YET_VERIFIED',os.environ['TARGET'])
           PY
       - name: Upload small receipt only
         if: always()
