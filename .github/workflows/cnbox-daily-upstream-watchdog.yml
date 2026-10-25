@@ -9,6 +9,7 @@ on:
       - '.github/workflows/cnbox-daily-upstream-watchdog.yml'
 permissions:
   contents: read
+  actions: write
 jobs:
   daily-check:
     runs-on: ubuntu-latest
@@ -55,10 +56,46 @@ jobs:
             except Exception as e:
               record["error"]=str(e)
             result["sources"].append(record)
-          result["status"]="CHECKED" if all("httpStatus" in x for x in result["sources"]) else "PARTIAL_SOURCE_FAILURE"
+          native=result["sources"][0]
+          builds=[int(v) for v in native.get("versionPatternMatches",[]) if v.isdigit()]
+          detected=max(builds) if builds else None
+          catalog_build=int(re.search(r"#\s*(\d+)",cat["aslainVersion"]).group(1))
+          result["nativeDetectedBuild"]=detected
+          result["catalogBuild"]=catalog_build
+          result["migrationRequired"]=bool(detected is not None and detected>catalog_build)
+          result["status"]="NEW_VERSION_DETECTED" if result["migrationRequired"] else ("CHECKED" if all("httpStatus" in x for x in result["sources"]) else "PARTIAL_SOURCE_FAILURE")
           pathlib.Path("cnbox_daily_receipt.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
           print(json.dumps(result,indent=2,ensure_ascii=False))
           if not any("httpStatus" in x for x in result["sources"]): raise SystemExit("Both independent upstream sources unavailable")
+          PY
+      - name: Trigger verified existing engineering pipelines
+        if: steps.gate.outputs.run == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,os,urllib.request
+          receipt=pathlib.Path("cnbox_daily_receipt.json")
+          data=json.loads(receipt.read_text())
+          if not data.get("migrationRequired"):
+              handoff={"status":"NO_NEW_BUILD"}
+          elif data["nativeDetectedBuild"]!=8:
+              handoff={"status":"UNSUPPORTED_NEW_VERSION","detected":data["nativeDetectedBuild"]}
+          else:
+              jobs=["cnbox-aslain08-drive-bridge.yml","cnbox-aslain08-native-full-teardown.yml","cnbox-aslain08-selected-package-audit.yml"]
+              results=[]
+              for job in jobs:
+                  url="https://api.github.com/repos/"+os.environ["GH_REPO"]+"/actions/workflows/"+job+"/dispatches"
+                  req=urllib.request.Request(url,data=b'{"ref":"main"}',method="POST",headers={"Authorization":"Bearer "+os.environ["GH_TOKEN"],"Accept":"application/vnd.github+json","Content-Type":"application/json"})
+                  try:
+                      with urllib.request.urlopen(req,timeout=25) as response:results.append({"job":job,"http":response.status})
+                  except Exception as e:results.append({"job":job,"error":str(e)})
+              handoff={"status":"DISPATCHED" if all(x.get("http")==204 for x in results) else "FAILED","jobs":results}
+          data["handoff"]=handoff
+          receipt.write_text(json.dumps(data,indent=2)+"\n")
+          print(json.dumps(handoff))
+          if handoff["status"] in ("FAILED","UNSUPPORTED_NEW_VERSION"):raise SystemExit("Engineering handoff not completed; never mark green.")
           PY
       - name: Upload daily execution receipt
         if: steps.gate.outputs.run == 'true' && always()
