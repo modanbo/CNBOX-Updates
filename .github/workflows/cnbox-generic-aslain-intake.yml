@@ -1,0 +1,61 @@
+name: CNBOX generic Aslain upstream intake
+on:
+  workflow_dispatch:
+    inputs:
+      target_version:
+        description: 'Official version such as 2.4.1.0 #09'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Inspect dynamically selected upstream
+        env:
+          TARGET: ${{ inputs.target_version }}
+        run: |
+          mkdir -p evidence
+          python3 - <<'PY'
+          import os,re,json,hashlib,pathlib,urllib.request,xml.etree.ElementTree as ET
+          target=os.environ["TARGET"].strip()
+          m=re.fullmatch(r"(\d+\.\d+\.\d+\.\d+)\s*#\s*(\d+)",target)
+          if not m:raise SystemExit("INVALID_TARGET")
+          game,build=m.group(1),int(m.group(2))
+          name=f"Aslains_WoT_Modpack_Installer_v.{game}_{build:02d}.exe"
+          def get(url):
+              req=urllib.request.Request(url,headers={"User-Agent":"Mozilla/5.0 CNBOX-GenericIntake","Cache-Control":"no-cache"})
+              with urllib.request.urlopen(req,timeout=150) as r:return r.read()
+          out={"target":target,"installerName":name,"status":"PRECHECK","gameRuntime":"NOT_TESTED","driveArchive":"NOT_TESTED"}
+          try:
+              cfg=get(f"https://repo.aslain.com/wot_modmanager/{game}/Configuration")
+              v=ET.fromstring(cfg).attrib.get("ContentVersion","")
+              out["nativeContentVersion"]=v
+              out["nativeSHA256"]=hashlib.sha256(cfg).hexdigest()
+              if not re.search(re.escape(game)+r"\s*#\s*0?"+str(build)+r"\b",v):raise RuntimeError("NATIVE_LIVE_TARGET_MISMATCH")
+              pathlib.Path("evidence/Configuration").write_bytes(cfg)
+              page=get("https://aslain.com/index.php?/topic/13-aslains-wot-modpack/").decode("utf-8","replace")
+              if not re.search(re.escape(game)+r"\s*#\s*0?"+str(build)+r"\b",page):raise RuntimeError("OFFICIAL_SITE_VERSION_NOT_CONFIRMED")
+              exe=get("https://filez.aslain.com/"+name)
+              out["installerBytes"]=len(exe)
+              out["installerSHA256"]=hashlib.sha256(exe).hexdigest()
+              if len(exe)<1000000 or exe[:2]!=b"MZ":raise RuntimeError("INSTALLER_NOT_PE_OR_TOO_SHORT")
+              out["status"]="INTAKE_HASH_RECORDED_OFFICIAL_SHA_COMPARISON_PENDING"
+              out["nextAction"]="Verify advertised SHA independently; archive Drive original; native unpack and Choice owner audit"
+          except Exception as e:
+              out["status"]="TRANSIENT_RETRY"
+              out["error"]=str(e)
+          pathlib.Path("evidence/generic_intake.json").write_text(json.dumps(out,indent=2)+"\n")
+          print(json.dumps(out,indent=2))
+          if out["status"]=="TRANSIENT_RETRY":raise SystemExit(2)
+          PY
+      - name: Upload small receipt only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generic-aslain-intake-receipt
+          path: evidence/
+          retention-days: 2
+          if-no-files-found: warn
