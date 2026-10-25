@@ -4,6 +4,9 @@ on:
     - cron: '0 9 * * *'
     - cron: '0 10 * * *'
   workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cnbox-daily-upstream-watchdog.yml'
 permissions:
   contents: read
 jobs:
