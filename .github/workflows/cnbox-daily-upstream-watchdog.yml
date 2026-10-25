@@ -20,7 +20,7 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          if [ "$EVENT_NAME" = "workflow_dispatch" ] || [ "$(TZ=America/New_York date +%H)" = "05" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
+          if [ "$EVENT_NAME" != "schedule" ] || [ "$(TZ=America/New_York date +%H)" = "05" ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
       - name: Independent native upstream and official-site checks
         if: steps.gate.outputs.run == 'true'
         env:
