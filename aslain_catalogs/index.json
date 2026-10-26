@@ -32,5 +32,37 @@
       "configurationSha256": "24b1fadad9ec6bbae6f1ccf383b2360746b5434ea806d100b2333c261f66bd9c",
       "bytes": 1936311
     }
-  ]
+  ],
+  "latestReviewedUpstream": {
+    "aslainVersion": "2.4.1.0 #08",
+    "reviewDateLocal": "2026-10-25",
+    "reviewBasis": "Google Drive completed source+Choice36 static owner workstream",
+    "choiceSourceDriveFileId": "1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW",
+    "choiceSHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
+    "latestInstallerCurrentDriveFileId": "1R5AWQfIX6jp-O2l-VacVFcppcb_Vg1y7",
+    "vendorInstallerSHA256": "d32a833868d2dedcc2a1108762464eee86d0acf4068f267ad6c9c9acd1b37923",
+    "evidenceDriveCheckpointId": "1nREYV6XkXaGRWsaRNotPc1oQY9CZghjgtit0MLyBPtw",
+    "evidenceDriveFolderId": "1x8dSPfgGCGgJR8y5FvPW4JhhQp7kdMNU",
+    "boxSourceOwnership": "NO_NEW_BOX_OWNED_DELTA",
+    "boxCompatibilityClassification": "A_LOW_RISK_REBASE_DELTA_ONLY",
+    "sourceInstallGraph": "TWO_INDEPENDENT_STATIC_REVIEWS_PASS_NOT_PHYSICAL_INSTALL",
+    "unchangedFormalModuleIdentities": [
+      "Box 1.2.1",
+      "MoE 1.3.1",
+      "Language 1.1.3",
+      "Manager/Creator 2.1.6"
+    ],
+    "gameRuntime": "NOT_TESTED",
+    "managerCreatorPhysicalRollback": "NOT_TESTED",
+    "note": "Native repository catalog remains #07 until exact original #08 catalog is separately indexed; #08 verified originals are in Drive. Do not re-run #08 intake or update locked GitHub binaries/channel from Aslain-only version change.",
+    "moduleReleaseChanged": false
+  },
+  "upstreamOnlyReleasePolicy": {
+    "effectiveDate": "2026-10-25",
+    "releaseGate": "Only proven changes to CNBOX Box/MoE/Language/Manager own release bytes or required functionality may open a candidate; formal release needs explicit owner authorization.",
+    "unchangedModules": "DO_NOT_EDIT_CURRENT_RELEASE_BINARIES_MANIFEST_OR_CHANNEL_JSON",
+    "aslainUpstreamOnly": "DOCUMENTATION_AND_LIGHTWEIGHT_INDEX_AND_DRIVE_EVIDENCE_ONLY",
+    "rawAndFullHistoryPrimary": "GOOGLE_DRIVE",
+    "githubKeep": "TOOLS_AND_CURRENT_PLUS_IMMEDIATELY_PREVIOUS_FORMAL_LOCKED_MODULES"
+  }
 }
