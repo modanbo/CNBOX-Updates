@@ -69,7 +69,7 @@ jobs:
                 record["bytesRead"]=len(data)
                 record["sha256OfReadBytes"]=hashlib.sha256(data).hexdigest()
                 text=data.decode("utf-8","replace")
-                matches=re.findall(r"(?:ContentVersion|v2\.4\.\d+\.\d+\s*#\s*\d+|2\.4\.\d+\.\d+\s*#\s*\d+)",text,re.I)
+                matches=re.findall(r"(?:ContentVersion|v?\d+\.\d+\.\d+\.\d+\s*#\s*\d+)",text,re.I)
                 record["versionHints"]=matches[:12]
                 if label=="native":
                   record["versionPatternMatches"]=re.findall(r"v?"+re.escape(version)+r"\s*#\s*(\d+)",text,re.I)[:20]
@@ -79,11 +79,20 @@ jobs:
           native=result["sources"][0]
           builds=[int(v) for v in native.get("versionPatternMatches",[]) if v.isdigit()]
           detected=max(builds) if builds else None
+          reviewed=index.get("latestReviewedUpstream",{})
+          reviewed_version=reviewed.get("aslainVersion",cat["aslainVersion"])
+          reviewed_match=re.search(r"(\d+(?:\.\d+){3})\s*#\s*(\d+)",reviewed_version)
+          if not reviewed_match:raise SystemExit("INVALID_LAST_REVIEWED_UPSTREAM_REFERENCE")
           catalog_build=int(re.search(r"#\s*(\d+)",cat["aslainVersion"]).group(1))
           result["nativeDetectedBuild"]=detected
           result["catalogBuild"]=catalog_build
-          result["migrationRequired"]=bool(detected is not None and detected>catalog_build)
-          result["status"]="NEW_VERSION_DETECTED" if result["migrationRequired"] else ("CHECKED" if all("httpStatus" in x for x in result["sources"]) else "PARTIAL_SOURCE_FAILURE")
+          result["reviewedReference"]=reviewed_version
+          result["reviewedChoiceSHA256"]=reviewed.get("choiceSHA256")
+          result["reviewedBuild"]=int(reviewed_match.group(2))
+          result["upstreamReviewRequired"]=bool(detected is not None and detected>result["reviewedBuild"])
+          result["moduleReleaseChanged"]=False
+          result["releasePolicy"]="Aslain-only updates are documented in Drive and lightweight indexes; never republish unchanged CNBOX Box/MoE/Language/Manager binaries or channel"
+          result["status"]="UPSTREAM_REVIEW_REQUIRED" if result["upstreamReviewRequired"] else ("NO_NEW_MODULE_RELEASE" if all("httpStatus" in x for x in result["sources"]) else "PARTIAL_SOURCE_FAILURE")
           pathlib.Path("cnbox_daily_receipt.json").write_text(json.dumps(result,indent=2,ensure_ascii=False)+"\n")
           print(json.dumps(result,indent=2,ensure_ascii=False))
           if not any("httpStatus" in x for x in result["sources"]): raise SystemExit("Both independent upstream sources unavailable")
@@ -100,7 +109,7 @@ jobs:
           d=json.loads(p.read_text())
           native=d["sources"][0]
           page=d["sources"][1]
-          versions=re.findall(r'2\.4\.\d+\.\d+\s*#\s*\d+',str(page.get("versionHints",[])))
+          versions=re.findall(r'\d+\.\d+\.\d+\.\d+\s*#\s*\d+',str(page.get("versionHints",[])))
           native_version=(native.get("versionHints") or [None,None])[-1]
           d["upstreamFullVersion"]=native_version
           d["officialVersionHints"]=versions
@@ -116,12 +125,20 @@ jobs:
           def key(s):
               a,b=re.search(r'(\d+\.\d+\.\d+\.\d+)\s*#\s*(\d+)',s).groups()
               return tuple(map(int,a.split(".")))+(int(b),)
-          new=key(native_version)>key(catalog)
-          d["migrationRequired"]=new
-          d["handoff"]={"status":"NEW_VERSION_INTAKE_REQUIRED" if new else "UP_TO_DATE",
+          reviewed=d.get("reviewedReference",catalog)
+          latest_page=max(versions,key=key) if versions else None
+          if latest_page and key(latest_page)>key(native_version):
+              d["handoff"]={"status":"UPSTREAM_SOURCE_VERSION_DIVERGENCE","official":latest_page,"native":native_version,"nextAction":"Wait for native target publication or verify correct native branch; no module release update"}
+              p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+"\n")
+              raise SystemExit("Official site is newer than checked native Configuration; do not report no update")
+          new=key(native_version)>key(reviewed)
+          d["upstreamReviewRequired"]=new
+          d["moduleReleaseChanged"]=False
+          d["cnboxReleaseChanged"]=False
+          d["handoff"]={"status":"NEW_UPSTREAM_REVIEW_REQUIRED" if new else "NO_CNBOX_MODULE_CHANGE",
                         "target":native_version,
                         "nextAction":"Acquire official SHA-verified native installer; current-Choice owner audit; Drive archival; two reviews; real Runtime remains NOT_TESTED" if new else "Routine next daily check",
-                        "note":"For ANY future build; no fixed #08 workflows dispatched. Detection alone is not migrated/archived."}
+                        "note":"Aslain-only version changes never authorize new CNBOX locked binaries, manifests or channel version/hash changes. Proven release delta and explicit owner approval required."}
           p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+"\n")
           print(json.dumps(d["handoff"],ensure_ascii=False))
           if new:
