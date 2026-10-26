@@ -4,7 +4,15 @@ Role: **CURRENT PUBLIC DISTRIBUTION**
 
 Machine update authority: `channel.json`.
 
-## Current release set (2026-10-22: formal releases unchanged; GitHub single-CURRENT storage)
+## 2026-10-25 Owner instruction — Aslain updates alone never republish CNBOX
+
+**An Aslain upstream revision is not a CNBOX release revision.** Daily checks continue, but if the actual Box / MoE / Language / Manager+Creator release payloads and their required native interfaces have no proven change, do **NOT** rebuild, replace, rename or republish any locked GitHub ZIP/EXE, module manifest or current `channel.json` module version/hash/download URL. Do not update `latestAslainVersion` in the install channel merely to represent an Aslain-only revision; upstream observations belong in documentation and the lightweight Aslain index instead. Only a proven CNBOX-owned/required change starts module-specific candidate work, and formal promotion still requires the owner's explicit approval.
+
+**Last reviewed upstream**: Aslain Classic `2.4.1.0 #08`, user Choice36 SHA `aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f`, official installer SHA `d32a833868d2dedcc2a1108762464eee86d0acf4068f267ad6c9c9acd1b37923`. Independent native/selected install-source owner audits found **zero new proven Box-owned path SHA changes** versus frozen Box1.2.1; static dual reviews PASS but actual game Runtime and Creator physical rollback remain `NOT_TESTED`. The real original installation and audit are archived on [Google Drive](https://drive.google.com/drive/folders/1x8dSPfgGCGgJR8y5FvPW4JhhQp7kdMNU), latest complete [Drive checkpoint](https://drive.google.com/file/d/1nREYV6XkXaGRWsaRNotPc1oQY9CZghjgtit0MLyBPtw/view). `aslain_catalogs/index.json.latestReviewedUpstream` records this without duplicating any binary or declaring native #08 files uploaded to GitHub. The sole engineering Master/Drive same-ID mirror synchronization for #08 is still **DOC_SYNC_PENDING**, not claimed complete.
+
+**GitHub retention (owner 2026-10-24 onward):** keep every actively required manufacturing/audit/recovery tool and at most `CURRENT_LOCKED + IMMEDIATELY_PREVIOUS_LOCKED` formal released version per module; no extra TEST binary. Earlier rollback copies already archived Drive-only need not be re-uploaded just to fill the optional previous slot. Once a third formal lock is expressly approved and safely backed up, remove the oldest GitHub version only after consumer/rollback verification. Drive keeps all generations and source evidence.
+
+## Current release set (formal versions unchanged by Aslain-only updates)
 
 - Manager Public: **2.1.6 FINAL_LOCK**
   - `manager/NAJXBox_Manager.exe`
@@ -39,9 +47,9 @@ Environment boundaries (module-specific; not one universal WoT version):
 - MoE 1.3.1 and Language 1.1.3 target WoT `2.4.1.0`; older-client MoE 1.3.0 is retained in Google Drive HISTORY, not the current online channel.
 - For exact client matching and package selection, `channel.json` is the machine install authority; do not infer compatibility from a single global version line.
 
-## GitHub single current release / Google Drive complete history (Owner 2026-10-22)
+## Historical 2026-10-22 single-CURRENT cleanup — superseded retention policy
 
-Applies to **Box, MoE, Language, Manager+Creator**. GitHub **CURRENT_LOCKED=1, PREVIOUS_LOCKED=0, ACTIVE_TEST=0 per module**; the previous 2026-10-20 `2LOCK+1TEST` rule is superseded. Manager Public/Creator 2.1.6 builds and necessary stable aliases belong to a single formal version identity, not competing releases. **All previous locks, test candidates, original binary archives, success/failure/retry history, runtime and rollback evidence live on Google Drive**.
+**Historical record, not current retention permission.** The following 2026-10-22 cleanup took place under its then-current rule; the current 2026-10-24/25 owner policy above permits at most two formal locked versions while preserving all tools. On 2026-10-22 the rule applied to **Box, MoE, Language, Manager+Creator** as GitHub **CURRENT_LOCKED=1, PREVIOUS_LOCKED=0, ACTIVE_TEST=0 per module**; its 2026-10-20 `2LOCK+1TEST` predecessor was superseded. Manager Public/Creator 2.1.6 builds and necessary stable aliases belong to a single formal version identity, not competing releases. **All previous locks, test candidates, original binary archives, success/failure/retry history, runtime and rollback evidence live on Google Drive**.
 
 GitHub `channel.json` is authority **only for currently installable content**. Its live versions are Box **1.2.1**, Manager+Creator **2.1.6**, MoE **1.3.1**, Language **1.1.3**. Previous client releases **may not auto-install from this live channel**; use the exact original files and SHA256 recorded in Google Drive history for restoration. Current frozen ZIP/EXE bytes were not changed as part of storage cleanup. All archived files remain traceable in [storage Issue #19](https://github.com/modanbo/NA-BOX/issues/19) and private Master §9A.
 
@@ -59,4 +67,4 @@ For release identity, always use `channel.json` and `CURRENT_RELEASE_INDEX.md`.
 
 The complete prior `aslain_catalogs` tree (45 exact original Git files / 28,124,611 original bytes, including WoT 2.4.0.2 histories and current-generation comparison/audit artifacts) was archived as an immutable, manifest-verified Google Drive [HISTORY/REFERENCE package](https://drive.google.com/file/d/1bmJQUJbG0s4ZoWG7x9nBQBp4OC3KuWos/view), SHA256 `65c3f3c4a78f8579c2e9057a7215ea3e744729624ea5f6bbcb054692ead75985`. Its inner source ZIP contains the exact original 45 files plus per-path SHA256, Git blob SHA1, size, and source commit metadata; every member was independently read back and verified.
 
-The GitHub live `aslain_catalogs` set retains only latest native WoT 2.4.1.0 #06, previous native #04 (to allow current-owner comparison), their installer hashes/metadata, the current selected audit, and the compact index/selection file. Archived paths are **not** live download endpoints. Module CURRENT_RELEASE binaries, rollback payloads, `channel.json` and Manager stable URLs remain unchanged. See private engineering Master §9A and Issue #19.
+The current GitHub `aslain_catalogs` native catalog has a preserved #07 entry and older comparison entries; its lightweight `index.json.latestReviewedUpstream` separately records the complete #08 Drive audit. A metadata pointer is not an EXE/native archive and does not trigger any CNBOX release update. The original and complete #08 bytes live in Drive. Archived paths are **not** live download endpoints. Module CURRENT_RELEASE binaries, rollback payloads, `channel.json` and Manager stable URLs remain unchanged. See private engineering Master §9A and Issue #19.
