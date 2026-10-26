@@ -1,12 +1,8 @@
-name: Fetch current Aslain installer artifact
-# trigger: 2026-10-21 aslain-07 official sha readback
+name: Fetch pinned Aslain catalog installer (manual tool only)
+# Historical pinned catalog downloader. Aslain index/document updates must not automatically fetch stale catalog installers.
 permissions:
   contents: read
 on:
-  push:
-    paths:
-      - ".github/workflows/fetch-current-aslain-installer.yml"
-      - "aslain_catalogs/index.json"
   workflow_dispatch:
 jobs:
   fetch:
