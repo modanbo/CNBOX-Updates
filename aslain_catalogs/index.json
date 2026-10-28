@@ -72,5 +72,34 @@
     "aslainUpstreamOnly": "DOCUMENTATION_AND_LIGHTWEIGHT_INDEX_AND_DRIVE_EVIDENCE_ONLY",
     "rawAndFullHistoryPrimary": "GOOGLE_DRIVE",
     "githubKeep": "TOOLS_AND_CURRENT_PLUS_IMMEDIATELY_PREVIOUS_FORMAL_LOCKED_MODULES"
+  },
+  "latestObservedUpstream": {
+    "aslainVersion": "2.4.1.1 #00",
+    "gameVersion": "2.4.1.1",
+    "officialChangelogDate": "2026-10-27",
+    "observedDateNewYork": "2026-10-28",
+    "source": "https://aslain.com/index.php?/topic/13-aslains-wot-modpack/",
+    "officialInstallerFilename": "Aslains_WoT_Modpack_Installer_v.2.4.1.1_00.exe",
+    "officialAdvertisedSHA256": "e3938d429c325a053d18a314e6330aa92bb0c106658856a2a2e498b4b8d064ff",
+    "independentlyDownloadedInstallerSHA256": "NOT_VERIFIED",
+    "nativeConfigurationUrl": "https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration",
+    "nativeContentVersion": "NOT_VERIFIED",
+    "nativeConfigurationSHA256": "NOT_VERIFIED",
+    "sourceCompatibilityChanges": [
+      "WoT 2.4.1.1 initial compatibility",
+      "XVM 14.0.0_0004",
+      "net.openwg.common 2.8.5"
+    ],
+    "existingReviewedUpstream": "2.4.1.0 #09",
+    "choiceSourceDriveFileId": "1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW",
+    "choiceSHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
+    "selectedChoiceVersionImpact": "NOT_VERIFIED",
+    "newBoxOrRequiredDependencyImpact": "NOT_VERIFIED",
+    "runtime": "NOT_TESTED",
+    "review1": "NOT_TESTED",
+    "review2": "NOT_TESTED",
+    "moduleReleaseChanged": false,
+    "classification": "NEW_GAME_UPSTREAM_SOURCE_ONLY_DISCOVERY / FULL_NATIVE_INTAKE_PENDING / FORMAL_MODULE_RELEASES_FROZEN",
+    "note": "Documentation-only upstream observation, NOT a compatibility pass, formal candidate, archival completion, or publication; the prior #09 static review stays the last full source review. Only future proven Box/MoE/Language/Manager own/required dependency changes can open precheck and owner-approved publication."
   }
 }
