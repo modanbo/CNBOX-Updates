@@ -65,6 +65,24 @@ jobs:
           ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_01_SUMMARY.json
           Copy-Item -LiteralPath 'evidence/NATIVE2411_01_SUMMARY.json' -Destination 'original/NATIVE2411_01_SUMMARY.json'
           Write-Host ('FULL_NATIVE_2411_01_COUNT '+$all.Count)
+          New-Item -ItemType Directory -Force -Path 'shared_owner' | Out-Null
+          $want=@(
+            @{source='{app}/mods/2.4.1.1/com.modxvm.xvm_14.0.0.0004.wotmod'; out='CLEAN_XVM_14_0_0_0004.wotmod'; sha='2245f772720a802ddf2c41c634092cd9c20059dd1b7d0278d882f577c10937af'},
+            @{source='{app}/mods/2.4.1.1/net.openwg/net.openwg.common_2.8.5.0000,1.wotmod'; out='CLEAN_OPENWG_COMMON_2_8_5.wotmod'; sha='f4680bb95857a7cbdb594ff7318c07784459fe5c316a52cb6a9f06c5b7917f37'},
+            @{source='{app}/res_mods/2.4.1.1/gui/flash/battleVehicleMarkersApp.swf'; out='CLEAN_BATTLE_VEHICLE_MARKERS.swf'; sha='315a9b2a4159f104e7770b1f4ad5283011ea53874c85b94a5c950db53186cf01'}
+          )
+          $ownerRecords=@()
+          foreach($obj in $want){
+            $path=Join-Path 'out' ($obj.source.Replace('/','\'))
+            if(!(Test-Path -LiteralPath $path)){throw ('OWNER_ORIGINAL_NOT_EXTRACTED '+$obj.source)}
+            $computed=(Get-FileHash -Algorithm SHA256 -LiteralPath $path).Hash.ToLowerInvariant()
+            if($computed -ne $obj.sha){throw ('OWNER_HASH_MISMATCH '+$obj.source)}
+            Copy-Item -LiteralPath $path -Destination (Join-Path 'shared_owner' $obj.out)
+            $ownerRecords+=($obj.source+[char]9+(Get-Item -LiteralPath $path).Length+[char]9+$computed)
+            Write-Host ('CLEAN_ORIGINAL_SHARED_OWNER_PASS '+$obj.source+' SHA '+$computed)
+          }
+          $ownerRecords | Set-Content -Encoding UTF8 shared_owner/SHARED_OWNER_SOURCE_SHA256.tsv
+
       - name: Preserve official original/Configuration for Drive even if installer source currently 404
         if: always()
         uses: actions/upload-artifact@v4
@@ -72,6 +90,14 @@ jobs:
           name: CNBOX-Aslain2411-01-raw-EXE-native-Drive-handoff
           path: original/
           retention-days: 2
+          if-no-files-found: error
+      - name: Preserve shared clean native originals for interface-only review
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-Aslain2411-01-shared-native-originals
+          path: shared_owner/
+          retention-days: 1
           if-no-files-found: error
       - name: Full pristine native evidence - ephemeral Drive handoff
         if: always()
