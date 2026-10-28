@@ -1,0 +1,26 @@
+name: CNBOX read-only pinned FFDec 26.3 tool for XVM interface review
+on:
+  push:
+    paths:
+      - '.github/workflows/cnbox-ffdec-readonly-source-tool.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  pinned-source-tool:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Fetch pinned verified FFDec 26.3.0 source-review tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail -L --retry 3 --retry-delay 2 -o ffdec_26.3.0.zip https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version26.3.0/ffdec_26.3.0.zip
+          printf '%s  %s\n' '35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd' 'ffdec_26.3.0.zip' | sha256sum -c -
+      - name: Preserve short-lived tool output (no CNBOX binary build)
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-FFDec-26.3-pinned-original-for-source-review
+          path: ffdec_26.3.0.zip
+          retention-days: 1
+          if-no-files-found: error
