@@ -20,6 +20,15 @@ jobs:
           $expectedNative='' # new native target, exact version required, hash recorded
           New-Item -ItemType Directory -Force -Path 'work','tool','out','evidence','original' | Out-Null
           $name=('Aslains_WoT_Modpack_Installer_v.{0}_{1}.exe' -f $game,$build)
+          $nativeUrl='https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration'
+          Invoke-WebRequest -Uri $nativeUrl -OutFile 'original/Configuration' -TimeoutSec 180
+          $nativeSha=(Get-FileHash -Algorithm SHA256 -LiteralPath 'original/Configuration').Hash.ToLowerInvariant()
+          [xml]$config=Get-Content 'original/Configuration' -Raw -Encoding UTF8
+          $nativeVersion=$config.DocumentElement.GetAttribute('ContentVersion')
+          $probe=[ordered]@{timeUTC=(Get-Date).ToUniversalTime().ToString('o');url=$nativeUrl;ContentVersion=$nativeVersion;sha256=$nativeSha;bytes=(Get-Item 'original/Configuration').Length;sourceStatus='RAW_LIVE_NATIVE_FETCH_OK';scope='READ_ONLY_UPSTREAM_NOT_RUNTIME'}
+          ($probe|ConvertTo-Json)|Set-Content -Encoding UTF8 evidence/NATIVE2411_SOURCE_PROBE.json
+          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?0\b' -or ($expectedNative -and $nativeSha -ne $expectedNative)){throw ('NATIVE_2411_00_VERSION_SHA_MISMATCH '+$nativeVersion+' / '+$nativeSha)}
+          Write-Host ('NATIVE_2411_00_CONFIG_PASS '+$nativeVersion+' SHA '+$nativeSha)
           $exe=Join-Path 'work' $name
           $officialUrl=('https://filez.aslain.com/'+$name)
           Invoke-WebRequest -Uri $officialUrl -OutFile $exe -TimeoutSec 180
@@ -28,13 +37,6 @@ jobs:
           if($sha -ne $advertised -or $sz -lt 70000000){throw ('OFFICIAL_2411_00_SHA_SIZE_GATE_FAIL '+$sha+' / '+$sz)}
           Copy-Item -LiteralPath $exe -Destination (Join-Path 'original' $name)
           Write-Host ('OFFICIAL_2411_00_RAW_PASS '+$sz+' '+$sha)
-          $nativeUrl='https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration'
-          Invoke-WebRequest -Uri $nativeUrl -OutFile 'original/Configuration' -TimeoutSec 180
-          $nativeSha=(Get-FileHash -Algorithm SHA256 -LiteralPath 'original/Configuration').Hash.ToLowerInvariant()
-          [xml]$config=Get-Content 'original/Configuration' -Raw -Encoding UTF8
-          $nativeVersion=$config.DocumentElement.GetAttribute('ContentVersion')
-          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?0\b' -or ($expectedNative -and $nativeSha -ne $expectedNative)){throw ('NATIVE_2411_00_VERSION_SHA_MISMATCH '+$nativeVersion+' / '+$nativeSha)}
-          Write-Host ('NATIVE_2411_00_CONFIG_PASS '+$nativeVersion+' SHA '+$nativeSha)
           $extractCommit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
           $toolUrl=('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$extractCommit+'/innounp-2/bin/innounp-2.zip')
           Invoke-WebRequest -Uri $toolUrl -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
@@ -63,8 +65,8 @@ jobs:
           ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_00_SUMMARY.json
           Copy-Item -LiteralPath 'evidence/NATIVE2411_00_SUMMARY.json' -Destination 'original/NATIVE2411_00_SUMMARY.json'
           Write-Host ('FULL_NATIVE_2411_00_COUNT '+$all.Count)
-      - name: SHA exact official original and Configuration - ephemeral Drive handoff
-        if: success()
+      - name: Preserve official original/Configuration for Drive even if installer source currently 404
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: CNBOX-Aslain2411-00-raw-EXE-native-Drive-handoff
