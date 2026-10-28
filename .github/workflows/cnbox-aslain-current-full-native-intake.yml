@@ -15,9 +15,9 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'
-          $build='00'; $game='2.4.1.1'
-          $advertised='e3938d429c325a053d18a314e6330aa92bb0c106658856a2a2e498b4b8d064ff'
-          $expectedNative='' # new native target, exact version required, hash recorded
+          $build='01'; $game='2.4.1.1'
+          $advertised='1110c3fd0ea260421d73d3e44c258efec051a65702d1321fb014765373e7f34b'
+          $expectedNative='543ec42fd2438b067624955c25044c376a1aa8ee0c6d2854038eb0ba9c477214' # live #01 independently observed and original archived for review
           New-Item -ItemType Directory -Force -Path 'work','tool','out','evidence','original' | Out-Null
           $name=('Aslains_WoT_Modpack_Installer_v.{0}_{1}.exe' -f $game,$build)
           $nativeUrl='https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration'
@@ -27,16 +27,16 @@ jobs:
           $nativeVersion=$config.DocumentElement.GetAttribute('ContentVersion')
           $probe=[ordered]@{timeUTC=(Get-Date).ToUniversalTime().ToString('o');url=$nativeUrl;ContentVersion=$nativeVersion;sha256=$nativeSha;bytes=(Get-Item 'original/Configuration').Length;sourceStatus='RAW_LIVE_NATIVE_FETCH_OK';scope='READ_ONLY_UPSTREAM_NOT_RUNTIME'}
           ($probe|ConvertTo-Json)|Set-Content -Encoding UTF8 evidence/NATIVE2411_SOURCE_PROBE.json
-          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?0\b' -or ($expectedNative -and $nativeSha -ne $expectedNative)){throw ('NATIVE_2411_00_VERSION_SHA_MISMATCH '+$nativeVersion+' / '+$nativeSha)}
-          Write-Host ('NATIVE_2411_00_CONFIG_PASS '+$nativeVersion+' SHA '+$nativeSha)
+          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?1\b' -or ($expectedNative -and $nativeSha -ne $expectedNative)){throw ('NATIVE_2411_01_VERSION_SHA_MISMATCH '+$nativeVersion+' / '+$nativeSha)}
+          Write-Host ('NATIVE_2411_01_CONFIG_PASS '+$nativeVersion+' SHA '+$nativeSha)
           $exe=Join-Path 'work' $name
           $officialUrl=('https://filez.aslain.com/'+$name)
           Invoke-WebRequest -Uri $officialUrl -OutFile $exe -TimeoutSec 180
           $sha=(Get-FileHash -Algorithm SHA256 -LiteralPath $exe).Hash.ToLowerInvariant()
           $sz=(Get-Item $exe).Length
-          if($sha -ne $advertised -or $sz -lt 70000000){throw ('OFFICIAL_2411_00_SHA_SIZE_GATE_FAIL '+$sha+' / '+$sz)}
+          if($sha -ne $advertised -or $sz -lt 70000000){throw ('OFFICIAL_2411_01_SHA_SIZE_GATE_FAIL '+$sha+' / '+$sz)}
           Copy-Item -LiteralPath $exe -Destination (Join-Path 'original' $name)
-          Write-Host ('OFFICIAL_2411_00_RAW_PASS '+$sz+' '+$sha)
+          Write-Host ('OFFICIAL_2411_01_RAW_PASS '+$sz+' '+$sha)
           $extractCommit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
           $toolUrl=('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$extractCommit+'/innounp-2/bin/innounp-2.zip')
           Invoke-WebRequest -Uri $toolUrl -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
@@ -61,15 +61,15 @@ jobs:
           Copy-Item -LiteralPath $iss[0].FullName -Destination evidence/install_script.iss
           $interesting=$rows | Where-Object {$_ -match '(?i)openwg|xvm_13|battlevehiclemarkers|playerspanel|battleloading|limpidstickers|modmenu|modssettingsbridge|armor_penetration|customuiscale|customsixthsense|minimap'}
           $interesting | Set-Content -Encoding UTF8 evidence/BOX_AND_SELECTED_NATIVE_OWNERS.tsv
-          $report=[ordered]@{work='ASLAIN2411_00_CHOICE36_NATIVE_FULL_INTAKE';upstream='2.4.1.1 #00';status='FULL_NATIVE_SOURCE_INVENTORY_PASS_NOT_RUNTIME';installerName=$name;installerBytes=$sz;installerSHA256=$sha;officialAdvertisedSHA256=$advertised;nativeContentVersion=$nativeVersion;nativeSHA256=$nativeSha;nativeBytes=(Get-Item original/Configuration).Length;extractedFileCount=$all.Count;extractorCommit=$extractCommit;extractorSHA256=$toolSha;installerSourceUrl=$officialUrl;nativeSourceUrl=$nativeUrl;choiceOriginalDriveId='1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW';choiceOriginalSHA256='aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f';formalBoxSHA256='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f';selectedChoiceFinalOwnerAudit='PENDING_INDEPENDENT_TWO_REVIEW';gameRuntime='NOT_TESTED';physicalCreatorRollback='NOT_TESTED';formalModuleReleaseChanged=$false}
-          ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_00_SUMMARY.json
-          Copy-Item -LiteralPath 'evidence/NATIVE2411_00_SUMMARY.json' -Destination 'original/NATIVE2411_00_SUMMARY.json'
-          Write-Host ('FULL_NATIVE_2411_00_COUNT '+$all.Count)
+          $report=[ordered]@{work='ASLAIN2411_01_CHOICE36_NATIVE_FULL_INTAKE';upstream='2.4.1.1 #01';status='FULL_NATIVE_SOURCE_INVENTORY_PASS_NOT_RUNTIME';installerName=$name;installerBytes=$sz;installerSHA256=$sha;officialAdvertisedSHA256=$advertised;nativeContentVersion=$nativeVersion;nativeSHA256=$nativeSha;nativeBytes=(Get-Item original/Configuration).Length;extractedFileCount=$all.Count;extractorCommit=$extractCommit;extractorSHA256=$toolSha;installerSourceUrl=$officialUrl;nativeSourceUrl=$nativeUrl;choiceOriginalDriveId='1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW';choiceOriginalSHA256='aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f';formalBoxSHA256='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f';selectedChoiceFinalOwnerAudit='PENDING_INDEPENDENT_TWO_REVIEW';gameRuntime='NOT_TESTED';physicalCreatorRollback='NOT_TESTED';formalModuleReleaseChanged=$false}
+          ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_01_SUMMARY.json
+          Copy-Item -LiteralPath 'evidence/NATIVE2411_01_SUMMARY.json' -Destination 'original/NATIVE2411_01_SUMMARY.json'
+          Write-Host ('FULL_NATIVE_2411_01_COUNT '+$all.Count)
       - name: Preserve official original/Configuration for Drive even if installer source currently 404
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: CNBOX-Aslain2411-00-raw-EXE-native-Drive-handoff
+          name: CNBOX-Aslain2411-01-raw-EXE-native-Drive-handoff
           path: original/
           retention-days: 2
           if-no-files-found: error
@@ -77,7 +77,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: CNBOX-Aslain2411-00-full-native-teardown
+          name: CNBOX-Aslain2411-01-full-native-teardown
           path: evidence/
           retention-days: 2
           if-no-files-found: error
