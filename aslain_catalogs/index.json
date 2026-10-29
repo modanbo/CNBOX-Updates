@@ -41,7 +41,7 @@
     "choiceSHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
     "vendorInstallerSHA256": "1110c3fd0ea260421d73d3e44c258efec051a65702d1321fb014765373e7f34b",
     "nativeConfigurationContentVersion": "v2.4.1.1 #01 (2026.10.28)",
-    "nativeConfigurationSHA256": "543ec42fd2438b067624955c25044c376a1aa8ee0c6d2854038eb0ba9c477214",
+    "nativeConfigurationSHA256": "43195c38d7fa23c56f0da73c0be562ad8f90f777ad825da4b3cf3b2d81947c4a",
     "originalInstallerAndNativeSourceDriveId": "1nnIavaSaB5JoHgXpn1Qm1erBoWLqqoG8",
     "evidenceDriveCheckpointId": "1DleaP7z1Zz3Fg9MKLc_rNQHLorL9fa4S",
     "evidenceDriveFolderId": "1Zer0eH3fT32hpzVXDUhuYKmljsdz7wK5",
@@ -62,7 +62,34 @@
     "moduleReleaseChanged": false,
     "previousReviewedAslainVersion": "2.4.1.0 #09",
     "previousReviewedDriveFolderId": "1VPRBFYb2SHENJIzA3bvGGibA_gnuvYyB",
-    "note": "Source-only/static completion permits advancing the upstream-review checkpoint; it does NOT claim functional runtime acceptance or formal release. Legacy catalog[0] remains archived 2.4.1.0 #07; daily native watcher must use latestObservedUpstream.gameVersion rather than a stored historical catalog."
+    "note": "Source-only/static completion permits advancing the upstream-review checkpoint; it does NOT claim functional runtime acceptance or formal release. Legacy catalog[0] remains archived 2.4.1.0 #07; daily native watcher must use latestObservedUpstream.gameVersion rather than a stored historical catalog.",
+    "initialNativeConfigurationSHA256": "543ec42fd2438b067624955c25044c376a1aa8ee0c6d2854038eb0ba9c477214",
+    "nativeConfigurationSemanticSHA256": "84fc76b823cfcd1ed896e98af1f84c1f75f3d0bf0e53089ddc85e22b84fd8273",
+    "nativeConfigurationSemanticNormalization": "Strip only decimal Installs attribute values, preserving XML and all File/SizeKb paths",
+    "nativeConfigurationLastReviewedNewYork": "2026-10-29",
+    "sameBuildRawDeltaReview": {
+      "sourceOriginalSHA256": "543ec42fd2438b067624955c25044c376a1aa8ee0c6d2854038eb0ba9c477214",
+      "sourceNewSHA256": "43195c38d7fa23c56f0da73c0be562ad8f90f777ad825da4b3cf3b2d81947c4a",
+      "sourceSemanticSHA256": "84fc76b823cfcd1ed896e98af1f84c1f75f3d0bf0e53089ddc85e22b84fd8273",
+      "sourceOriginalBytes": 1946358,
+      "sourceNewBytes": 1946413,
+      "countersChanged": 1145,
+      "substantiveXMLNodesChanged": 7,
+      "substantiveOwnerCount": 4,
+      "substantiveOwners": [
+        "crosshairs_1_crosshairAimCircle_More_Visible_Aiming_Circle",
+        "GarageMods_garage_FreeCamera",
+        "skinpacks_Clean_Camo_HD",
+        "skinpacks_Clean_Camo_SD"
+      ],
+      "allOwnersUnselectedChoice36": true,
+      "review1": "PASS_STATIC_XML",
+      "review2": "PASS_STATIC_RAW_LINES",
+      "gameRuntime": "NOT_TESTED",
+      "creatorPhysicalRollback": "NOT_TESTED",
+      "rawConfigEvidenceDriveId": "1aVgT0B8pboxEEoZj1C5cR4xD5C47Gb9i",
+      "githubLiveProof": "https://github.com/modanbo/CNBOX-Updates/actions/runs/40848265840"
+    }
   },
   "upstreamOnlyReleasePolicy": {
     "effectiveDate": "2026-10-25",
@@ -107,6 +134,11 @@
     "boxR1Sha256": "c6def397c2e6ef4a0274efc1a1ef9184f390202fad47aaeb181055eff8c35280",
     "boxR1NotFolderOnly": "515 same path/byte +14 path relocated exact +2 clean dependency replacements,2 prior third-party fixes excluded; 533 formal decoded SHA verified inverse",
     "moePathOnlyR1Sha256": "7d9fdbc40324a8ab84753433b0c1f1ecb8ba69f40b300aaab827db957d540707",
-    "noMandatoryPretestFullCollection": "Only folder-version change does not prove mandatory full collection; actual real-client Creator checks remain NOT_TESTED"
+    "noMandatoryPretestFullCollection": "Only folder-version change does not prove mandatory full collection; actual real-client Creator checks remain NOT_TESTED",
+    "nativeConfigurationLiveSHA256": "43195c38d7fa23c56f0da73c0be562ad8f90f777ad825da4b3cf3b2d81947c4a",
+    "nativeConfigurationLiveBytes": 1946413,
+    "nativeConfigurationSemanticSHA256": "84fc76b823cfcd1ed896e98af1f84c1f75f3d0bf0e53089ddc85e22b84fd8273",
+    "liveSourceCheckDateNewYork": "2026-10-29",
+    "nativeLiveSameVersionSemanticDelta": "7 UNSELECTED Choice36 XML elements; static two independent reviews PASS, no Box-owned module content change proven"
   }
 }
