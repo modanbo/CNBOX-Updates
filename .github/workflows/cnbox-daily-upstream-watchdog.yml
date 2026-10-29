@@ -53,12 +53,13 @@ jobs:
           now=datetime.datetime.now(datetime.timezone.utc)
           index=json.loads(pathlib.Path("aslain_catalogs/index.json").read_text())
           cat=index["catalogs"][0]
-          version=cat["wotVersion"]
+          # Catalog entries may remain archived; the current observed WoT generation is the native watch target.
+          version=index.get("latestObservedUpstream",{}).get("gameVersion") or cat["wotVersion"]
           sources=[
             ("native",f"https://repo.aslain.com/wot_modmanager/{version}/Configuration"),
             ("official_page","https://aslain.com/index.php?/topic/13-aslains-wot-modpack/")
           ]
-          result={"checkedAtUTC":now.isoformat(),"dateNewYork":datetime.datetime.now(zoneinfo.ZoneInfo("America/New_York")).isoformat(),"catalogReference":cat["aslainVersion"],"sources":[],"status":"UNKNOWN","note":"Independent upstream watchdog only; NOT runtime verification or full migration."}
+          result={"checkedAtUTC":now.isoformat(),"dateNewYork":datetime.datetime.now(zoneinfo.ZoneInfo("America/New_York")).isoformat(),"catalogReference":cat["aslainVersion"],"watchedGameVersion":version,"sources":[],"status":"UNKNOWN","note":"Independent upstream watchdog only; NOT runtime verification or full migration."}
           for label,url in sources:
             record={"name":label,"url":url}
             try:
@@ -72,6 +73,9 @@ jobs:
                 matches=re.findall(r"(?:ContentVersion|v?\d+\.\d+\.\d+\.\d+\s*#\s*\d+)",text,re.I)
                 record["versionHints"]=matches[:12]
                 if label=="native":
+                  # Parse the current XML root attribute; do not use the last arbitrary version mention.
+                  m=re.search(r"""ContentVersion\s*=\s*["']([^"']+)["']""",text,re.I)
+                  record["nativeContentVersion"]=m.group(1) if m else None
                   record["versionPatternMatches"]=re.findall(r"v?"+re.escape(version)+r"\s*#\s*(\d+)",text,re.I)[:20]
             except Exception as e:
               record["error"]=str(e)
@@ -110,7 +114,9 @@ jobs:
           native=d["sources"][0]
           page=d["sources"][1]
           versions=re.findall(r'\d+\.\d+\.\d+\.\d+\s*#\s*\d+',str(page.get("versionHints",[])))
-          native_version=(native.get("versionHints") or [None,None])[-1]
+          native_text=native.get("nativeContentVersion") or ""
+          m=re.search(r"v?\d+\.\d+\.\d+\.\d+\s*#\s*\d+",native_text)
+          native_version=m.group(0) if m else None
           d["upstreamFullVersion"]=native_version
           d["officialVersionHints"]=versions
           if not native.get("httpStatus") or not page.get("httpStatus"):
