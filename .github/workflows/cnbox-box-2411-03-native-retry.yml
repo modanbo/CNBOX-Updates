@@ -159,6 +159,31 @@ jobs:
             [System.IO.File]::WriteAllText($libFile,$traceLib,(New-Object System.Text.UTF8Encoding($false)))
             ('VERSION_GATE_PATCH_SHA '+$patchSha+'; TRACE_MARKERS '+$traceMarkers.Count+'; TRACE_LIB_SHA '+(Get-FileHash -Algorithm SHA256 -LiteralPath $libFile).Hash.ToLowerInvariant()) | Set-Content -Encoding UTF8 evidence/INNEX_DIAGNOSTIC_PROVENANCE.txt
             Write-Host ('INNEX_INNO71_READ_ONLY_STAGE_TRACING '+$traceMarkers.Count)
+            $headerFile='tool/inno-rust/core/src/header/mod.rs'
+            $headerSrc=[System.IO.File]::ReadAllText($headerFile,[System.Text.Encoding]::UTF8)
+            $headerMarkers=@(
+              @('header.app_name = reader.read_pascal_string()?;','eprintln!("CNBOX_INNO71_HEADER_APPNAME"); header.app_name = reader.read_pascal_string()?;'),
+              @('header.use_previous_app_dir = reader.read_pascal_string()?;','eprintln!("CNBOX_INNO71_HEADER_USE_PREVIOUS"); header.use_previous_app_dir = reader.read_pascal_string()?;'),
+              @('header.entry_counts = EntryCounts::read(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_ENTRY_COUNTS_BEGIN"); header.entry_counts = EntryCounts::read(&mut reader, version)?; eprintln!("CNBOX_INNO71_HEADER_ENTRY_COUNTS_OK");'),
+              @('WindowsVersionRange::read_from(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_WINDOWS_RANGE"); WindowsVersionRange::read_from(&mut reader, version)?;'),
+              @('header.wizard = WizardSettings::read_from(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_WIZARD_BEGIN"); header.wizard = WizardSettings::read_from(&mut reader, version)?; eprintln!("CNBOX_INNO71_HEADER_WIZARD_OK");'),
+              @('header.wizard.image_back_color = reader.read_t::<Color>()?;','eprintln!("CNBOX_INNO71_HEADER_COLOR_BEGIN"); header.wizard.image_back_color = reader.read_t::<Color>()?;'),
+              @('header.wizard.image_opacity = Some(reader.read_u8()?);','eprintln!("CNBOX_INNO71_HEADER_OPACITY"); header.wizard.image_opacity = Some(reader.read_u8()?);'),
+              @('header.extra_disk_space_required = reader.read_u64::<LE>()?;','eprintln!("CNBOX_INNO71_HEADER_EXTRA_SPACE"); header.extra_disk_space_required = reader.read_u64::<LE>()?;'),
+              @('header.uninstall_log_mode = LogMode::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_UNINSTALL_LOG_MODE"); header.uninstall_log_mode = LogMode::try_read_from_io(&mut reader)?;'),
+              @('header.dir_exists_warning = AutoBool::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_DIR_EXISTS_WARN"); header.dir_exists_warning = AutoBool::try_read_from_io(&mut reader)?;'),
+              @('header.privileges_required = PrivilegeLevel::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_PRIVILEGES_REQUIRED"); header.privileges_required = PrivilegeLevel::try_read_from_io(&mut reader)?;'),
+              @('header.compression = Compression::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_COMPRESSION"); header.compression = Compression::try_read_from_io(&mut reader)?;'),
+              @('header.flags |= Self::read_flags(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_FLAGS"); header.flags |= Self::read_flags(&mut reader, version)?;'),
+              @('Ok(header)','eprintln!("CNBOX_INNO71_HEADER_COMPLETE"); Ok(header)')
+            )
+            foreach($t in $headerMarkers) {
+              if(-not $headerSrc.Contains($t[0])) {throw ('PINNED_PARSER_HEADER_TRACE_ANCHOR_MISSING '+$t[0])}
+              $headerSrc=$headerSrc.Replace($t[0],$t[1])
+            }
+            [System.IO.File]::WriteAllText($headerFile,$headerSrc,(New-Object System.Text.UTF8Encoding($false)))
+            ('TRACE_HEADER_MARKERS '+$headerMarkers.Count+'; TRACE_HEADER_SHA '+(Get-FileHash -Algorithm SHA256 -LiteralPath $headerFile).Hash.ToLowerInvariant()) | Set-Content -Encoding UTF8 evidence/INNEX_HEADER_DIAGNOSTIC_PROVENANCE.txt
+            Write-Host ('INNEX_INNO71_READ_ONLY_HEADER_TRACING '+$headerMarkers.Count)
             rustup toolchain install '1.93.0' --profile minimal
             if($LASTEXITCODE -ne 0){throw 'RUST_1_93_INSTALL_FAILED'}
             Push-Location 'tool/inno-rust'
