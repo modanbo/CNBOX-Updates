@@ -161,6 +161,16 @@ jobs:
             Write-Host ('INNEX_INNO71_READ_ONLY_STAGE_TRACING '+$traceMarkers.Count)
             $headerFile='tool/inno-rust/core/src/header/mod.rs'
             $headerSrc=[System.IO.File]::ReadAllText($headerFile,[System.Text.Encoding]::UTF8)
+            # Official jrsoftware issrc tag diff: Inno 7.0.2 TSetupHeader has
+            # SetupHeaderStrings=39 incl BaseFilename, 7.1.1 has 38 and removes
+            # BaseFilename. The old parser consumes one extra Pascal string,
+            # corrupting all following fields and causing invalid enum bytes.
+            $oldHeaderBase='header.base_filename = reader.read_pascal_string()?;'
+            $newHeaderBase='if version < 7.1 { header.base_filename = reader.read_pascal_string()?; } else { eprintln!("CNBOX_INNO71_OFFICIAL_HEADER_BASEFILENAME_REMOVED_SKIPPED"); }'
+            if(-not $headerSrc.Contains($oldHeaderBase)) {throw 'PINNED_INNO71_OFFICIAL_BASEFILENAME_ANCHOR_MISSING'}
+            $headerSrc=$headerSrc.Replace($oldHeaderBase,$newHeaderBase)
+            ('RUST_INNEX_OFFICIAL_7_1_HEADER_STRUCT_REBASE; verified official source https://github.com/jrsoftware/issrc/blob/is-7_1_1/Projects/Src/Shared.Struct.pas SetupHeaderStrings=38; prior 7.0.2=39; exactly BaseFilename removed; no other header replacement; exact official EXE SHA guarded; parser test-only') | Set-Content -Encoding UTF8 evidence/INNO71_OFFICIAL_HEADER_REBASE_SOURCE.txt
+            Write-Host 'PINNED_INNO71_HEADER_OFFICIAL_STRINGS_39_TO_38_BASE_FILENAME_REMOVED'
             $headerMarkers=@(
               @('header.app_name = reader.read_pascal_string()?;','eprintln!("CNBOX_INNO71_HEADER_APPNAME"); header.app_name = reader.read_pascal_string()?;'),
               @('header.use_previous_app_dir = reader.read_pascal_string()?;','eprintln!("CNBOX_INNO71_HEADER_USE_PREVIOUS"); header.use_previous_app_dir = reader.read_pascal_string()?;'),
