@@ -68,6 +68,29 @@ jobs:
           if($sha -ne $advertised -or $sz -ne 75930149){throw ('EXACT_03_INSTALLER_SHA_OR_SIZE_FAIL '+$sha+' / '+$sz)}
           ('Full original already SHA+CRC archived in Drive ID 10cMIiqzcMji_kGRXpFB1FwgLHLxL8Qb3; EXE SHA '+$sha) | Set-Content -Encoding UTF8 original/DRIVE_RAW_EXE_REFERENCE.txt
           Write-Host ('EXACT_03_RAW_EXE_SHA_PASS_ORIGINAL_IN_DRIVE '+$sz+' '+$sha)
+          New-Item -ItemType Directory -Force -Path shared_owner | Out-Null
+          $cond='Implicit_cond02_xvm_modpack_722b7070.zip'
+          $condUrl='https://repo.aslain.com/wot_modmanager/Files/System/'+$cond
+          $condPath=(Join-Path shared_owner $cond)
+          $condResult=[ordered]@{status='NOT_VERIFIED';source=$condUrl;sourceBuild='2.4.1.1 #03'}
+          try {
+            Invoke-WebRequest -Uri $condUrl -OutFile $condPath -TimeoutSec 180
+            $condSha=(Get-FileHash -Algorithm SHA256 -LiteralPath $condPath).Hash.ToLowerInvariant()
+            $condSize=(Get-Item $condPath).Length
+            if($condSize -lt 150){throw ('INVALID_CONDITIONAL_XVM_SOURCE '+$condSize)}
+            python -c "import zipfile,sys; z=zipfile.ZipFile(sys.argv[1]); assert z.testzip() is None; print('CONDITIONAL_XVM_ZIP_CRC_PASS',len(z.namelist()))" $condPath
+            if($LASTEXITCODE -ne 0){throw 'CONDITIONAL_ZIP_CRC_FAILED'}
+            $condResult['status']='SOURCE_ZIP_CRC_PASS'
+            $condResult['sha256']=$condSha
+            $condResult['bytes']=$condSize
+            Write-Host ('CONDITIONAL_XVM_ORIGINAL_SOURCE_CRC_PASS '+$condSha+' '+$condSize)
+          } catch {
+            $condResult['status']='SOURCE_FETCH_OR_CRC_FAIL'
+            $condResult['error']=$_.Exception.Message
+            if(Test-Path $condPath){Remove-Item -LiteralPath $condPath -Force}
+            Write-Host ('CONDITIONAL_XVM_SOURCE_FAILED '+$_.Exception.Message)
+          }
+          $condResult | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 evidence/CONDITIONAL_XVM_SOURCE_RECEIPT.json
           $extractCommit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
           $toolUrl=('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$extractCommit+'/innounp-2/bin/innounp-2.zip')
           Invoke-WebRequest -Uri $toolUrl -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
@@ -147,14 +170,7 @@ jobs:
             $ownerRecords+=($f.FullName+[char]9+$f.Length+[char]9+$hash)
             Write-Host ('NATIVE_BOX_OWNER '+$f.Name+' '+$hash)
           }
-          $cond='Implicit_cond02_xvm_modpack_722b7070.zip'
-          $condUrl='https://repo.aslain.com/wot_modmanager/Files/System/'+$cond
-          Invoke-WebRequest -Uri $condUrl -OutFile (Join-Path shared_owner $cond) -TimeoutSec 180
-          $condSha=(Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path shared_owner $cond)).Hash.ToLowerInvariant()
-          $condSize=(Get-Item (Join-Path shared_owner $cond)).Length
-          if($condSize -lt 150){throw ('INVALID_CONDITIONAL_XVM_SOURCE '+$condSize)}
-          $ownerRecords+=($cond+[char]9+$condSize+[char]9+$condSha)
-          Write-Host ('CONDITIONAL_XVM_ORIGINAL '+$condSha+' '+$condSize)
+          if($condResult.status -eq 'SOURCE_ZIP_CRC_PASS'){$ownerRecords+=($cond+[char]9+$condSize+[char]9+$condSha)}
           $ownerRecords | Set-Content -Encoding UTF8 shared_owner/SHARED_OWNER_SOURCE_SHA256.tsv
 
       - name: Preserve official original/Configuration for Drive even if installer source currently 404
@@ -172,7 +188,7 @@ jobs:
           name: CNBOX-BOX2411-03-shared-native-originals
           path: shared_owner/
           retention-days: 1
-          if-no-files-found: error
+          if-no-files-found: warn
       - name: Full pristine native evidence - ephemeral Drive handoff
         if: steps.gate.outputs.run == 'true' && always()
         uses: actions/upload-artifact@v4
