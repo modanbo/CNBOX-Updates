@@ -228,16 +228,16 @@ jobs:
             $wizardFile='tool/inno-rust/core/src/wizard.rs'
             $wizardSrc=[System.IO.File]::ReadAllText($wizardFile,[System.Text.Encoding]::UTF8)
             $wizardAnchor='        Ok(wizard)'
-            $wizardFix=@'
-                    if version >= 6.5 && header.seven_zip_library_name().is_some_and(|n| !n.is_empty()) {
-                        let native_sevenzip_dll = reader.read_raw_pascal_string()?;
-                        eprintln!("CNBOX_INNO71_OFFICIAL_SEVENZIP_DLL_CONSUMED_BYTES={}", native_sevenzip_dll.len());
-                        if native_sevenzip_dll.len() < 2 || &native_sevenzip_dll[..2] != b"MZ" {
-                            return Err(io::Error::new(io::ErrorKind::InvalidData, "SevenZipDLL lacks native MZ header"));
-                        }
-                    }
-                    Ok(wizard)
-            '@
+            $wizardFix=(@(
+              '        if version >= 6.5 && header.seven_zip_library_name().is_some_and(|n| !n.is_empty()) {',
+              '            let native_sevenzip_dll = reader.read_raw_pascal_string()?;',
+              '            eprintln!("CNBOX_INNO71_OFFICIAL_SEVENZIP_DLL_CONSUMED_BYTES={}", native_sevenzip_dll.len());',
+              '            if native_sevenzip_dll.len() < 2 || &native_sevenzip_dll[..2] != b"MZ" {',
+              '                return Err(io::Error::new(io::ErrorKind::InvalidData, "SevenZipDLL lacks native MZ header"));',
+              '            }',
+              '        }',
+              '        Ok(wizard)'
+            ) -join [Environment]::NewLine)
             if(-not $wizardSrc.Contains($wizardAnchor)) {throw 'PINNED_INNO71_SEVENZIP_7_1_SOURCE_ANCHOR_MISSING'}
             $wizardSrc=$wizardSrc.Replace($wizardAnchor,$wizardFix.TrimEnd())
             [System.IO.File]::WriteAllText($wizardFile,$wizardSrc,(New-Object System.Text.UTF8Encoding($false)))
