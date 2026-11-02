@@ -1,0 +1,146 @@
+name: CNBOX Box-only #03 native 30-minute retry
+permissions:
+  contents: read
+  actions: read
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  push:
+    paths:
+      - '.github/workflows/cnbox-box-2411-03-native-retry.yml'
+  workflow_dispatch:
+jobs:
+  native-windows:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - name: Skip only with fresh complete GitHub artifacts from a real source run
+        id: gate
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference='Stop'
+          $ready=$false
+          try {
+            $headers=@{Authorization=('Bearer '+$env:GH_TOKEN);Accept='application/vnd.github+json'}
+            $uri='https://api.github.com/repos/'+$env:GITHUB_REPOSITORY+'/actions/workflows/cnbox-box-2411-03-native-retry.yml/runs?status=success&per_page=12'
+            $runs=Invoke-RestMethod -Headers $headers -Uri $uri -TimeoutSec 45
+            $cutoff=(Get-Date).ToUniversalTime().AddHours(-12)
+            foreach($r in @($runs.workflow_runs)) {
+              if($r.conclusion -ne 'success' -or [datetime]$r.created_at -lt $cutoff) {continue}
+              $art=Invoke-RestMethod -Headers $headers -Uri ('https://api.github.com/repos/'+$env:GITHUB_REPOSITORY+'/actions/runs/'+$r.id+'/artifacts?per_page=20') -TimeoutSec 45
+              $names=@($art.artifacts | Where-Object {$_.expired -eq $false} | ForEach-Object {$_.name})
+              if(($names -contains 'CNBOX-BOX2411-03-raw-EXE-native-Drive-handoff') -and ($names -contains 'CNBOX-BOX2411-03-shared-native-originals') -and ($names -contains 'CNBOX-BOX2411-03-full-native-teardown')) {$ready=$true;break}
+            }
+          } catch {Write-Host ('ARTIFACT_GATE_ERROR_RETRY_SAFE '+$_.Exception.Message)}
+          if($ready) {
+            'run=false' | Out-File -Append -Encoding utf8 $env:GITHUB_OUTPUT
+            Write-Host 'VALID_SOURCE_ARTIFACT_FRESH_SKIP'
+          } else {
+            'run=true' | Out-File -Append -Encoding utf8 $env:GITHUB_OUTPUT
+            Write-Host 'RESUME_EXACT_BOX03_SOURCE'
+          }
+      - name: Obtain pinned #03 original EXE and actual Box owners
+        if: steps.gate.outputs.run == 'true'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'
+          $build='03'; $game='2.4.1.1'
+          $advertised='36d27bd1306df8755c0672e6a5e225dfda891333e379312027d2fb6e501b2aee'
+          $expectedNative='' # Live Configuration may advance; never confuse it with pinned EXE version
+          New-Item -ItemType Directory -Force -Path 'work','tool','out','evidence','original' | Out-Null
+          $name=('Aslains_WoT_Modpack_Installer_v.{0}_{1}.exe' -f $game,$build)
+          $nativeUrl='https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration'
+          Invoke-WebRequest -Uri $nativeUrl -OutFile 'original/Configuration' -TimeoutSec 180
+          $nativeSha=(Get-FileHash -Algorithm SHA256 -LiteralPath 'original/Configuration').Hash.ToLowerInvariant()
+          [xml]$config=Get-Content 'original/Configuration' -Raw -Encoding UTF8
+          $nativeVersion=$config.DocumentElement.GetAttribute('ContentVersion')
+          $probe=[ordered]@{timeUTC=(Get-Date).ToUniversalTime().ToString('o');url=$nativeUrl;ContentVersion=$nativeVersion;sha256=$nativeSha;bytes=(Get-Item 'original/Configuration').Length;sourceStatus='RAW_LIVE_NATIVE_FETCH_OK';scope='READ_ONLY_UPSTREAM_NOT_RUNTIME'}
+          ($probe|ConvertTo-Json)|Set-Content -Encoding UTF8 evidence/NATIVE2411_SOURCE_PROBE.json
+          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?3\b'){Write-Host ('LIVE_CONFIG_NOW_OTHER_BUILD '+$nativeVersion)}
+          Write-Host ('LIVE_CONFIGURATION_OBSERVED_NOT_PINNED_03 '+$nativeVersion+' SHA '+$nativeSha)
+          $exe=Join-Path 'work' $name
+          $officialUrl=('https://filez.aslain.com/'+$name)
+          Invoke-WebRequest -Uri $officialUrl -OutFile $exe -TimeoutSec 180
+          $sha=(Get-FileHash -Algorithm SHA256 -LiteralPath $exe).Hash.ToLowerInvariant()
+          $sz=(Get-Item $exe).Length
+          if($sha -ne $advertised -or $sz -ne 75930149){throw ('EXACT_03_INSTALLER_SHA_OR_SIZE_FAIL '+$sha+' / '+$sz)}
+          Copy-Item -LiteralPath $exe -Destination (Join-Path 'original' $name)
+          Write-Host ('OFFICIAL_2411_01_RAW_PASS '+$sz+' '+$sha)
+          $extractCommit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          $toolUrl=('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$extractCommit+'/innounp-2/bin/innounp-2.zip')
+          Invoke-WebRequest -Uri $toolUrl -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
+          $toolSha=(Get-FileHash -Algorithm SHA256 -LiteralPath 'tool/innounp-2.zip').Hash.ToLowerInvariant()
+          if($toolSha -ne 'f2f037fdbc63de31248efae9ccb294398d160dc0cbad5f36d14c2f159e17bbf5'){throw ('EXTRACTOR_SHA_MISMATCH '+$toolSha)}
+          Expand-Archive tool/innounp-2.zip -DestinationPath tool/innounp -Force
+          $iu=(Get-ChildItem tool/innounp -Recurse -Filter innounp.exe | Select-Object -First 1).FullName
+          if(-not $iu){throw 'EXTRACTOR_MISSING'}
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence/EXTRACTOR.log
+          if($LASTEXITCODE -ne 0){throw ('EXTRACT_FAILURE '+$LASTEXITCODE)}
+          $all=@(Get-ChildItem out -File -Recurse)
+          if($all.Count -lt 10000){throw ('INCOMPLETE_EXTRACTION_COUNT '+$all.Count)}
+          $root=(Resolve-Path out).Path
+          $rows=@(foreach($f in $all){
+             $rel=$f.FullName.Substring($root.Length+1).Replace('\','/')
+             $h=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+             ($rel+[char]9+$f.Length+[char]9+$h)
+          })
+          $rows | Sort-Object | Set-Content -Encoding UTF8 evidence/FULL_NATIVE_PATH_SHA256.tsv
+          $iss=@(Get-ChildItem out -Recurse -File -Filter install_script.iss)
+          if($iss.Count -ne 1){throw ('INNO_SCRIPT_EXPECTED_ONCE_'+$iss.Count)}
+          Copy-Item -LiteralPath $iss[0].FullName -Destination evidence/install_script.iss
+          $interesting=$rows | Where-Object {$_ -match '(?i)openwg|xvm_13|battlevehiclemarkers|playerspanel|battleloading|limpidstickers|modmenu|modssettingsbridge|armor_penetration|customuiscale|customsixthsense|minimap'}
+          $interesting | Set-Content -Encoding UTF8 evidence/BOX_AND_SELECTED_NATIVE_OWNERS.tsv
+          $report=[ordered]@{work='ASLAIN2411_03_BOX_ONLY_NATIVE_SOURCE_INTAKE';upstream='2.4.1.1 #03';status='FULL_NATIVE_SOURCE_INVENTORY_PASS_NOT_RUNTIME';installerName=$name;installerBytes=$sz;installerSHA256=$sha;officialAdvertisedSHA256=$advertised;nativeContentVersion=$nativeVersion;nativeSHA256=$nativeSha;nativeBytes=(Get-Item original/Configuration).Length;extractedFileCount=$all.Count;extractorCommit=$extractCommit;extractorSHA256=$toolSha;installerSourceUrl=$officialUrl;nativeSourceUrl=$nativeUrl;choiceOriginalDriveId='1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW';choiceOriginalSHA256='aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f';formalBoxSHA256='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f';selectedChoiceFinalOwnerAudit='PENDING_INDEPENDENT_TWO_REVIEW';gameRuntime='NOT_TESTED';physicalCreatorRollback='NOT_TESTED';formalModuleReleaseChanged=$false}
+          ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_03_SUMMARY.json
+          Copy-Item -LiteralPath 'evidence/NATIVE2411_03_SUMMARY.json' -Destination 'original/NATIVE2411_03_SUMMARY.json'
+          Write-Host ('FULL_NATIVE_2411_03_COUNT '+$all.Count)
+          New-Item -ItemType Directory -Force -Path 'shared_owner' | Out-Null
+          $ownerRecords=@()
+          $nativeOwnerFiles=@(Get-ChildItem out -Recurse -File | Where-Object {
+            $_.Name -match '(?i)^(com\.modxvm\.xvm.*\.wotmod|net\.openwg\.common.*\.wotmod|battleVehicleMarkersApp\.swf)$'
+          })
+          if($nativeOwnerFiles.Count -lt 3){throw ('BOX_REQUIRED_OWNER_MISSING '+$nativeOwnerFiles.Count)}
+          foreach($f in $nativeOwnerFiles) {
+            $hash=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+            $dest=Join-Path shared_owner $f.Name
+            if(Test-Path $dest){$dest=Join-Path shared_owner ($hash.Substring(0,10)+'_'+$f.Name)}
+            Copy-Item -LiteralPath $f.FullName -Destination $dest
+            $ownerRecords+=($f.FullName+[char]9+$f.Length+[char]9+$hash)
+            Write-Host ('NATIVE_BOX_OWNER '+$f.Name+' '+$hash)
+          }
+          $cond='Implicit_cond02_xvm_modpack_722b7070.zip'
+          $condUrl='https://repo.aslain.com/wot_modmanager/Files/System/'+$cond
+          Invoke-WebRequest -Uri $condUrl -OutFile (Join-Path shared_owner $cond) -TimeoutSec 180
+          $condSha=(Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path shared_owner $cond)).Hash.ToLowerInvariant()
+          $condSize=(Get-Item (Join-Path shared_owner $cond)).Length
+          if($condSize -lt 150){throw ('INVALID_CONDITIONAL_XVM_SOURCE '+$condSize)}
+          $ownerRecords+=($cond+[char]9+$condSize+[char]9+$condSha)
+          Write-Host ('CONDITIONAL_XVM_ORIGINAL '+$condSha+' '+$condSize)
+          $ownerRecords | Set-Content -Encoding UTF8 shared_owner/SHARED_OWNER_SOURCE_SHA256.tsv
+
+      - name: Preserve official original/Configuration for Drive even if installer source currently 404
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-03-raw-EXE-native-Drive-handoff
+          path: original/
+          retention-days: 1
+          if-no-files-found: error
+      - name: Preserve shared clean native originals for interface-only review
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-03-shared-native-originals
+          path: shared_owner/
+          retention-days: 1
+          if-no-files-found: error
+      - name: Full pristine native evidence - ephemeral Drive handoff
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-03-full-native-teardown
+          path: evidence/
+          retention-days: 1
+          if-no-files-found: error
