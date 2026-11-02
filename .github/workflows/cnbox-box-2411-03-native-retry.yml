@@ -89,7 +89,17 @@ jobs:
             if($LASTEXITCODE -ne 0){throw 'RUST_SOURCE_PIN_CHECKOUT_FAILED'}
             $actualCommit=(git -C 'tool/inno-rust' rev-parse HEAD).Trim()
             if($actualCommit -ne $sourceCommit){throw ('RUST_SOURCE_COMMIT_MISMATCH '+$actualCommit)}
-            Write-Host ('PINNED_INNO_7_1_X_PARSER_COMMIT '+$actualCommit)
+            Write-Host ('PINNED_INNO_PARSER_COMMIT '+$actualCommit)
+            $libFile='tool/inno-rust/core/src/lib.rs'
+            $orig=[System.IO.File]::ReadAllText($libFile,[System.Text.Encoding]::UTF8)
+            $oldGate='pub const MAX_SUPPORTED_VERSION: InnoVersion = InnoVersion::new(7, 0, u8::MAX, u8::MAX);'
+            $newGate='pub const MAX_SUPPORTED_VERSION: InnoVersion = InnoVersion::new(7, 1, u8::MAX, u8::MAX);'
+            if(-not $orig.Contains($oldGate)){throw 'PINNED_PARSER_GATE_FORMAT_MISMATCH_STOP'}
+            $patched=$orig.Replace($oldGate,$newGate)
+            [System.IO.File]::WriteAllText($libFile,$patched,(New-Object System.Text.UTF8Encoding($false)))
+            $patchSha=(Get-FileHash -Algorithm SHA256 -LiteralPath $libFile).Hash.ToLowerInvariant()
+            ('READ_ONLY_EXPERIMENTAL_SUPPORT_GATE_7.0_TO_7.1.1; UPSTREAM_COMMIT='+$actualCommit+'; PATCHED_LIB_SHA256='+$patchSha) | Set-Content -Encoding UTF8 evidence/INNEX_EXPERIMENTAL_GATE_PROVENANCE.txt
+            Write-Host ('READ_ONLY_INNO_7_1_1_EXPERIMENTAL_VERSION_GATE '+$patchSha)
             rustup toolchain install '1.93.0' --profile minimal
             if($LASTEXITCODE -ne 0){throw 'RUST_1_93_INSTALL_FAILED'}
             Push-Location 'tool/inno-rust'
