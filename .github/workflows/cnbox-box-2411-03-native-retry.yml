@@ -260,7 +260,8 @@ jobs:
             Write-Host 'INNO_7_1_1_RUST_EXTRACT_CURRENT_ORIGINAL_PASSED'
           }
           $all=@(Get-ChildItem out -File -Recurse)
-          if($all.Count -lt 10000){throw ('INCOMPLETE_EXTRACTION_COUNT '+$all.Count)}
+          if($all.Count -eq 0){throw ('INNO_7_1_1_EXTRACT_NO_PHYSICAL_FILES '+$all.Count)}
+          Write-Host ('INNO_7_1_1_DECODED_PHYSICAL_FILES '+$all.Count+' / PRIOR_INNOUNP_10249_PATH_ALIAS_COUNT_NOT_A_VALID_INNEX_COMPLETENESS_THRESHOLD; VALIDATE_NATIVE_OWNER_FILES_AND_INNO_FILE_TABLE_BEFORE_FULL_PASS')
           $root=(Resolve-Path out).Path
           $rows=@(foreach($f in $all){
              $rel=$f.FullName.Substring($root.Length+1).Replace('\','/')
@@ -277,7 +278,7 @@ jobs:
           } else {throw ('INNO_SCRIPT_NOT_RECOVERED '+$iss.Count)}
           $interesting=$rows | Where-Object {$_ -match '(?i)openwg|xvm_13|battlevehiclemarkers|playerspanel|battleloading|limpidstickers|modmenu|modssettingsbridge|armor_penetration|customuiscale|customsixthsense|minimap'}
           $interesting | Set-Content -Encoding UTF8 evidence/BOX_AND_SELECTED_NATIVE_OWNERS.tsv
-          $report=[ordered]@{work='ASLAIN2411_03_BOX_ONLY_NATIVE_SOURCE_INTAKE';upstream='2.4.1.1 #03';status='FULL_NATIVE_SOURCE_INVENTORY_PASS_NOT_RUNTIME';installerName=$name;installerBytes=$sz;installerSHA256=$sha;officialAdvertisedSHA256=$advertised;nativeContentVersion=$nativeVersion;nativeSHA256=$nativeSha;nativeBytes=(Get-Item original/Configuration).Length;extractedFileCount=$all.Count;extractorCommit=$extractCommit;extractorSHA256=$toolSha;installerSourceUrl=$officialUrl;nativeSourceUrl=$nativeUrl;choiceOriginalDriveId='1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW';choiceOriginalSHA256='aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f';formalBoxSHA256='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f';selectedChoiceFinalOwnerAudit='PENDING_INDEPENDENT_TWO_REVIEW';gameRuntime='NOT_TESTED';physicalCreatorRollback='NOT_TESTED';formalModuleReleaseChanged=$false}
+          $report=[ordered]@{work='ASLAIN2411_03_BOX_ONLY_NATIVE_SOURCE_INTAKE';upstream='2.4.1.1 #03';status='NATIVE_EXE_PHYSICAL_EXTRACTION_PASS_OWNER_ID_AND_INSTALL_ALIAS_PARITY_PENDING_NOT_RUNTIME';extractionCountReconciliation='PENDING_INNO_FILE_TABLE_SELECTED_INSTALL_DESTINATIONS';installerName=$name;installerBytes=$sz;installerSHA256=$sha;officialAdvertisedSHA256=$advertised;nativeContentVersion=$nativeVersion;nativeSHA256=$nativeSha;nativeBytes=(Get-Item original/Configuration).Length;extractedFileCount=$all.Count;extractorCommit=$extractCommit;extractorSHA256=$toolSha;installerSourceUrl=$officialUrl;nativeSourceUrl=$nativeUrl;choiceOriginalDriveId='1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW';choiceOriginalSHA256='aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f';formalBoxSHA256='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f';selectedChoiceFinalOwnerAudit='PENDING_INDEPENDENT_TWO_REVIEW';gameRuntime='NOT_TESTED';physicalCreatorRollback='NOT_TESTED';formalModuleReleaseChanged=$false}
           ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_03_SUMMARY.json
           Copy-Item -LiteralPath 'evidence/NATIVE2411_03_SUMMARY.json' -Destination 'original/NATIVE2411_03_SUMMARY.json'
           Write-Host ('FULL_NATIVE_2411_03_COUNT '+$all.Count)
