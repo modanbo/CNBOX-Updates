@@ -194,6 +194,32 @@ jobs:
             [System.IO.File]::WriteAllText($headerFile,$headerSrc,(New-Object System.Text.UTF8Encoding($false)))
             ('TRACE_HEADER_MARKERS '+$headerMarkers.Count+'; TRACE_HEADER_SHA '+(Get-FileHash -Algorithm SHA256 -LiteralPath $headerFile).Hash.ToLowerInvariant()) | Set-Content -Encoding UTF8 evidence/INNEX_HEADER_DIAGNOSTIC_PROVENANCE.txt
             Write-Host ('INNEX_INNO71_READ_ONLY_HEADER_TRACING '+$headerMarkers.Count)
+            $innoReadFile='tool/inno-rust/core/src/lib.rs'
+            $readSrc=[System.IO.File]::ReadAllText($innoReadFile,[System.Text.Encoding]::UTF8)
+            $moreMarkers=@(
+              @('let ini_entries = (0..header.ini_entry_count())','eprintln!("CNBOX_INNO71_STAGE_INI"); let ini_entries = (0..header.ini_entry_count())'),
+              @('let registry_entries = (0..header.registry_entry_count())','eprintln!("CNBOX_INNO71_STAGE_REGISTRY"); let registry_entries = (0..header.registry_entry_count())'),
+              @('let delete_entries = (0..header.install_delete_entry_count())','eprintln!("CNBOX_INNO71_STAGE_INSTALL_DELETE"); let delete_entries = (0..header.install_delete_entry_count())'),
+              @('let uninstall_delete_entries = (0..header.uninstall_delete_entry_count())','eprintln!("CNBOX_INNO71_STAGE_UNINSTALL_DELETE"); let uninstall_delete_entries = (0..header.uninstall_delete_entry_count())'),
+              @('let run_entries = (0..header.run_entry_count())','eprintln!("CNBOX_INNO71_STAGE_RUN"); let run_entries = (0..header.run_entry_count())'),
+              @('let uninstall_run_entries = (0..header.uninstall_run_entry_count())','eprintln!("CNBOX_INNO71_STAGE_UNINSTALL_RUN"); let uninstall_run_entries = (0..header.uninstall_run_entry_count())'),
+              @('wizard = Wizard::read(&mut reader, &header, inno_version)?;','eprintln!("CNBOX_INNO71_STAGE_WIZARD_DATA"); wizard = Wizard::read(&mut reader, &header, inno_version)?;'),
+              @('reader.check_end_of_stream::<Primary>()?;','eprintln!("CNBOX_INNO71_STAGE_PRIMARY_END_CHECK"); reader.check_end_of_stream::<Primary>()?; eprintln!("CNBOX_INNO71_STAGE_PRIMARY_END_PASS");'),
+              @('reader = reader.reset()?;','eprintln!("CNBOX_INNO71_STAGE_SECONDARY_RESET"); reader = reader.reset()?;')
+            )
+            foreach($t in $moreMarkers) {
+              if(-not $readSrc.Contains($t[0])) {throw ('PINNED_INNO71_SECOND_STAGE_ANCHOR_MISSING '+$t[0])}
+              $readSrc=$readSrc.Replace($t[0],$t[1])
+            }
+            [System.IO.File]::WriteAllText($innoReadFile,$readSrc,(New-Object System.Text.UTF8Encoding($false)))
+            $streamFile='tool/inno-rust/core/src/read/stream.rs'
+            $streamSrc=[System.IO.File]::ReadAllText($streamFile,[System.Text.Encoding]::UTF8)
+            $oldRead='return Err(InnoError::UnexpectedExtraData(S::HEADER_STREAM));'
+            $newRead='let mut extra = Vec::new(); self.take(1024).read_to_end(&mut extra)?; eprintln!("CNBOX_INNO71_PRIMARY_EXTRA_DIAGNOSTIC_FIRST={:02x} TAIL_READ_BYTES={} TAIL_FIRST128={:02x?}",buf[0],extra.len(), &extra[..extra.len().min(128)]); return Err(InnoError::UnexpectedExtraData(S::HEADER_STREAM));'
+            if(-not $streamSrc.Contains($oldRead)) {throw 'PINNED_INNO71_STREAM_DIAGNOSTIC_ANCHOR_MISSING'}
+            $streamSrc=$streamSrc.Replace($oldRead,$newRead)
+            [System.IO.File]::WriteAllText($streamFile,$streamSrc,(New-Object System.Text.UTF8Encoding($false)))
+            Write-Host ('INNEX_INNO71_READ_ONLY_SECONDARY_STAGES '+$moreMarkers.Count)
             rustup toolchain install '1.93.0' --profile minimal
             if($LASTEXITCODE -ne 0){throw 'RUST_1_93_INSTALL_FAILED'}
             Push-Location 'tool/inno-rust'
