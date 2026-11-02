@@ -132,6 +132,33 @@ jobs:
             $patchSha=(Get-FileHash -Algorithm SHA256 -LiteralPath $libFile).Hash.ToLowerInvariant()
             ('READ_ONLY_EXPERIMENTAL_SUPPORT_GATE_7.0_TO_7.1.1; UPSTREAM_COMMIT='+$actualCommit+'; PATCHED_LIB_SHA256='+$patchSha) | Set-Content -Encoding UTF8 evidence/INNEX_EXPERIMENTAL_GATE_PROVENANCE.txt
             Write-Host ('READ_ONLY_INNO_7_1_1_EXPERIMENTAL_VERSION_GATE '+$patchSha)
+            # Temporary READ-ONLY parser stage tracing: pin and validate the exact
+            # source first, then trace which Inno 7.1.1 structure rejects the
+            # new bytes. This instrumentation does not rewrite installer bytes.
+            $traceMarkers=@(
+              @('let encryption_header = if inno_version >= 6.5 {','eprintln!("CNBOX_INNO71_STAGE_ENCRYPTION"); let encryption_header = if inno_version >= 6.5 {'),
+              @('let mut reader = InnoStreamReader::new(&mut reader, inno_version)?;','eprintln!("CNBOX_INNO71_STAGE_STREAM"); let mut reader = InnoStreamReader::new(&mut reader, inno_version)?;'),
+              @('let mut header = Header::read(&mut reader, inno_version)?;','eprintln!("CNBOX_INNO71_STAGE_HEADER_BEGIN"); let mut header = Header::read(&mut reader, inno_version)?; eprintln!("CNBOX_INNO71_STAGE_HEADER_OK");'),
+              @('let languages = (0..header.language_count())','eprintln!("CNBOX_INNO71_STAGE_LANGUAGES"); let languages = (0..header.language_count())'),
+              @('let messages = (0..header.custom_message_count())','eprintln!("CNBOX_INNO71_STAGE_MESSAGES"); let messages = (0..header.custom_message_count())'),
+              @('let permissions = (0..header.permission_count())','eprintln!("CNBOX_INNO71_STAGE_PERMISSIONS"); let permissions = (0..header.permission_count())'),
+              @('let type_entries = (0..header.type_count())','eprintln!("CNBOX_INNO71_STAGE_TYPES"); let type_entries = (0..header.type_count())'),
+              @('let components = (0..header.component_count())','eprintln!("CNBOX_INNO71_STAGE_COMPONENTS"); let components = (0..header.component_count())'),
+              @('let tasks = (0..header.task_count())','eprintln!("CNBOX_INNO71_STAGE_TASKS"); let tasks = (0..header.task_count())'),
+              @('let directories = (0..header.directory_count())','eprintln!("CNBOX_INNO71_STAGE_DIRS"); let directories = (0..header.directory_count())'),
+              @('let is_sig_keys = (0..header.is_sig_keys_count())','eprintln!("CNBOX_INNO71_STAGE_SIG_KEYS"); let is_sig_keys = (0..header.is_sig_keys_count())'),
+              @('let files = (0..header.file_count())','eprintln!("CNBOX_INNO71_STAGE_FILES"); let files = (0..header.file_count())'),
+              @('let icons = (0..header.icon_count())','eprintln!("CNBOX_INNO71_STAGE_ICONS"); let icons = (0..header.icon_count())'),
+              @('let file_locations = (0..header.file_location_entry_count())','eprintln!("CNBOX_INNO71_STAGE_FILE_LOCATIONS"); let file_locations = (0..header.file_location_entry_count())')
+            )
+            $traceLib=[System.IO.File]::ReadAllText($libFile,[System.Text.Encoding]::UTF8)
+            foreach($t in $traceMarkers) {
+              if(-not $traceLib.Contains($t[0])) {throw ('PINNED_PARSER_TRACE_ANCHOR_MISSING '+$t[0])}
+              $traceLib=$traceLib.Replace($t[0],$t[1])
+            }
+            [System.IO.File]::WriteAllText($libFile,$traceLib,(New-Object System.Text.UTF8Encoding($false)))
+            ('VERSION_GATE_PATCH_SHA '+$patchSha+'; TRACE_MARKERS '+$traceMarkers.Count+'; TRACE_LIB_SHA '+(Get-FileHash -Algorithm SHA256 -LiteralPath $libFile).Hash.ToLowerInvariant()) | Set-Content -Encoding UTF8 evidence/INNEX_DIAGNOSTIC_PROVENANCE.txt
+            Write-Host ('INNEX_INNO71_READ_ONLY_STAGE_TRACING '+$traceMarkers.Count)
             rustup toolchain install '1.93.0' --profile minimal
             if($LASTEXITCODE -ne 0){throw 'RUST_1_93_INSTALL_FAILED'}
             Push-Location 'tool/inno-rust'
@@ -140,7 +167,12 @@ jobs:
             $sourceExe=(Resolve-Path $exe).Path
             $outDir=(Resolve-Path out).Path
             & $innexExe $sourceExe --extract $outDir *> evidence/INNEX_EXTRACT.log
-            if($LASTEXITCODE -ne 0){throw ('INNEX_INNO_7_1_1_EXTRACT_FAILED '+$LASTEXITCODE)}
+            if($LASTEXITCODE -ne 0){
+              Write-Host 'INNEX_INNO71_EXACT_FAILURE_DIAGNOSTIC_START'
+              Get-Content -LiteralPath evidence/INNEX_EXTRACT.log -Tail 120 | ForEach-Object {Write-Host $_}
+              Write-Host 'INNEX_INNO71_EXACT_FAILURE_DIAGNOSTIC_END'
+              throw ('INNEX_INNO_7_1_1_EXTRACT_FAILED '+$LASTEXITCODE)
+            }
             Write-Host 'INNO_7_1_1_RUST_EXTRACT_CURRENT_ORIGINAL_PASSED'
           }
           $all=@(Get-ChildItem out -File -Recurse)
