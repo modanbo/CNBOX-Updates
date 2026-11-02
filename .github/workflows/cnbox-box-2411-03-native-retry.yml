@@ -69,28 +69,37 @@ jobs:
           ('Full original already SHA+CRC archived in Drive ID 10cMIiqzcMji_kGRXpFB1FwgLHLxL8Qb3; EXE SHA '+$sha) | Set-Content -Encoding UTF8 original/DRIVE_RAW_EXE_REFERENCE.txt
           Write-Host ('EXACT_03_RAW_EXE_SHA_PASS_ORIGINAL_IN_DRIVE '+$sz+' '+$sha)
           New-Item -ItemType Directory -Force -Path shared_owner | Out-Null
-          $cond='Implicit_cond02_xvm_modpack_722b7070.zip'
-          $condUrl='https://repo.aslain.com/wot_modmanager/Files/System/'+$cond
-          $condPath=(Join-Path shared_owner $cond)
-          $condResult=[ordered]@{status='NOT_VERIFIED';source=$condUrl;sourceBuild='2.4.1.1 #03'}
-          try {
-            Invoke-WebRequest -Uri $condUrl -OutFile $condPath -TimeoutSec 180
-            $condSha=(Get-FileHash -Algorithm SHA256 -LiteralPath $condPath).Hash.ToLowerInvariant()
-            $condSize=(Get-Item $condPath).Length
-            if($condSize -lt 150){throw ('INVALID_CONDITIONAL_XVM_SOURCE '+$condSize)}
-            python -c "import zipfile,sys; z=zipfile.ZipFile(sys.argv[1]); assert z.testzip() is None; print('CONDITIONAL_XVM_ZIP_CRC_PASS',len(z.namelist()))" $condPath
-            if($LASTEXITCODE -ne 0){throw 'CONDITIONAL_ZIP_CRC_FAILED'}
-            $condResult['status']='SOURCE_ZIP_CRC_PASS'
-            $condResult['sha256']=$condSha
-            $condResult['bytes']=$condSize
-            Write-Host ('CONDITIONAL_XVM_ORIGINAL_SOURCE_CRC_PASS '+$condSha+' '+$condSize)
-          } catch {
-            $condResult['status']='SOURCE_FETCH_OR_CRC_FAIL'
-            $condResult['error']=$_.Exception.Message
-            if(Test-Path $condPath){Remove-Item -LiteralPath $condPath -Force}
-            Write-Host ('CONDITIONAL_XVM_SOURCE_FAILED '+$_.Exception.Message)
+          $boxRefList=@(
+            'Implicit_cond02_xvm_modpack_722b7070.zip',
+            'Implicit_xvm_592411f7.zip',
+            'Implicit_xvm_shared_c35655e9.zip'
+          )
+          $sourceRecords=@()
+          foreach($archiveName in $boxRefList){
+            $url='https://repo.aslain.com/wot_modmanager/Files/System/'+$archiveName
+            $dest=(Join-Path shared_owner $archiveName)
+            $entry=[ordered]@{name=$archiveName;url=$url;status='NOT_VERIFIED'}
+            try {
+              Invoke-WebRequest -Uri $url -OutFile $dest -TimeoutSec 180
+              $digest=(Get-FileHash -Algorithm SHA256 -LiteralPath $dest).Hash.ToLowerInvariant()
+              $size=(Get-Item -LiteralPath $dest).Length
+              if($size -lt 150){throw ('INVALID_SOURCE_SIZE '+$size)}
+              python -c "import zipfile,sys; z=zipfile.ZipFile(sys.argv[1]); assert z.testzip() is None; print('ZIP_CRC_PASS',len(z.namelist()))" $dest
+              if($LASTEXITCODE -ne 0){throw 'ZIP_CRC_FAILED'}
+              $entry['status']='SOURCE_ZIP_CRC_PASS'
+              $entry['sha256']=$digest
+              $entry['bytes']=$size
+              Write-Host ('BOX_REQUIRED_SOURCE_ZIP_CRC_PASS '+$archiveName+' '+$digest+' '+$size)
+            } catch {
+              $entry['status']='SOURCE_UNAVAILABLE_OR_INVALID'
+              $entry['error']=$_.Exception.Message
+              if(Test-Path -LiteralPath $dest){Remove-Item -LiteralPath $dest -Force}
+              Write-Host ('BOX_REQUIRED_SOURCE_FAIL '+$archiveName+' '+$_.Exception.Message)
+            }
+            $sourceRecords+=$entry
           }
-          $condResult | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 evidence/CONDITIONAL_XVM_SOURCE_RECEIPT.json
+          $sourceRecords | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 evidence/BOX_REQUIRED_SOURCE_ARCHIVES.json
+          if(@($sourceRecords|Where-Object {$_.status -eq 'SOURCE_ZIP_CRC_PASS'}).Count -ne 3){Write-Host 'BOX_REQUIRED_PARTIAL_SOURCE_ONLY_NOT_ALL_THREE'}
           $extractCommit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
           $toolUrl=('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$extractCommit+'/innounp-2/bin/innounp-2.zip')
           Invoke-WebRequest -Uri $toolUrl -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
@@ -170,7 +179,7 @@ jobs:
             $ownerRecords+=($f.FullName+[char]9+$f.Length+[char]9+$hash)
             Write-Host ('NATIVE_BOX_OWNER '+$f.Name+' '+$hash)
           }
-          if($condResult.status -eq 'SOURCE_ZIP_CRC_PASS'){$ownerRecords+=($cond+[char]9+$condSize+[char]9+$condSha)}
+          $ownerRecords+=@($sourceRecords | Where-Object {$_.status -eq 'SOURCE_ZIP_CRC_PASS'} | ForEach-Object {$_.name+[char]9+$_.bytes+[char]9+$_.sha256})
           $ownerRecords | Set-Content -Encoding UTF8 shared_owner/SHARED_OWNER_SOURCE_SHA256.tsv
 
       - name: Preserve official original/Configuration for Drive even if installer source currently 404
