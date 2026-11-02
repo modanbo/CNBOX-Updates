@@ -220,6 +220,29 @@ jobs:
             $streamSrc=$streamSrc.Replace($oldRead,$newRead)
             [System.IO.File]::WriteAllText($streamFile,$streamSrc,(New-Object System.Text.UTF8Encoding($false)))
             Write-Host ('INNEX_INNO71_READ_ONLY_SECONDARY_STAGES '+$moreMarkers.Count)
+            # Vendor's actual Setup.MainFunc.pas for Inno 7.1.1 writes a
+            # SevenZipDLL Pascal-blob after 6 Wizard image tables when
+            # SetupHeader.SevenZipLibraryName is nonempty. Pinned Rust innex
+            # Wizard::read forgot this newer section. Previous diagnostic
+            # read precisely u32 length followed by MZ 90 PE header at tail.
+            $wizardFile='tool/inno-rust/core/src/wizard.rs'
+            $wizardSrc=[System.IO.File]::ReadAllText($wizardFile,[System.Text.Encoding]::UTF8)
+            $wizardAnchor='        Ok(wizard)'
+            $wizardFix=@'
+        if version >= 6.5 && header.seven_zip_library_name().is_some_and(|n| !n.is_empty()) {
+            let native_sevenzip_dll = reader.read_raw_pascal_string()?;
+            eprintln!("CNBOX_INNO71_OFFICIAL_SEVENZIP_DLL_CONSUMED_BYTES={}", native_sevenzip_dll.len());
+            if native_sevenzip_dll.len() < 2 || &native_sevenzip_dll[..2] != b"MZ" {
+                return Err(io::Error::new(io::ErrorKind::InvalidData, "SevenZipDLL lacks native MZ header"));
+            }
+        }
+        Ok(wizard)
+'@
+            if(-not $wizardSrc.Contains($wizardAnchor)) {throw 'PINNED_INNO71_SEVENZIP_7_1_SOURCE_ANCHOR_MISSING'}
+            $wizardSrc=$wizardSrc.Replace($wizardAnchor,$wizardFix.TrimEnd())
+            [System.IO.File]::WriteAllText($wizardFile,$wizardSrc,(New-Object System.Text.UTF8Encoding($false)))
+            ('7.1.1 official Setup.MainFunc.pas writes SevenZipDLL if SevenZipLibraryName not empty, after Wizard data. Read only, guarded MZ, no byte change to original. Tail had u32 size + MZ.') | Set-Content -Encoding UTF8 evidence/INNEX_OFFICIAL_SEVENZIP_READER_FIX.txt
+            Write-Host 'INNEX_INNO71_READ_ONLY_OFFICIAL_SEVENZIP_CONSUMPTION_REPAIR'
             rustup toolchain install '1.93.0' --profile minimal
             if($LASTEXITCODE -ne 0){throw 'RUST_1_93_INSTALL_FAILED'}
             Push-Location 'tool/inno-rust'
