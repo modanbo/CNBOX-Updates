@@ -1,0 +1,69 @@
+name: CNBOX Box 2411 live scoped native source probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cnbox-box-2411-live-native-source-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  box-native-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Fetch native source and record Box-only owner path references
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source evidence
+          python - <<'PY'
+          import datetime, hashlib, json, pathlib, re, urllib.request, xml.etree.ElementTree as ET
+          url='https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration'
+          req=urllib.request.Request(url,headers={'User-Agent':'CNBOX-Box-source-intake/1.0'})
+          try:
+              with urllib.request.urlopen(req,timeout=100) as resp:
+                  raw=resp.read()
+                  http=resp.status
+          except Exception as e:
+              print('LIVE_NATIVE_HTTP_FAILED '+repr(e),flush=True)
+              raise
+          if not raw or http != 200: raise RuntimeError('EMPTY_OR_NON200_CONFIG')
+          pathlib.Path('source/Configuration').write_bytes(raw)
+          root=ET.fromstring(raw)
+          version=root.attrib.get('ContentVersion','NOT_VERIFIED')
+          sha=hashlib.sha256(raw).hexdigest()
+          # Limit scoped metadata to XVM/OpenWG/Box player-panel and marker owner dependency paths.
+          pattern=re.compile(r'xvm|openwg|playerspanel|player_panels|vehiclemarker|battleloading|modxvm|implicit_cond02',re.I)
+          owners=[]
+          for el in root.iter():
+              if el.tag.split('}')[-1].lower() != 'file': continue
+              attrs={str(k):str(v) for k,v in el.attrib.items()}
+              if pattern.search(json.dumps(attrs,ensure_ascii=False)):
+                  owners.append(attrs)
+          owners=sorted(owners,key=lambda x:json.dumps(x,sort_keys=True))
+          names=('Implicit_cond02_xvm_modpack_722b7070.zip','Implicit_xvm_592411f7.zip','Implicit_xvm_shared_c35655e9.zip')
+          flat=json.dumps(owners,ensure_ascii=False)
+          report={'checkedUTC':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':url,
+                  'HTTP':http,'contentVersion':version,'configurationSHA256':sha,'configurationBytes':len(raw),
+                  'previousKnown03ContentVersion':'v2.4.1.1 #03 (2026.11.01)',
+                  'previousKnown03RawSHA256':'4bea638a8737141807e09b0081eee4325f70ad8a8d93f81a053c042046536958',
+                  'scopedFileReferenceCount':len(owners),
+                  'threePriorCriticalSourceReferencesPresent':{n:(n in flat) for n in names},
+                  'classification':'RAW_SOURCE_ONLY; not selected-Choice audit, binary member audit, actual installed proof or Runtime',
+                  'formalReleaseChanged':False}
+          pathlib.Path('evidence/BOX_SCOPED_NATIVE_SOURCE_PROBE.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+          pathlib.Path('evidence/BOX_SCOPED_FILE_REFERENCES.json').write_text(json.dumps(owners,ensure_ascii=False,indent=2),encoding='utf-8')
+          print('CNBOX_BOX_SOURCE_PROBE '+json.dumps(report,ensure_ascii=False),flush=True)
+          if not re.search(r'2\.4\.1\.1\s*#\s*0?4\b',version):
+              print('LIVE_CONTENTVERSION_NOT_04_REQUIRE_RECONCILIATION '+version,flush=True)
+          PY
+      - name: Preserve exact source and method-scoped reference evidence for Drive handoff
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-LIVE-NATIVE-SOURCE-PROBE
+          path: |
+            source/
+            evidence/
+          retention-days: 2
+          if-no-files-found: warn
