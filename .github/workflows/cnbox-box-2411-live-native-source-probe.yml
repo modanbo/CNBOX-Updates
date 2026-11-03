@@ -36,9 +36,9 @@ jobs:
           pattern=re.compile(r'xvm|openwg|playerspanel|player_panels|vehiclemarker|battleloading|modxvm|implicit_cond02',re.I)
           owners=[]
           for el in root.iter():
-              if el.tag.split('}')[-1].lower() != 'file': continue
+              if el.tag.split('}')[-1].lower() not in ('mod','package'): continue
               attrs={str(k):str(v) for k,v in el.attrib.items()}
-              if pattern.search(json.dumps(attrs,ensure_ascii=False)):
+              if attrs.get('File') and pattern.search(attrs['File']):
                   owners.append(attrs)
           owners=sorted(owners,key=lambda x:json.dumps(x,sort_keys=True))
           names=('Implicit_cond02_xvm_modpack_722b7070.zip','Implicit_xvm_592411f7.zip','Implicit_xvm_shared_c35655e9.zip')
