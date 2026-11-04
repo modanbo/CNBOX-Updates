@@ -2,12 +2,10 @@ name: CNBOX Box 2411 03 native 30 minute retry
 permissions:
   contents: read
   actions: read
+# #03 exact original and Inno/native owner evidence were already archived and verified in Drive.
+# #04 is current upstream. Retain this forensic tool for explicit manual reproduction only;
+# never schedule repeating obsolete #03 source extraction/artifact churn.
 on:
-  schedule:
-    - cron: '*/30 * * * *'
-  push:
-    paths:
-      - '.github/workflows/cnbox-box-2411-03-native-retry.yml'
   workflow_dispatch:
 jobs:
   native-windows:
