@@ -1,0 +1,324 @@
+name: CNBOX Box 2411 05 scoped native owner one-shot
+permissions:
+  contents: read
+  actions: read
+on:
+  push:
+    paths:
+      - '.github/workflows/cnbox-box-2411-05-box-owner-native-once.yml'
+  workflow_dispatch:
+jobs:
+  native-windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - name: Skip only with fresh complete GitHub artifacts from a real source run
+        id: gate
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference='Stop'
+          $ready=$false
+          try {
+            $headers=@{Authorization=('Bearer '+$env:GH_TOKEN);Accept='application/vnd.github+json'}
+            $uri='https://api.github.com/repos/'+$env:GITHUB_REPOSITORY+'/actions/workflows/cnbox-box-2411-05-box-owner-native-once.yml/runs?status=success&per_page=12'
+            $runs=Invoke-RestMethod -Headers $headers -Uri $uri -TimeoutSec 45
+            $cutoff=(Get-Date).ToUniversalTime().AddHours(-12)
+            foreach($r in @($runs.workflow_runs)) {
+              if($r.conclusion -ne 'success' -or [datetime]$r.created_at -lt $cutoff) {continue}
+              $art=Invoke-RestMethod -Headers $headers -Uri ('https://api.github.com/repos/'+$env:GITHUB_REPOSITORY+'/actions/runs/'+$r.id+'/artifacts?per_page=20') -TimeoutSec 45
+              $names=@($art.artifacts | Where-Object {$_.expired -eq $false} | ForEach-Object {$_.name})
+              if(($names -contains 'CNBOX-BOX2411-05-original-Drive-reference-native') -and ($names -contains 'CNBOX-BOX2411-05-shared-native-originals') -and ($names -contains 'CNBOX-BOX2411-05-full-native-teardown')) {$ready=$true;break}
+            }
+          } catch {Write-Host ('ARTIFACT_GATE_ERROR_RETRY_SAFE '+$_.Exception.Message)}
+          if($ready) {
+            'run=false' | Out-File -Append -Encoding utf8 $env:GITHUB_OUTPUT
+            Write-Host 'VALID_SOURCE_ARTIFACT_FRESH_SKIP'
+          } else {
+            'run=true' | Out-File -Append -Encoding utf8 $env:GITHUB_OUTPUT
+            Write-Host 'RESUME_EXACT_BOX05_SOURCE'
+          }
+      - name: Obtain pinned #05 original EXE and actual Box owners
+        if: steps.gate.outputs.run == 'true'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'
+          $build='05'; $game='2.4.1.1'
+          $advertised='099d6a926a89158512083f0aecc8581c277b075b3e507e83c7a2f39ca83f0776'
+          $expectedNative='' # Live Configuration may advance; never confuse it with pinned EXE version
+          New-Item -ItemType Directory -Force -Path 'work','tool','out','evidence','original' | Out-Null
+          $name=('Aslains_WoT_Modpack_Installer_v.{0}_{1}.exe' -f $game,$build)
+          $nativeUrl='https://repo.aslain.com/wot_modmanager/2.4.1.1/Configuration'
+          Invoke-WebRequest -Uri $nativeUrl -OutFile 'original/Configuration' -TimeoutSec 180
+          $nativeSha=(Get-FileHash -Algorithm SHA256 -LiteralPath 'original/Configuration').Hash.ToLowerInvariant()
+          [xml]$config=Get-Content 'original/Configuration' -Raw -Encoding UTF8
+          $nativeVersion=$config.DocumentElement.GetAttribute('ContentVersion')
+          $probe=[ordered]@{timeUTC=(Get-Date).ToUniversalTime().ToString('o');url=$nativeUrl;ContentVersion=$nativeVersion;sha256=$nativeSha;bytes=(Get-Item 'original/Configuration').Length;sourceStatus='RAW_LIVE_NATIVE_FETCH_OK';scope='READ_ONLY_UPSTREAM_NOT_RUNTIME'}
+          ($probe|ConvertTo-Json)|Set-Content -Encoding UTF8 evidence/NATIVE2411_SOURCE_PROBE.json
+          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?3\b'){Write-Host ('LIVE_CONFIG_NOW_OTHER_BUILD '+$nativeVersion)}
+          Write-Host ('LIVE_CONFIGURATION_OBSERVED_NOT_PINNED_05 '+$nativeVersion+' SHA '+$nativeSha)
+          $exe=Join-Path 'work' $name
+          $officialUrl=('https://filez.aslain.com/'+$name)
+          Invoke-WebRequest -Uri $officialUrl -OutFile $exe -TimeoutSec 180
+          $sha=(Get-FileHash -Algorithm SHA256 -LiteralPath $exe).Hash.ToLowerInvariant()
+          $sz=(Get-Item $exe).Length
+          if($sha -ne $advertised -or $sz -lt 10000000){throw ('EXACT_05_INSTALLER_SHA_OR_SIZE_FAIL '+$sha+' / '+$sz)}
+          Copy-Item -LiteralPath $exe -Destination (Join-Path 'original' $name)
+          ('#05 new full original EXE and native source in GitHub transient artifact; Drive original archival PENDING until raw same-ID reread; EXE SHA '+$sha) | Set-Content -Encoding UTF8 original/DRIVE_RAW_EXE_REFERENCE.txt
+          Write-Host ('EXACT_05_RAW_EXE_SHA_PASS_DRIVE_NOT_YET_ARCHIVED '+$sz+' '+$sha)
+          New-Item -ItemType Directory -Force -Path shared_owner | Out-Null
+          $boxRefList=@(
+            'Implicit_cond02_xvm_modpack_722b7070.zip',
+            'Implicit_xvm_592411f7.zip',
+            'Implicit_xvm_shared_c35655e9.zip'
+          )
+          $sourceRecords=@()
+          foreach($archiveName in $boxRefList){
+            $url='https://repo.aslain.com/wot_modmanager/Files/System/'+$archiveName
+            $dest=(Join-Path shared_owner $archiveName)
+            $entry=[ordered]@{name=$archiveName;url=$url;status='NOT_VERIFIED'}
+            try {
+              Invoke-WebRequest -Uri $url -OutFile $dest -TimeoutSec 180
+              $digest=(Get-FileHash -Algorithm SHA256 -LiteralPath $dest).Hash.ToLowerInvariant()
+              $size=(Get-Item -LiteralPath $dest).Length
+              if($size -lt 150){throw ('INVALID_SOURCE_SIZE '+$size)}
+              python -c "import zipfile,sys; z=zipfile.ZipFile(sys.argv[1]); assert z.testzip() is None; print('ZIP_CRC_PASS',len(z.namelist()))" $dest
+              if($LASTEXITCODE -ne 0){throw 'ZIP_CRC_FAILED'}
+              $entry['status']='SOURCE_ZIP_CRC_PASS'
+              $entry['sha256']=$digest
+              $entry['bytes']=$size
+              Write-Host ('BOX_REQUIRED_SOURCE_ZIP_CRC_PASS '+$archiveName+' '+$digest+' '+$size)
+            } catch {
+              $entry['status']='SOURCE_UNAVAILABLE_OR_INVALID'
+              $entry['error']=$_.Exception.Message
+              if(Test-Path -LiteralPath $dest){Remove-Item -LiteralPath $dest -Force}
+              Write-Host ('BOX_REQUIRED_SOURCE_FAIL '+$archiveName+' '+$_.Exception.Message)
+            }
+            $sourceRecords+=$entry
+          }
+          $sourceRecords | ConvertTo-Json -Depth 4 | Set-Content -Encoding UTF8 evidence/BOX_REQUIRED_SOURCE_ARCHIVES.json
+          if(@($sourceRecords|Where-Object {$_.status -eq 'SOURCE_ZIP_CRC_PASS'}).Count -ne 3){Write-Host 'BOX_REQUIRED_PARTIAL_SOURCE_ONLY_NOT_ALL_THREE'}
+          $extractCommit='6fb49264aacf512a093e7b4fc6fb3dd266dad31a'
+          $toolUrl=('https://raw.githubusercontent.com/jrathlev/InnoUnpacker-Windows-GUI/'+$extractCommit+'/innounp-2/bin/innounp-2.zip')
+          Invoke-WebRequest -Uri $toolUrl -OutFile 'tool/innounp-2.zip' -TimeoutSec 180
+          $toolSha=(Get-FileHash -Algorithm SHA256 -LiteralPath 'tool/innounp-2.zip').Hash.ToLowerInvariant()
+          if($toolSha -ne 'f2f037fdbc63de31248efae9ccb294398d160dc0cbad5f36d14c2f159e17bbf5'){throw ('EXTRACTOR_SHA_MISMATCH '+$toolSha)}
+          Expand-Archive tool/innounp-2.zip -DestinationPath tool/innounp -Force
+          $iu=(Get-ChildItem tool/innounp -Recurse -Filter innounp.exe | Select-Object -First 1).FullName
+          if(-not $iu){throw 'EXTRACTOR_MISSING'}
+          & $iu -h -o -b -y -q -a -m -x '-dout' $exe 2>&1 | Out-File -Encoding utf8 evidence/EXTRACTOR.log
+          $innexExe=$null
+          if($LASTEXITCODE -ne 0){
+            $errorText=Get-Content evidence/EXTRACTOR.log -Raw
+            if($errorText -notmatch 'This version is not supported'){throw ('OLD_EXTRACTOR_UNEXPECTED_FAILURE '+$LASTEXITCODE)}
+            Write-Host 'INNOUNP_REJECTS_7_1_1_TRY_PINNED_RUST_INNEX'
+            $sourceCommit='aacca522b84cca0a2b3446b31ecb276112be1f95'
+            git clone --filter=blob:none 'https://github.com/russellbanks/inno.git' 'tool/inno-rust'
+            if($LASTEXITCODE -ne 0){throw 'RUST_SOURCE_CLONE_FAILED'}
+            git -C 'tool/inno-rust' checkout $sourceCommit
+            if($LASTEXITCODE -ne 0){throw 'RUST_SOURCE_PIN_CHECKOUT_FAILED'}
+            $actualCommit=(git -C 'tool/inno-rust' rev-parse HEAD).Trim()
+            if($actualCommit -ne $sourceCommit){throw ('RUST_SOURCE_COMMIT_MISMATCH '+$actualCommit)}
+            Write-Host ('PINNED_INNO_PARSER_COMMIT '+$actualCommit)
+            $libFile='tool/inno-rust/core/src/lib.rs'
+            $orig=[System.IO.File]::ReadAllText($libFile,[System.Text.Encoding]::UTF8)
+            $oldGate='pub const MAX_SUPPORTED_VERSION: InnoVersion = InnoVersion::new(7, 0, u8::MAX, u8::MAX);'
+            $newGate='pub const MAX_SUPPORTED_VERSION: InnoVersion = InnoVersion::new(7, 1, u8::MAX, u8::MAX);'
+            if(-not $orig.Contains($oldGate)){throw 'PINNED_PARSER_GATE_FORMAT_MISMATCH_STOP'}
+            $patched=$orig.Replace($oldGate,$newGate)
+            [System.IO.File]::WriteAllText($libFile,$patched,(New-Object System.Text.UTF8Encoding($false)))
+            $patchSha=(Get-FileHash -Algorithm SHA256 -LiteralPath $libFile).Hash.ToLowerInvariant()
+            ('READ_ONLY_EXPERIMENTAL_SUPPORT_GATE_7.0_TO_7.1.1; UPSTREAM_COMMIT='+$actualCommit+'; PATCHED_LIB_SHA256='+$patchSha) | Set-Content -Encoding UTF8 evidence/INNEX_EXPERIMENTAL_GATE_PROVENANCE.txt
+            Write-Host ('READ_ONLY_INNO_7_1_1_EXPERIMENTAL_VERSION_GATE '+$patchSha)
+            # Temporary READ-ONLY parser stage tracing: pin and validate the exact
+            # source first, then trace which Inno 7.1.1 structure rejects the
+            # new bytes. This instrumentation does not rewrite installer bytes.
+            $traceMarkers=@(
+              @('let encryption_header = if inno_version >= 6.5 {','eprintln!("CNBOX_INNO71_STAGE_ENCRYPTION"); let encryption_header = if inno_version >= 6.5 {'),
+              @('let mut reader = InnoStreamReader::new(&mut reader, inno_version)?;','eprintln!("CNBOX_INNO71_STAGE_STREAM"); let mut reader = InnoStreamReader::new(&mut reader, inno_version)?;'),
+              @('let mut header = Header::read(&mut reader, inno_version)?;','eprintln!("CNBOX_INNO71_STAGE_HEADER_BEGIN"); let mut header = Header::read(&mut reader, inno_version)?; eprintln!("CNBOX_INNO71_STAGE_HEADER_OK");'),
+              @('let languages = (0..header.language_count())','eprintln!("CNBOX_INNO71_STAGE_LANGUAGES"); let languages = (0..header.language_count())'),
+              @('let messages = (0..header.custom_message_count())','eprintln!("CNBOX_INNO71_STAGE_MESSAGES"); let messages = (0..header.custom_message_count())'),
+              @('let permissions = (0..header.permission_count())','eprintln!("CNBOX_INNO71_STAGE_PERMISSIONS"); let permissions = (0..header.permission_count())'),
+              @('let type_entries = (0..header.type_count())','eprintln!("CNBOX_INNO71_STAGE_TYPES"); let type_entries = (0..header.type_count())'),
+              @('let components = (0..header.component_count())','eprintln!("CNBOX_INNO71_STAGE_COMPONENTS"); let components = (0..header.component_count())'),
+              @('let tasks = (0..header.task_count())','eprintln!("CNBOX_INNO71_STAGE_TASKS"); let tasks = (0..header.task_count())'),
+              @('let directories = (0..header.directory_count())','eprintln!("CNBOX_INNO71_STAGE_DIRS"); let directories = (0..header.directory_count())'),
+              @('let is_sig_keys = (0..header.is_sig_keys_count())','eprintln!("CNBOX_INNO71_STAGE_SIG_KEYS"); let is_sig_keys = (0..header.is_sig_keys_count())'),
+              @('let files = (0..header.file_count())','eprintln!("CNBOX_INNO71_STAGE_FILES"); let files = (0..header.file_count())'),
+              @('let icons = (0..header.icon_count())','eprintln!("CNBOX_INNO71_STAGE_ICONS"); let icons = (0..header.icon_count())'),
+              @('let file_locations = (0..header.file_location_entry_count())','eprintln!("CNBOX_INNO71_STAGE_FILE_LOCATIONS"); let file_locations = (0..header.file_location_entry_count())')
+            )
+            $traceLib=[System.IO.File]::ReadAllText($libFile,[System.Text.Encoding]::UTF8)
+            foreach($t in $traceMarkers) {
+              if(-not $traceLib.Contains($t[0])) {throw ('PINNED_PARSER_TRACE_ANCHOR_MISSING '+$t[0])}
+              $traceLib=$traceLib.Replace($t[0],$t[1])
+            }
+            [System.IO.File]::WriteAllText($libFile,$traceLib,(New-Object System.Text.UTF8Encoding($false)))
+            ('VERSION_GATE_PATCH_SHA '+$patchSha+'; TRACE_MARKERS '+$traceMarkers.Count+'; TRACE_LIB_SHA '+(Get-FileHash -Algorithm SHA256 -LiteralPath $libFile).Hash.ToLowerInvariant()) | Set-Content -Encoding UTF8 evidence/INNEX_DIAGNOSTIC_PROVENANCE.txt
+            Write-Host ('INNEX_INNO71_READ_ONLY_STAGE_TRACING '+$traceMarkers.Count)
+            $headerFile='tool/inno-rust/core/src/header/mod.rs'
+            $headerSrc=[System.IO.File]::ReadAllText($headerFile,[System.Text.Encoding]::UTF8)
+            # Official jrsoftware issrc tag diff: Inno 7.0.2 TSetupHeader has
+            # SetupHeaderStrings=39 incl BaseFilename, 7.1.1 has 38 and removes
+            # BaseFilename. The old parser consumes one extra Pascal string,
+            # corrupting all following fields and causing invalid enum bytes.
+            $oldHeaderBase='header.base_filename = reader.read_pascal_string()?;'
+            $newHeaderBase='if version < 7.1 { header.base_filename = reader.read_pascal_string()?; } else { eprintln!("CNBOX_INNO71_OFFICIAL_HEADER_BASEFILENAME_REMOVED_SKIPPED"); }'
+            if(-not $headerSrc.Contains($oldHeaderBase)) {throw 'PINNED_INNO71_OFFICIAL_BASEFILENAME_ANCHOR_MISSING'}
+            $headerSrc=$headerSrc.Replace($oldHeaderBase,$newHeaderBase)
+            ('RUST_INNEX_OFFICIAL_7_1_HEADER_STRUCT_REBASE; verified official source https://github.com/jrsoftware/issrc/blob/is-7_1_1/Projects/Src/Shared.Struct.pas SetupHeaderStrings=38; prior 7.0.2=39; exactly BaseFilename removed; no other header replacement; exact official EXE SHA guarded; parser test-only') | Set-Content -Encoding UTF8 evidence/INNO71_OFFICIAL_HEADER_REBASE_SOURCE.txt
+            Write-Host 'PINNED_INNO71_HEADER_OFFICIAL_STRINGS_39_TO_38_BASE_FILENAME_REMOVED'
+            $headerMarkers=@(
+              @('header.app_name = reader.read_pascal_string()?;','eprintln!("CNBOX_INNO71_HEADER_APPNAME"); header.app_name = reader.read_pascal_string()?;'),
+              @('header.use_previous_app_dir = reader.read_pascal_string()?;','eprintln!("CNBOX_INNO71_HEADER_USE_PREVIOUS"); header.use_previous_app_dir = reader.read_pascal_string()?;'),
+              @('header.entry_counts = EntryCounts::read(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_ENTRY_COUNTS_BEGIN"); header.entry_counts = EntryCounts::read(&mut reader, version)?; eprintln!("CNBOX_INNO71_HEADER_ENTRY_COUNTS_OK");'),
+              @('WindowsVersionRange::read_from(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_WINDOWS_RANGE"); WindowsVersionRange::read_from(&mut reader, version)?;'),
+              @('header.wizard = WizardSettings::read_from(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_WIZARD_BEGIN"); header.wizard = WizardSettings::read_from(&mut reader, version)?; eprintln!("CNBOX_INNO71_HEADER_WIZARD_OK");'),
+              @('header.wizard.image_back_color = reader.read_t::<Color>()?;','eprintln!("CNBOX_INNO71_HEADER_COLOR_BEGIN"); header.wizard.image_back_color = reader.read_t::<Color>()?;'),
+              @('header.wizard.image_opacity = Some(reader.read_u8()?);','eprintln!("CNBOX_INNO71_HEADER_OPACITY"); header.wizard.image_opacity = Some(reader.read_u8()?);'),
+              @('header.extra_disk_space_required = reader.read_u64::<LE>()?;','eprintln!("CNBOX_INNO71_HEADER_EXTRA_SPACE"); header.extra_disk_space_required = reader.read_u64::<LE>()?;'),
+              @('header.uninstall_log_mode = LogMode::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_UNINSTALL_LOG_MODE"); header.uninstall_log_mode = LogMode::try_read_from_io(&mut reader)?;'),
+              @('header.dir_exists_warning = AutoBool::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_DIR_EXISTS_WARN"); header.dir_exists_warning = AutoBool::try_read_from_io(&mut reader)?;'),
+              @('header.privileges_required = PrivilegeLevel::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_PRIVILEGES_REQUIRED"); header.privileges_required = PrivilegeLevel::try_read_from_io(&mut reader)?;'),
+              @('header.compression = Compression::try_read_from_io(&mut reader)?;','eprintln!("CNBOX_INNO71_HEADER_COMPRESSION"); header.compression = Compression::try_read_from_io(&mut reader)?;'),
+              @('header.flags |= Self::read_flags(&mut reader, version)?;','eprintln!("CNBOX_INNO71_HEADER_FLAGS"); header.flags |= Self::read_flags(&mut reader, version)?;'),
+              @('Ok(header)','eprintln!("CNBOX_INNO71_HEADER_COMPLETE"); Ok(header)')
+            )
+            foreach($t in $headerMarkers) {
+              if(-not $headerSrc.Contains($t[0])) {throw ('PINNED_PARSER_HEADER_TRACE_ANCHOR_MISSING '+$t[0])}
+              $headerSrc=$headerSrc.Replace($t[0],$t[1])
+            }
+            [System.IO.File]::WriteAllText($headerFile,$headerSrc,(New-Object System.Text.UTF8Encoding($false)))
+            ('TRACE_HEADER_MARKERS '+$headerMarkers.Count+'; TRACE_HEADER_SHA '+(Get-FileHash -Algorithm SHA256 -LiteralPath $headerFile).Hash.ToLowerInvariant()) | Set-Content -Encoding UTF8 evidence/INNEX_HEADER_DIAGNOSTIC_PROVENANCE.txt
+            Write-Host ('INNEX_INNO71_READ_ONLY_HEADER_TRACING '+$headerMarkers.Count)
+            $innoReadFile='tool/inno-rust/core/src/lib.rs'
+            $readSrc=[System.IO.File]::ReadAllText($innoReadFile,[System.Text.Encoding]::UTF8)
+            $moreMarkers=@(
+              @('let ini_entries = (0..header.ini_entry_count())','eprintln!("CNBOX_INNO71_STAGE_INI"); let ini_entries = (0..header.ini_entry_count())'),
+              @('let registry_entries = (0..header.registry_entry_count())','eprintln!("CNBOX_INNO71_STAGE_REGISTRY"); let registry_entries = (0..header.registry_entry_count())'),
+              @('let delete_entries = (0..header.install_delete_entry_count())','eprintln!("CNBOX_INNO71_STAGE_INSTALL_DELETE"); let delete_entries = (0..header.install_delete_entry_count())'),
+              @('let uninstall_delete_entries = (0..header.uninstall_delete_entry_count())','eprintln!("CNBOX_INNO71_STAGE_UNINSTALL_DELETE"); let uninstall_delete_entries = (0..header.uninstall_delete_entry_count())'),
+              @('let run_entries = (0..header.run_entry_count())','eprintln!("CNBOX_INNO71_STAGE_RUN"); let run_entries = (0..header.run_entry_count())'),
+              @('let uninstall_run_entries = (0..header.uninstall_run_entry_count())','eprintln!("CNBOX_INNO71_STAGE_UNINSTALL_RUN"); let uninstall_run_entries = (0..header.uninstall_run_entry_count())'),
+              @('wizard = Wizard::read(&mut reader, &header, inno_version)?;','eprintln!("CNBOX_INNO71_STAGE_WIZARD_DATA"); wizard = Wizard::read(&mut reader, &header, inno_version)?;'),
+              @('reader.check_end_of_stream::<Primary>()?;','eprintln!("CNBOX_INNO71_STAGE_PRIMARY_END_CHECK"); reader.check_end_of_stream::<Primary>()?; eprintln!("CNBOX_INNO71_STAGE_PRIMARY_END_PASS");'),
+              @('reader = reader.reset()?;','eprintln!("CNBOX_INNO71_STAGE_SECONDARY_RESET"); reader = reader.reset()?;')
+            )
+            foreach($t in $moreMarkers) {
+              if(-not $readSrc.Contains($t[0])) {throw ('PINNED_INNO71_SECOND_STAGE_ANCHOR_MISSING '+$t[0])}
+              $readSrc=$readSrc.Replace($t[0],$t[1])
+            }
+            [System.IO.File]::WriteAllText($innoReadFile,$readSrc,(New-Object System.Text.UTF8Encoding($false)))
+            $streamFile='tool/inno-rust/core/src/read/stream.rs'
+            $streamSrc=[System.IO.File]::ReadAllText($streamFile,[System.Text.Encoding]::UTF8)
+            $oldRead='return Err(InnoError::UnexpectedExtraData(S::HEADER_STREAM));'
+            $newRead='let mut extra = Vec::new(); self.take(1024).read_to_end(&mut extra)?; eprintln!("CNBOX_INNO71_PRIMARY_EXTRA_DIAGNOSTIC_FIRST={:02x} TAIL_READ_BYTES={} TAIL_FIRST128={:02x?}",buf[0],extra.len(), &extra[..extra.len().min(128)]); return Err(InnoError::UnexpectedExtraData(S::HEADER_STREAM));'
+            if(-not $streamSrc.Contains($oldRead)) {throw 'PINNED_INNO71_STREAM_DIAGNOSTIC_ANCHOR_MISSING'}
+            $streamSrc=$streamSrc.Replace($oldRead,$newRead)
+            [System.IO.File]::WriteAllText($streamFile,$streamSrc,(New-Object System.Text.UTF8Encoding($false)))
+            Write-Host ('INNEX_INNO71_READ_ONLY_SECONDARY_STAGES '+$moreMarkers.Count)
+            # Vendor's actual Setup.MainFunc.pas for Inno 7.1.1 writes a
+            # SevenZipDLL Pascal-blob after 6 Wizard image tables when
+            # SetupHeader.SevenZipLibraryName is nonempty. Pinned Rust innex
+            # Wizard::read forgot this newer section. Previous diagnostic
+            # read precisely u32 length followed by MZ 90 PE header at tail.
+            $wizardFile='tool/inno-rust/core/src/wizard.rs'
+            $wizardSrc=[System.IO.File]::ReadAllText($wizardFile,[System.Text.Encoding]::UTF8)
+            $wizardAnchor='        Ok(wizard)'
+            $wizardFix=(@(
+              '        if version >= 6.5 && header.seven_zip_library_name().is_some_and(|n| !n.is_empty()) {',
+              '            let native_sevenzip_dll = reader.read_raw_pascal_string()?;',
+              '            eprintln!("CNBOX_INNO71_OFFICIAL_SEVENZIP_DLL_CONSUMED_BYTES={}", native_sevenzip_dll.len());',
+              '            if native_sevenzip_dll.len() < 2 || &native_sevenzip_dll[..2] != b"MZ" {',
+              '                return Err(io::Error::new(io::ErrorKind::InvalidData, "SevenZipDLL lacks native MZ header"));',
+              '            }',
+              '        }',
+              '        Ok(wizard)'
+            ) -join [Environment]::NewLine)
+            if(-not $wizardSrc.Contains($wizardAnchor)) {throw 'PINNED_INNO71_SEVENZIP_7_1_SOURCE_ANCHOR_MISSING'}
+            $wizardSrc=$wizardSrc.Replace($wizardAnchor,$wizardFix.TrimEnd())
+            [System.IO.File]::WriteAllText($wizardFile,$wizardSrc,(New-Object System.Text.UTF8Encoding($false)))
+            ('7.1.1 official Setup.MainFunc.pas writes SevenZipDLL if SevenZipLibraryName not empty, after Wizard data. Read only, guarded MZ, no byte change to original. Tail had u32 size + MZ.') | Set-Content -Encoding UTF8 evidence/INNEX_OFFICIAL_SEVENZIP_READER_FIX.txt
+            Write-Host 'INNEX_INNO71_READ_ONLY_OFFICIAL_SEVENZIP_CONSUMPTION_REPAIR'
+            rustup toolchain install '1.93.0' --profile minimal
+            if($LASTEXITCODE -ne 0){throw 'RUST_1_93_INSTALL_FAILED'}
+            Push-Location 'tool/inno-rust'
+            try {cargo +1.93.0 build --release --locked -p innex *> '../../evidence/INNEX_BUILD.log'; if($LASTEXITCODE -ne 0){throw ('INNEX_BUILD_FAILED '+$LASTEXITCODE)}} finally {Pop-Location}
+            $innexExe=(Resolve-Path 'tool/inno-rust/target/release/innex.exe').Path
+            $sourceExe=(Resolve-Path $exe).Path
+            $outDir=(Resolve-Path out).Path
+            & $innexExe $sourceExe --extract $outDir *> evidence/INNEX_EXTRACT.log
+            if($LASTEXITCODE -ne 0){
+              Write-Host 'INNEX_INNO71_EXACT_FAILURE_DIAGNOSTIC_START'
+              Get-Content -LiteralPath evidence/INNEX_EXTRACT.log -Tail 120 | ForEach-Object {Write-Host $_}
+              Write-Host 'INNEX_INNO71_EXACT_FAILURE_DIAGNOSTIC_END'
+              throw ('INNEX_INNO_7_1_1_EXTRACT_FAILED '+$LASTEXITCODE)
+            }
+            Write-Host 'INNO_7_1_1_RUST_EXTRACT_CURRENT_ORIGINAL_PASSED'
+          }
+          $all=@(Get-ChildItem out -File -Recurse)
+          if($all.Count -eq 0){throw ('INNO_7_1_1_EXTRACT_NO_PHYSICAL_FILES '+$all.Count)}
+          Write-Host ('INNO_7_1_1_DECODED_PHYSICAL_FILES '+$all.Count+' / PRIOR_INNOUNP_10249_PATH_ALIAS_COUNT_NOT_A_VALID_INNEX_COMPLETENESS_THRESHOLD; VALIDATE_NATIVE_OWNER_FILES_AND_INNO_FILE_TABLE_BEFORE_FULL_PASS')
+          $root=(Resolve-Path out).Path
+          $rows=@(foreach($f in $all){
+             $rel=$f.FullName.Substring($root.Length+1).Replace('\','/')
+             $h=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+             ($rel+[char]9+$f.Length+[char]9+$h)
+          })
+          $rows | Sort-Object | Set-Content -Encoding UTF8 evidence/FULL_NATIVE_PATH_SHA256.tsv
+          $iss=@(Get-ChildItem out -Recurse -File -Filter install_script.iss)
+          if($iss.Count -eq 1){Copy-Item -LiteralPath $iss[0].FullName -Destination evidence/install_script.iss}
+          elseif($innexExe){
+            Write-Host 'INNEX_STRUCTURED_INNO_FILE_METADATA_NO_RECONSTRUCTED_ISS'
+            & $innexExe (Resolve-Path $exe).Path --debug *> evidence/INNEX_FULL_FILE_COMPONENT_STRUCTURE.txt
+            if($LASTEXITCODE -ne 0){throw ('INNEX_INNO_STRUCTURE_EXTRACTION_FAILED '+$LASTEXITCODE)}
+          } else {throw ('INNO_SCRIPT_NOT_RECOVERED '+$iss.Count)}
+          $interesting=$rows | Where-Object {$_ -match '(?i)openwg|xvm_13|battlevehiclemarkers|playerspanel|battleloading|limpidstickers|modmenu|modssettingsbridge|armor_penetration|customuiscale|customsixthsense|minimap'}
+          $interesting | Set-Content -Encoding UTF8 evidence/BOX_AND_SELECTED_NATIVE_OWNERS.tsv
+          $report=[ordered]@{work='ASLAIN2411_05_BOX_ONLY_NATIVE_SOURCE_INTAKE';upstream='2.4.1.1 #05';status='NATIVE_EXE_PHYSICAL_EXTRACTION_PASS_OWNER_ID_AND_INSTALL_ALIAS_PARITY_PENDING_NOT_RUNTIME';extractionCountReconciliation='PENDING_INNO_FILE_TABLE_SELECTED_INSTALL_DESTINATIONS';installerName=$name;installerBytes=$sz;installerSHA256=$sha;officialAdvertisedSHA256=$advertised;nativeContentVersion=$nativeVersion;nativeSHA256=$nativeSha;nativeBytes=(Get-Item original/Configuration).Length;extractedFileCount=$all.Count;extractorCommit=$extractCommit;extractorSHA256=$toolSha;installerSourceUrl=$officialUrl;nativeSourceUrl=$nativeUrl;choiceOriginalDriveId='1_PGX-1iT5siz9ZIjQfsDXxiWNzdoHDVW';choiceOriginalSHA256='aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f';formalBoxSHA256='ce38abf70ca43b443810a375d067367622b5cac96263511cef63c0b9186be36f';selectedChoiceFinalOwnerAudit='PENDING_INDEPENDENT_TWO_REVIEW';gameRuntime='NOT_TESTED';physicalCreatorRollback='NOT_TESTED';formalModuleReleaseChanged=$false}
+          ($report | ConvertTo-Json -Depth 5) | Set-Content -Encoding UTF8 evidence/NATIVE2411_05_SUMMARY.json
+          Copy-Item -LiteralPath 'evidence/NATIVE2411_05_SUMMARY.json' -Destination 'original/NATIVE2411_05_SUMMARY.json'
+          Write-Host ('FULL_NATIVE_2411_05_COUNT '+$all.Count)
+          New-Item -ItemType Directory -Force -Path 'shared_owner' | Out-Null
+          $ownerRecords=@()
+          $nativeOwnerFiles=@(Get-ChildItem out -Recurse -File | Where-Object {
+            $_.Name -match '(?i)^(com\.modxvm\.xvm.*\.wotmod|net\.openwg\.common.*\.wotmod|battleVehicleMarkersApp\.swf)$'
+          })
+          if($nativeOwnerFiles.Count -lt 3){throw ('BOX_REQUIRED_OWNER_MISSING '+$nativeOwnerFiles.Count)}
+          foreach($f in $nativeOwnerFiles) {
+            $hash=(Get-FileHash -Algorithm SHA256 -LiteralPath $f.FullName).Hash.ToLowerInvariant()
+            $dest=Join-Path shared_owner $f.Name
+            if(Test-Path $dest){$dest=Join-Path shared_owner ($hash.Substring(0,10)+'_'+$f.Name)}
+            Copy-Item -LiteralPath $f.FullName -Destination $dest
+            $ownerRecords+=($f.FullName+[char]9+$f.Length+[char]9+$hash)
+            Write-Host ('NATIVE_BOX_OWNER '+$f.Name+' '+$hash)
+          }
+          $ownerRecords+=@($sourceRecords | Where-Object {$_.status -eq 'SOURCE_ZIP_CRC_PASS'} | ForEach-Object {$_.name+[char]9+$_.bytes+[char]9+$_.sha256})
+          $ownerRecords | Set-Content -Encoding UTF8 shared_owner/SHARED_OWNER_SOURCE_SHA256.tsv
+
+      - name: Preserve official original/Configuration for Drive even if installer source currently 404
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-05-original-Drive-reference-native
+          path: original/
+          retention-days: 1
+          if-no-files-found: error
+      - name: Preserve shared clean native originals for interface-only review
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-05-shared-native-originals
+          path: shared_owner/
+          retention-days: 1
+          if-no-files-found: warn
+      - name: Full pristine native evidence - ephemeral Drive handoff
+        if: steps.gate.outputs.run == 'true' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CNBOX-BOX2411-05-full-native-teardown
+          path: evidence/
+          retention-days: 1
+          if-no-files-found: error
