@@ -158,5 +158,31 @@
     "moduleReleaseChanged": false,
     "masterMirror": "UNCHANGED original GitHub/Drive byte identity; newer doc sync still pending",
     "nextAction": "Persist and decompose exact current #03 installer and changed Box-required XVM conditional ZIP, verify clean native installed owners/method ABI; MoE and Language own-scope only; no formal publication without explicit approval"
+  },
+  "latestBoxScopedSourceReview": {
+    "aslainVersion": "2.4.1.1 #05",
+    "dateNewYork": "2026-11-04",
+    "status": "SOURCE_ONLY_BOX_SCOPE_REVIEW1_REVIEW2_PASS / 6_NATIVE_BOX_DEPENDENCIES_SHA_EQUAL_04 / NO_ADDITIONAL_BOX_FUNCTION_CHANGE_REQUIRED / REAL_CLIENT_UNAVAILABLE / NO_RELEASE",
+    "officialInstallerSHA256": "099d6a926a89158512083f0aecc8581c277b075b3e507e83c7a2f39ca83f0776",
+    "nativeConfigurationContentVersion": "v2.4.1.1 #05 (2026.11.04)",
+    "nativeConfigurationSHA256": "148c8f0558c096767d6545b8bcbcae3c4c1ac37b2e502f2c3e6f31cb9a41bb67",
+    "nativeConfigurationSemanticSHA256": "950e5f903bcf3760175039e4ffd0c5a458ac44b9a3899864e306ca3c0dfe2d45",
+    "nativeConfigurationSemanticNormalization": "Remove decimal Installs=\"...\" attributes only; preserve all other XML attributes, paths, text and structure",
+    "nativeConfigurationBytes": 1990846,
+    "nativeFreshObservationUTC": "2026-11-04T17:49:13Z",
+    "priorDriveArchivedConfigurationSHA256": "907da8c781578a5784c1ae21ea25aa8584e9b629f4f02bf32f84c147c10af437",
+    "priorDriveArchivedConfigurationBytes": 1990799,
+    "sourceDeltaReview": "3034/3034 XML nodes structurally equal; 860 Installs counters changed; only noncounter mutation GarageMods_platoon_header File reference 3d3e601e.zip -> f771d6f9.zip, unselected in immutable 36-item Choice; normalizing that single unselected File path and counter attrs yields byte equality. Both source ZIP CRC PASS. Box scoped source File URLs and native owners unchanged. This live copy is 1-day Actions artifact, not new permanent Drive original.",
+    "choice36OriginalSHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
+    "choice36SelectedIds": 36,
+    "evidenceGithub": "https://github.com/modanbo/NA-BOX/blob/main/03_EVIDENCE/ASLAIN2411_01/ASLAIN2411_05_CHOICE36_BOX_NATIVE_SOURCE_BINARY_REVIEW1_REVIEW2_20261104.md",
+    "nativeSourceEvidenceRun": "https://github.com/modanbo/CNBOX-Updates/actions/runs/41880739836",
+    "sourceDriveOriginalId": "1F2vz4zYVPoLRmFHjcoc9FyWaG2dR8RA3",
+    "frozenR2TestOnlyDriveId": "1frHp7Cp9pdRcq5dNPMZpYvs90jqhu91c",
+    "gameRuntime": "NOT_TESTED",
+    "actualInstalledLastWriter": "NOT_VERIFIED",
+    "creatorPhysicalRollback": "NOT_TESTED",
+    "soleNextAction": "REAL_CLIENT_UNAVAILABLE / LAST_WRITER_NOT_VERIFIED / CREATOR_PHYSICAL_ROLLBACK_NOT_TESTED / GAME_RUNTIME_NOT_TESTED",
+    "note": "This additive Box-scoped source review is newer than legacy latestReviewedUpstream #01 and must be used by native watchdog to suppress obsolete #05 re-intake. Do not treat it as formal CURRENT_RELEASE, installed-game evidence, or permission to rebuild."
   }
 }
