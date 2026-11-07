@@ -29,7 +29,7 @@ jobs:
               if($r.conclusion -ne 'success' -or [datetime]$r.created_at -lt $cutoff) {continue}
               $art=Invoke-RestMethod -Headers $headers -Uri ('https://api.github.com/repos/'+$env:GITHUB_REPOSITORY+'/actions/runs/'+$r.id+'/artifacts?per_page=20') -TimeoutSec 45
               $names=@($art.artifacts | Where-Object {$_.expired -eq $false} | ForEach-Object {$_.name})
-              if(($names -contains 'CNBOX-BOX2411-07-original-Drive-reference-native') -and ($names -contains 'CNBOX-BOX2411-07-shared-native-originals') -and ($names -contains 'CNBOX-BOX2411-07-full-native-teardown')) {$ready=$true;break}
+              if(($names -contains 'CNBOX-BOX2411-07-original-Drive-reference-native') -and ($names -contains 'CNBOX-BOX2411-07-shared-native-originals-af2c48c5') -and ($names -contains 'CNBOX-BOX2411-07-full-native-teardown')) {$ready=$true;break}
             }
           } catch {Write-Host ('ARTIFACT_GATE_ERROR_RETRY_SAFE '+$_.Exception.Message)}
           if($ready) {
@@ -56,7 +56,7 @@ jobs:
           $nativeVersion=$config.DocumentElement.GetAttribute('ContentVersion')
           $probe=[ordered]@{timeUTC=(Get-Date).ToUniversalTime().ToString('o');url=$nativeUrl;ContentVersion=$nativeVersion;sha256=$nativeSha;bytes=(Get-Item 'original/Configuration').Length;sourceStatus='RAW_LIVE_NATIVE_FETCH_OK';scope='READ_ONLY_UPSTREAM_NOT_RUNTIME'}
           ($probe|ConvertTo-Json)|Set-Content -Encoding UTF8 evidence/NATIVE2411_SOURCE_PROBE.json
-          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?6\b'){Write-Host ('LIVE_CONFIG_NOW_OTHER_BUILD '+$nativeVersion)}
+          if($nativeVersion -notmatch '2\.4\.1\.1\s*#\s*0?7\b'){Write-Host ('LIVE_CONFIG_NOW_OTHER_BUILD '+$nativeVersion)}
           Write-Host ('LIVE_CONFIGURATION_OBSERVED_NOT_PINNED_07 '+$nativeVersion+' SHA '+$nativeSha)
           $exe=Join-Path 'work' $name
           $officialUrl=('https://filez.aslain.com/'+$name)
@@ -69,7 +69,7 @@ jobs:
           Write-Host ('EXACT_07_RAW_EXE_SHA_PASS_DRIVE_NOT_YET_ARCHIVED '+$sz+' '+$sha)
           New-Item -ItemType Directory -Force -Path shared_owner | Out-Null
           $boxRefList=@(
-            'Implicit_cond02_xvm_modpack_722b7070.zip',
+            'Implicit_cond02_xvm_modpack_af2c48c5.zip',
             'Implicit_xvm_592411f7.zip',
             'Implicit_xvm_shared_c35655e9.zip'
           )
@@ -310,7 +310,7 @@ jobs:
         if: steps.gate.outputs.run == 'true' && always()
         uses: actions/upload-artifact@v4
         with:
-          name: CNBOX-BOX2411-07-shared-native-originals
+          name: CNBOX-BOX2411-07-shared-native-originals-af2c48c5
           path: shared_owner/
           retention-days: 1
           if-no-files-found: warn
