@@ -126,7 +126,7 @@
     "choiceSHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
     "choiceCount": 36,
     "previousVersion": "2.4.1.1 #09",
-    "boxSourceClassification": "#10 EXE+native+full Inno5773; #09->#10 5769 same path exact, 2 removed/2 added unselected garage/weather, 0 same-path byte changes, 6/6 XVM/OpenWG/VehicleMarker shared owner archives EXACT, original Choice36 ET/SAX source changed selected 0, no own Box ABI delta; installed last-writer NOT_VERIFIED",
+    "boxSourceClassification": "#10 EXE+native+full Inno5773; #09->#10 5771 same path exact, 2 removed/2 added unselected garage/weather, 0 same-path byte changes, 6/6 XVM/OpenWG/VehicleMarker shared owner archives EXACT, original Choice36 ET/SAX source changed selected 0, no own Box ABI delta; installed last-writer NOT_VERIFIED",
     "evidenceGithub": "https://github.com/modanbo/CNBOX-Updates/actions/runs/43702426291",
     "gameRuntime": "NOT_TESTED",
     "creatorPhysicalRollback": "NOT_TESTED",
@@ -206,7 +206,7 @@
     "nativeFreshObservationUTC": "2026-11-15T10:06:15Z",
     "priorReviewedBuild": "2.4.1.1 #09",
     "priorReviewedFreshConfigurationSHA256": "2afc60a8d1ab7018c7681473c572f5595d186715d4340861123905cff772b762",
-    "sourceDeltaReview": "#09->#10 physical Inno 5773 vs 5773, 5769 unchanged same-path, 2 removed+2 added unselected unrelated HangMan+real-weather, 0 same-path changed; 6/6 required Box original owners byte-equal, 7th TSV equal; source ET+SAX 3 unselected new mods, 3 changed unselected source attrs, Choice36 selected changed 0; official Hawg/XVM contour vehicle tier fix noted without proof of Box runtime result",
+    "sourceDeltaReview": "#09->#10 physical Inno 5773 vs 5773, 5771 unchanged same-path, 2 removed+2 added unselected unrelated HangMan+real-weather, 0 same-path changed; 6/6 required Box original owners byte-equal, 7th TSV equal; source ET+SAX 3 unselected new mods, 3 changed unselected source attrs, Choice36 selected changed 0; official Hawg/XVM contour vehicle tier fix noted without proof of Box runtime result",
     "choice36OriginalSHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
     "choice36SelectedIds": 36,
     "evidenceGithub": "https://github.com/modanbo/CNBOX-Updates/actions/runs/43702426291",
@@ -376,6 +376,7 @@
       "sourceOriginalDriveId": "1Ke00qVEW1442VELT--HzlOQN13DTdVON",
       "ownerDriveId": "1xxKok1spfnSOGxGp6wLeZXak7zPu5K15",
       "review": "STATIC_ET_SAX_PASS_WITH_SELECTED_THIRD_PARTY_REFS_7"
-    }
+    },
+    "pathIntersectionMathCorrection": "2026-11-15 05:25 EST: 5773 physical paths each - two removed = exactly 5771 common unchanged. Prior 5769 double-subtraction typo only; original TSV path SHA recompare PASS; no vendor/raw source change."
   }
 }
