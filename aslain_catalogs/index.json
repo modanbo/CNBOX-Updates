@@ -427,5 +427,27 @@
       "gameAndCreator": "NOT_TESTED",
       "singleNextAction": "ASLAIN_2.4.1.1_11_REAL_WINDOWS_CHOICE36_CREATOR_2.1.6_INSTALLED_LAST_WRITER_PHYSICAL_ROLLBACK_AND_BOX_RUNTIME_GATE_PENDING"
     }
+  },
+  "latestOfficialOnlyObservation": {
+    "record": "ASLAIN2411_12_OFFICIAL_FIRST_CONFIRMED_20261117_1647_EST",
+    "observedDateNewYork": "2026-11-17 16:47 EST",
+    "aslainVersion": "2.4.1.1 #12",
+    "gameVersion": "2.4.1.1",
+    "changelogDate": "2026-11-17",
+    "source": "https://aslain.com/index.php?/topic/13-aslains-wot-modpack/",
+    "installerFilename": "Aslains_WoT_Modpack_Installer_v.2.4.1.1_12.exe",
+    "officialAdvertisedSHA256": "b708f1df9bd94638e86a1bb9ccd8fde33e5eafec11353b434923a474dfc29545",
+    "classification": "OFFICIAL_ANNOUNCEMENT_ONLY / EXE_DOWNLOAD_NOT_VERIFIED / NATIVE_CONFIGURATION_NOT_VERIFIED / BOX_SOURCE_REVIEW_PENDING / NO_RELEASE",
+    "latestSuccessfullyFetchedNative": "#11 (2026.11.16) SHA256 7982cdbfc17f3d0b6703f1438965196ffb414d2b4bdcf178453fbe4fff05e58b",
+    "latestActualWindowsSourceRun": "https://github.com/modanbo/CNBOX-Updates/actions/runs/44153444784",
+    "latestSourceRunScope": "#11, steps 4/5/6 SUCCESS non-skipped, before #12 official update",
+    "latestBoxScopedSourceReview": "#11 / frozen static only, no #12 source audit yet",
+    "boxRequiredByteChanges": "NOT_VERIFIED",
+    "choice36SHA256": "aa54b627c2a91aed4f23badddf7436810d43a793bb5bce170d2c59770f88624f",
+    "candidate": "only existing #07 R3 TEST_ONLY 531 SHA256 4fde6362154a18138e537663f94527c687606b339f883cf4e333e5530aed7a31",
+    "realClient": "UNAVAILABLE",
+    "formalReleaseChanged": false,
+    "publicChannelChanged": false,
+    "nextAction": "ASLAIN_2.4.1.1_12_ORIGINAL_NATIVE_EXE_INNO_CHOICE36_BOX_REQUIRED_OWNER_PRECHECK_PENDING"
   }
 }
